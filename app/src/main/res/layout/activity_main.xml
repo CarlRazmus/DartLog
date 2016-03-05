@@ -7,7 +7,8 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="com.fraz.dartlog.MainActivity">
+    tools:context="com.fraz.dartlog.MainActivity"
+    android:background="@color/material_blue_grey_800">
 
     <Button
         android:id="@+id/play_button"
@@ -21,4 +22,31 @@
         android:layout_below="@id/play_button"
         android:layout_height="wrap_content"
         android:text="SHOW STATISTICS"/>
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true">
+
+        <TextView
+            android:id="@+id/dart_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="DART"
+            android:textSize="30pt"
+            android:textColor="#D1D1D1"
+            android:layout_marginBottom="50dp"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="LOG"
+            android:textSize="30pt"
+            android:textColor="#991010"
+            android:layout_marginBottom="50dp"
+            android:layout_toRightOf="@id/dart_text"/>
+
+    </RelativeLayout>
 </RelativeLayout>
+
