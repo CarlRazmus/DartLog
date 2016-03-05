@@ -1,16 +1,24 @@
 package com.fraz.dartlog;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
 
-public class MainActivity extends ActionBarActivity {
+public class MainActivity extends ActionBarActivity implements View.OnClickListener {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        Button playButton = (Button) findViewById(R.id.play_button);
+        playButton.setOnClickListener(this);
+        Button statisticsButton = (Button) findViewById(R.id.stat_button);
+        statisticsButton.setOnClickListener(this);
     }
 
     @Override
@@ -33,5 +41,27 @@ public class MainActivity extends ActionBarActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch(v.getId()) {
+            case R.id.play_button:
+                startPlayActivity();
+                break;
+            case R.id.stat_button:
+                startStatActivity();
+                break;
+        }
+    }
+
+    private void startStatActivity() {
+        Intent intent = new Intent(this, StatActivity.class);
+        startActivity(intent);
+    }
+
+    private void startPlayActivity() {
+        Intent intent = new Intent(this, PlayActivity.class);
+        startActivity(intent);
     }
 }
