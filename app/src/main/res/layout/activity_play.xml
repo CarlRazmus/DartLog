@@ -3,12 +3,17 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.fraz.dartlog.PlayActivity">
+    tools:context="com.fraz.dartlog.PlayActivity"
+    android:background="#37474F">
 
     <TextView
-        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="This is the play activity!"/>
+        android:layout_width="match_parent"
+        android:text="RazmusLindgren"
+        android:textSize="40dp"
+        android:layout_alignParentTop="true"
+        android:height="50dp"
+        android:background="#303088" />
 
     <RelativeLayout
         android:id="@+id/numpad"
@@ -105,13 +110,18 @@
             android:layout_below="@id/seven"
             android:layout_toRightOf="@id/eight"/>
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_toRightOf="@id/enter"
-            android:layout_below="@id/nine"
-            android:textSize="30dp"
-            android:gravity="center"
-            android:text="180"/>
     </RelativeLayout>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="40sp"
+        android:gravity="center"
+        android:text="301"
+        android:fontFamily="sans-serif-black"
+        android:textColor="#ECEFF1"
+        android:layout_marginBottom="95dp"
+        android:textIsSelectable="false"
+        android:layout_above="@id/numpad"
+        android:layout_centerHorizontal="true" />
 </RelativeLayout>
