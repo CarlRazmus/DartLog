@@ -2,7 +2,7 @@ package com.fraz.dartlog;
 
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
-import android.util.Log;
+import android.text.InputFilter;
 import android.view.View;
 import android.widget.Button;
 import android.widget.RelativeLayout;
@@ -15,6 +15,13 @@ public class PlayActivity extends ActionBarActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_play);
         initButtons();
+        initInputField();
+    }
+
+    private void initInputField() {
+        TextView v = (TextView) findViewById(R.id.score_input);
+        InputFilter[] inputFilters = {new ScoreFilter()};
+        v.setFilters(inputFilters);
     }
 
     @Override
@@ -51,12 +58,9 @@ public class PlayActivity extends ActionBarActivity implements View.OnClickListe
 
     private void addNumber(CharSequence number) {
         TextView scoreInput = (TextView) findViewById(R.id.score_input);
-        Log.i("MyTag", "addNumber: " + scoreInput.getText());
         if (scoreInput.getText().toString().equals("0")) {
-            Log.i("MyTag", "addNumber: setting text");
             scoreInput.setText(number);
         } else {
-            Log.i("MyTag", "addNumber: appending text");
             scoreInput.append(number);
         }
     }
