@@ -47,7 +47,7 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
     public void onClick(View v) {
         switch(v.getId()) {
             case R.id.play_button:
-                startPlayActivity();
+                startPlayersActivity();
                 break;
             case R.id.stat_button:
                 startStatActivity();
@@ -60,8 +60,8 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
         startActivity(intent);
     }
 
-    private void startPlayActivity() {
-        Intent intent = new Intent(this, PlayActivity.class);
+    private void startPlayersActivity() {
+        Intent intent = new Intent(this, PlayersActivity.class);
         startActivity(intent);
     }
 }

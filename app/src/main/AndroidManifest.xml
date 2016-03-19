@@ -18,7 +18,8 @@
             </intent-filter>
         </activity>
         <activity android:name=".PlayActivity" />
-        <activity android:name=".StatActivity"></activity>
+        <activity android:name=".StatActivity" />
+        <activity android:name=".PlayersActivity" />
     </application>
 
 </manifest>
