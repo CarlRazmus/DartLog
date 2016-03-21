@@ -49,6 +49,7 @@ public class NumPadHandler implements View.OnClickListener {
 
     private void enter() {
         Integer score = getInput();
+        listener.enter(score);
     }
 
     private Integer getInput() {
