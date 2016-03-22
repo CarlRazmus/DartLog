@@ -20,9 +20,6 @@ public class PlayActivity extends ActionBarActivity implements NumPadEventListen
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_play);
-        initButtons();
-        initInputField();
-
 
         ListView myListView = (ListView) findViewById(R.id.play_players_listView);
         ArrayList<PlayerData> playerDataArrayList = new ArrayList<>();
@@ -32,7 +29,7 @@ public class PlayActivity extends ActionBarActivity implements NumPadEventListen
 
         PlayerListAdapter playerListAdapter = new PlayerListAdapter(this, playerDataArrayList);
         myListView.setAdapter(playerListAdapter);
-    }
+
         NumPadHandler numPadHandler = new NumPadHandler((ViewGroup) findViewById(R.id.numpad_view));
         numPadHandler.setListener(this);
 
@@ -44,7 +41,7 @@ public class PlayActivity extends ActionBarActivity implements NumPadEventListen
     public void enter(Integer score) {
         Log.i("MyTag", "enter: ");
         game.enterScore(score);
-        TextView v = (TextView) findViewById(R.id.player_score);
-        v.setText(String.valueOf(game.getScores()[0]));
+        // TextView v = (TextView) findViewById(R.id.player_score);
+        // v.setText(String.valueOf(game.getScores()[0]));
     }
 }
