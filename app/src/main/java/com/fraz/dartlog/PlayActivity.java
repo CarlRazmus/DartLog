@@ -5,8 +5,10 @@ import android.support.v7.app.ActionBarActivity;
 import android.text.InputFilter;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import java.util.ArrayList;
 
 public class PlayActivity extends ActionBarActivity implements View.OnClickListener{
 
@@ -16,6 +18,16 @@ public class PlayActivity extends ActionBarActivity implements View.OnClickListe
         setContentView(R.layout.activity_play);
         initButtons();
         initInputField();
+
+
+        ListView myListView = (ListView) findViewById(R.id.play_players_listView);
+        ArrayList<PlayerData> playerDataArrayList = new ArrayList<>();
+
+        playerDataArrayList.add(new PlayerData("Razmus Lindgren", 30));
+        playerDataArrayList.add(new PlayerData("Filip Källström", 42));
+
+        PlayerListAdapter playerListAdapter = new PlayerListAdapter(this, playerDataArrayList);
+        myListView.setAdapter(playerListAdapter);
     }
 
     private void initInputField() {

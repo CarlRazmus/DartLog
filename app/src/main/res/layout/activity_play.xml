@@ -1,36 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.fraz.dartlog.PlayActivity"
+    android:orientation="vertical"
     android:background="#37474F">
 
-
-    <LinearLayout
+    <ListView
+        android:id="@+id/play_players_listView"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="16dp">
-
-        <TextView
-            android:layout_height="wrap_content"
-            android:layout_width="wrap_content"
-            android:text="Razmus"
-            android:textSize="40dp"
-            android:layout_alignParentTop="true"
-            android:height="50dp"
-            android:textColor="#ECEFF1"
-            android:layout_weight="1"/>
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="35sp"
-            android:text="301"
-            android:fontFamily="sans-serif-medium"
-            android:textColor="#ECEFF1"
-            android:textIsSelectable="false"/>
-    </LinearLayout>
+        android:layout_height="match_parent"
+        android:layout_weight="1">
+    </ListView>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -143,4 +125,4 @@
                 android:layout_toRightOf="@id/eight"/>
         </RelativeLayout>
     </LinearLayout>
-</RelativeLayout>
+</LinearLayout>
