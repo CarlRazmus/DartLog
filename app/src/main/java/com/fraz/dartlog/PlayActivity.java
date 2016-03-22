@@ -7,10 +7,14 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
+import android.util.Log;
+import android.view.ViewGroup;
 import android.widget.TextView;
 import java.util.ArrayList;
 
-public class PlayActivity extends ActionBarActivity implements View.OnClickListener{
+public class PlayActivity extends ActionBarActivity implements NumPadEventListener{
+
+    private X01 game;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,62 +33,18 @@ public class PlayActivity extends ActionBarActivity implements View.OnClickListe
         PlayerListAdapter playerListAdapter = new PlayerListAdapter(this, playerDataArrayList);
         myListView.setAdapter(playerListAdapter);
     }
+        NumPadHandler numPadHandler = new NumPadHandler((ViewGroup) findViewById(R.id.numpad_view));
+        numPadHandler.setListener(this);
 
-    private void initInputField() {
-        TextView v = (TextView) findViewById(R.id.score_input);
-        InputFilter[] inputFilters = {new ScoreFilter()};
-        v.setFilters(inputFilters);
+        String[] players = {"Filip"};
+        game = new X01(players, 3);
     }
 
     @Override
-    public void onClick(View v) {
-        switch(v.getId()) {
-            case R.id.zero:
-            case R.id.one:
-            case R.id.two:
-            case R.id.three:
-            case R.id.four:
-            case R.id.five:
-            case R.id.six:
-            case R.id.seven:
-            case R.id.eight:
-            case R.id.nine:
-                addNumber(((Button) v).getText());
-                break;
-            case R.id.erase:
-                eraseNumber();
-                break;
-        }
-    }
-
-    private void eraseNumber() {
-        TextView scoreInput = (TextView) findViewById(R.id.score_input);
-        CharSequence currentText = scoreInput.getText();
-        int length = currentText.length();
-        if (length > 1) {
-            scoreInput.setText(currentText.subSequence(0, length - 1));
-        } else {
-            scoreInput.setText("0");
-        }
-    }
-
-    private void addNumber(CharSequence number) {
-        TextView scoreInput = (TextView) findViewById(R.id.score_input);
-        if (scoreInput.getText().toString().equals("0")) {
-            scoreInput.setText(number);
-        } else {
-            scoreInput.append(number);
-        }
-    }
-
-    private void initButtons() {
-        RelativeLayout numpad = (RelativeLayout) findViewById(R.id.numpad);
-        int childCount = numpad.getChildCount();
-        for (int i=0; i < childCount; i++) {
-            View v = numpad.getChildAt(i);
-            if (v instanceof Button) {
-                v.setOnClickListener(this);
-            }
-        }
+    public void enter(Integer score) {
+        Log.i("MyTag", "enter: ");
+        game.enterScore(score);
+        TextView v = (TextView) findViewById(R.id.player_score);
+        v.setText(String.valueOf(game.getScores()[0]));
     }
 }
