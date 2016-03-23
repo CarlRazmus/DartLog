@@ -36,11 +36,19 @@ class PlayerListAdapter extends ArrayAdapter<PlayerData> {
         TextView scoreView = (TextView) listItem.findViewById(R.id.game_player_list_item_score);
         scoreView.setText(String.valueOf(items.get(position).getScore()));
 
-        if (items.get(position).isActive()) {
+        setBackgroundColor(position, listItem);
+        return listItem;
+    }
+
+    private void setBackgroundColor(int position, View listItem) {
+
+        PlayerData player = items.get(position);
+        if (player.getScore() == 0) {
+            listItem.setBackgroundColor(Color.parseColor("#558B2F"));
+        } else if (player.isActive()) {
             listItem.setBackgroundColor(Color.parseColor("#455A64"));
         } else {
             listItem.setBackgroundColor(Color.parseColor("#37474F"));
         }
-        return listItem;
     }
 }

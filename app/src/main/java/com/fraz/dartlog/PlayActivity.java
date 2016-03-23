@@ -29,7 +29,7 @@ public class PlayActivity extends ActionBarActivity implements InputEventListene
         NumPadHandler numPadHandler = new NumPadHandler((ViewGroup) findViewById(R.id.numpad_view));
         numPadHandler.setListener(this);
 
-        game = new X01(playerDataArrayList, 3);
+        game = new X01(this, playerDataArrayList, 3);
     }
 
     @Override
