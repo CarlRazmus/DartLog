@@ -1,6 +1,7 @@
 package com.fraz.dartlog;
 
 import android.content.Context;
+import android.view.Gravity;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -48,15 +49,19 @@ public class X01 {
 
     private void showBustToast() {
         CharSequence text = "Bust!";
-        int duration = Toast.LENGTH_SHORT;
-        Toast.makeText(context, text, duration).show();
+        showToast(text);
     }
 
     private void showWinnerToast() {
         CharSequence text = String.format("Winner: %s!",
                 players.get(currentPlayerIdx).getPlayerName());
-        int duration = Toast.LENGTH_SHORT;
-        Toast.makeText(context, text, duration).show();
+        showToast(text);
+    }
+
+    private void showToast(CharSequence text) {
+        Toast toast = Toast.makeText(context, text, Toast.LENGTH_SHORT);
+        toast.setGravity(Gravity.CENTER, 0, 0);
+        toast.show();
     }
 
     private void nextPlayer() {
