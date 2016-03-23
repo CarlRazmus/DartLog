@@ -11,6 +11,7 @@ public class X01 {
         this.players = players;
         currentPlayerIdx = 0;
 
+        players.get(currentPlayerIdx).setActive(true);
         for (PlayerData player : players) {
             player.setScore(x*100 + 1);
         }
@@ -23,6 +24,8 @@ public class X01 {
     }
 
     private void nextPlayer() {
+        players.get(currentPlayerIdx).setActive(false);
         currentPlayerIdx = (currentPlayerIdx + 1) % players.size();
+        players.get(currentPlayerIdx).setActive(true);
     }
 }

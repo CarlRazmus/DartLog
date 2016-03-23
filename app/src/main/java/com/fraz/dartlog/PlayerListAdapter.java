@@ -1,6 +1,7 @@
 package com.fraz.dartlog;
 
 import android.app.Activity;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -35,6 +36,11 @@ class PlayerListAdapter extends ArrayAdapter<PlayerData> {
         TextView scoreView = (TextView) listItem.findViewById(R.id.game_player_list_item_score);
         scoreView.setText(String.valueOf(items.get(position).getScore()));
 
+        if (items.get(position).isActive()) {
+            listItem.setBackgroundColor(Color.parseColor("#455A64"));
+        } else {
+            listItem.setBackgroundColor(Color.parseColor("#37474F"));
+        }
         return listItem;
     }
 }
