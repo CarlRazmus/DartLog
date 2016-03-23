@@ -27,7 +27,7 @@ class PlayerListAdapter extends ArrayAdapter<PlayerData> {
         View listItem = convertView;
 
         if (convertView == null) {
-            listItem = inflater.inflate(R.layout.game_player_list_item, null);
+            listItem = inflater.inflate(R.layout.game_player_list_item, parent, false);
         }
 
         TextView playerNameView = (TextView) listItem.findViewById(R.id.game_player_list_item_name);

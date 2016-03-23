@@ -19,7 +19,8 @@
         </activity>
         <activity android:name=".PlayActivity" />
         <activity android:name=".StatActivity" />
-        <activity android:name=".PlayersActivity" />
+        <activity android:name=".PlayersActivity"
+            android:windowSoftInputMode="stateHidden"/>
     </application>
 
 </manifest>
