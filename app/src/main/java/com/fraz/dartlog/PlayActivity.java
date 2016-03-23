@@ -2,17 +2,13 @@ package com.fraz.dartlog;
 
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
-import android.text.InputFilter;
-import android.view.View;
-import android.widget.Button;
-import android.widget.ListView;
-import android.widget.RelativeLayout;
 import android.util.Log;
 import android.view.ViewGroup;
-import android.widget.TextView;
+import android.widget.ListView;
+
 import java.util.ArrayList;
 
-public class PlayActivity extends ActionBarActivity implements NumPadEventListener{
+public class PlayActivity extends ActionBarActivity implements InputEventListener {
 
     private X01 game;
 
