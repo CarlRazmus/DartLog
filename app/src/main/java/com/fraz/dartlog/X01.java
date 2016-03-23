@@ -1,38 +1,28 @@
 package com.fraz.dartlog;
 
-import java.util.Arrays;
+import java.util.ArrayList;
 
 public class X01 {
 
-    private String[] players;
-    private Integer[] scores;
+    private ArrayList<PlayerData> players;
     private Integer currentPlayerIdx;
 
-    public X01(String[] players, Integer x) {
+    public X01(ArrayList<PlayerData> players, Integer x) {
         this.players = players;
-        scores = new Integer[players.length];
         currentPlayerIdx = 0;
 
-        Arrays.fill(scores, x*100 + 1);
+        for (PlayerData player : players) {
+            player.setScore(x*100 + 1);
+        }
     }
 
     public void enterScore(Integer score) {
-        scores[currentPlayerIdx] -= score;
+        PlayerData currentPlayer = players.get(currentPlayerIdx);
+        currentPlayer.setScore(currentPlayer.getScore() - score);
+        nextPlayer();
     }
 
-    public String[] getPlayers() {
-        return players;
-    }
-
-    public Integer[] getScores() {
-        return scores;
-    }
-
-    public Integer getCurrentPlayerIdx() {
-        return currentPlayerIdx;
-    }
-
-    public void next() {
-        currentPlayerIdx = (currentPlayerIdx + 1) % players.length;
+    private void nextPlayer() {
+        currentPlayerIdx = (currentPlayerIdx + 1) % players.size();
     }
 }

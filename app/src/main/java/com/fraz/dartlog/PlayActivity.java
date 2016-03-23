@@ -2,7 +2,6 @@ package com.fraz.dartlog;
 
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
-import android.util.Log;
 import android.view.ViewGroup;
 import android.widget.ListView;
 
@@ -11,6 +10,7 @@ import java.util.ArrayList;
 public class PlayActivity extends ActionBarActivity implements InputEventListener {
 
     private X01 game;
+    private PlayerListAdapter playerListAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -23,21 +23,18 @@ public class PlayActivity extends ActionBarActivity implements InputEventListene
         playerDataArrayList.add(new PlayerData("Razmus Lindgren", 30));
         playerDataArrayList.add(new PlayerData("Filip Källström", 42));
 
-        PlayerListAdapter playerListAdapter = new PlayerListAdapter(this, playerDataArrayList);
+        playerListAdapter = new PlayerListAdapter(this, playerDataArrayList);
         myListView.setAdapter(playerListAdapter);
 
         NumPadHandler numPadHandler = new NumPadHandler((ViewGroup) findViewById(R.id.numpad_view));
         numPadHandler.setListener(this);
 
-        String[] players = {"Filip"};
-        game = new X01(players, 3);
+        game = new X01(playerDataArrayList, 3);
     }
 
     @Override
     public void enter(Integer score) {
-        Log.i("MyTag", "enter: ");
         game.enterScore(score);
-        // TextView v = (TextView) findViewById(R.id.player_score);
-        // v.setText(String.valueOf(game.getScores()[0]));
+        playerListAdapter.notifyDataSetChanged();
     }
 }
