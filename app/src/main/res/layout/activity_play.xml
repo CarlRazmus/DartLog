@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     tools:context="com.fraz.dartlog.PlayActivity"
     android:orientation="vertical"
-    android:background="#37474F">
+    android:background="@color/background">
 
     <ListView
         android:id="@+id/play_players_listView"
@@ -28,8 +28,8 @@
             android:layout_weight="1"
             android:text="0"
             android:maxLength="3"
-            android:textSize="35dp"
-            android:textColor="#ECEFF1"
+            android:textSize="35sp"
+            android:textColor="@color/main_white"
             android:gravity="center"/>
 
         <RelativeLayout
