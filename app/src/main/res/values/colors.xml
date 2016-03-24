@@ -5,4 +5,5 @@
     <color name="game_player_winner">#558B2F</color>
     <color name="main_white">#ECEFF1</color>
     <color name="main_red">#991010</color>
+    <color name="main_red_transparent">#00991010</color>
 </resources>
