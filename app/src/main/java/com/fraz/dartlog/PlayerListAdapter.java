@@ -1,7 +1,6 @@
 package com.fraz.dartlog;
 
 import android.app.Activity;
-import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -41,14 +40,15 @@ class PlayerListAdapter extends ArrayAdapter<PlayerData> {
     }
 
     private void setBackgroundColor(int position, View listItem) {
-
         PlayerData player = items.get(position);
         if (player.getScore() == 0) {
-            listItem.setBackgroundColor(Color.parseColor("#558B2F"));
+            listItem.setBackgroundColor(
+                    context.getResources().getColor(R.color.game_player_winner));
         } else if (player.isActive()) {
-            listItem.setBackgroundColor(Color.parseColor("#455A64"));
+            listItem.setBackgroundColor(
+                    context.getResources().getColor(R.color.game_player_highlight));
         } else {
-            listItem.setBackgroundColor(Color.parseColor("#37474F"));
+            listItem.setBackgroundColor(context.getResources().getColor(R.color.background));
         }
     }
 }

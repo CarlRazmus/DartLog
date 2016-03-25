@@ -14,8 +14,8 @@
         android:layout_height="wrap_content"
         android:text="Player 1"
         android:layout_alignParentLeft="true"
-        android:textSize="25dp"
-        android:textColor="#FFFFFF"/>
+        android:textSize="25sp"
+        android:textColor="@color/main_white"/>
 
     <TextView
         android:id="@+id/game_player_list_item_score"
@@ -23,7 +23,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
         android:text="301"
-        android:textSize="25dp"
-        android:textColor="#FFFFFF"/>
+        android:textSize="25sp"
+        android:textColor="@color/main_white"/>
 
 </RelativeLayout>

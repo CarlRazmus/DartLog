@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="background">#37474F</color>
+    <color name="game_player_highlight">#455A64</color>
+    <color name="game_player_winner">#558B2F</color>
+    <color name="main_white">#ECEFF1</color>
+    <color name="main_red">#991010</color>
+    <color name="main_red_transparent">#00991010</color>
+</resources>
