@@ -12,6 +12,10 @@ public class PlayerData {
         this.score = score;
     }
 
+    public PlayerData(String playerName) {
+        this.playerName = playerName;
+    }
+
 
     public Boolean isActive() {
         return active;

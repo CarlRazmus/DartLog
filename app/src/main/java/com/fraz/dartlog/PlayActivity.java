@@ -11,25 +11,41 @@ public class PlayActivity extends ActionBarActivity implements InputEventListene
 
     private X01 game;
     private PlayerListAdapter playerListAdapter;
+    private ArrayList<PlayerData> playerDataArrayList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_play);
 
-        ListView myListView = (ListView) findViewById(R.id.play_players_listView);
-        ArrayList<PlayerData> playerDataArrayList = new ArrayList<>();
-
-        playerDataArrayList.add(new PlayerData("Razmus Lindgren", 30));
-        playerDataArrayList.add(new PlayerData("Filip Källström", 42));
-
+        playerDataArrayList = new ArrayList<>();
         playerListAdapter = new PlayerListAdapter(this, playerDataArrayList);
-        myListView.setAdapter(playerListAdapter);
+
+        addPlayerNamesToListView();
+
+        linkListViewToPlayerListAdapter();
 
         NumPadHandler numPadHandler = new NumPadHandler((ViewGroup) findViewById(R.id.numpad_view));
         numPadHandler.setListener(this);
 
         game = new X01(this, playerDataArrayList, 3);
+    }
+
+
+    private void linkListViewToPlayerListAdapter() {
+        ListView myListView = (ListView) findViewById(R.id.play_players_listView);
+        myListView.setAdapter(playerListAdapter);
+    }
+
+    /**
+     * Fetch players names that are sent from PlayersActivity and store them in
+     * play_players_listView
+     */
+    private void addPlayerNamesToListView(){
+        for(String playerName: getIntent().getStringArrayListExtra("playerNames"))
+        {
+            playerDataArrayList.add(new PlayerData(playerName));
+        }
     }
 
     @Override

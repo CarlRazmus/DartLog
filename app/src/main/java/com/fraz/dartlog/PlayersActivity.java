@@ -13,7 +13,7 @@ import android.widget.ListView;
 import java.util.ArrayList;
 
 public class PlayersActivity extends ActionBarActivity implements View.OnClickListener {
-    private ArrayList<String> playersNamesStringArray;
+    private ArrayList<String> playersNames;
     private ArrayAdapter<String> arrayStringAdapter;
 
     @Override
@@ -29,8 +29,11 @@ public class PlayersActivity extends ActionBarActivity implements View.OnClickLi
 
         /* create a listView that contains all players who will join the game */
         ListView myListView = (ListView) findViewById(R.id.players_listView);
-        playersNamesStringArray = new ArrayList<>();
-        arrayStringAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, playersNamesStringArray);
+        playersNames = new ArrayList<>();
+        /* add names for debug purposes, remove when app is finished */
+        playersNames.add("Razmus Lindgren");
+        playersNames.add("Filip Källström");
+        arrayStringAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, playersNames);
         myListView.setAdapter(arrayStringAdapter);
     }
 
@@ -53,14 +56,12 @@ public class PlayersActivity extends ActionBarActivity implements View.OnClickLi
         Log.d("PlayerName", playerName);
 
         arrayStringAdapter.add(playerName);
-
-        //playersNamesStringArray.add(playerName);
-        //arrayStringAdapter.notifyDataSetChanged();
-
     }
 
     private void startPlayActivity() {
         Intent intent = new Intent(this, PlayActivity.class);
+
+        intent.putStringArrayListExtra("playerNames", playersNames);
         startActivity(intent);
     }
 }
