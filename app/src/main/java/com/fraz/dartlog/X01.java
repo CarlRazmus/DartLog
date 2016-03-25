@@ -69,4 +69,8 @@ public class X01 {
         currentPlayerIdx = (currentPlayerIdx + 1) % players.size();
         players.get(currentPlayerIdx).setActive(true);
     }
+
+    public int getCurrentPlayer(){
+        return currentPlayerIdx;
+    }
 }

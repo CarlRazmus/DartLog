@@ -52,5 +52,11 @@ public class PlayActivity extends ActionBarActivity implements InputEventListene
     public void enter(Integer score) {
         game.enterScore(score);
         playerListAdapter.notifyDataSetChanged();
+        updateSelectedItemInPlayersListView();
+    }
+
+    private void updateSelectedItemInPlayersListView() {
+        ListView playersListView = (ListView) findViewById(R.id.play_players_listView);
+        playersListView.smoothScrollToPosition(game.getCurrentPlayer());
     }
 }
