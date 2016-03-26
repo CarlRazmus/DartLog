@@ -1,14 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/num_pad_view"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:background="@color/background_dark"
+    tools:showIn="@layout/activity_play">
+
+    <View
+        android:id="@+id/num_pad_divider"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/main_red"/>
 
     <TextView
         android:id="@+id/score_input"
         android:layout_width="0dp"
         android:layout_height="match_parent"
-        android:layout_weight="1"
+        android:layout_alignParentLeft="true"
+        android:layout_alignBottom="@+id/num_pad"
+        android:layout_below="@id/num_pad_divider"
+        android:layout_toLeftOf="@id/num_pad"
         android:gravity="center"
         android:maxLength="3"
         android:text="0"
@@ -16,9 +29,11 @@
         android:textSize="35sp" />
 
     <RelativeLayout
-        android:id="@+id/numpad"
+        android:id="@id/num_pad"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_below="@id/num_pad_divider">
 
         <Button
             android:id="@+id/one"
@@ -109,4 +124,4 @@
             android:layout_toRightOf="@id/eight"
             android:text="enter" />
     </RelativeLayout>
-</LinearLayout>
+</RelativeLayout>

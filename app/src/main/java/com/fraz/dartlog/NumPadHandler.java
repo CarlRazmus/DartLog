@@ -13,7 +13,7 @@ public class NumPadHandler implements View.OnClickListener {
     private InputEventListener listener;
 
     public NumPadHandler(ViewGroup numpadView) {
-        this.numpad = (ViewGroup) numpadView.findViewById(R.id.numpad);
+        this.numpad = (ViewGroup) numpadView.findViewById(R.id.num_pad);
         this.scoreInput = (TextView) numpadView.findViewById(R.id.score_input);
         initButtons();
         initInputField();
