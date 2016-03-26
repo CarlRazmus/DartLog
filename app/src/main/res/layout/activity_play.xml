@@ -17,6 +17,12 @@
         tools:listitem="@layout/game_player_list_item">
     </ListView>
 
+    <View
+        android:id="@+id/num_pad_divider"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/main_red"/>
+
     <ViewAnimator
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

@@ -8,19 +8,23 @@
     android:background="@color/background_dark"
     tools:showIn="@layout/activity_play">
 
-    <View
-        android:id="@+id/num_pad_divider"
+    <TextView
         android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="@color/main_red"/>
+        android:layout_height="wrap_content"
+        android:id="@+id/game_hint"
+        android:textSize="20sp"
+        android:gravity="center"
+        android:textColor="@color/main_white"
+        android:padding="5dp"
+        android:visibility="gone"/>
 
     <TextView
         android:id="@+id/score_input"
         android:layout_width="0dp"
         android:layout_height="match_parent"
+        android:layout_below="@id/game_hint"
         android:layout_alignParentLeft="true"
         android:layout_alignBottom="@+id/num_pad"
-        android:layout_below="@id/num_pad_divider"
         android:layout_toLeftOf="@id/num_pad"
         android:gravity="center"
         android:maxLength="3"
@@ -33,7 +37,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
-        android:layout_below="@id/num_pad_divider">
+        android:layout_below="@id/game_hint">
 
         <Button
             android:id="@+id/one"
