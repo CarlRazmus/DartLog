@@ -11,21 +11,20 @@ public class X01 {
     private final Context context;
     private final ArrayList<PlayerData> players;
     private Integer currentPlayerIdx;
+    private Integer startingScore;
     private PlayerData winner;
 
     public X01(Context context, ArrayList<PlayerData> players, Integer x) {
         this.context = context;
         this.players = players;
-        currentPlayerIdx = 0;
 
-        players.get(currentPlayerIdx).setActive(true);
-        for (PlayerData player : players) {
-            player.setScore(x*100 + 1);
-        }
+        currentPlayerIdx = 0;
+        startingScore = x*100 + 1;
+        resetScores();
     }
 
     public void enterScore(Integer score) {
-        if (winner == null) {
+        if (!isDone()) {
             PlayerData currentPlayer = players.get(currentPlayerIdx);
             Integer newScore = currentPlayer.getScore() - score;
             if (newScore < 0) {
@@ -41,6 +40,10 @@ public class X01 {
             else
                 nextPlayer();
         }
+    }
+
+    public Boolean isDone() {
+        return winner != null;
     }
 
     private void setWinner(PlayerData currentPlayer) {
@@ -65,12 +68,29 @@ public class X01 {
     }
 
     private void nextPlayer() {
+        setActivePlayer((currentPlayerIdx + 1) % players.size());
+    }
+
+    private void setActivePlayer(Integer playerIdx) {
         players.get(currentPlayerIdx).setActive(false);
-        currentPlayerIdx = (currentPlayerIdx + 1) % players.size();
+        currentPlayerIdx = playerIdx;
         players.get(currentPlayerIdx).setActive(true);
     }
 
     public int getCurrentPlayer(){
         return currentPlayerIdx;
+    }
+
+    public void newLeg() {
+        setActivePlayer(0);
+        winner = null;
+        resetScores();
+    }
+
+    private void resetScores() {
+        players.get(currentPlayerIdx).setActive(true);
+        for (PlayerData player : players) {
+            player.setScore(startingScore);
+        }
     }
 }

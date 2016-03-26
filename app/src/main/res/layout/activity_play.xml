@@ -12,121 +12,18 @@
         android:dividerHeight="2dp"
         android:id="@+id/play_players_listView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="0dp"
         android:layout_weight="1"
         tools:listitem="@layout/game_player_list_item">
     </ListView>
 
-    <LinearLayout
+    <ViewAnimator
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:id="@+id/numpad_view">
+        android:id="@+id/game_input">
 
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:id="@+id/score_input"
-            android:layout_weight="1"
-            android:text="0"
-            android:maxLength="3"
-            android:textSize="35sp"
-            android:textColor="@color/main_white"
-            android:gravity="center"/>
+        <include layout="@layout/game_num_pad"/>
+        <include layout="@layout/game_done"/>
+    </ViewAnimator>
 
-        <RelativeLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/numpad">
-
-            <Button
-                android:id="@+id/one"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="1"/>
-
-            <Button
-                android:id="@+id/two"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="2"
-                android:layout_toRightOf="@id/one"/>
-
-            <Button
-                android:id="@+id/three"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="3"
-                android:layout_toRightOf="@id/two"/>
-
-            <Button
-                android:id="@+id/four"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/one"
-                android:text="4"/>
-
-            <Button
-                android:id="@+id/five"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="5"
-                android:layout_below="@id/one"
-                android:layout_toRightOf="@id/four"/>
-
-            <Button
-                android:id="@+id/six"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="6"
-                android:layout_below="@id/one"
-                android:layout_toRightOf="@id/five"/>
-
-            <Button
-                android:id="@+id/seven"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/four"
-                android:text="7"/>
-
-            <Button
-                android:id="@+id/eight"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="8"
-                android:layout_below="@id/four"
-                android:layout_toRightOf="@id/seven"/>
-
-            <Button
-                android:id="@+id/nine"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="9"
-                android:layout_below="@id/four"
-                android:layout_toRightOf="@id/eight"/>
-
-            <Button
-                android:id="@+id/erase"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/seven"
-                android:text="erase"/>
-
-            <Button
-                android:id="@+id/zero"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="0"
-                android:layout_below="@id/seven"
-                android:layout_toRightOf="@id/seven"/>
-
-            <Button
-                android:id="@+id/enter"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="enter"
-                android:layout_below="@id/seven"
-                android:layout_toRightOf="@id/eight"/>
-        </RelativeLayout>
-    </LinearLayout>
 </LinearLayout>

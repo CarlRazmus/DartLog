@@ -16,7 +16,6 @@ public class PlayerData {
         this.playerName = playerName;
     }
 
-
     public Boolean isActive() {
         return active;
     }
