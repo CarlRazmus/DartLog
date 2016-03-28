@@ -19,13 +19,13 @@ public class X01 {
     private final Activity context;
     private final ArrayList<PlayerData> players;
     private final String checkoutUnavailableText = "Checkout Unavailable";
-    private Integer currentPlayerIdx;
-    private Integer startingScore;
+    private int currentPlayerIdx;
+    private int startingScore;
     private PlayerData winner;
     private TextView checkoutView;
     private Map<Integer, String> checkouts = new HashMap<>();
 
-    public X01(Activity context, ArrayList<PlayerData> players, Integer x) {
+    public X01(Activity context, ArrayList<PlayerData> players, int x) {
         this.context = context;
         this.players = players;
 
@@ -35,6 +35,53 @@ public class X01 {
 
         initCheckoutView();
         initCheckoutMap();
+    }
+
+    public void enterScore(int score) {
+        if (!isDone()) {
+            PlayerData currentPlayer = players.get(currentPlayerIdx);
+            int newScore = currentPlayer.getScore() - score;
+            if (newScore < 0) {
+                showBustToast();
+            } else {
+                currentPlayer.setScore(newScore);
+            }
+            updateGameState();
+        }
+    }
+
+    public boolean isDone() {
+        return winner != null;
+    }
+
+    public void newLeg() {
+        setActivePlayer(0);
+        winner = null;
+        resetScores();
+        updateCheckoutHint();
+    }
+
+    private void updateGameState() {
+        PlayerData currentPlayer = players.get(currentPlayerIdx);
+        int currentScore = currentPlayer.getScore();
+        if (currentScore == 0) {
+            setWinner(currentPlayer);
+            showWinnerToast();
+        }
+        else {
+            nextPlayer();
+            updateCheckoutHint();
+        }
+    }
+
+    private void updateCheckoutHint() {
+        int currentScore = players.get(currentPlayerIdx).getScore();
+        String checkoutHint = checkouts.get(currentScore);
+        if (checkoutHint == null) {
+            checkoutHint = checkoutUnavailableText;
+        }
+
+        checkoutView.setText(checkoutHint);
     }
 
     private void initCheckoutMap() {
@@ -51,53 +98,6 @@ public class X01 {
         } catch (IOException e) {
             e.printStackTrace();
         }
-    }
-
-    public void enterScore(Integer score) {
-        if (!isDone()) {
-            PlayerData currentPlayer = players.get(currentPlayerIdx);
-            Integer newScore = currentPlayer.getScore() - score;
-            if (newScore < 0) {
-                showBustToast();
-            } else {
-                currentPlayer.setScore(newScore);
-            }
-            updateGameState();
-        }
-    }
-
-    public Boolean isDone() {
-        return winner != null;
-    }
-
-    public void newLeg() {
-        setActivePlayer(0);
-        winner = null;
-        resetScores();
-        updateCheckoutHint();
-    }
-
-    private void updateGameState() {
-        PlayerData currentPlayer = players.get(currentPlayerIdx);
-        Integer currentScore = currentPlayer.getScore();
-        if (currentScore == 0) {
-            setWinner(currentPlayer);
-            showWinnerToast();
-        }
-        else {
-            nextPlayer();
-            updateCheckoutHint();
-        }
-    }
-
-    private void updateCheckoutHint() {
-        Integer currentScore = players.get(currentPlayerIdx).getScore();
-        String checkoutHint = checkouts.get(currentScore);
-        if (checkoutHint == null) {
-            checkoutHint = checkoutUnavailableText;
-        }
-
-        checkoutView.setText(checkoutHint);
     }
 
     private void initCheckoutView() {
@@ -131,7 +131,7 @@ public class X01 {
         setActivePlayer((currentPlayerIdx + 1) % players.size());
     }
 
-    private void setActivePlayer(Integer playerIdx) {
+    private void setActivePlayer(int playerIdx) {
         players.get(currentPlayerIdx).setActive(false);
         currentPlayerIdx = playerIdx;
         players.get(currentPlayerIdx).setActive(true);

@@ -40,7 +40,7 @@ public class PlayActivity extends ActionBarActivity implements View.OnClickListe
         switch (v.getId()) {
             case R.id.new_leg:
                 game.newLeg();
-                update();
+                updateView();
                 break;
             case R.id.complete_match:
                 completeMatch();
@@ -49,12 +49,12 @@ public class PlayActivity extends ActionBarActivity implements View.OnClickListe
     }
 
     @Override
-    public void enter(Integer score) {
+    public void enter(int score) {
         game.enterScore(score);
-        update();
+        updateView();
     }
 
-    private void update() {
+    private void updateView() {
         playerListAdapter.notifyDataSetChanged();
         updateSelectedItemInPlayersListView();
         if (game.isDone()) {

@@ -48,14 +48,13 @@ public class NumPadHandler implements View.OnClickListener {
     }
 
     private void enter() {
-        Integer score = getInput();
+        int score = getInput();
         listener.enter(score);
         scoreInput.setText("0");
     }
 
-    private Integer getInput() {
+    private int getInput() {
         return Integer.parseInt(scoreInput.getText().toString());
-
     }
 
     private void eraseNumber() {

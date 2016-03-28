@@ -1,5 +1,5 @@
 package com.fraz.dartlog;
 
 public interface InputEventListener {
-    void enter(Integer val);
+    void enter(int val);
 }
