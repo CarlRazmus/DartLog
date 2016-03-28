@@ -9,13 +9,14 @@ import android.widget.TextView;
 
 import java.util.List;
 
-class PlayerListAdapter extends ArrayAdapter<PlayerData> {
+class GameListAdapter extends ArrayAdapter<PlayerData> {
 
     private List<PlayerData> items;
     private Activity context;
 
-    public PlayerListAdapter(Activity context, List<PlayerData> items) {
+    public GameListAdapter(Activity context, List<PlayerData> items) {
         super(context, R.layout.game_player_list_item, items);
+
         this.context = context;
         this.items = items;
     }
@@ -36,11 +37,13 @@ class PlayerListAdapter extends ArrayAdapter<PlayerData> {
         scoreView.setText(String.valueOf(items.get(position).getScore()));
 
         setBackgroundColor(position, listItem);
+
         return listItem;
     }
 
     private void setBackgroundColor(int position, View listItem) {
         PlayerData player = items.get(position);
+
         if (player.getScore() == 0) {
             listItem.setBackgroundColor(
                     context.getResources().getColor(R.color.game_player_winner));

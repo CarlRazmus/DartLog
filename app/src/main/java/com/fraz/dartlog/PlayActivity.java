@@ -15,7 +15,7 @@ public class PlayActivity extends ActionBarActivity implements View.OnClickListe
                                                                InputEventListener {
 
     private X01 game;
-    private PlayerListAdapter playerListAdapter;
+    private GameListAdapter gameListAdapter;
     private ArrayList<PlayerData> playerDataArrayList;
     private ViewAnimator viewAnimator;
 
@@ -23,12 +23,13 @@ public class PlayActivity extends ActionBarActivity implements View.OnClickListe
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_play);
+
         viewAnimator = (ViewAnimator) findViewById(R.id.game_input);
         playerDataArrayList = new ArrayList<>();
-        playerListAdapter = new PlayerListAdapter(this, playerDataArrayList);
+        gameListAdapter = new GameListAdapter(this, playerDataArrayList);
+
         addPlayerNamesToListView();
         linkListViewToPlayerListAdapter();
-
         initNumPadView();
         initGameDoneView();
 
@@ -55,7 +56,7 @@ public class PlayActivity extends ActionBarActivity implements View.OnClickListe
     }
 
     private void updateView() {
-        playerListAdapter.notifyDataSetChanged();
+        gameListAdapter.notifyDataSetChanged();
         updateSelectedItemInPlayersListView();
         if (game.isDone()) {
             setGameDoneView();
@@ -66,7 +67,7 @@ public class PlayActivity extends ActionBarActivity implements View.OnClickListe
 
     private void linkListViewToPlayerListAdapter() {
         ListView myListView = (ListView) findViewById(R.id.play_players_listView);
-        myListView.setAdapter(playerListAdapter);
+        myListView.setAdapter(gameListAdapter);
     }
 
     /**
