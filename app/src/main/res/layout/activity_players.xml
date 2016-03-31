@@ -14,8 +14,8 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="40dp"
         android:layout_alignParentTop="true"
+        android:layout_marginBottom="100dp"
         android:id="@+id/add_players_group">
 
         <EditText
@@ -24,7 +24,11 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:inputType="text"
+            android:textSize="20sp"
+            android:textColor="@color/main_white"
+            android:backgroundTint="@color/primary_dark_material_dark"
             android:textAlignment="center"
+            android:textColorHint="@color/main_white"
             android:hint="Player Name"/>
 
         <Button
@@ -36,25 +40,33 @@
             android:text="+"/>
     </LinearLayout>
 
+    <View
+        android:id="@+id/add_players_group_divider"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/main_red"/>
+
     <ListView
         android:id="@+id/players_listView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_margin="5dp"
+        android:layout_marginTop="1dp"
+        android:layout_marginBottom="1dp"
         android:layout_weight="1">
+
     </ListView>
 
-    <RelativeLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:id="@+id/button_group">
+    <View
+        android:id="@+id/ready_button_divider"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/main_red"/>
 
-        <Button
-            android:id="@+id/ready_button"
-            android:layout_width="match_parent"
-            android:layout_alignParentRight="true"
-            android:layout_height="wrap_content"
-            android:text="Ready!"/>
-    </RelativeLayout>
+    <Button
+        android:id="@+id/ready_button"
+        android:layout_width="match_parent"
+        android:layout_alignParentRight="true"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:text="Ready!"/>
 </LinearLayout>
