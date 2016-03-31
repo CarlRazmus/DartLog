@@ -11,7 +11,7 @@ import android.widget.ViewAnimator;
 
 import java.util.ArrayList;
 
-public class PlayActivity extends ActionBarActivity implements View.OnClickListener,
+public class GameActivity extends ActionBarActivity implements View.OnClickListener,
                                                                InputEventListener {
 
     private X01 game;
@@ -22,7 +22,7 @@ public class PlayActivity extends ActionBarActivity implements View.OnClickListe
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_play);
+        setContentView(R.layout.activity_game);
 
         viewAnimator = (ViewAnimator) findViewById(R.id.game_input);
         playerDataArrayList = new ArrayList<>();

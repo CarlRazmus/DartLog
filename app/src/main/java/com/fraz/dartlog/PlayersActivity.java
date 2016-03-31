@@ -92,7 +92,7 @@ public class PlayersActivity extends ActionBarActivity implements View.OnClickLi
             showMustAddPlayersErrorToast();
         }
 
-        Intent intent = new Intent(this, PlayActivity.class);
+        Intent intent = new Intent(this, GameActivity.class);
 
         intent.putStringArrayListExtra("playerNames", playersNames);
         startActivity(intent);
