@@ -11,31 +11,43 @@
     android:background="@color/background">
 
 
-
     <RelativeLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
+        android:layout_alignParentBottom="true"
         android:id="@+id/button_group">
 
-        <Button
-            android:id="@+id/play_button"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="PLAY DARTS"/>
+        <ImageView
+            android:layout_width="400dp"
+            android:layout_height="400dp"
+            android:src="@drawable/dart_board_800px"
+            android:layout_centerInParent="true"
+            android:alpha=".2"/>
 
-        <Button
-            android:id="@+id/stat_button"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_below="@id/play_button"
             android:layout_height="wrap_content"
-            android:text="SHOW STATISTICS"/>
+            android:layout_centerInParent="true"
+            android:orientation="vertical">
+
+            <Button
+                android:id="@+id/play_button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:text="PLAY DARTS"/>
+
+            <Button
+                android:id="@+id/stat_button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="SHOW STATISTICS"/>
+        </LinearLayout>
     </RelativeLayout>
 
-    <RelativeLayout
+    <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_above="@id/button_group"
         android:layout_centerHorizontal="true"
         android:id="@+id/logo_group">
 
@@ -45,19 +57,15 @@
             android:layout_height="wrap_content"
             android:text="DART"
             android:textSize="30pt"
-            android:textColor="@color/main_white"
-            android:layout_marginBottom="50dp"/>
+            android:textColor="@color/main_white" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="LOG"
             android:textSize="30pt"
-            android:textColor="@color/main_red"
-            android:layout_marginBottom="50dp"
-            android:layout_toRightOf="@id/dart_text"/>
-
-    </RelativeLayout>
+            android:textColor="@color/main_red"/>
+    </LinearLayout>
 
 </RelativeLayout>
 
