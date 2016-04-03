@@ -57,7 +57,7 @@ public class GameActivity extends ActionBarActivity implements View.OnClickListe
 
     private void updateView() {
         gameListAdapter.notifyDataSetChanged();
-        updateSelectedItemInPlayersListView();
+        scrollToPlayerInList();
         if (game.isDone()) {
             setGameDoneView();
         } else {
@@ -81,7 +81,7 @@ public class GameActivity extends ActionBarActivity implements View.OnClickListe
         }
     }
 
-    private void updateSelectedItemInPlayersListView() {
+    private void scrollToPlayerInList() {
         ListView playersListView = (ListView) findViewById(R.id.play_players_listView);
         playersListView.smoothScrollToPosition(game.getCurrentPlayer());
     }
