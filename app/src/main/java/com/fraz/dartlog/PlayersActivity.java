@@ -3,7 +3,7 @@ package com.fraz.dartlog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.view.Gravity;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -14,7 +14,7 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 
-public class PlayersActivity extends ActionBarActivity implements View.OnClickListener {
+public class PlayersActivity extends AppCompatActivity implements View.OnClickListener {
     private ArrayList<String> playersNames;
     private SelectedPlayersListAdapter arrayStringAdapter;
 

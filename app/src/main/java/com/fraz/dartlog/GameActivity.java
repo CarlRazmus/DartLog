@@ -2,7 +2,7 @@ package com.fraz.dartlog;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -11,7 +11,7 @@ import android.widget.ViewAnimator;
 
 import java.util.ArrayList;
 
-public class GameActivity extends ActionBarActivity implements View.OnClickListener,
+public class GameActivity extends AppCompatActivity implements View.OnClickListener,
                                                                InputEventListener {
 
     private X01 game;
