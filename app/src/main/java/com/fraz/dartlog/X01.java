@@ -1,10 +1,8 @@
 package com.fraz.dartlog;
 
 import android.app.Activity;
-import android.view.Gravity;
 import android.view.View;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -14,22 +12,17 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-public class X01 {
+public class X01 extends Game {
 
-    private final Activity context;
-    private final ArrayList<PlayerData> players;
     private final String checkoutUnavailableText = "Checkout Unavailable";
-    private int currentPlayerIdx;
     private int startingScore;
-    private PlayerData winner;
     private TextView checkoutView;
     private Map<Integer, String> checkouts = new HashMap<>();
 
     public X01(Activity context, ArrayList<PlayerData> players, int x) {
-        this.context = context;
-        this.players = players;
+        super(context, players);
 
-        currentPlayerIdx = 0;
+        setActivePlayer(0);
         startingScore = x*100 + 1;
         resetScores();
 
@@ -48,10 +41,6 @@ public class X01 {
             }
             updateGameState();
         }
-    }
-
-    public boolean isDone() {
-        return winner != null;
     }
 
     public void newLeg() {
@@ -106,43 +95,12 @@ public class X01 {
         checkoutView.setVisibility(View.VISIBLE);
     }
 
-    private void setWinner(PlayerData currentPlayer) {
-        winner = currentPlayer;
-    }
-
     private void showBustToast() {
         CharSequence text = "Bust!";
         showToast(text);
     }
 
-    private void showWinnerToast() {
-        CharSequence text = String.format("Winner: %s!",
-                players.get(currentPlayerIdx).getPlayerName());
-        showToast(text);
-    }
-
-    private void showToast(CharSequence text) {
-        Toast toast = Toast.makeText(context, text, Toast.LENGTH_SHORT);
-        toast.setGravity(Gravity.CENTER, 0, 0);
-        toast.show();
-    }
-
-    private void nextPlayer() {
-        setActivePlayer((currentPlayerIdx + 1) % players.size());
-    }
-
-    private void setActivePlayer(int playerIdx) {
-        players.get(currentPlayerIdx).setActive(false);
-        currentPlayerIdx = playerIdx;
-        players.get(currentPlayerIdx).setActive(true);
-    }
-
-    public int getCurrentPlayer(){
-        return currentPlayerIdx;
-    }
-
     private void resetScores() {
-        players.get(currentPlayerIdx).setActive(true);
         for (PlayerData player : players) {
             player.setScore(startingScore);
         }
