@@ -5,7 +5,8 @@
     android:layout_height="match_parent"
     tools:context=".GameActivity"
     android:orientation="vertical"
-    android:background="@color/background">
+    android:background="@color/background"
+    android:keepScreenOn="true">
 
     <ListView
         android:divider="@drawable/list_divider"
