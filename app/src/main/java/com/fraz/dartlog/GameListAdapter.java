@@ -16,7 +16,6 @@ class GameListAdapter extends ArrayAdapter<PlayerData> {
 
     public GameListAdapter(Activity context, List<PlayerData> items) {
         super(context, R.layout.game_player_list_item, items);
-
         this.context = context;
         this.items = items;
     }
@@ -37,13 +36,11 @@ class GameListAdapter extends ArrayAdapter<PlayerData> {
         scoreView.setText(String.valueOf(items.get(position).getScore()));
 
         setBackgroundColor(position, listItem);
-
         return listItem;
     }
 
     private void setBackgroundColor(int position, View listItem) {
         PlayerData player = items.get(position);
-
         if (player.getScore() == 0) {
             listItem.setBackgroundColor(
                     context.getResources().getColor(R.color.game_player_winner));

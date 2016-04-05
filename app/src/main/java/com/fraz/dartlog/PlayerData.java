@@ -1,6 +1,5 @@
 package com.fraz.dartlog;
 
-
 public class PlayerData {
 
     private String playerName;

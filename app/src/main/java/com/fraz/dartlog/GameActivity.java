@@ -29,7 +29,8 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
         gameListAdapter = new GameListAdapter(this, playerDataArrayList);
 
         addPlayerNamesToListView();
-        linkListViewToPlayerListAdapter();
+        initListView();
+
         initNumPadView();
         initGameDoneView();
 
@@ -65,7 +66,7 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
-    private void linkListViewToPlayerListAdapter() {
+    private void initListView() {
         ListView myListView = (ListView) findViewById(R.id.play_players_listView);
         myListView.setAdapter(gameListAdapter);
     }
