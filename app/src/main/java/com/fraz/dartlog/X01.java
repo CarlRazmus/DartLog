@@ -22,9 +22,9 @@ public class X01 extends Game {
     public X01(Activity context, ArrayList<PlayerData> players, int x) {
         super(context, players);
 
-        setActivePlayer(0);
         startingScore = x*100 + 1;
-        resetScores();
+        resetPlayerData(startingScore);
+        setActivePlayer(0);
 
         initCheckoutView();
         initCheckoutMap();
@@ -33,26 +33,26 @@ public class X01 extends Game {
     public void enterScore(int score) {
         if (!isDone()) {
             PlayerData currentPlayer = players.get(currentPlayerIdx);
-            int newScore = currentPlayer.getScore() - score;
+            int newScore = currentPlayer.getCurrentScore() - score;
             if (newScore < 0) {
                 showBustToast();
             } else {
-                currentPlayer.setScore(newScore);
+                currentPlayer.setCurrentScore(newScore);
             }
             updateGameState();
         }
     }
 
     public void newLeg() {
-        setActivePlayer(0);
         winner = null;
-        resetScores();
+        resetPlayerData(startingScore);
+        setActivePlayer(0);
         updateCheckoutHint();
     }
 
     private void updateGameState() {
         PlayerData currentPlayer = players.get(currentPlayerIdx);
-        int currentScore = currentPlayer.getScore();
+        int currentScore = currentPlayer.getCurrentScore();
         if (currentScore == 0) {
             setWinner(currentPlayer);
             showWinnerToast();
@@ -64,7 +64,7 @@ public class X01 extends Game {
     }
 
     private void updateCheckoutHint() {
-        int currentScore = players.get(currentPlayerIdx).getScore();
+        int currentScore = players.get(currentPlayerIdx).getCurrentScore();
         String checkoutHint = checkouts.get(currentScore);
         if (checkoutHint == null) {
             checkoutHint = checkoutUnavailableText;
@@ -100,9 +100,9 @@ public class X01 extends Game {
         showToast(text);
     }
 
-    private void resetScores() {
+    private void resetPlayerData(int score) {
         for (PlayerData player : players) {
-            player.setScore(startingScore);
+            player.reset(score);
         }
     }
 }

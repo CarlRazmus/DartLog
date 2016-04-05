@@ -33,7 +33,7 @@ class GameListAdapter extends ArrayAdapter<PlayerData> {
         playerNameView.setText(items.get(position).getPlayerName());
 
         TextView scoreView = (TextView) listItem.findViewById(R.id.game_player_list_item_score);
-        scoreView.setText(String.valueOf(items.get(position).getScore()));
+        scoreView.setText(String.valueOf(items.get(position).getCurrentScore()));
 
         setBackgroundColor(position, listItem);
         return listItem;
@@ -41,7 +41,7 @@ class GameListAdapter extends ArrayAdapter<PlayerData> {
 
     private void setBackgroundColor(int position, View listItem) {
         PlayerData player = items.get(position);
-        if (player.getScore() == 0) {
+        if (player.getCurrentScore() == 0) {
             listItem.setBackgroundColor(
                     context.getResources().getColor(R.color.game_player_winner));
         } else if (player.isActive()) {

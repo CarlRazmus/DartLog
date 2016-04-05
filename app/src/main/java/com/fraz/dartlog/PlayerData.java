@@ -1,9 +1,12 @@
 package com.fraz.dartlog;
 
+import java.util.LinkedList;
+
 public class PlayerData {
 
     private String playerName;
-    private int score = -1;
+    private int currentScore = -1;
+    private LinkedList<Integer> scoreHistory = new LinkedList<>();
     private boolean active = false;
 
     public PlayerData(String playerName) {
@@ -22,11 +25,18 @@ public class PlayerData {
         return playerName;
     }
 
-    public void setScore(int score) {
-        this.score = score;
+    public void setCurrentScore(int score) {
+        scoreHistory.add(currentScore);
+        currentScore = score;
     }
 
-    public int getScore() {
-        return score;
+    public int getCurrentScore() {
+        return currentScore;
+    }
+
+    public void reset(int score) {
+        scoreHistory = new LinkedList<>();
+        active = false;
+        setCurrentScore(score);
     }
 }
