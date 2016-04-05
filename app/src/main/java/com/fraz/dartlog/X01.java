@@ -23,7 +23,7 @@ public class X01 extends Game {
         super(context, players);
 
         startingScore = x*100 + 1;
-        resetPlayerData(startingScore);
+        initPlayerData(startingScore);
         setActivePlayer(0);
 
         initCheckoutView();
@@ -35,18 +35,17 @@ public class X01 extends Game {
             PlayerData currentPlayer = players.get(currentPlayerIdx);
             int newScore = currentPlayer.getCurrentScore() - score;
             if (newScore < 0) {
+                newScore = currentPlayer.getCurrentScore();
                 showBustToast();
-            } else {
-                currentPlayer.setCurrentScore(newScore);
             }
+            setCurrentScore(newScore);
             updateGameState();
         }
     }
 
     public void newLeg() {
-        winner = null;
-        resetPlayerData(startingScore);
-        setActivePlayer(0);
+        initPlayerData(startingScore);
+        initGame();
         updateCheckoutHint();
     }
 
@@ -98,11 +97,5 @@ public class X01 extends Game {
     private void showBustToast() {
         CharSequence text = "Bust!";
         showToast(text);
-    }
-
-    private void resetPlayerData(int score) {
-        for (PlayerData player : players) {
-            player.reset(score);
-        }
     }
 }

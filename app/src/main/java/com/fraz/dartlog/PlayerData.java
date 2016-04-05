@@ -5,12 +5,18 @@ import java.util.LinkedList;
 public class PlayerData {
 
     private String playerName;
-    private int currentScore = -1;
-    private LinkedList<Integer> scoreHistory = new LinkedList<>();
-    private boolean active = false;
+    private int currentScore;
+    private LinkedList<Integer> scoreHistory;
+    private boolean active;
 
     public PlayerData(String playerName) {
         this.playerName = playerName;
+    }
+
+    public void initPlayerData(int score) {
+        currentScore = score;
+        scoreHistory = new LinkedList<>();
+        active = false;
     }
 
     public boolean isActive() {
@@ -34,9 +40,9 @@ public class PlayerData {
         return currentScore;
     }
 
-    public void reset(int score) {
-        scoreHistory = new LinkedList<>();
-        active = false;
-        setCurrentScore(score);
+    public void undo() {
+        if (!scoreHistory.isEmpty()) {
+            currentScore = scoreHistory.removeLast();
+        }
     }
 }
