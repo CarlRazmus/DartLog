@@ -80,4 +80,8 @@ public abstract class Game {
             player.initPlayerData(score);
         }
     }
+
+    public String getHintText() {
+        return null;
+    }
 }

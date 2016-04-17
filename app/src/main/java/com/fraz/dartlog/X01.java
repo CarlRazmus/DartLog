@@ -1,7 +1,6 @@
 package com.fraz.dartlog;
 
 import android.app.Activity;
-import android.view.View;
 import android.widget.TextView;
 
 import java.io.BufferedReader;
@@ -26,7 +25,6 @@ public class X01 extends Game {
         initPlayerData(startingScore);
         setActivePlayer(0);
 
-        initCheckoutView();
         initCheckoutMap();
     }
 
@@ -46,7 +44,6 @@ public class X01 extends Game {
     public void newLeg() {
         initPlayerData(startingScore);
         initGame();
-        updateCheckoutHint();
     }
 
     private void updateGameState() {
@@ -58,18 +55,7 @@ public class X01 extends Game {
         }
         else {
             nextPlayer();
-            updateCheckoutHint();
         }
-    }
-
-    private void updateCheckoutHint() {
-        int currentScore = players.get(currentPlayerIdx).getCurrentScore();
-        String checkoutHint = checkouts.get(currentScore);
-        if (checkoutHint == null) {
-            checkoutHint = checkoutUnavailableText;
-        }
-
-        checkoutView.setText(checkoutHint);
     }
 
     private void initCheckoutMap() {
@@ -88,10 +74,14 @@ public class X01 extends Game {
         }
     }
 
-    private void initCheckoutView() {
-        checkoutView = (TextView) context.findViewById(R.id.game_hint);
-        checkoutView.setText(checkoutUnavailableText);
-        checkoutView.setVisibility(View.VISIBLE);
+    @Override
+    public String getHintText() {
+        int currentScore = players.get(currentPlayerIdx).getCurrentScore();
+        String checkoutHint = checkouts.get(currentScore);
+        if (checkoutHint == null) {
+            checkoutHint = checkoutUnavailableText;
+        }
+        return checkoutHint;
     }
 
     private void showBustToast() {

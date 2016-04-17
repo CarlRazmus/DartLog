@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.ViewAnimator;
 
 import java.util.ArrayList;
@@ -41,6 +42,7 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
         initGameDoneView();
 
         game = new X01(this, playerDataArrayList, 3);
+        updateView();
     }
 
     @Override
@@ -83,6 +85,7 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
 
     private void updateView() {
         gameListAdapter.notifyDataSetChanged();
+        updateHintView();
         scrollToPlayerInList();
         if (game.isDone()) {
             setGameDoneView();
@@ -91,8 +94,21 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
+    private void updateHintView() {
+        TextView hintView = (TextView) findViewById(R.id.game_hint);
+        assert hintView != null;
+        String hintText = game.getHintText();
+        if (hintText != null) {
+            hintView.setVisibility(View.VISIBLE);
+            hintView.setText(hintText);
+        } else {
+            hintView.setVisibility(View.GONE);
+        }
+    }
+
     private void initListView() {
         ListView myListView = (ListView) findViewById(R.id.play_players_listView);
+        assert myListView != null;
         myListView.setAdapter(gameListAdapter);
     }
 
@@ -109,6 +125,7 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
 
     private void scrollToPlayerInList() {
         ListView playersListView = (ListView) findViewById(R.id.play_players_listView);
+        assert playersListView != null;
         playersListView.smoothScrollToPosition(game.getCurrentPlayer());
     }
 
@@ -121,7 +138,9 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
         Button newLegButton = (Button) findViewById(R.id.new_leg);
         Button completeMatchButton = (Button) findViewById(R.id.complete_match);
 
+        assert newLegButton != null;
         newLegButton.setOnClickListener(this);
+        assert completeMatchButton != null;
         completeMatchButton.setOnClickListener(this);
     }
 
