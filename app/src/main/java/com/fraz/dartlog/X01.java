@@ -1,7 +1,6 @@
 package com.fraz.dartlog;
 
 import android.app.Activity;
-import android.widget.TextView;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -15,7 +14,6 @@ public class X01 extends Game {
 
     private final String checkoutUnavailableText = "Checkout Unavailable";
     private int startingScore;
-    private TextView checkoutView;
     private Map<Integer, String> checkouts = new HashMap<>();
 
     public X01(Activity context, ArrayList<PlayerData> players, int x) {

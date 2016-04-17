@@ -24,8 +24,16 @@ public abstract class Game {
         return winner != null;
     }
 
-    public int getCurrentPlayer(){
+    public int getCurrentPlayer() {
         return currentPlayerIdx;
+    }
+
+    public PlayerData getPlayer(int index) {
+        return players.get(index);
+    }
+
+    public int getNumberOfPlayers() {
+        return players.size();
     }
 
     public void undo() {

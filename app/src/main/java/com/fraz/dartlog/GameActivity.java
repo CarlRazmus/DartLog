@@ -21,7 +21,6 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
 
     private X01 game;
     private GameListAdapter gameListAdapter;
-    private ArrayList<PlayerData> playerDataArrayList;
     private ViewAnimator viewAnimator;
 
     @Override
@@ -32,16 +31,13 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
         setSupportActionBar((Toolbar) findViewById(R.id.game_toolbar));
 
         viewAnimator = (ViewAnimator) findViewById(R.id.game_input);
-        playerDataArrayList = new ArrayList<>();
-        gameListAdapter = new GameListAdapter(this, playerDataArrayList);
 
-        addPlayerNamesToListView();
+        game = new X01(this, createPlayerDataList(), 3);
+        gameListAdapter = new GameListAdapter(this, game);
+
         initListView();
-
         initNumPadView();
         initGameDoneView();
-
-        game = new X01(this, playerDataArrayList, 3);
         updateView();
     }
 
@@ -113,14 +109,15 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     /**
-     * Fetch players names that are sent from PlayersActivity and store them in
-     * play_players_listView
+     * Create and return a list of player data from a list of player names.
      */
-    private void addPlayerNamesToListView(){
+    private ArrayList<PlayerData> createPlayerDataList(){
+        ArrayList<PlayerData> playerDataList = new ArrayList<>();
         for(String playerName: getIntent().getStringArrayListExtra("playerNames"))
         {
-            playerDataArrayList.add(new PlayerData(playerName));
+            playerDataList.add(new PlayerData(playerName));
         }
+        return playerDataList;
     }
 
     private void scrollToPlayerInList() {

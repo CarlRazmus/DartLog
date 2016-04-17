@@ -4,43 +4,55 @@ import android.app.Activity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
+import android.widget.BaseAdapter;
 import android.widget.TextView;
 
-import java.util.List;
+class GameListAdapter extends BaseAdapter {
 
-class GameListAdapter extends ArrayAdapter<PlayerData> {
-
-    private List<PlayerData> items;
+    private Game game;
     private Activity context;
 
-    public GameListAdapter(Activity context, List<PlayerData> items) {
-        super(context, R.layout.game_player_list_item, items);
+    public GameListAdapter(Activity context, Game game) {
         this.context = context;
-        this.items = items;
+        this.game = game;
     }
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         LayoutInflater inflater = context.getLayoutInflater();
         View listItem = convertView;
+        PlayerData player = game.getPlayer(position);
 
         if (convertView == null) {
             listItem = inflater.inflate(R.layout.game_player_list_item, parent, false);
         }
 
         TextView playerNameView = (TextView) listItem.findViewById(R.id.game_player_list_item_name);
-        playerNameView.setText(items.get(position).getPlayerName());
+        playerNameView.setText(player.getPlayerName());
 
         TextView scoreView = (TextView) listItem.findViewById(R.id.game_player_list_item_score);
-        scoreView.setText(String.valueOf(items.get(position).getCurrentScore()));
+        scoreView.setText(String.valueOf(player.getCurrentScore()));
 
-        setBackgroundColor(position, listItem);
+        setBackgroundColor(player, listItem);
         return listItem;
     }
 
-    private void setBackgroundColor(int position, View listItem) {
-        PlayerData player = items.get(position);
+    @Override
+    public int getCount() {
+        return game.getNumberOfPlayers();
+    }
+
+    @Override
+    public PlayerData getItem(int i) {
+        return game.getPlayer(i);
+    }
+
+    @Override
+    public long getItemId(int i) {
+        return i;
+    }
+
+    private void setBackgroundColor(PlayerData player, View listItem) {
         if (player.getCurrentScore() == 0) {
             listItem.setBackgroundColor(
                     context.getResources().getColor(R.color.game_player_winner));
