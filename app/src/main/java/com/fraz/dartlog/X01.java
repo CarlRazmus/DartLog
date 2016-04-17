@@ -12,7 +12,6 @@ import java.util.Map;
 
 public class X01 extends Game {
 
-    private final String checkoutUnavailableText = "Checkout Unavailable";
     private int startingScore;
     private Map<Integer, String> checkouts = new HashMap<>();
 
@@ -21,7 +20,7 @@ public class X01 extends Game {
 
         startingScore = x*100 + 1;
         initPlayerData(startingScore);
-        setActivePlayer(0);
+        currentPlayerIdx = 0;
 
         initCheckoutMap();
     }
@@ -77,7 +76,7 @@ public class X01 extends Game {
         int currentScore = players.get(currentPlayerIdx).getCurrentScore();
         String checkoutHint = checkouts.get(currentScore);
         if (checkoutHint == null) {
-            checkoutHint = checkoutUnavailableText;
+            checkoutHint = "Checkout Unavailable";
         }
         return checkoutHint;
     }

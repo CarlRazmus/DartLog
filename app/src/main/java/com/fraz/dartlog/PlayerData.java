@@ -7,7 +7,6 @@ public class PlayerData {
     private String playerName;
     private int currentScore;
     private LinkedList<Integer> scoreHistory;
-    private boolean active;
 
     public PlayerData(String playerName) {
         this.playerName = playerName;
@@ -16,15 +15,6 @@ public class PlayerData {
     public void initPlayerData(int score) {
         currentScore = score;
         scoreHistory = new LinkedList<>();
-        active = false;
-    }
-
-    public boolean isActive() {
-        return active;
-    }
-
-    public void setActive(boolean active) {
-        this.active = active;
     }
 
     public String getPlayerName() {

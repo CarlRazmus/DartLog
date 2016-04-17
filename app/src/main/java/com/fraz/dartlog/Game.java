@@ -40,7 +40,7 @@ public abstract class Game {
         if (!playOrder.isEmpty()) {
             int lastPlayerIdx = playOrder.removeLast();
             players.get(lastPlayerIdx).undo();
-            setActivePlayer(lastPlayerIdx);
+            currentPlayerIdx = lastPlayerIdx;
             winner = null;
         }
     }
@@ -49,7 +49,6 @@ public abstract class Game {
         playOrder = new LinkedList<>();
         winner = null;
         currentPlayerIdx = 0;
-        setActivePlayer(currentPlayerIdx);
     }
 
     protected void setWinner(PlayerData currentPlayer) {
@@ -69,18 +68,12 @@ public abstract class Game {
     }
 
     protected void nextPlayer() {
-        setActivePlayer((currentPlayerIdx + 1) % players.size());
+        currentPlayerIdx = (currentPlayerIdx + 1) % players.size();
     }
 
     protected void setCurrentScore(int newScore) {
         players.get(currentPlayerIdx).setCurrentScore(newScore);
         playOrder.add(currentPlayerIdx);
-    }
-
-    protected void setActivePlayer(int playerIdx) {
-        players.get(currentPlayerIdx).setActive(false);
-        currentPlayerIdx = playerIdx;
-        players.get(currentPlayerIdx).setActive(true);
     }
 
     protected void initPlayerData(int score) {

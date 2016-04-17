@@ -1,6 +1,7 @@
 package com.fraz.dartlog;
 
 import android.app.Activity;
+import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -33,7 +34,7 @@ class GameListAdapter extends BaseAdapter {
         TextView scoreView = (TextView) listItem.findViewById(R.id.game_player_list_item_score);
         scoreView.setText(String.valueOf(player.getCurrentScore()));
 
-        setBackgroundColor(player, listItem);
+        setBackgroundColor(player, position, listItem);
         return listItem;
     }
 
@@ -52,15 +53,15 @@ class GameListAdapter extends BaseAdapter {
         return i;
     }
 
-    private void setBackgroundColor(PlayerData player, View listItem) {
+    private void setBackgroundColor(PlayerData player, int position, View listItem) {
         if (player.getCurrentScore() == 0) {
             listItem.setBackgroundColor(
-                    context.getResources().getColor(R.color.game_player_winner));
-        } else if (player.isActive()) {
+                    ContextCompat.getColor(context, R.color.game_player_winner));
+        } else if (game.getCurrentPlayer() == position) {
             listItem.setBackgroundColor(
-                    context.getResources().getColor(R.color.game_player_highlight));
+                    ContextCompat.getColor(context, R.color.game_player_highlight));
         } else {
-            listItem.setBackgroundColor(context.getResources().getColor(R.color.background));
+            listItem.setBackgroundColor(ContextCompat.getColor(context, R.color.background));
         }
     }
 }
