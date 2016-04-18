@@ -2,6 +2,7 @@ package com.fraz.dartlog;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
@@ -32,13 +33,29 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
 
         viewAnimator = (ViewAnimator) findViewById(R.id.game_input);
 
-        game = new X01(this, createPlayerDataList(), 3);
+        game = GetGameInstance(savedInstanceState);
         gameListAdapter = new GameListAdapter(this, game);
 
         initListView();
         initNumPadView();
         initGameDoneView();
         updateView();
+    }
+
+    @NonNull
+    private X01 GetGameInstance(Bundle savedInstanceState) {
+        if (savedInstanceState != null) {
+            X01 game = (X01) savedInstanceState.getSerializable("game");
+            if(game != null)
+                return game;
+        }
+        return new X01(this, createPlayerDataList(), 3);
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putSerializable("game", game);
     }
 
     @Override
