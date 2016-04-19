@@ -1,7 +1,6 @@
 package com.fraz.dartlog;
 
 import android.app.Activity;
-import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -55,13 +54,11 @@ class GameListAdapter extends BaseAdapter {
 
     private void setBackgroundColor(PlayerData player, int position, View listItem) {
         if (player.getCurrentScore() == 0) {
-            listItem.setBackgroundColor(
-                    ContextCompat.getColor(context, R.color.game_player_winner));
+            listItem.setBackgroundResource(R.drawable.game_player_winner);
         } else if (game.getCurrentPlayer() == position) {
-            listItem.setBackgroundColor(
-                    ContextCompat.getColor(context, R.color.game_player_highlight));
+            listItem.setBackgroundResource(R.drawable.game_player_active);
         } else {
-            listItem.setBackgroundColor(ContextCompat.getColor(context, R.color.background));
+            listItem.setBackgroundResource(R.drawable.game_player_normal);
         }
     }
 }
