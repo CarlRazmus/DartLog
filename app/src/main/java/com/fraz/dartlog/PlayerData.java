@@ -35,4 +35,8 @@ public class PlayerData {
             currentScore = scoreHistory.removeLast();
         }
     }
+
+    public LinkedList<Integer> getScoreHistory() {
+        return scoreHistory;
+    }
 }

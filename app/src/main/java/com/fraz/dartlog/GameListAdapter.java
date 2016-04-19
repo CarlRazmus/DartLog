@@ -7,6 +7,8 @@ import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
 import android.widget.TextView;
 
+import java.util.LinkedList;
+
 class GameListAdapter extends BaseExpandableListAdapter {
 
     private Game game;
@@ -81,8 +83,24 @@ class GameListAdapter extends BaseExpandableListAdapter {
         if (view == null) {
             listItem = inflater.inflate(R.layout.game_player_child_list_item, parent, false);
         }
-        setBackgroundColor(game.getPlayer(position), position, listItem);
+        PlayerData player = game.getPlayer(position);
+        setBackgroundColor(player, position, listItem);
+
+        String scoreHistoryText = createScoreHistoryString(player);
+        TextView scoreHistoryView = (TextView) listItem.findViewById(R.id.score_history);
+        scoreHistoryView.setText(scoreHistoryText);
         return listItem;
+    }
+
+    private String createScoreHistoryString(PlayerData player) {
+        String scoreHistoryText = "";
+        LinkedList<Integer> scoreHistory = player.getScoreHistory();
+        for (int i = 0; i < scoreHistory.size(); i++) {
+            Integer score =  scoreHistory.get(i);
+            scoreHistoryText += Integer.toString(score) + "  ";
+        }
+        scoreHistoryText += Integer.toString(player.getCurrentScore());
+        return scoreHistoryText;
     }
 
     @Override
