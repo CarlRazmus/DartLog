@@ -77,10 +77,11 @@ class GameListAdapter extends BaseExpandableListAdapter {
                              View view, ViewGroup parent) {
         LayoutInflater inflater = context.getLayoutInflater();
         View listItem = view;
+
         if (view == null) {
             listItem = inflater.inflate(R.layout.game_player_child_list_item, parent, false);
         }
-
+        setBackgroundColor(game.getPlayer(position), position, listItem);
         return listItem;
     }
 
