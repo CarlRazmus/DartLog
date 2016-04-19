@@ -15,13 +15,14 @@
         android:background="?attr/colorPrimary"
         android:elevation="4dp"/>
 
-    <ListView
+    <ExpandableListView
         android:divider="@drawable/list_divider"
         android:dividerHeight="1dp"
         android:id="@+id/play_players_listView"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
+        android:groupIndicator="@null"
         tools:listitem="@layout/game_player_list_item"/>
 
     <View

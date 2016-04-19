@@ -4,10 +4,10 @@ import android.app.Activity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.BaseAdapter;
+import android.widget.BaseExpandableListAdapter;
 import android.widget.TextView;
 
-class GameListAdapter extends BaseAdapter {
+class GameListAdapter extends BaseExpandableListAdapter {
 
     private Game game;
     private Activity context;
@@ -18,12 +18,47 @@ class GameListAdapter extends BaseAdapter {
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public int getGroupCount() {
+        return game.getNumberOfPlayers();
+    }
+
+    @Override
+    public int getChildrenCount(int i) {
+        return 1;
+    }
+
+    @Override
+    public Object getGroup(int i) {
+        return game.getPlayer(i);
+    }
+
+    @Override
+    public Object getChild(int i, int i1) {
+        return game.getPlayer(i);
+    }
+
+    @Override
+    public long getGroupId(int i) {
+        return i;
+    }
+
+    @Override
+    public long getChildId(int i, int i1) {
+        return i * 100 + i1;
+    }
+
+    @Override
+    public boolean hasStableIds() {
+        return true;
+    }
+
+    @Override
+    public View getGroupView(int position, boolean isExpanded, View view, ViewGroup parent) {
         LayoutInflater inflater = context.getLayoutInflater();
-        View listItem = convertView;
+        View listItem = view;
         PlayerData player = game.getPlayer(position);
 
-        if (convertView == null) {
+        if (view == null) {
             listItem = inflater.inflate(R.layout.game_player_list_item, parent, false);
         }
 
@@ -38,18 +73,20 @@ class GameListAdapter extends BaseAdapter {
     }
 
     @Override
-    public int getCount() {
-        return game.getNumberOfPlayers();
+    public View getChildView(int position, int childPosition, boolean isLastChild,
+                             View view, ViewGroup parent) {
+        LayoutInflater inflater = context.getLayoutInflater();
+        View listItem = view;
+        if (view == null) {
+            listItem = inflater.inflate(R.layout.game_player_child_list_item, parent, false);
+        }
+
+        return listItem;
     }
 
     @Override
-    public PlayerData getItem(int i) {
-        return game.getPlayer(i);
-    }
-
-    @Override
-    public long getItemId(int i) {
-        return i;
+    public boolean isChildSelectable(int i, int i1) {
+        return false;
     }
 
     private void setBackgroundColor(PlayerData player, int position, View listItem) {

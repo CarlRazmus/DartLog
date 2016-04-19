@@ -6,5 +6,6 @@
     <color name="game_player_highlight">#455A64</color>
     <color name="game_player_winner">#558B2F</color>
     <color name="main_white">#ECEFF1</color>
+    <color name="main_grey">#9E9E9E</color>
     <color name="main_red">#991010</color>
 </resources>

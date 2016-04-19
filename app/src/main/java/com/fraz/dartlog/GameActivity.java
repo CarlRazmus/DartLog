@@ -11,6 +11,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ExpandableListView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.ViewAnimator;
@@ -120,7 +121,7 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void initListView() {
-        ListView myListView = (ListView) findViewById(R.id.play_players_listView);
+        ExpandableListView myListView = (ExpandableListView) findViewById(R.id.play_players_listView);
         assert myListView != null;
         myListView.setAdapter(gameListAdapter);
     }
