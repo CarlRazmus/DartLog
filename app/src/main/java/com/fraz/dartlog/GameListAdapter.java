@@ -84,7 +84,6 @@ class GameListAdapter extends BaseExpandableListAdapter {
             listItem = inflater.inflate(R.layout.game_player_child_list_item, parent, false);
         }
         PlayerData player = game.getPlayer(position);
-        setBackgroundColor(player, position, listItem);
 
         String scoreHistoryText = createScoreHistoryString(player);
         TextView scoreHistoryView = (TextView) listItem.findViewById(R.id.score_history);
