@@ -34,7 +34,7 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
 
         viewAnimator = (ViewAnimator) findViewById(R.id.game_input);
 
-        game = GetGameInstance(savedInstanceState);
+        game = GetGameInstance(savedInstanceState, createPlayerDataList());
         gameListAdapter = new GameListAdapter(this, game);
 
         initListView();
@@ -44,13 +44,13 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     @NonNull
-    private X01 GetGameInstance(Bundle savedInstanceState) {
+    private X01 GetGameInstance(Bundle savedInstanceState, ArrayList<PlayerData> playerDataList) {
         if (savedInstanceState != null) {
             X01 game = (X01) savedInstanceState.getSerializable("game");
             if(game != null)
                 return game;
         }
-        return new X01(this, createPlayerDataList(), 3);
+        return new X01(this, playerDataList, 3);
     }
 
     @Override

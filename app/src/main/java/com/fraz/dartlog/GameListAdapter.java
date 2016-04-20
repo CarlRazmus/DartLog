@@ -68,7 +68,7 @@ class GameListAdapter extends BaseExpandableListAdapter {
         playerNameView.setText(player.getPlayerName());
 
         TextView scoreView = (TextView) listItem.findViewById(R.id.game_player_list_item_score);
-        scoreView.setText(String.valueOf(player.getCurrentScore()));
+        scoreView.setText(String.valueOf(player.getScore()));
 
         setBackgroundColor(player, position, listItem);
         return listItem;
@@ -99,7 +99,7 @@ class GameListAdapter extends BaseExpandableListAdapter {
             Integer score =  scoreHistory.get(i);
             scoreHistoryText += Integer.toString(score) + "  ";
         }
-        scoreHistoryText += Integer.toString(player.getCurrentScore());
+        scoreHistoryText += Integer.toString(player.getScore());
         return scoreHistoryText;
     }
 
@@ -109,7 +109,7 @@ class GameListAdapter extends BaseExpandableListAdapter {
     }
 
     private void setBackgroundColor(PlayerData player, int position, View listItem) {
-        if (player.getCurrentScore() == 0) {
+        if (player.getScore() == 0) {
             listItem.setBackgroundResource(R.drawable.game_player_winner);
         } else if (game.getCurrentPlayer() == position) {
             listItem.setBackgroundResource(R.drawable.game_player_active);

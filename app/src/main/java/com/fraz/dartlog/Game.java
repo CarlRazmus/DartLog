@@ -72,7 +72,7 @@ public abstract class Game {
     }
 
     protected void setCurrentScore(int newScore) {
-        players.get(currentPlayerIdx).setCurrentScore(newScore);
+        players.get(currentPlayerIdx).setScore(newScore);
         playOrder.add(currentPlayerIdx);
     }
 

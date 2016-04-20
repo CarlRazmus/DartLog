@@ -5,7 +5,7 @@ import java.util.LinkedList;
 public class PlayerData {
 
     private String playerName;
-    private int currentScore;
+    private int score;
     private LinkedList<Integer> scoreHistory;
 
     public PlayerData(String playerName) {
@@ -13,7 +13,7 @@ public class PlayerData {
     }
 
     public void initPlayerData(int score) {
-        currentScore = score;
+        this.score = score;
         scoreHistory = new LinkedList<>();
     }
 
@@ -21,18 +21,18 @@ public class PlayerData {
         return playerName;
     }
 
-    public void setCurrentScore(int score) {
-        scoreHistory.add(currentScore);
-        currentScore = score;
+    public void setScore(int score) {
+        scoreHistory.add(this.score);
+        this.score = score;
     }
 
-    public int getCurrentScore() {
-        return currentScore;
+    public int getScore() {
+        return score;
     }
 
     public void undo() {
         if (!scoreHistory.isEmpty()) {
-            currentScore = scoreHistory.removeLast();
+            score = scoreHistory.removeLast();
         }
     }
 

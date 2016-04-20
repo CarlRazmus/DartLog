@@ -29,9 +29,9 @@ public class X01 extends Game implements Serializable {
     public void enterScore(int score) {
         if (!isDone()) {
             PlayerData currentPlayer = players.get(currentPlayerIdx);
-            int newScore = currentPlayer.getCurrentScore() - score;
+            int newScore = currentPlayer.getScore() - score;
             if (newScore < 0) {
-                newScore = currentPlayer.getCurrentScore();
+                newScore = currentPlayer.getScore();
                 showBustToast();
             }
             setCurrentScore(newScore);
@@ -46,8 +46,7 @@ public class X01 extends Game implements Serializable {
 
     private void updateGameState() {
         PlayerData currentPlayer = players.get(currentPlayerIdx);
-        int currentScore = currentPlayer.getCurrentScore();
-        if (currentScore == 0) {
+        if (currentPlayer.getScore() == 0) {
             setWinner(currentPlayer);
             showWinnerToast();
         }
@@ -59,7 +58,6 @@ public class X01 extends Game implements Serializable {
     private void initCheckoutMap() {
         InputStream inputStream = context.getResources().openRawResource(R.raw.checkout_chart);
         BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
-
         try {
             String line = reader.readLine();
             while (line != null) {
@@ -74,8 +72,8 @@ public class X01 extends Game implements Serializable {
 
     @Override
     public String getHintText() {
-        int currentScore = players.get(currentPlayerIdx).getCurrentScore();
-        String checkoutHint = checkouts.get(currentScore);
+        int score = players.get(currentPlayerIdx).getScore();
+        String checkoutHint = checkouts.get(score);
         if (checkoutHint == null) {
             checkoutHint = "Checkout Unavailable";
         }
