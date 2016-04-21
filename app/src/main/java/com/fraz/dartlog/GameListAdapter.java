@@ -13,6 +13,8 @@ class GameListAdapter extends BaseExpandableListAdapter {
 
     private Game game;
     private Activity context;
+    private final int colors[] = {R.color.main_red, R.color.main_blue,
+                                  R.color.main_green, R.color.main_yellow};
 
     public GameListAdapter(Activity context, Game game) {
         this.context = context;
@@ -70,6 +72,7 @@ class GameListAdapter extends BaseExpandableListAdapter {
         TextView scoreView = (TextView) listItem.findViewById(R.id.game_player_list_item_score);
         scoreView.setText(String.valueOf(player.getScore()));
 
+        setLineColor(position, listItem);
         setBackgroundColor(player, position, listItem);
         return listItem;
     }
@@ -95,7 +98,7 @@ class GameListAdapter extends BaseExpandableListAdapter {
         String scoreHistoryText = "";
         LinkedList<Integer> scoreHistory = player.getScoreHistory();
         for (int i = 0; i < scoreHistory.size(); i++) {
-            Integer score =  scoreHistory.get(i);
+            Integer score = scoreHistory.get(i);
             scoreHistoryText += Integer.toString(score) + " ";
         }
         return scoreHistoryText.trim();
@@ -114,5 +117,10 @@ class GameListAdapter extends BaseExpandableListAdapter {
         } else {
             listItem.setBackgroundResource(R.drawable.game_player_normal);
         }
+    }
+
+    private void setLineColor(int position, View listItem) {
+        View lineView = listItem.findViewById(R.id.game_player_list_line);
+        lineView.setBackgroundResource(colors[position % colors.length]);
     }
 }

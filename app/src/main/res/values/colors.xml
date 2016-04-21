@@ -7,5 +7,8 @@
     <color name="game_player_winner">#558B2F</color>
     <color name="main_white">#EEEEEE</color>
     <color name="main_grey">#616161</color>
-    <color name="main_red">#991010</color>
+    <color name="main_red">#B71C1C</color>
+    <color name="main_blue">#0D47A1</color>
+    <color name="main_green">#1B5E20</color>
+    <color name="main_yellow">#F57F17</color>
 </resources>
