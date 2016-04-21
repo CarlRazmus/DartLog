@@ -4,17 +4,22 @@ import android.app.Activity;
 import android.view.Gravity;
 import android.widget.Toast;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.LinkedList;
 
-public abstract class Game implements Serializable{
-    protected final Activity context;
-    protected final ArrayList<X01PlayerData> players;
+public abstract class Game {
+
+    protected Activity context;
+    protected ArrayList<X01PlayerData> players;
     protected int currentPlayerIdx;
     protected X01PlayerData winner;
     protected int startingScore;
     private LinkedList<Integer> playOrder;
+
+
+    /** Needed for serialization of subclasses. */
+    protected Game() {
+    }
 
     public Game(Activity context, ArrayList<X01PlayerData> players, int startingScore) {
         this.context = context;

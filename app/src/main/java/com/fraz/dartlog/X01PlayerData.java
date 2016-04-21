@@ -1,6 +1,6 @@
 package com.fraz.dartlog;
 
-public class X01PlayerData extends PlayerData{
+public class X01PlayerData extends PlayerData {
 
     public X01PlayerData(String playerName) {
         super(playerName);

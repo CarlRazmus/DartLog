@@ -21,7 +21,7 @@ import java.util.ArrayList;
 public class GameActivity extends AppCompatActivity implements View.OnClickListener,
         InputEventListener {
 
-    private Game game;
+    private X01 game;
     private GameListAdapter gameListAdapter;
     private ViewAnimator viewAnimator;
 
