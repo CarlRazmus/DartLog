@@ -24,9 +24,11 @@ public class PlayersActivity extends AppCompatActivity implements View.OnClickLi
         setContentView(R.layout.activity_players);
 
         Button readyButton = (Button) findViewById(R.id.ready_button);
+        assert readyButton != null;
         readyButton.setOnClickListener(this);
 
         Button addPlayerButton = (Button) findViewById(R.id.add_player_button);
+        assert addPlayerButton != null;
         addPlayerButton.setOnClickListener(this);
 
         /* create a listView that contains all players who will join the game */
@@ -34,9 +36,12 @@ public class PlayersActivity extends AppCompatActivity implements View.OnClickLi
 
         playersNames = new ArrayList<>();
         /* add names for debug purposes, remove when app is finished */
-        playersNames.add("Razmus Lindgren");
-        playersNames.add("Filip Källström");
+        playersNames.add("Razmus");
+        playersNames.add("Filip");
+        playersNames.add("Jonathan");
+        playersNames.add("Martin");
         arrayStringAdapter = new SelectedPlayersListAdapter(this, playersNames);
+        assert myListView != null;
         myListView.setAdapter(arrayStringAdapter);
     }
 
@@ -55,6 +60,7 @@ public class PlayersActivity extends AppCompatActivity implements View.OnClickLi
 
     private void clearInputTextField() {
         EditText editText = (EditText) findViewById(R.id.player_input_textfield);
+        assert editText != null;
         editText.setText("");
         InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow(editText.getWindowToken(), 0);
@@ -63,6 +69,7 @@ public class PlayersActivity extends AppCompatActivity implements View.OnClickLi
     private void addPlayerNameToPlayerListView()
     {
         EditText editText = (EditText) findViewById(R.id.player_input_textfield);
+        assert editText != null;
         String playerName = editText.getText().toString();
 
         if(!playerName.equals("")) {
