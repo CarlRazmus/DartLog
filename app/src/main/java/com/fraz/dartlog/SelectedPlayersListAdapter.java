@@ -36,7 +36,7 @@ public class SelectedPlayersListAdapter extends ArrayAdapter<String> {
         playerNameView.setText(playerNames.get(position));
 
         Button removeButton = (Button) listItem.findViewById(R.id.remove_player_button);
-        removeButton.setText("Remove");
+        removeButton.setText("X");
 
         removeButton.setOnClickListener(new View.OnClickListener() {
             @Override
