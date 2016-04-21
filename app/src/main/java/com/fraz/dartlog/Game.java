@@ -20,6 +20,8 @@ public abstract class Game {
         initGame();
     }
 
+    public abstract void submitScore(int score);
+
     public boolean isDone() {
         return winner != null;
     }
@@ -43,6 +45,10 @@ public abstract class Game {
             currentPlayerIdx = lastPlayerIdx;
             winner = null;
         }
+    }
+
+    public String getHintText() {
+        return null;
     }
 
     protected void initGame() {
@@ -80,9 +86,5 @@ public abstract class Game {
         for (PlayerData player : players) {
             player.initPlayerData(score);
         }
-    }
-
-    public String getHintText() {
-        return null;
     }
 }

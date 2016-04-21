@@ -93,7 +93,7 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public void enter(int score) {
-        game.enterScore(score);
+        game.submitScore(score);
         updateView();
     }
 

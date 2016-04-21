@@ -26,7 +26,7 @@ public class X01 extends Game implements Serializable {
         initCheckoutMap();
     }
 
-    public void enterScore(int score) {
+    public void submitScore(int score) {
         if (!isDone()) {
             PlayerData currentPlayer = players.get(currentPlayerIdx);
             int newScore = currentPlayer.getScore() - score;
