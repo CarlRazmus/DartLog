@@ -9,18 +9,16 @@ import java.util.LinkedList;
 
 public abstract class Game {
     protected final Activity context;
-    protected final ArrayList<PlayerData> players;
+    protected final ArrayList<X01PlayerData> players;
     protected int currentPlayerIdx;
-    protected PlayerData winner;
+    protected X01PlayerData winner;
     private LinkedList<Integer> playOrder;
 
-    public Game(Activity context, ArrayList<PlayerData> players) {
+    public Game(Activity context, ArrayList<X01PlayerData> players) {
         this.context = context;
         this.players = players;
         initGame();
     }
-
-    public abstract void submitScore(int score);
 
     public boolean isDone() {
         return winner != null;
@@ -30,12 +28,17 @@ public abstract class Game {
         return currentPlayerIdx;
     }
 
-    public PlayerData getPlayer(int index) {
+    public X01PlayerData getPlayer(int index) {
         return players.get(index);
     }
 
     public int getNumberOfPlayers() {
         return players.size();
+    }
+
+    public boolean submitScore(int newScore) {
+        playOrder.add(currentPlayerIdx);
+        return players.get(currentPlayerIdx).submitScore(newScore);
     }
 
     public void undo() {
@@ -57,7 +60,7 @@ public abstract class Game {
         currentPlayerIdx = 0;
     }
 
-    protected void setWinner(PlayerData currentPlayer) {
+    protected void setWinner(X01PlayerData currentPlayer) {
         winner = currentPlayer;
     }
 
@@ -77,13 +80,8 @@ public abstract class Game {
         currentPlayerIdx = (currentPlayerIdx + 1) % players.size();
     }
 
-    protected void setCurrentScore(int newScore) {
-        players.get(currentPlayerIdx).setScore(newScore);
-        playOrder.add(currentPlayerIdx);
-    }
-
     protected void initPlayerData(int score) {
-        for (PlayerData player : players) {
+        for (X01PlayerData player : players) {
             player.initPlayerData(score);
         }
     }

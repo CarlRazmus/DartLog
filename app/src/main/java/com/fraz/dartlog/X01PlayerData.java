@@ -2,13 +2,13 @@ package com.fraz.dartlog;
 
 import java.util.LinkedList;
 
-public class PlayerData {
+public class X01PlayerData {
 
     private String playerName;
     private int score;
     private LinkedList<Integer> scoreHistory;
 
-    public PlayerData(String playerName) {
+    public X01PlayerData(String playerName) {
         this.playerName = playerName;
     }
 
@@ -21,9 +21,16 @@ public class PlayerData {
         return playerName;
     }
 
-    public void setScore(int score) {
-        scoreHistory.add(this.score);
-        this.score = score;
+    public boolean submitScore(int score) {
+        int newScore = getScore() - score;
+        if (newScore < 0) {
+            scoreHistory.add(0);
+            return false;
+        } else {
+            this.score = newScore;
+            scoreHistory.add(score);
+            return true;
+        }
     }
 
     public int getScore() {
@@ -32,7 +39,7 @@ public class PlayerData {
 
     public void undo() {
         if (!scoreHistory.isEmpty()) {
-            score = scoreHistory.removeLast();
+            score += scoreHistory.removeLast();
         }
     }
 

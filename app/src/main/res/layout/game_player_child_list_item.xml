@@ -8,10 +8,22 @@
     android:paddingEnd="24dp"
     android:background="@color/main_white">
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/score_history_label"
+        android:text="Scores:"
+        android:textColor="@color/main_grey"
+        android:padding="5dp"
+        android:textSize="15sp"/>
+
     <HorizontalScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="5dp"
+        android:layout_toRightOf="@id/score_history_label"
+        android:layout_toEndOf="@id/score_history_label"
+        android:paddingTop="5dp"
+        android:paddingBottom="5dp"
         android:scrollbars="none">
 
         <TextView
@@ -19,6 +31,7 @@
             android:layout_height="wrap_content"
             android:id="@+id/score_history"
             android:textColor="@color/main_grey"
+            android:typeface="monospace"
             android:textSize="15sp"/>
     </HorizontalScrollView>
 </RelativeLayout>

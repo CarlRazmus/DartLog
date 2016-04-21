@@ -44,7 +44,7 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     @NonNull
-    private X01 GetGameInstance(Bundle savedInstanceState, ArrayList<PlayerData> playerDataList) {
+    private X01 GetGameInstance(Bundle savedInstanceState, ArrayList<X01PlayerData> playerDataList) {
         if (savedInstanceState != null) {
             X01 game = (X01) savedInstanceState.getSerializable("game");
             if(game != null)
@@ -129,11 +129,11 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
     /**
      * Create and return a list of player data from a list of player names.
      */
-    private ArrayList<PlayerData> createPlayerDataList(){
-        ArrayList<PlayerData> playerDataList = new ArrayList<>();
+    private ArrayList<X01PlayerData> createPlayerDataList(){
+        ArrayList<X01PlayerData> playerDataList = new ArrayList<>();
         for(String playerName: getIntent().getStringArrayListExtra("playerNames"))
         {
-            playerDataList.add(new PlayerData(playerName));
+            playerDataList.add(new X01PlayerData(playerName));
         }
         return playerDataList;
     }

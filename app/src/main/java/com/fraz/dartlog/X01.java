@@ -16,7 +16,7 @@ public class X01 extends Game implements Serializable {
     private int startingScore;
     private Map<Integer, String> checkouts = new HashMap<>();
 
-    public X01(Activity context, ArrayList<PlayerData> players, int x) {
+    public X01(Activity context, ArrayList<X01PlayerData> players, int x) {
         super(context, players);
 
         startingScore = x*100 + 1;
@@ -26,17 +26,14 @@ public class X01 extends Game implements Serializable {
         initCheckoutMap();
     }
 
-    public void submitScore(int score) {
+    public boolean submitScore(int score) {
         if (!isDone()) {
-            PlayerData currentPlayer = players.get(currentPlayerIdx);
-            int newScore = currentPlayer.getScore() - score;
-            if (newScore < 0) {
-                newScore = currentPlayer.getScore();
+            if (!super.submitScore(score)) {
                 showBustToast();
             }
-            setCurrentScore(newScore);
             updateGameState();
         }
+        return true;
     }
 
     public void newLeg() {
@@ -45,7 +42,7 @@ public class X01 extends Game implements Serializable {
     }
 
     private void updateGameState() {
-        PlayerData currentPlayer = players.get(currentPlayerIdx);
+        X01PlayerData currentPlayer = players.get(currentPlayerIdx);
         if (currentPlayer.getScore() == 0) {
             setWinner(currentPlayer);
             showWinnerToast();

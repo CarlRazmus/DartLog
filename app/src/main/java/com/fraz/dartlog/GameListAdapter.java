@@ -58,7 +58,7 @@ class GameListAdapter extends BaseExpandableListAdapter {
     public View getGroupView(int position, boolean isExpanded, View view, ViewGroup parent) {
         LayoutInflater inflater = context.getLayoutInflater();
         View listItem = view;
-        PlayerData player = game.getPlayer(position);
+        X01PlayerData player = game.getPlayer(position);
 
         if (view == null) {
             listItem = inflater.inflate(R.layout.game_player_list_item, parent, false);
@@ -83,7 +83,7 @@ class GameListAdapter extends BaseExpandableListAdapter {
         if (view == null) {
             listItem = inflater.inflate(R.layout.game_player_child_list_item, parent, false);
         }
-        PlayerData player = game.getPlayer(position);
+        X01PlayerData player = game.getPlayer(position);
 
         String scoreHistoryText = createScoreHistoryString(player);
         TextView scoreHistoryView = (TextView) listItem.findViewById(R.id.score_history);
@@ -91,15 +91,14 @@ class GameListAdapter extends BaseExpandableListAdapter {
         return listItem;
     }
 
-    private String createScoreHistoryString(PlayerData player) {
+    private String createScoreHistoryString(X01PlayerData player) {
         String scoreHistoryText = "";
         LinkedList<Integer> scoreHistory = player.getScoreHistory();
         for (int i = 0; i < scoreHistory.size(); i++) {
             Integer score =  scoreHistory.get(i);
-            scoreHistoryText += String.format("%5s", Integer.toString(score));
+            scoreHistoryText += Integer.toString(score) + " ";
         }
-        scoreHistoryText += String.format("%5s", Integer.toString(player.getScore()));
-        return scoreHistoryText;
+        return scoreHistoryText.trim();
     }
 
     @Override
@@ -107,7 +106,7 @@ class GameListAdapter extends BaseExpandableListAdapter {
         return false;
     }
 
-    private void setBackgroundColor(PlayerData player, int position, View listItem) {
+    private void setBackgroundColor(X01PlayerData player, int position, View listItem) {
         if (player.getScore() == 0) {
             listItem.setBackgroundResource(R.drawable.game_player_winner);
         } else if (game.getCurrentPlayer() == position) {
