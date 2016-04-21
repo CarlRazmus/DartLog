@@ -4,20 +4,36 @@ import android.app.Activity;
 import android.view.Gravity;
 import android.widget.Toast;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.LinkedList;
 
-public abstract class Game {
+public abstract class Game implements Serializable{
     protected final Activity context;
     protected final ArrayList<X01PlayerData> players;
     protected int currentPlayerIdx;
     protected X01PlayerData winner;
+    protected int startingScore;
     private LinkedList<Integer> playOrder;
 
-    public Game(Activity context, ArrayList<X01PlayerData> players) {
+    public Game(Activity context, ArrayList<X01PlayerData> players, int startingScore) {
         this.context = context;
         this.players = players;
-        initGame();
+        this.startingScore = startingScore;
+    }
+
+    public boolean submitScore(int newScore) {
+        playOrder.add(currentPlayerIdx);
+        return players.get(currentPlayerIdx).submitScore(newScore);
+    }
+
+    public void undo() {
+        if (!playOrder.isEmpty()) {
+            int lastPlayerIdx = playOrder.removeLast();
+            players.get(lastPlayerIdx).undo();
+            currentPlayerIdx = lastPlayerIdx;
+            winner = null;
+        }
     }
 
     public boolean isDone() {
@@ -36,28 +52,15 @@ public abstract class Game {
         return players.size();
     }
 
-    public boolean submitScore(int newScore) {
-        playOrder.add(currentPlayerIdx);
-        return players.get(currentPlayerIdx).submitScore(newScore);
-    }
-
-    public void undo() {
-        if (!playOrder.isEmpty()) {
-            int lastPlayerIdx = playOrder.removeLast();
-            players.get(lastPlayerIdx).undo();
-            currentPlayerIdx = lastPlayerIdx;
-            winner = null;
-        }
-    }
-
     public String getHintText() {
         return null;
     }
 
-    protected void initGame() {
+    protected void newGame() {
         playOrder = new LinkedList<>();
         winner = null;
         currentPlayerIdx = 0;
+        initPlayerData(startingScore);
     }
 
     protected void setWinner(X01PlayerData currentPlayer) {

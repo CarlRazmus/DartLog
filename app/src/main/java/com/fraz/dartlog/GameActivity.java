@@ -19,9 +19,9 @@ import android.widget.ViewAnimator;
 import java.util.ArrayList;
 
 public class GameActivity extends AppCompatActivity implements View.OnClickListener,
-                                                               InputEventListener {
+        InputEventListener {
 
-    private X01 game;
+    private Game game;
     private GameListAdapter gameListAdapter;
     private ViewAnimator viewAnimator;
 
@@ -47,7 +47,7 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
     private X01 GetGameInstance(Bundle savedInstanceState, ArrayList<X01PlayerData> playerDataList) {
         if (savedInstanceState != null) {
             X01 game = (X01) savedInstanceState.getSerializable("game");
-            if(game != null)
+            if (game != null)
                 return game;
         }
         return new X01(this, playerDataList, 3);
@@ -63,7 +63,7 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.new_leg:
-                game.newLeg();
+                game.newGame();
                 updateView();
                 break;
             case R.id.complete_match:
@@ -129,10 +129,9 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
     /**
      * Create and return a list of player data from a list of player names.
      */
-    private ArrayList<X01PlayerData> createPlayerDataList(){
+    private ArrayList<X01PlayerData> createPlayerDataList() {
         ArrayList<X01PlayerData> playerDataList = new ArrayList<>();
-        for(String playerName: getIntent().getStringArrayListExtra("playerNames"))
-        {
+        for (String playerName : getIntent().getStringArrayListExtra("playerNames")) {
             playerDataList.add(new X01PlayerData(playerName));
         }
         return playerDataList;

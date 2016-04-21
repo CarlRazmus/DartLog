@@ -1,24 +1,9 @@
 package com.fraz.dartlog;
 
-import java.util.LinkedList;
-
-public class X01PlayerData {
-
-    private String playerName;
-    private int score;
-    private LinkedList<Integer> scoreHistory;
+public class X01PlayerData extends PlayerData{
 
     public X01PlayerData(String playerName) {
-        this.playerName = playerName;
-    }
-
-    public void initPlayerData(int score) {
-        this.score = score;
-        scoreHistory = new LinkedList<>();
-    }
-
-    public String getPlayerName() {
-        return playerName;
+        super(playerName);
     }
 
     public boolean submitScore(int score) {
@@ -33,17 +18,11 @@ public class X01PlayerData {
         }
     }
 
-    public int getScore() {
-        return score;
-    }
-
-    public void undo() {
+    public boolean undo() {
         if (!scoreHistory.isEmpty()) {
             score += scoreHistory.removeLast();
+            return true;
         }
-    }
-
-    public LinkedList<Integer> getScoreHistory() {
-        return scoreHistory;
+        return false;
     }
 }
