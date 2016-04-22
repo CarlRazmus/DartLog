@@ -6,6 +6,7 @@ public abstract class PlayerData {
 
     private String playerName;
     protected LinkedList<Integer> scoreHistory;
+    protected LinkedList<Integer> totalScoreHistory;
     protected int score;
 
     public PlayerData(String playerName) {
@@ -15,11 +16,23 @@ public abstract class PlayerData {
     public void initPlayerData(int score) {
         this.score = score;
         scoreHistory = new LinkedList<>();
+        totalScoreHistory = new LinkedList<>();
     }
 
-    public abstract boolean submitScore(int score);
+    public void submitScore(int achievedScore, int totalScore) {
+        scoreHistory.add(achievedScore);
+        totalScoreHistory.add(score);
 
-    public abstract boolean undo();
+        score = totalScore;
+    }
+
+    public void undo() {
+        if (!scoreHistory.isEmpty())
+            scoreHistory.removeLast();
+
+        if (!totalScoreHistory.isEmpty())
+            score = totalScoreHistory.removeLast();
+    }
 
     public String getPlayerName() {
         return playerName;
@@ -32,4 +45,6 @@ public abstract class PlayerData {
     public LinkedList<Integer> getScoreHistory() {
         return scoreHistory;
     }
+
+    public LinkedList<Integer> getTotalScoreHistory() { return totalScoreHistory; }
 }

@@ -9,20 +9,15 @@ public class X01PlayerData extends PlayerData {
     public boolean submitScore(int score) {
         int newScore = getScore() - score;
         if (newScore < 0) {
-            scoreHistory.add(0);
+            super.submitScore(0, getScore());
             return false;
         } else {
-            this.score = newScore;
-            scoreHistory.add(score);
+            super.submitScore(score, newScore);
             return true;
         }
     }
 
-    public boolean undo() {
-        if (!scoreHistory.isEmpty()) {
-            score += scoreHistory.removeLast();
-            return true;
-        }
-        return false;
+    public void undo() {
+        super.undo();
     }
 }
