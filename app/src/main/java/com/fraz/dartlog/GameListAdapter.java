@@ -88,21 +88,28 @@ class GameListAdapter extends BaseExpandableListAdapter {
         }
         X01PlayerData player = game.getPlayer(position);
 
+        // Set score history text
         String scoreHistoryText = createScoresString(player.getScoreHistory());
         ((TextView) listItem.findViewById(R.id.score_history)).setText(scoreHistoryText);
 
+        // Set total score history text
         LinkedList<Integer> scores = new LinkedList<>(player.getTotalScoreHistory());
         scores.addLast(player.getScore());
         String totalScoreHistoryText = createScoresString(scores);
         ((TextView) listItem.findViewById(R.id.total_score_history)).setText(totalScoreHistoryText);
+
+        //Set average and max score text
+        TextView avgScore = (TextView) listItem.findViewById(R.id.average_score);
+        TextView maxScore = (TextView) listItem.findViewById(R.id.max_score);
+        avgScore.setText(String.format("%.1f", player.getAvgScore()));
+        maxScore.setText(String.valueOf(player.getMaxScore()));
 
         return listItem;
     }
 
     private String createScoresString(LinkedList<Integer> scores) {
         String scoreHistoryText = "";
-        for (int i = 0; i < scores.size(); i++) {
-            Integer score = scores.get(i);
+        for (Integer score : scores) {
             scoreHistoryText += String.format("%-4s", Integer.toString(score));
         }
         return scoreHistoryText.trim();

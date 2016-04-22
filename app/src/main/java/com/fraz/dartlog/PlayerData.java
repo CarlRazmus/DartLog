@@ -1,5 +1,6 @@
 package com.fraz.dartlog;
 
+import java.util.Collections;
 import java.util.LinkedList;
 
 public abstract class PlayerData {
@@ -40,6 +41,25 @@ public abstract class PlayerData {
 
     public int getScore() {
         return score;
+    }
+
+    public int getMaxScore() {
+        if (!scoreHistory.isEmpty())
+            return Collections.max(scoreHistory);
+        else
+            return 0;
+    }
+
+    public float getAvgScore() {
+        int sum = 0;
+        for (int score : scoreHistory) {
+            sum += score;
+        }
+
+        if (!scoreHistory.isEmpty())
+            return (float)sum / scoreHistory.size();
+        else
+            return 0;
     }
 
     public LinkedList<Integer> getScoreHistory() {
