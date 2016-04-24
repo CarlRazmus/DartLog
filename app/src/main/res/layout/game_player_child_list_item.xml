@@ -3,11 +3,11 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@color/light_grey"
+    android:orientation="vertical"
     android:paddingEnd="24dp"
     android:paddingLeft="24dp"
     android:paddingRight="24dp"
-    android:paddingStart="24dp"
-    android:orientation="vertical">
+    android:paddingStart="24dp">
 
 
     <LinearLayout
@@ -29,7 +29,7 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:background="@color/main_red"/>
+        android:background="@color/main_red" />
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -38,65 +38,65 @@
         android:paddingTop="5dp">
 
         <TextView
+            android:id="@+id/average_score_label"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/average_score_label"
             android:text="Average score: "
             android:textColor="@color/main_grey"
-            android:textSize="15sp"/>
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/average_score"
-            android:layout_toRightOf="@id/average_score_label"
-            android:layout_toEndOf="@id/average_score_label"
-            android:textColor="@color/main_grey"
-            android:typeface="monospace"
-            android:textSize="15sp"/>
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/max_score_label"
-            android:layout_toRightOf="@id/average_score"
-            android:layout_toEndOf="@id/average_score"
-            android:layout_marginLeft="40dp"
-            android:layout_marginStart="40dp"
-            android:text="Max score: "
-            android:textColor="@color/main_grey"
-            android:textSize="15sp"/>
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/max_score"
-            android:layout_toRightOf="@id/max_score_label"
-            android:layout_toEndOf="@id/max_score_label"
-            android:layout_alignTop="@id/max_score_label"
-            android:textColor="@color/main_grey"
-            android:typeface="monospace"
             android:textSize="15sp" />
 
         <TextView
+            android:id="@+id/average_score"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_toEndOf="@id/average_score_label"
+            android:layout_toRightOf="@id/average_score_label"
+            android:textColor="@color/main_grey"
+            android:textSize="15sp"
+            android:typeface="monospace" />
+
+        <TextView
+            android:id="@+id/max_score_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="40dp"
+            android:layout_marginStart="40dp"
+            android:layout_toEndOf="@id/average_score"
+            android:layout_toRightOf="@id/average_score"
+            android:text="Max score: "
+            android:textColor="@color/main_grey"
+            android:textSize="15sp" />
+
+        <TextView
+            android:id="@+id/max_score"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@id/max_score_label"
+            android:layout_toEndOf="@id/max_score_label"
+            android:layout_toRightOf="@id/max_score_label"
+            android:textColor="@color/main_grey"
+            android:textSize="15sp"
+            android:typeface="monospace" />
+
+        <TextView
             android:id="@+id/checkout_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_below="@id/max_score_label"
             android:layout_marginTop="5dp"
             android:text="Checkout: "
             android:textColor="@color/main_grey"
-            android:textSize="15sp"/>
+            android:textSize="15sp" />
 
         <TextView
+            android:id="@+id/checkout"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/checkout"
-            android:layout_toRightOf="@id/checkout_label"
-            android:layout_toEndOf="@id/checkout_label"
             android:layout_alignTop="@id/checkout_label"
+            android:layout_toEndOf="@id/checkout_label"
+            android:layout_toRightOf="@id/checkout_label"
             android:textColor="@color/main_grey"
-            android:typeface="monospace"
-            android:textSize="15sp"/>
+            android:textSize="15sp"
+            android:typeface="monospace" />
     </RelativeLayout>
 </LinearLayout>
