@@ -16,7 +16,6 @@ public abstract class Game {
     protected int startingScore;
     private LinkedList<Integer> playOrder;
 
-
     /** Needed for serialization of subclasses. */
     protected Game() {
     }
@@ -55,10 +54,6 @@ public abstract class Game {
 
     public int getNumberOfPlayers() {
         return players.size();
-    }
-
-    public String getHintText() {
-        return null;
     }
 
     protected void newGame() {

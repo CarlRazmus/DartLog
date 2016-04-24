@@ -11,12 +11,12 @@ import java.util.LinkedList;
 
 class GameListAdapter extends BaseExpandableListAdapter {
 
-    private Game game;
+    private X01 game;
     private Activity context;
     private final int colors[] = {R.color.main_red, R.color.main_blue,
                                   R.color.main_green, R.color.main_yellow};
 
-    public GameListAdapter(Activity context, Game game) {
+    public GameListAdapter(Activity context, X01 game) {
         this.context = context;
         this.game = game;
     }
@@ -88,10 +88,6 @@ class GameListAdapter extends BaseExpandableListAdapter {
         }
         X01PlayerData player = game.getPlayer(position);
 
-        // Set score history text
-        String scoreHistoryText = createScoresString(player.getScoreHistory());
-        ((TextView) listItem.findViewById(R.id.score_history)).setText(scoreHistoryText);
-
         // Set total score history text
         LinkedList<Integer> scores = new LinkedList<>(player.getTotalScoreHistory());
         scores.addLast(player.getScore());
@@ -104,6 +100,9 @@ class GameListAdapter extends BaseExpandableListAdapter {
         avgScore.setText(String.format("%.1f", player.getAvgScore()));
         maxScore.setText(String.valueOf(player.getMaxScore()));
 
+        //Set checkout text
+        TextView checkout = (TextView) listItem.findViewById(R.id.checkout);
+        checkout.setText(game.getCheckoutText(player));
         return listItem;
     }
 

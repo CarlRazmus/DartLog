@@ -13,7 +13,6 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ExpandableListView;
 import android.widget.ListView;
-import android.widget.TextView;
 import android.widget.ViewAnimator;
 
 import java.util.ArrayList;
@@ -99,24 +98,11 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
 
     private void updateView() {
         gameListAdapter.notifyDataSetChanged();
-        updateHintView();
         scrollToPlayerInList();
         if (game.isDone()) {
             setGameDoneView();
         } else {
             setNumPadView();
-        }
-    }
-
-    private void updateHintView() {
-        TextView hintView = (TextView) findViewById(R.id.game_hint);
-        assert hintView != null;
-        String hintText = game.getHintText();
-        if (hintText != null) {
-            hintView.setVisibility(View.VISIBLE);
-            hintView.setText(hintText);
-        } else {
-            hintView.setVisibility(View.GONE);
         }
     }
 

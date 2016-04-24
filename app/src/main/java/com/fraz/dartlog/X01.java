@@ -2,23 +2,17 @@ package com.fraz.dartlog;
 
 import android.app.Activity;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 
 public class X01 extends Game implements Serializable{
 
-    private Map<Integer, String> checkouts = new HashMap<>();
+    private CheckoutChart checkoutChart;
 
     public X01(Activity context, ArrayList<X01PlayerData> players, int x) {
         super(context, players, x*100 + 1);
 
-        initCheckoutMap();
+        checkoutChart = new CheckoutChart(context, R.raw.checkout_chart);
         newGame();
     }
 
@@ -32,6 +26,10 @@ public class X01 extends Game implements Serializable{
         return true;
     }
 
+    public String getCheckoutText(PlayerData player) {
+        return checkoutChart.getCheckoutText(player.getScore());
+    }
+
     private void updateGameState() {
         X01PlayerData currentPlayer = players.get(currentPlayerIdx);
         if (currentPlayer.getScore() == 0) {
@@ -41,31 +39,6 @@ public class X01 extends Game implements Serializable{
         else {
             nextPlayer();
         }
-    }
-
-    private void initCheckoutMap() {
-        InputStream inputStream = context.getResources().openRawResource(R.raw.checkout_chart);
-        BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
-        try {
-            String line = reader.readLine();
-            while (line != null) {
-                String[] checkout = line.split(",");
-                checkouts.put(Integer.parseInt(checkout[0]), checkout[1]);
-                line = reader.readLine();
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    @Override
-    public String getHintText() {
-        int score = players.get(currentPlayerIdx).getScore();
-        String checkoutHint = checkouts.get(score);
-        if (checkoutHint == null) {
-            checkoutHint = "Checkout Unavailable";
-        }
-        return checkoutHint;
     }
 
     private void showBustToast() {
