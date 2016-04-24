@@ -42,7 +42,8 @@
             android:layout_height="wrap_content"
             android:text="Average score: "
             android:textColor="@color/main_grey"
-            android:textSize="15sp" />
+            android:textSize="15sp"
+            android:textStyle="bold" />
 
         <TextView
             android:id="@+id/average_score"
@@ -64,7 +65,8 @@
             android:layout_toRightOf="@id/average_score"
             android:text="Max score: "
             android:textColor="@color/main_grey"
-            android:textSize="15sp" />
+            android:textSize="15sp"
+            android:textStyle="bold" />
 
         <TextView
             android:id="@+id/max_score"
@@ -85,7 +87,8 @@
             android:layout_marginTop="5dp"
             android:text="Checkout: "
             android:textColor="@color/main_grey"
-            android:textSize="15sp" />
+            android:textSize="15sp"
+            android:textStyle="bold" />
 
         <TextView
             android:id="@+id/checkout"
