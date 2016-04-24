@@ -109,7 +109,7 @@ class GameListAdapter extends BaseExpandableListAdapter {
     private String createScoresString(LinkedList<Integer> scores) {
         String scoreHistoryText = "";
         for (Integer score : scores) {
-            scoreHistoryText += String.format("%-4s", Integer.toString(score));
+            scoreHistoryText += String.format("%s ", Integer.toString(score));
         }
         return scoreHistoryText.trim();
     }
