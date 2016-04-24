@@ -62,7 +62,7 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.new_leg:
-                game.newGame();
+                game.newLeg();
                 updateView();
                 break;
             case R.id.complete_match:

@@ -24,7 +24,6 @@
             android:textColor="@color/main_grey"
             android:textSize="15sp"
             android:typeface="monospace" />
-
     </LinearLayout>
 
     <View

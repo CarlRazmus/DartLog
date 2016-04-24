@@ -56,10 +56,10 @@ public abstract class Game {
         return players.size();
     }
 
-    protected void newGame() {
+    protected void newGame(int startingPlayer) {
         playOrder = new LinkedList<>();
         winner = null;
-        currentPlayerIdx = 0;
+        currentPlayerIdx = startingPlayer;
         initPlayerData(startingScore);
     }
 
