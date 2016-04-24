@@ -2,22 +2,19 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:paddingLeft="8dp"
-    android:paddingRight="8dp"
-    android:paddingTop="8dp"
     android:background="@drawable/game_player_normal">
 
     <View
-        android:layout_width="2dp"
+        android:layout_width="8dp"
         android:layout_height="match_parent"
         android:id="@+id/game_player_list_line"
-        android:layout_marginTop="4dp"
         android:background="@color/main_red">
     </View>
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:paddingTop="8dp"
         android:paddingBottom="8dp"
         android:paddingLeft="8dp"
         android:paddingRight="8dp">
