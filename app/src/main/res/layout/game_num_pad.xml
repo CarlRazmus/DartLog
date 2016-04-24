@@ -8,122 +8,134 @@
     android:background="@color/background_dark"
     tools:showIn="@layout/activity_game">
 
-    <TextView
-        android:id="@+id/score_input"
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_alignBottom="@+id/num_pad"
-        android:layout_toLeftOf="@id/num_pad"
-        android:layout_toStartOf="@id/num_pad"
-        android:gravity="center"
-        android:maxLength="3"
-        android:text="0"
-        android:textColor="@color/main_white"
-        android:textSize="35sp" />
-
-    <RelativeLayout
-        android:id="@id/num_pad"
+    <TableLayout
+        android:id="@+id/num_pad"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true">
+        android:layout_alignParentEnd="true"
+        android:background="#000000"
+        android:stretchColumns="*">
 
-        <Button
-            android:id="@+id/one"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="1" />
+        <TableRow
+            android:background="@color/background_dark"
+            android:layout_marginBottom="1dp">
 
-        <Button
-            android:id="@+id/two"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_toRightOf="@id/one"
-            android:layout_toEndOf="@id/one"
-            android:text="2" />
+            <TextView
+                android:id="@+id/score_input"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:maxLength="3"
+                android:text="0"
+                android:textColor="@color/main_white"
+                android:layout_column="1"
+                android:padding="3dp"
+                android:textSize="25sp" />
+        </TableRow>
 
-        <Button
-            android:id="@+id/three"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_toRightOf="@id/two"
-            android:layout_toEndOf="@id/two"
-            android:text="3" />
+        <TableRow>
+                <Button
+                    android:id="@+id/one"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_margin="1dp"
+                    android:background="@drawable/num_pad_button"
+                    android:text="1" />
 
-        <Button
-            android:id="@+id/four"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/one"
-            android:text="4" />
+                <Button
+                    android:id="@+id/two"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_margin="1dp"
+                    android:background="@drawable/num_pad_button"
+                    android:text="2" />
 
-        <Button
-            android:id="@+id/five"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/one"
-            android:layout_toRightOf="@id/four"
-            android:layout_toEndOf="@id/four"
-            android:text="5" />
+                <Button
+                    android:id="@+id/three"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_margin="1dp"
+                    android:background="@drawable/num_pad_button"
+                    android:text="3" />
+        </TableRow>
 
-        <Button
-            android:id="@+id/six"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/one"
-            android:layout_toRightOf="@id/five"
-            android:layout_toEndOf="@id/five"
-            android:text="6" />
+        <TableRow>
+            <Button
+                android:id="@+id/four"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_margin="1dp"
+                android:background="@drawable/num_pad_button"
+                android:text="4" />
 
-        <Button
-            android:id="@+id/seven"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/four"
-            android:text="7" />
+            <Button
+                android:id="@+id/five"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_margin="1dp"
+                android:background="@drawable/num_pad_button"
+                android:text="5" />
 
-        <Button
-            android:id="@+id/eight"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/four"
-            android:layout_toRightOf="@id/seven"
-            android:layout_toEndOf="@id/seven"
-            android:text="8" />
+            <Button
+                android:id="@+id/six"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_margin="1dp"
+                android:background="@drawable/num_pad_button"
+                android:text="6" />
+        </TableRow>
 
-        <Button
-            android:id="@+id/nine"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/four"
-            android:layout_toEndOf="@id/eight"
-            android:text="9" />
+        <TableRow>
+            <Button
+                android:id="@+id/seven"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_margin="1dp"
+                android:background="@drawable/num_pad_button"
+                android:text="7" />
 
-        <Button
-            android:id="@+id/erase"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/seven"
-            android:text="erase" />
+            <Button
+                android:id="@+id/eight"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_margin="1dp"
+                android:background="@drawable/num_pad_button"
+                android:text="8" />
 
-        <Button
-            android:id="@+id/zero"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/seven"
-            android:layout_toRightOf="@id/seven"
-            android:layout_toEndOf="@id/seven"
-            android:text="0" />
+            <Button
+                android:id="@+id/nine"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_margin="1dp"
+                android:background="@drawable/num_pad_button"
+                android:text="9" />
+        </TableRow>
 
-        <Button
-            android:id="@+id/enter"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/seven"
-            android:layout_toRightOf="@id/eight"
-            android:layout_toEndOf="@id/eight"
-            android:text="enter" />
-    </RelativeLayout>
+        <TableRow>
+            <ImageButton
+                android:id="@+id/erase"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_margin="1dp"
+                android:background="@drawable/num_pad_button"
+                android:src="@android:drawable/ic_input_delete" />
+
+            <Button
+                android:id="@+id/zero"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_margin="1dp"
+                android:background="@drawable/num_pad_button"
+                android:text="0" />
+
+            <Button
+                android:id="@+id/enter"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_margin="1dp"
+                android:background="@drawable/num_pad_button"
+                android:text="DONE" />
+        </TableRow>
+    </TableLayout>
 </RelativeLayout>

@@ -4,18 +4,18 @@ import android.text.InputFilter;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 public class NumPadHandler implements View.OnClickListener {
 
     private final TextView scoreInput;
-    private final ViewGroup numpad;
     private InputEventListener listener;
 
     public NumPadHandler(ViewGroup numpadView) {
-        this.numpad = (ViewGroup) numpadView.findViewById(R.id.num_pad);
         this.scoreInput = (TextView) numpadView.findViewById(R.id.score_input);
-        initButtons();
+        ViewGroup numpad = (ViewGroup) numpadView.findViewById(R.id.num_pad);
+        setClickListenerInView(numpad);
         initInputField();
     }
 
@@ -75,12 +75,13 @@ public class NumPadHandler implements View.OnClickListener {
         }
     }
 
-    private void initButtons() {
-        int childCount = numpad.getChildCount();
-        for (int i=0; i < childCount; i++) {
-            View v = numpad.getChildAt(i);
-            if (v instanceof Button) {
+    private void setClickListenerInView(ViewGroup viewGroup) {
+        for (int i=0; i < viewGroup.getChildCount(); i++) {
+            View v = viewGroup.getChildAt(i);
+            if (v instanceof Button || v instanceof ImageButton) {
                 v.setOnClickListener(this);
+            } else if (v instanceof ViewGroup) {
+                setClickListenerInView((ViewGroup) v);
             }
         }
     }
