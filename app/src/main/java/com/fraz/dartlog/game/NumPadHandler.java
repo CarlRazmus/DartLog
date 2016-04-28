@@ -1,4 +1,4 @@
-package com.fraz.dartlog;
+package com.fraz.dartlog.game;
 
 import android.text.InputFilter;
 import android.view.View;
@@ -6,6 +6,8 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
+
+import com.fraz.dartlog.R;
 
 public class NumPadHandler implements View.OnClickListener {
 

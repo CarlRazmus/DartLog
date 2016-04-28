@@ -1,4 +1,4 @@
-package com.fraz.dartlog;
+package com.fraz.dartlog.game;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -14,6 +14,9 @@ import android.widget.Button;
 import android.widget.ExpandableListView;
 import android.widget.ListView;
 import android.widget.ViewAnimator;
+
+import com.fraz.dartlog.MainActivity;
+import com.fraz.dartlog.R;
 
 import java.util.ArrayList;
 

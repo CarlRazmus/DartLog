@@ -1,4 +1,4 @@
-package com.fraz.dartlog;
+package com.fraz.dartlog.game;
 
 import java.util.Collections;
 import java.util.LinkedList;

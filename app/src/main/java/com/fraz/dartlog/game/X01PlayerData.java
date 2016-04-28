@@ -1,4 +1,4 @@
-package com.fraz.dartlog;
+package com.fraz.dartlog.game;
 
 public class X01PlayerData extends PlayerData {
 

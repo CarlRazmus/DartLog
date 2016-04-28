@@ -1,4 +1,4 @@
-package com.fraz.dartlog;
+package com.fraz.dartlog.game;
 
 import android.app.Activity;
 import android.view.Gravity;

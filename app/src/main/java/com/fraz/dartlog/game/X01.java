@@ -1,6 +1,9 @@
-package com.fraz.dartlog;
+package com.fraz.dartlog.game;
 
 import android.app.Activity;
+
+import com.fraz.dartlog.CheckoutChart;
+import com.fraz.dartlog.R;
 
 import java.io.Serializable;
 import java.util.ArrayList;
