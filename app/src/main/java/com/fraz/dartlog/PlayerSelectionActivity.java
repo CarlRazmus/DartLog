@@ -16,7 +16,7 @@ import com.fraz.dartlog.game.GameActivity;
 
 import java.util.ArrayList;
 
-public class PlayersActivity extends AppCompatActivity implements View.OnClickListener {
+public class PlayerSelectionActivity extends AppCompatActivity implements View.OnClickListener {
     private ArrayList<String> playersNames;
     private ParticipantsListAdapter arrayStringAdapter;
 

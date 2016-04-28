@@ -19,7 +19,7 @@
         </activity>
         <activity android:name=".game.GameActivity" />
         <activity android:name=".StatisticsActivity" />
-        <activity android:name=".PlayersActivity"
+        <activity android:name=".PlayerSelectionActivity"
             android:windowSoftInputMode="stateHidden"/>
     </application>
 
