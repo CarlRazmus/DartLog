@@ -54,7 +54,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void startStatActivity() {
-        Intent intent = new Intent(this, StatActivity.class);
+        Intent intent = new Intent(this, StatisticsActivity.class);
         startActivity(intent);
     }
 

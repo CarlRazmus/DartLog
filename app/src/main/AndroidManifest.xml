@@ -18,7 +18,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".GameActivity" />
-        <activity android:name=".StatActivity" />
+        <activity android:name=".StatisticsActivity" />
         <activity android:name=".PlayersActivity"
             android:windowSoftInputMode="stateHidden"/>
     </application>
