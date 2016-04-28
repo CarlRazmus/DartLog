@@ -19,7 +19,7 @@ public class X01 extends Game implements Serializable{
     }
 
     public boolean submitScore(int score) {
-        if (!isDone()) {
+        if (!isGameOver()) {
             if (!super.submitScore(score)) {
                 showBustToast();
             }

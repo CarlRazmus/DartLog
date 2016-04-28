@@ -40,7 +40,7 @@ public abstract class Game {
         }
     }
 
-    public boolean isDone() {
+    public boolean isGameOver() {
         return winner != null;
     }
 

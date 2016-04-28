@@ -100,7 +100,7 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
         gameListAdapter.notifyDataSetChanged();
         scrollToPlayerInList();
         setExpandedPlayers();
-        if (game.isDone()) {
+        if (game.isGameOver()) {
             setGameDoneView();
         } else {
             setNumPadView();

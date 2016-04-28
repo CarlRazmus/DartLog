@@ -50,7 +50,7 @@
                 android:layout_centerInParent="true">
 
                 <include layout="@layout/game_num_pad"/>
-                <include layout="@layout/game_done"/>
+                <include layout="@layout/game_over"/>
             </ViewAnimator>
         </RelativeLayout>
     </LinearLayout>

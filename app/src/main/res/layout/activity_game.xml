@@ -37,7 +37,7 @@
         android:id="@+id/game_input">
 
         <include layout="@layout/game_num_pad"/>
-        <include layout="@layout/game_done"/>
+        <include layout="@layout/game_over"/>
     </ViewAnimator>
 
 </LinearLayout>
