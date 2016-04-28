@@ -11,16 +11,16 @@ import android.widget.TextView;
 import java.util.List;
 
 
-public class SelectedPlayersListAdapter extends ArrayAdapter<String> {
+public class ParticipantsListAdapter extends ArrayAdapter<String> {
 
-    private List<String> playerNames;
+    private List<String> participants;
     private Activity context;
 
-    public SelectedPlayersListAdapter(Activity context, List<String> playerNames) {
-        super(context, R.layout.game_player_list_item, playerNames);
+    public ParticipantsListAdapter(Activity context, List<String> participants) {
+        super(context, R.layout.participant_list_item, participants);
 
         this.context = context;
-        this.playerNames = playerNames;
+        this.participants = participants;
     }
 
     @Override
@@ -29,13 +29,13 @@ public class SelectedPlayersListAdapter extends ArrayAdapter<String> {
         View listItem = convertView;
 
         if (convertView == null) {
-            listItem = inflater.inflate(R.layout.select_players_list_item, parent, false);
+            listItem = inflater.inflate(R.layout.participant_list_item, parent, false);
         }
 
-        TextView playerNameView = (TextView) listItem.findViewById(R.id.select_players_list_item_name);
-        playerNameView.setText(playerNames.get(position));
+        TextView participantNameView = (TextView) listItem.findViewById(R.id.participant_name);
+        participantNameView.setText(participants.get(position));
 
-        Button removeButton = (Button) listItem.findViewById(R.id.remove_player_button);
+        Button removeButton = (Button) listItem.findViewById(R.id.remove_participant_button);
         removeButton.setText("X");
 
         removeButton.setOnClickListener(new View.OnClickListener() {

@@ -4,7 +4,7 @@
 
 
     <TextView
-        android:id="@+id/select_players_list_item_name"
+        android:id="@+id/participant_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
@@ -15,7 +15,8 @@
     <Button
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:id="@+id/remove_player_button"
+        android:id="@+id/remove_participant_button"
+        android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"/>
 
 </RelativeLayout>

@@ -16,12 +16,12 @@ import java.util.ArrayList;
 
 public class PlayersActivity extends AppCompatActivity implements View.OnClickListener {
     private ArrayList<String> playersNames;
-    private SelectedPlayersListAdapter arrayStringAdapter;
+    private ParticipantsListAdapter arrayStringAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_players);
+        setContentView(R.layout.activity_player_selection);
 
         Button readyButton = (Button) findViewById(R.id.ready_button);
         assert readyButton != null;
@@ -40,7 +40,7 @@ public class PlayersActivity extends AppCompatActivity implements View.OnClickLi
         playersNames.add("Filip");
         playersNames.add("Jonathan");
         playersNames.add("Martin");
-        arrayStringAdapter = new SelectedPlayersListAdapter(this, playersNames);
+        arrayStringAdapter = new ParticipantsListAdapter(this, playersNames);
         assert myListView != null;
         myListView.setAdapter(arrayStringAdapter);
     }
