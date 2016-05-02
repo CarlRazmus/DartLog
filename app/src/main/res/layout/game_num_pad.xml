@@ -40,7 +40,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_margin="1dp"
-                    android:background="@drawable/num_pad_button"
+                    android:background="@drawable/button_default"
                     android:text="1" />
 
                 <Button
@@ -48,7 +48,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_margin="1dp"
-                    android:background="@drawable/num_pad_button"
+                    android:background="@drawable/button_default"
                     android:text="2" />
 
                 <Button
@@ -56,7 +56,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_margin="1dp"
-                    android:background="@drawable/num_pad_button"
+                    android:background="@drawable/button_default"
                     android:text="3" />
         </TableRow>
 
@@ -66,7 +66,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_margin="1dp"
-                android:background="@drawable/num_pad_button"
+                android:background="@drawable/button_default"
                 android:text="4" />
 
             <Button
@@ -74,7 +74,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_margin="1dp"
-                android:background="@drawable/num_pad_button"
+                android:background="@drawable/button_default"
                 android:text="5" />
 
             <Button
@@ -82,7 +82,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_margin="1dp"
-                android:background="@drawable/num_pad_button"
+                android:background="@drawable/button_default"
                 android:text="6" />
         </TableRow>
 
@@ -92,7 +92,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_margin="1dp"
-                android:background="@drawable/num_pad_button"
+                android:background="@drawable/button_default"
                 android:text="7" />
 
             <Button
@@ -100,7 +100,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_margin="1dp"
-                android:background="@drawable/num_pad_button"
+                android:background="@drawable/button_default"
                 android:text="8" />
 
             <Button
@@ -108,7 +108,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_margin="1dp"
-                android:background="@drawable/num_pad_button"
+                android:background="@drawable/button_default"
                 android:text="9" />
         </TableRow>
 
@@ -118,7 +118,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_margin="1dp"
-                android:background="@drawable/num_pad_button"
+                android:background="@drawable/button_default"
                 android:src="@android:drawable/ic_input_delete" />
 
             <Button
@@ -126,7 +126,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_margin="1dp"
-                android:background="@drawable/num_pad_button"
+                android:background="@drawable/button_default"
                 android:text="0" />
 
             <Button
@@ -134,7 +134,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_margin="1dp"
-                android:background="@drawable/num_pad_button"
+                android:background="@drawable/button_default"
                 android:text="DONE" />
         </TableRow>
     </TableLayout>
