@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -11,62 +11,64 @@
     tools:context=".game.settings.PlayerSelectionActivity"
     android:background="@color/background">
 
-    <LinearLayout
+
+    <TextView
+        android:id="@+id/players_listview_header"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_marginBottom="100dp"
-        android:id="@+id/add_players_group">
-
-        <EditText
-            android:id="@+id/player_input_textfield"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:inputType="text"
-            android:textSize="20sp"
-            android:textColor="@color/main_white"
-            android:backgroundTint="@color/primary_dark_material_dark"
-            android:textAlignment="center"
-            android:textColorHint="@color/main_white"
-            android:hint="Player Name"/>
-
-        <Button
-            android:id="@+id/add_player_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="20sp"
-            android:layout_alignParentRight="true"
-            android:text="+"/>
-    </LinearLayout>
+        android:text="Players to join this game"
+        android:textAlignment="center"
+        android:layout_marginTop="70dp"  />
 
     <View
         android:id="@+id/add_players_group_divider"
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:background="@color/main_red"/>
-
-    <ListView
-        android:id="@+id/players_listView"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginTop="1dp"
-        android:layout_marginBottom="1dp"
-        android:layout_weight="1">
-
-    </ListView>
-
-    <View
-        android:id="@+id/ready_button_divider"
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
+        android:layout_below="@id/players_listview_header"
         android:background="@color/main_red"/>
 
     <Button
         android:id="@+id/ready_button"
         android:layout_width="match_parent"
         android:layout_alignParentRight="true"
+        android:layout_alignParentBottom="true"
         android:layout_height="wrap_content"
-        android:layout_marginTop="15dp"
+        android:layout_marginBottom="20dp"
         android:text="Ready!"/>
-</LinearLayout>
+
+    <View
+        android:id="@+id/ready_button_divider"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_above="@id/ready_button"
+        android:layout_marginBottom="50dp"
+        android:background="@color/main_red"/>
+
+    <RelativeLayout
+        android:id="@+id/players_listview_layout_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/add_players_group_divider"
+        android:layout_above="@id/ready_button_divider">
+
+        <ListView
+            android:id="@+id/players_listView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="1dp"
+            android:layout_marginBottom="1dp"
+            android:layout_weight="1" />
+
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/open_player_selection_fab"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@id/players_listView"
+            android:layout_alignRight="@id/players_listView"
+            android:layout_margin="10dp"
+            android:clickable="true"/>
+    </RelativeLayout>
+
+
+
+</RelativeLayout>

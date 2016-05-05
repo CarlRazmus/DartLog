@@ -5,7 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import com.fraz.dartlog.R;
@@ -37,17 +37,18 @@ public class ParticipantsListAdapter extends ArrayAdapter<String> {
         TextView participantNameView = (TextView) listItem.findViewById(R.id.participant_name);
         participantNameView.setText(participants.get(position));
 
-        Button removeButton = (Button) listItem.findViewById(R.id.remove_participant_button);
-        removeButton.setText("X");
+        //Button removeButton = (Button) listItem.findViewById(R.id.remove_participant_button);
+        //removeButton.setText("X");
 
-        removeButton.setOnClickListener(new View.OnClickListener() {
+        listItem.setOnTouchListener(new SwipeDetector(participantNameView, position, (ListView) parent));
+
+        /* removeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 remove(getItem(position));
                 notifyDataSetChanged();
             }
-        });
-
+        }); */
         return listItem;
     }
 }
