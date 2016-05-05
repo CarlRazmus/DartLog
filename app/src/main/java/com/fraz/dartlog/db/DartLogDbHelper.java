@@ -20,7 +20,7 @@ public class DartLogDbHelper extends SQLiteOpenHelper {
     private static final String SQL_CREATE_ENTRIES =
             "CREATE TABLE " + DartLogContract.PlayerEntry.TABLE_NAME + " (" +
                     DartLogContract.PlayerEntry._ID + " INTEGER PRIMARY KEY," +
-                    DartLogContract.PlayerEntry.COLUMN_NAME_PLAYER_NAME + " TEXT )";
+                    DartLogContract.PlayerEntry.COLUMN_NAME_PLAYER_NAME + " TEXT UNIQUE)";
 
     private static final String SQL_DELETE_ENTRIES =
             "DROP TABLE IF EXISTS " + DartLogContract.PlayerEntry.TABLE_NAME;
@@ -49,20 +49,21 @@ public class DartLogDbHelper extends SQLiteOpenHelper {
         addPlayer("Martin");
     }
 
-    public void addPlayer(String name) {
+    /** Add a player to the database. Duplicated names is not allowed.
+     * @param name the name of the player to add.
+     * @return the row ID of the newly inserted player, or -1 if the player could not be added.
+     */
+    public long addPlayer(String name) {
         SQLiteDatabase db = getWritableDatabase();
 
         ContentValues values = new ContentValues();
         values.put(DartLogContract.PlayerEntry.COLUMN_NAME_PLAYER_NAME, name);
-        db.insert(DartLogContract.PlayerEntry.TABLE_NAME, null, values);
+        return db.insert(DartLogContract.PlayerEntry.TABLE_NAME, null, values);
     }
 
-    public void addPlayers(ArrayList<String> names) {
-        for (String name : names) {
-            addPlayer(name);
-        }
-    }
-
+    /** Get the player names of all the players.
+     * @return the player names of all the players in the database.
+     */
     public ArrayList<String> getPlayers() {
         SQLiteDatabase db = getReadableDatabase();
         String[] projection = {
