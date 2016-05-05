@@ -13,6 +13,7 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import com.fraz.dartlog.R;
+import com.fraz.dartlog.db.DartLogDbHelper;
 import com.fraz.dartlog.game.GameActivity;
 
 import java.util.ArrayList;
@@ -20,11 +21,14 @@ import java.util.ArrayList;
 public class PlayerSelectionActivity extends AppCompatActivity implements View.OnClickListener {
     private ArrayList<String> playersNames;
     private ParticipantsListAdapter arrayStringAdapter;
+    private DartLogDbHelper dbHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_player_selection);
+
+        dbHelper = new DartLogDbHelper(this);
 
         Button readyButton = (Button) findViewById(R.id.ready_button);
         assert readyButton != null;
@@ -37,12 +41,7 @@ public class PlayerSelectionActivity extends AppCompatActivity implements View.O
         /* create a listView that contains all players who will join the game */
         ListView myListView = (ListView) findViewById(R.id.players_listView);
 
-        playersNames = new ArrayList<>();
-        /* add names for debug purposes, remove when app is finished */
-        playersNames.add("Razmus");
-        playersNames.add("Filip");
-        playersNames.add("Jonathan");
-        playersNames.add("Martin");
+        playersNames = dbHelper.getPlayers();
         arrayStringAdapter = new ParticipantsListAdapter(this, playersNames);
         assert myListView != null;
         myListView.setAdapter(arrayStringAdapter);
@@ -107,5 +106,4 @@ public class PlayerSelectionActivity extends AppCompatActivity implements View.O
         intent.putStringArrayListExtra("playerNames", playersNames);
         startActivity(intent);
     }
-
 }
