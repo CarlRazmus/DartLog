@@ -8,7 +8,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 
-import com.fraz.dartlog.db.DartLogDbHelper;
 import com.fraz.dartlog.game.settings.PlayerSelectionActivity;
 import com.fraz.dartlog.statistics.StatisticsActivity;
 
@@ -21,9 +20,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         ((Button) findViewById(R.id.play_button)).setOnClickListener(this);
         ((Button) findViewById(R.id.stat_button)).setOnClickListener(this);
-
-        DartLogDbHelper dartLogDbHelper = new DartLogDbHelper(this);
-        dartLogDbHelper.resetDatabase();
     }
 
     @Override

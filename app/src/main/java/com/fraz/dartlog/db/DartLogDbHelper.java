@@ -6,24 +6,17 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
-import java.util.ArrayList;
+import com.fraz.dartlog.game.X01;
+import com.fraz.dartlog.game.X01PlayerData;
 
-/**
- * Created by filip on 2016-05-05.
- */
+import java.util.ArrayList;
+import java.util.Calendar;
+
 public class DartLogDbHelper extends SQLiteOpenHelper {
 
     // If you change the database schema, you must increment the database version.
     public static final int DATABASE_VERSION = 1;
     public static final String DATABASE_NAME = "DartLog.db";
-
-    private static final String SQL_CREATE_ENTRIES =
-            "CREATE TABLE " + DartLogContract.PlayerEntry.TABLE_NAME + " (" +
-                    DartLogContract.PlayerEntry._ID + " INTEGER PRIMARY KEY," +
-                    DartLogContract.PlayerEntry.COLUMN_NAME_PLAYER_NAME + " TEXT UNIQUE)";
-
-    private static final String SQL_DELETE_ENTRIES =
-            "DROP TABLE IF EXISTS " + DartLogContract.PlayerEntry.TABLE_NAME;
 
     public DartLogDbHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -31,17 +24,24 @@ public class DartLogDbHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        db.execSQL(SQL_CREATE_ENTRIES);
+        for (String createSql : DartLogContract.SQL_CREATE_ENTRIES) {
+            db.execSQL(createSql);
+        }
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+        resetDatabase();
     }
 
     public void resetDatabase() {
         SQLiteDatabase db = getWritableDatabase();
-        db.execSQL(SQL_DELETE_ENTRIES);
-        db.execSQL(SQL_CREATE_ENTRIES);
+        for (String deleteSql :DartLogContract.SQL_DELETE_ENTRIES) {
+            db.execSQL(deleteSql);
+        }
+        for (String createSql :DartLogContract.SQL_CREATE_ENTRIES) {
+            db.execSQL(createSql);
+        }
 
         addPlayer("Filip");
         addPlayer("Razmus");
@@ -59,6 +59,46 @@ public class DartLogDbHelper extends SQLiteOpenHelper {
         ContentValues values = new ContentValues();
         values.put(DartLogContract.PlayerEntry.COLUMN_NAME_PLAYER_NAME, name);
         return db.insert(DartLogContract.PlayerEntry.TABLE_NAME, null, values);
+    }
+
+    /** Add a match to the database. Date at time of the add is recorded as date of match.
+     * All players scores are added.
+     *
+     * @param match The match to add.
+     */
+    public void addX01Match(X01 match) {
+        SQLiteDatabase db = getWritableDatabase();
+        Calendar c = Calendar.getInstance();
+        long matchId = InsertMatchEntry(db, "X01", c.getTimeInMillis());
+
+        for(int i = 0; i < match.getNumberOfPlayers(); ++i) {
+            InsertPlayerScores(db, match.getPlayer(i), matchId);
+        }
+    }
+
+    private void InsertPlayerScores(SQLiteDatabase db, X01PlayerData player, long matchId) {
+        Cursor c = db.query(DartLogContract.PlayerEntry.TABLE_NAME,
+                new String[]{DartLogContract.PlayerEntry._ID},
+                String.format("%s = '%s'", DartLogContract.PlayerEntry.COLUMN_NAME_PLAYER_NAME,
+                        player.getPlayerName()), null, null, null, null);
+        c.moveToFirst();
+        long playerId = c.getLong(0);
+        c.close();
+
+        for (int score : player.getScoreHistory()) {
+            ContentValues values = new ContentValues();
+            values.put(DartLogContract.ScoreEntry.COLUMN_NAME_SCORE, score);
+            values.put(DartLogContract.ScoreEntry.COLUMN_NAME_MATCH_ID, matchId);
+            values.put(DartLogContract.ScoreEntry.COLUMN_NAME_PLAYER_ID, playerId);
+            db.insert(DartLogContract.ScoreEntry.TABLE_NAME, null, values);
+        }
+    }
+
+    private long InsertMatchEntry(SQLiteDatabase db, String gameType, Long timeInMillis) {
+        ContentValues matchValues = new ContentValues();
+        matchValues.put(DartLogContract.MatchEntry.COLUMN_NAME_DATE, timeInMillis);
+        matchValues.put(DartLogContract.MatchEntry.COLUMN_NAME_GAME, gameType);
+        return db.insert(DartLogContract.MatchEntry.TABLE_NAME, null, matchValues);
     }
 
     /** Get the player names of all the players.

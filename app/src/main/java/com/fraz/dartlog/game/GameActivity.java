@@ -17,6 +17,7 @@ import android.widget.ViewAnimator;
 
 import com.fraz.dartlog.MainActivity;
 import com.fraz.dartlog.R;
+import com.fraz.dartlog.db.DartLogDbHelper;
 
 import java.util.ArrayList;
 
@@ -26,6 +27,7 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
     private X01 game;
     private GameListAdapter gameListAdapter;
     private ViewAnimator viewAnimator;
+    private DartLogDbHelper dbHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,8 +35,8 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
         setContentView(R.layout.activity_game);
 
         setSupportActionBar((Toolbar) findViewById(R.id.game_toolbar));
-
         viewAnimator = (ViewAnimator) findViewById(R.id.game_input);
+        dbHelper = new DartLogDbHelper(this);
 
         game = GetGameInstance(savedInstanceState, createPlayerDataList());
         gameListAdapter = new GameListAdapter(this, game);
@@ -65,10 +67,12 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.new_leg:
+                dbHelper.addX01Match(game);
                 game.newLeg();
                 updateView();
                 break;
             case R.id.complete_match:
+                dbHelper.addX01Match(game);
                 completeMatch();
                 break;
         }
