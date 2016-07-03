@@ -11,14 +11,12 @@ import java.util.ArrayList;
 public class X01 extends Game implements Serializable{
 
     private CheckoutChart checkoutChart;
-    private int startingPlayer;
 
     public X01(Activity context, ArrayList<X01PlayerData> players, int x) {
         super(context, players, x*100 + 1);
 
         checkoutChart = new CheckoutChart(context, R.raw.checkout_chart);
-        startingPlayer = 0;
-        newGame(0);
+        newGame();
     }
 
     public boolean submitScore(int score) {
@@ -52,7 +50,7 @@ public class X01 extends Game implements Serializable{
     }
 
     public void newLeg() {
-        startingPlayer += 1;
-        newGame(startingPlayer);
+        cycleStartingPlayer();
+        newGame();
     }
 }

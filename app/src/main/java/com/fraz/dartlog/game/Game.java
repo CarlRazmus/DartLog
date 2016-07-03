@@ -14,6 +14,8 @@ public abstract class Game {
     protected int currentPlayerIdx;
     protected X01PlayerData winner;
     protected int startingScore;
+    private int startingPlayer;
+
     private LinkedList<Integer> playOrder;
 
     /** Needed for serialization of subclasses. */
@@ -56,7 +58,7 @@ public abstract class Game {
         return players.size();
     }
 
-    protected void newGame(int startingPlayer) {
+    protected void newGame() {
         playOrder = new LinkedList<>();
         winner = null;
         currentPlayerIdx = startingPlayer;
@@ -81,6 +83,10 @@ public abstract class Game {
 
     protected void nextPlayer() {
         currentPlayerIdx = (currentPlayerIdx + 1) % players.size();
+    }
+
+    protected void cycleStartingPlayer() {
+        startingPlayer = (startingPlayer + 1) % players.size();
     }
 
     protected void initPlayerData(int score) {
