@@ -77,13 +77,7 @@ public class DartLogDbHelper extends SQLiteOpenHelper {
     }
 
     private void InsertPlayerScores(SQLiteDatabase db, X01PlayerData player, long matchId) {
-        Cursor c = db.query(DartLogContract.PlayerEntry.TABLE_NAME,
-                new String[]{DartLogContract.PlayerEntry._ID},
-                String.format("%s = '%s'", DartLogContract.PlayerEntry.COLUMN_NAME_PLAYER_NAME,
-                        player.getPlayerName()), null, null, null, null);
-        c.moveToFirst();
-        long playerId = c.getLong(0);
-        c.close();
+        long playerId = getPlayerId(db, player);
 
         for (int score : player.getScoreHistory()) {
             ContentValues values = new ContentValues();
@@ -92,6 +86,28 @@ public class DartLogDbHelper extends SQLiteOpenHelper {
             values.put(DartLogContract.ScoreEntry.COLUMN_NAME_PLAYER_ID, playerId);
             db.insert(DartLogContract.ScoreEntry.TABLE_NAME, null, values);
         }
+    }
+
+    /** Gets the ID of a player in the database. Adds a new player if id does not exist.
+     * @param db The database.
+     * @param player The player to find in the database or add if not existing.
+     * @return The id of the player in the database.
+     */
+    private long getPlayerId(SQLiteDatabase db, X01PlayerData player) {
+        long playerId;
+        String name = player.getPlayerName();
+        Cursor c = db.query(DartLogContract.PlayerEntry.TABLE_NAME,
+                new String[]{DartLogContract.PlayerEntry._ID},
+                String.format("%s = '%s'", DartLogContract.PlayerEntry.COLUMN_NAME_PLAYER_NAME,
+                        name), null, null, null, null);
+        if(c.getCount() == 0)
+            playerId = addPlayer(name);
+        else {
+            c.moveToFirst();
+            playerId = c.getLong(0);
+        }
+        c.close();
+        return playerId;
     }
 
     private long InsertMatchEntry(SQLiteDatabase db, String gameType, Long timeInMillis) {
