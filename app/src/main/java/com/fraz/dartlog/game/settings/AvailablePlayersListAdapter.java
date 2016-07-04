@@ -1,6 +1,7 @@
 package com.fraz.dartlog.game.settings;
 
 import android.app.Activity;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,12 +14,13 @@ import com.fraz.dartlog.R;
 import java.util.List;
 
 
-public class ParticipantsListAdapter extends ArrayAdapter<String> {
+public class AvailablePlayersListAdapter extends ArrayAdapter<String> {
 
     private List<String> participants;
     private Activity context;
 
-    public ParticipantsListAdapter(Activity context, List<String> participants) {
+
+    public AvailablePlayersListAdapter(Activity context, List<String> participants) {
         super(context, R.layout.participant_list_item, participants);
 
         this.context = context;
@@ -37,18 +39,6 @@ public class ParticipantsListAdapter extends ArrayAdapter<String> {
         TextView participantNameView = (TextView) listItem.findViewById(R.id.participant_name);
         participantNameView.setText(participants.get(position));
 
-        //Button removeButton = (Button) listItem.findViewById(R.id.remove_participant_button);
-        //removeButton.setText("X");
-
-        listItem.setOnTouchListener(new SwipeDetector(participantNameView, position, (ListView) parent));
-
-        /* removeButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                remove(getItem(position));
-                notifyDataSetChanged();
-            }
-        }); */
         return listItem;
     }
 }
