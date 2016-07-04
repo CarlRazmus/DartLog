@@ -1,15 +1,20 @@
 package com.fraz.dartlog.game.settings;
 
 import android.app.Dialog;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Toast;
@@ -59,11 +64,6 @@ public class PlayerSelectionActivity extends AppCompatActivity implements View.O
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(recyclerViewAdapter);
 
-        participantNames.add("Razmus");
-        participantNames.add("Filip");
-        participantNames.add("Jonathan");
-        participantNames.add("Martin");
-
         itemTouchHelper.attachToRecyclerView(recyclerView);
     }
 
@@ -76,13 +76,28 @@ public class PlayerSelectionActivity extends AppCompatActivity implements View.O
         }
     }
 
-    private void openPlayerSelectionView(){
-        final Dialog dialog = new Dialog(this);
+    private void initializeDialog(Dialog dialog){
         dialog.setContentView(R.layout.select_players_dialog);
         dialog.setTitle("Select players");
         dialog.setCancelable(true);
 
-        ListView availablePlayersListView = (ListView) dialog.findViewById(R.id.dialog_players_listView);
+        dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+            @Override
+            public void onDismiss(DialogInterface dialog) {
+                Log.d("Dialog", "adding stuff");
+                participantNames.clear();
+                participantNames.addAll(arrayStringAdapterForFechedPlayers.getSelectedPlayers());
+                recyclerViewAdapter.notifyDataSetChanged();
+            }
+        });
+    }
+
+    private void openPlayerSelectionView(){
+        final Dialog dialog = new Dialog(this);
+
+        initializeDialog(dialog);
+
+        final ListView availablePlayersListView = (ListView) dialog.findViewById(R.id.dialog_players_listView);
         assert availablePlayersListView != null;
 
         ArrayList<String> fetchedPlayersNames = new ArrayList<>();
@@ -91,8 +106,24 @@ public class PlayerSelectionActivity extends AppCompatActivity implements View.O
         arrayStringAdapterForFechedPlayers = new AvailablePlayersListAdapter(this, fetchedPlayersNames);
         availablePlayersListView.setAdapter(arrayStringAdapterForFechedPlayers);
 
+        availablePlayersListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+            @Override
+            public void onItemClick(AdapterView<?> arg0, View view, int position, long id) {
+                arrayStringAdapterForFechedPlayers.toggleSelected(position);
+
+                if(arrayStringAdapterForFechedPlayers.isMarked(position))
+                    view.setBackgroundResource(R.color.game_player_winner);
+                else
+                    view.setBackgroundResource(R.color.background_dark_transparent);
+            }
+        });
+
         Button button = (Button) dialog.findViewById(R.id.done_button);
+
+
         button.setOnClickListener(new View.OnClickListener() {
+
             @Override
             public void onClick(View v) {
                 dialog.dismiss();
@@ -102,19 +133,19 @@ public class PlayerSelectionActivity extends AppCompatActivity implements View.O
         dialog.show();
     }
 
-    private void populatePlayerList(ArrayList<String> participantNames){
-        participantNames.add("Razmus");
-        participantNames.add("Filip");
-        participantNames.add("Jonathan");
-        participantNames.add("Martin");
-        participantNames.add("GenericName1");
-        participantNames.add("GenericName2");
-        participantNames.add("GenericName3");
-        participantNames.add("GenericName4");
-        participantNames.add("GenericName5");
-        participantNames.add("GenericName6");
-        participantNames.add("GenericName7");
-        participantNames.add("GenericName8");
+    private void populatePlayerList(ArrayList<String> availablePlayers){
+        availablePlayers.add("Razmus");
+        availablePlayers.add("Filip");
+        availablePlayers.add("Jonathan");
+        availablePlayers.add("Martin");
+        availablePlayers.add("GenericName1");
+        availablePlayers.add("GenericName2");
+        availablePlayers.add("GenericName3");
+        availablePlayers.add("GenericName4");
+        availablePlayers.add("GenericName5");
+        availablePlayers.add("GenericName6");
+        availablePlayers.add("GenericName7");
+        availablePlayers.add("GenericName8");
     }
 
     private ArrayList<PlayerData> fetchPlayerNamesFromDataBase(){
