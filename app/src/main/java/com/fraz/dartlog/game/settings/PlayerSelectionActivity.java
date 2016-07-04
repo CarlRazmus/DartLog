@@ -20,6 +20,7 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import com.fraz.dartlog.R;
+import com.fraz.dartlog.db.DartLogDbHelper;
 import com.fraz.dartlog.game.GameActivity;
 import com.fraz.dartlog.game.PlayerData;
 
@@ -31,12 +32,14 @@ public class PlayerSelectionActivity extends AppCompatActivity implements View.O
     private RecyclerView recyclerView;
     private RecyclerView.Adapter recyclerViewAdapter;
     private RecyclerView.LayoutManager layoutManager;
-
+    private DartLogDbHelper dbHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_player_selection);
+
+        dbHelper = new DartLogDbHelper(this);
 
         Button readyButton = (Button) findViewById(R.id.ready_button);
         assert readyButton != null;
@@ -52,6 +55,7 @@ public class PlayerSelectionActivity extends AppCompatActivity implements View.O
 
         recyclerView = (RecyclerView) findViewById(R.id.participants_recycler_view);
 
+        participantNames = dbHelper.getPlayers();
         layoutManager = new LinearLayoutManager(this);
         participantNames = new ArrayList<>();
         recyclerViewAdapter = new ParticipantsListRecyclerAdapter(participantNames);
@@ -163,5 +167,4 @@ public class PlayerSelectionActivity extends AppCompatActivity implements View.O
         intent.putStringArrayListExtra("playerNames", participantNames);
         startActivity(intent);
     }
-
 }
