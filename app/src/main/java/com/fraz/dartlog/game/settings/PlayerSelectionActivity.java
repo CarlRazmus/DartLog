@@ -27,8 +27,7 @@ import java.util.ArrayList;
 
 public class PlayerSelectionActivity extends AppCompatActivity implements View.OnClickListener {
     private ArrayList<String> participantNames;
-    private AvailablePlayersListAdapter arrayStringAdapterForFechedPlayers;
-
+    private AvailablePlayersListAdapter availablePlayersListAdapter;
     private RecyclerView recyclerView;
     private RecyclerView.Adapter recyclerViewAdapter;
     private RecyclerView.LayoutManager layoutManager;
@@ -86,7 +85,7 @@ public class PlayerSelectionActivity extends AppCompatActivity implements View.O
             public void onDismiss(DialogInterface dialog) {
                 Log.d("Dialog", "adding stuff");
                 participantNames.clear();
-                participantNames.addAll(arrayStringAdapterForFechedPlayers.getSelectedPlayers());
+                participantNames.addAll(availablePlayersListAdapter.getSelectedPlayers());
                 recyclerViewAdapter.notifyDataSetChanged();
             }
         });
@@ -103,16 +102,16 @@ public class PlayerSelectionActivity extends AppCompatActivity implements View.O
         ArrayList<String> fetchedPlayersNames = new ArrayList<>();
         populatePlayerList(fetchedPlayersNames);
 
-        arrayStringAdapterForFechedPlayers = new AvailablePlayersListAdapter(this, fetchedPlayersNames);
-        availablePlayersListView.setAdapter(arrayStringAdapterForFechedPlayers);
+        availablePlayersListAdapter = new AvailablePlayersListAdapter(this, fetchedPlayersNames);
+        availablePlayersListView.setAdapter(availablePlayersListAdapter);
 
         availablePlayersListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
             @Override
             public void onItemClick(AdapterView<?> arg0, View view, int position, long id) {
-                arrayStringAdapterForFechedPlayers.toggleSelected(position);
+                availablePlayersListAdapter.toggleSelected(position);
 
-                if(arrayStringAdapterForFechedPlayers.isMarked(position))
+                if(availablePlayersListAdapter.isMarked(position))
                     view.setBackgroundResource(R.color.game_player_winner);
                 else
                     view.setBackgroundResource(R.color.background_dark_transparent);
@@ -120,10 +119,7 @@ public class PlayerSelectionActivity extends AppCompatActivity implements View.O
         });
 
         Button button = (Button) dialog.findViewById(R.id.done_button);
-
-
         button.setOnClickListener(new View.OnClickListener() {
-
             @Override
             public void onClick(View v) {
                 dialog.dismiss();
@@ -138,47 +134,15 @@ public class PlayerSelectionActivity extends AppCompatActivity implements View.O
         availablePlayers.add("Filip");
         availablePlayers.add("Jonathan");
         availablePlayers.add("Martin");
-        availablePlayers.add("GenericName1");
-        availablePlayers.add("GenericName2");
-        availablePlayers.add("GenericName3");
-        availablePlayers.add("GenericName4");
-        availablePlayers.add("GenericName5");
-        availablePlayers.add("GenericName6");
-        availablePlayers.add("GenericName7");
-        availablePlayers.add("GenericName8");
+        availablePlayers.add("Erik");
+        availablePlayers.add("Fredrik");
+        availablePlayers.add("Stefan");
+        availablePlayers.add("Maria");
     }
 
     private ArrayList<PlayerData> fetchPlayerNamesFromDataBase(){
         return null;
     }
-
-/*
-        private void clearInputTextField() {
-        EditText editText = (EditText) findViewById(R.id.player_input_textfield);
-        assert editText != null;
-        editText.setText("");
-        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-        imm.hideSoftInputFromWindow(editText.getWindowToken(), 0);
-    }
-
-    private void addPlayerNameToPlayerListView()
-    {
-        EditText editText = (EditText) findViewById(R.id.player_input_textfield);
-        assert editText != null;
-        String playerName = editText.getText().toString();
-
-        if(!playerName.equals("")) {
-            arrayStringAdapter.add(playerName);
-        }
-        else{
-            showEmptyTextErrorToast();
-        }
-    }
-
-    private void showEmptyTextErrorToast() {
-        showToast("must write something!");
-    }
-*/
 
     private void showMustAddPlayersErrorToast() {
         showToast("Its kinda hard to play dart without any players!");
