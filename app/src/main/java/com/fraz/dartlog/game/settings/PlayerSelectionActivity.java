@@ -55,9 +55,8 @@ public class PlayerSelectionActivity extends AppCompatActivity implements View.O
 
         recyclerView = (RecyclerView) findViewById(R.id.participants_recycler_view);
 
-        participantNames = dbHelper.getPlayers();
-        layoutManager = new LinearLayoutManager(this);
         participantNames = new ArrayList<>();
+        layoutManager = new LinearLayoutManager(this);
         recyclerViewAdapter = new ParticipantsListRecyclerAdapter(participantNames);
         ItemTouchHelper itemTouchHelper = new ItemTouchHelper(new ParticipantSwipeCallback(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT, participantNames, recyclerViewAdapter));
 
