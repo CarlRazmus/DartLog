@@ -20,8 +20,8 @@ import android.widget.Toast;
 import com.fraz.dartlog.R;
 import com.fraz.dartlog.db.DartLogDbHelper;
 import com.fraz.dartlog.game.GameActivity;
-import com.fraz.dartlog.game.PlayerData;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 public class PlayerSelectionActivity extends AppCompatActivity implements View.OnClickListener {
@@ -43,7 +43,7 @@ public class PlayerSelectionActivity extends AppCompatActivity implements View.O
         assert readyButton != null;
         readyButton.setOnClickListener(this);
 
-        FloatingActionButton openPlayerSelectionFab = (FloatingActionButton)findViewById(R.id.open_player_selection_fab);
+        FloatingActionButton openPlayerSelectionFab = (FloatingActionButton) findViewById(R.id.open_player_selection_fab);
         assert openPlayerSelectionFab != null;
         openPlayerSelectionFab.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
@@ -69,14 +69,16 @@ public class PlayerSelectionActivity extends AppCompatActivity implements View.O
 
     @Override
     public void onClick(View v) {
-        switch(v.getId()) {
+        switch (v.getId()) {
             case R.id.ready_button:
                 startPlayActivity();
                 break;
         }
     }
 
-    private void initializeDialog(Dialog dialog){
+    private Dialog initializeDialog() {
+        Dialog dialog = new Dialog(this);
+
         dialog.setContentView(R.layout.select_players_dialog);
         dialog.setTitle("Select players");
         dialog.setCancelable(true);
@@ -90,20 +92,16 @@ public class PlayerSelectionActivity extends AppCompatActivity implements View.O
                 recyclerViewAdapter.notifyDataSetChanged();
             }
         });
+
+        return dialog;
     }
 
-    private void openPlayerSelectionView(){
-        final Dialog dialog = new Dialog(this);
-
-        initializeDialog(dialog);
-
+    private void openPlayerSelectionView() {
+        final Dialog dialog = initializeDialog();
         final ListView availablePlayersListView = (ListView) dialog.findViewById(R.id.dialog_players_listView);
         assert availablePlayersListView != null;
 
-        ArrayList<String> playerNames = new ArrayList<>();
-        //populatePlayerList(playerNames);
-        fetchPlayerNamesFromDataBase(playerNames);
-
+        ArrayList<String> playerNames = fetchPlayerNamesFromDataBase();
         availablePlayersListAdapter = new AvailablePlayersListAdapter(this, playerNames);
         availablePlayersListView.setAdapter(availablePlayersListAdapter);
 
@@ -113,7 +111,7 @@ public class PlayerSelectionActivity extends AppCompatActivity implements View.O
             public void onItemClick(AdapterView<?> arg0, View view, int position, long id) {
                 availablePlayersListAdapter.toggleSelected(position);
 
-                if(availablePlayersListAdapter.isMarked(position))
+                if (availablePlayersListAdapter.isMarked(position))
                     view.setBackgroundResource(R.color.game_player_winner);
                 else
                     view.setBackgroundResource(R.color.background_dark_transparent);
@@ -131,8 +129,10 @@ public class PlayerSelectionActivity extends AppCompatActivity implements View.O
         dialog.show();
     }
 
-    private void fetchPlayerNamesFromDataBase(ArrayList<String> list){
+    private ArrayList<String> fetchPlayerNamesFromDataBase() {
+        ArrayList<String> list = new ArrayList<>();
         list.addAll(dbHelper.getPlayers());
+        return list;
     }
 
     private void showMustAddPlayersErrorToast() {
@@ -146,10 +146,9 @@ public class PlayerSelectionActivity extends AppCompatActivity implements View.O
     }
 
     private void startPlayActivity() {
-        if(participantNames.size() == 0){
+        if (participantNames.size() == 0) {
             showMustAddPlayersErrorToast();
-        }
-        else {
+        } else {
             Intent intent = new Intent(this, GameActivity.class);
             intent.putStringArrayListExtra("playerNames", participantNames);
             startActivity(intent);

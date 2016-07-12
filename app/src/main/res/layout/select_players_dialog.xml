@@ -4,6 +4,14 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+
+    <Button
+        android:id="@+id/create_new_player_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:text="Create new player"/>
+
     <Button
         android:id="@+id/done_button"
         android:layout_width="match_parent"
@@ -25,15 +33,6 @@
             android:layout_marginTop="1dp"
             android:layout_marginBottom="1dp"
             android:layout_weight="1" />
-
-        <android.support.design.widget.FloatingActionButton
-            android:id="@+id/create_and_add_player_fab"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignBottom="@id/dialog_players_listView"
-            android:layout_alignRight="@id/dialog_players_listView"
-            android:layout_margin="10dp"
-            android:clickable="true"/>
     </RelativeLayout>
 
 
