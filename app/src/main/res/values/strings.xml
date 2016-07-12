@@ -2,4 +2,6 @@
     <string name="app_name">DartLog</string>
     <string name="action_settings">Settings</string>
     <string name="title_activity_players">PlayersActivity</string>
+    <string name="ok">OK</string>
+    <string name="cancel">Cancel</string>
 </resources>
