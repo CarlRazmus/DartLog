@@ -1,26 +1,37 @@
 package com.fraz.dartlog.game.settings;
 
-import android.content.Context;
+import android.app.Dialog;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.helper.ItemTouchHelper;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
-import android.view.inputmethod.InputMethodManager;
+import android.widget.AdapterView;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
 
 import com.fraz.dartlog.R;
 import com.fraz.dartlog.db.DartLogDbHelper;
 import com.fraz.dartlog.game.GameActivity;
+import com.fraz.dartlog.game.PlayerData;
 
 import java.util.ArrayList;
 
 public class PlayerSelectionActivity extends AppCompatActivity implements View.OnClickListener {
-    private ArrayList<String> playersNames;
-    private ParticipantsListAdapter arrayStringAdapter;
+    private ArrayList<String> participantNames;
+    private AvailablePlayersListAdapter availablePlayersListAdapter;
+    private RecyclerView recyclerView;
+    private RecyclerView.Adapter recyclerViewAdapter;
+    private RecyclerView.LayoutManager layoutManager;
     private DartLogDbHelper dbHelper;
 
     @Override
@@ -34,17 +45,28 @@ public class PlayerSelectionActivity extends AppCompatActivity implements View.O
         assert readyButton != null;
         readyButton.setOnClickListener(this);
 
-        Button addPlayerButton = (Button) findViewById(R.id.add_player_button);
-        assert addPlayerButton != null;
-        addPlayerButton.setOnClickListener(this);
+        FloatingActionButton openPlayerSelectionFab = (FloatingActionButton)findViewById(R.id.open_player_selection_fab);
+        assert openPlayerSelectionFab != null;
+        openPlayerSelectionFab.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                openPlayerSelectionView();
+            }
+        });
 
-        /* create a listView that contains all players who will join the game */
-        ListView myListView = (ListView) findViewById(R.id.players_listView);
+        recyclerView = (RecyclerView) findViewById(R.id.participants_recycler_view);
 
-        playersNames = dbHelper.getPlayers();
-        arrayStringAdapter = new ParticipantsListAdapter(this, playersNames);
-        assert myListView != null;
-        myListView.setAdapter(arrayStringAdapter);
+        participantNames = new ArrayList<>();
+        layoutManager = new LinearLayoutManager(this);
+        recyclerViewAdapter = new ParticipantsListRecyclerAdapter(participantNames);
+        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(new ParticipantSwipeCallback(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT, participantNames, recyclerViewAdapter));
+
+        // use this setting to improve performance if you know that changes
+        // in content do not change the layout size of the RecyclerView
+        recyclerView.setHasFixedSize(true);
+        recyclerView.setLayoutManager(layoutManager);
+        recyclerView.setAdapter(recyclerViewAdapter);
+
+        itemTouchHelper.attachToRecyclerView(recyclerView);
     }
 
     @Override
@@ -53,37 +75,76 @@ public class PlayerSelectionActivity extends AppCompatActivity implements View.O
             case R.id.ready_button:
                 startPlayActivity();
                 break;
-            case R.id.add_player_button:
-                addPlayerNameToPlayerListView();
-                clearInputTextField();
-                break;
         }
     }
 
-    private void clearInputTextField() {
-        EditText editText = (EditText) findViewById(R.id.player_input_textfield);
-        assert editText != null;
-        editText.setText("");
-        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-        imm.hideSoftInputFromWindow(editText.getWindowToken(), 0);
+    private void initializeDialog(Dialog dialog){
+        dialog.setContentView(R.layout.select_players_dialog);
+        dialog.setTitle("Select players");
+        dialog.setCancelable(true);
+
+        dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+            @Override
+            public void onDismiss(DialogInterface dialog) {
+                Log.d("Dialog", "adding stuff");
+                participantNames.clear();
+                participantNames.addAll(availablePlayersListAdapter.getSelectedPlayers());
+                recyclerViewAdapter.notifyDataSetChanged();
+            }
+        });
     }
 
-    private void addPlayerNameToPlayerListView()
-    {
-        EditText editText = (EditText) findViewById(R.id.player_input_textfield);
-        assert editText != null;
-        String playerName = editText.getText().toString();
+    private void openPlayerSelectionView(){
+        final Dialog dialog = new Dialog(this);
 
-        if(!playerName.equals("")) {
-            arrayStringAdapter.add(playerName);
-        }
-        else{
-            showEmptyTextErrorToast();
-        }
+        initializeDialog(dialog);
+
+        final ListView availablePlayersListView = (ListView) dialog.findViewById(R.id.dialog_players_listView);
+        assert availablePlayersListView != null;
+
+        ArrayList<String> fetchedPlayersNames = new ArrayList<>();
+        populatePlayerList(fetchedPlayersNames);
+
+        availablePlayersListAdapter = new AvailablePlayersListAdapter(this, fetchedPlayersNames);
+        availablePlayersListView.setAdapter(availablePlayersListAdapter);
+
+        availablePlayersListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+            @Override
+            public void onItemClick(AdapterView<?> arg0, View view, int position, long id) {
+                availablePlayersListAdapter.toggleSelected(position);
+
+                if(availablePlayersListAdapter.isMarked(position))
+                    view.setBackgroundResource(R.color.game_player_winner);
+                else
+                    view.setBackgroundResource(R.color.background_dark_transparent);
+            }
+        });
+
+        Button button = (Button) dialog.findViewById(R.id.done_button);
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+
+        dialog.show();
     }
 
-    private void showEmptyTextErrorToast() {
-        showToast("must write something!");
+    private void populatePlayerList(ArrayList<String> availablePlayers){
+        availablePlayers.add("Razmus");
+        availablePlayers.add("Filip");
+        availablePlayers.add("Jonathan");
+        availablePlayers.add("Martin");
+        availablePlayers.add("Erik");
+        availablePlayers.add("Fredrik");
+        availablePlayers.add("Stefan");
+        availablePlayers.add("Maria");
+    }
+
+    private ArrayList<PlayerData> fetchPlayerNamesFromDataBase(){
+        return null;
     }
 
     private void showMustAddPlayersErrorToast() {
@@ -97,13 +158,12 @@ public class PlayerSelectionActivity extends AppCompatActivity implements View.O
     }
 
     private void startPlayActivity() {
-        if(playersNames.size() == 0){
+        if(participantNames.size() == 0){
             showMustAddPlayersErrorToast();
         }
 
         Intent intent = new Intent(this, GameActivity.class);
-
-        intent.putStringArrayListExtra("playerNames", playersNames);
+        intent.putStringArrayListExtra("playerNames", participantNames);
         startActivity(intent);
     }
 }
