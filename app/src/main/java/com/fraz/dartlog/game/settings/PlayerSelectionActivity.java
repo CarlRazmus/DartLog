@@ -136,7 +136,7 @@ public class PlayerSelectionActivity extends AppCompatActivity implements View.O
     }
 
     private void showMustAddPlayersErrorToast() {
-        showToast("Its kinda hard to play dart without any players!");
+        showToast("A game requires 1 or more players to start!");
     }
 
     private void showToast(CharSequence text) {
@@ -149,9 +149,10 @@ public class PlayerSelectionActivity extends AppCompatActivity implements View.O
         if(participantNames.size() == 0){
             showMustAddPlayersErrorToast();
         }
-
-        Intent intent = new Intent(this, GameActivity.class);
-        intent.putStringArrayListExtra("playerNames", participantNames);
-        startActivity(intent);
+        else {
+            Intent intent = new Intent(this, GameActivity.class);
+            intent.putStringArrayListExtra("playerNames", participantNames);
+            startActivity(intent);
+        }
     }
 }
