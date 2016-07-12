@@ -27,6 +27,8 @@ public class DartLogDbHelper extends SQLiteOpenHelper {
         for (String createSql : DartLogContract.SQL_CREATE_ENTRIES) {
             db.execSQL(createSql);
         }
+
+        initializePlayers(db);
     }
 
     @Override
@@ -55,7 +57,15 @@ public class DartLogDbHelper extends SQLiteOpenHelper {
      */
     public long addPlayer(String name) {
         SQLiteDatabase db = getWritableDatabase();
+        return addPlayer(name, db);
+    }
 
+    /** Add a player to the database. Duplicated names is not allowed.
+     * @param name the name of the player to add.
+     * @param db   the database which the name shall be added to.
+     * @return the row ID of the newly inserted player, or -1 if the player could not be added.
+     */
+    private long addPlayer(String name, SQLiteDatabase db) {
         ContentValues values = new ContentValues();
         values.put(DartLogContract.PlayerEntry.COLUMN_NAME_PLAYER_NAME, name);
         return db.insert(DartLogContract.PlayerEntry.TABLE_NAME, null, values);
@@ -138,5 +148,25 @@ public class DartLogDbHelper extends SQLiteOpenHelper {
             c.close();
         }
         return names;
+    }
+
+    private void initializePlayers(SQLiteDatabase db){
+        ArrayList<String> playersNames = new ArrayList<>();
+
+        playersNames.add("Razmus");
+        playersNames.add("Filip");
+        playersNames.add("Jonathan");
+        playersNames.add("Martin");
+        playersNames.add("Erik");
+        playersNames.add("Fredrik");
+        playersNames.add("Stefan");
+        playersNames.add("Maria");
+        playersNames.add("Gustav");
+
+
+        for (String name : playersNames) {
+            addPlayer(name, db);
+        }
+
     }
 }

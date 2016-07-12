@@ -3,8 +3,6 @@ package com.fraz.dartlog.game.settings;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
@@ -102,10 +100,11 @@ public class PlayerSelectionActivity extends AppCompatActivity implements View.O
         final ListView availablePlayersListView = (ListView) dialog.findViewById(R.id.dialog_players_listView);
         assert availablePlayersListView != null;
 
-        ArrayList<String> fetchedPlayersNames = new ArrayList<>();
-        populatePlayerList(fetchedPlayersNames);
+        ArrayList<String> playerNames = new ArrayList<>();
+        //populatePlayerList(playerNames);
+        fetchPlayerNamesFromDataBase(playerNames);
 
-        availablePlayersListAdapter = new AvailablePlayersListAdapter(this, fetchedPlayersNames);
+        availablePlayersListAdapter = new AvailablePlayersListAdapter(this, playerNames);
         availablePlayersListView.setAdapter(availablePlayersListAdapter);
 
         availablePlayersListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -132,19 +131,8 @@ public class PlayerSelectionActivity extends AppCompatActivity implements View.O
         dialog.show();
     }
 
-    private void populatePlayerList(ArrayList<String> availablePlayers){
-        availablePlayers.add("Razmus");
-        availablePlayers.add("Filip");
-        availablePlayers.add("Jonathan");
-        availablePlayers.add("Martin");
-        availablePlayers.add("Erik");
-        availablePlayers.add("Fredrik");
-        availablePlayers.add("Stefan");
-        availablePlayers.add("Maria");
-    }
-
-    private ArrayList<PlayerData> fetchPlayerNamesFromDataBase(){
-        return null;
+    private void fetchPlayerNamesFromDataBase(ArrayList<String> list){
+        list.addAll(dbHelper.getPlayers());
     }
 
     private void showMustAddPlayersErrorToast() {
