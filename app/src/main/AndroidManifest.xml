@@ -19,8 +19,27 @@
         </activity>
         <activity android:name=".game.GameActivity" />
         <activity android:name=".statistics.StatisticsActivity" />
-        <activity android:name=".game.settings.PlayerSelectionActivity"
-            android:windowSoftInputMode="stateHidden"/>
+        <activity
+            android:name=".game.settings.PlayerSelectionActivity"
+            android:windowSoftInputMode="stateHidden" />
+        <activity
+            android:name=".statistics.ProfileListActivity"
+            android:label="@string/title_profile_list"
+            android:parentActivityName=".MainActivity"
+            android:theme="@style/Theme.AppCompat.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.fraz.dartlog.MainActivity" />
+        </activity>
+        <activity
+            android:name=".statistics.ProfileDetailActivity"
+            android:label="@string/title_profile_detail"
+            android:parentActivityName=".statistics.ProfileListActivity"
+            android:theme="@style/Theme.AppCompat.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.fraz.dartlog.statistics.ProfileListActivity" />
+        </activity>
     </application>
 
 </manifest>

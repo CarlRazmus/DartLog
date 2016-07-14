@@ -9,6 +9,7 @@ import android.view.View;
 import android.widget.Button;
 
 import com.fraz.dartlog.game.settings.PlayerSelectionActivity;
+import com.fraz.dartlog.statistics.ProfileListActivity;
 import com.fraz.dartlog.statistics.StatisticsActivity;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
@@ -19,6 +20,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         setContentView(R.layout.activity_main);
 
         ((Button) findViewById(R.id.play_button)).setOnClickListener(this);
+        ((Button) findViewById(R.id.profiles_button)).setOnClickListener(this);
         ((Button) findViewById(R.id.stat_button)).setOnClickListener(this);
     }
 
@@ -50,19 +52,27 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             case R.id.play_button:
                 startPlayersActivity();
                 break;
+            case R.id.profiles_button:
+                startProfileActivity();
+                break;
             case R.id.stat_button:
                 startStatActivity();
                 break;
         }
     }
 
-    private void startStatActivity() {
-        Intent intent = new Intent(this, StatisticsActivity.class);
+    private void startPlayersActivity() {
+        Intent intent = new Intent(this, PlayerSelectionActivity.class);
         startActivity(intent);
     }
 
-    private void startPlayersActivity() {
-        Intent intent = new Intent(this, PlayerSelectionActivity.class);
+    private void startProfileActivity() {
+        Intent intent = new Intent(this, ProfileListActivity.class);
+        startActivity(intent);
+    }
+
+    private void startStatActivity() {
+        Intent intent = new Intent(this, StatisticsActivity.class);
         startActivity(intent);
     }
 }
