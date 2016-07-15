@@ -84,7 +84,7 @@ public class DartLogDbHelper extends SQLiteOpenHelper {
     public void addX01Match(X01 match) {
         SQLiteDatabase db = getWritableDatabase();
         Calendar c = Calendar.getInstance();
-        long matchId = InsertMatchEntry(db, "X01", c.getTimeInMillis());
+        long matchId = InsertX01MatchEntry(db, match, c.getTimeInMillis());
 
         for (int i = 0; i < match.getNumberOfPlayers(); ++i) {
             InsertPlayerScores(db, match.getPlayer(i), matchId);
@@ -127,10 +127,14 @@ public class DartLogDbHelper extends SQLiteOpenHelper {
         return playerId;
     }
 
-    private long InsertMatchEntry(SQLiteDatabase db, String gameType, Long timeInMillis) {
+    private long InsertX01MatchEntry(SQLiteDatabase db, X01 match, Long timeInMillis) {
         ContentValues matchValues = new ContentValues();
         matchValues.put(DartLogContract.MatchEntry.COLUMN_NAME_DATE, timeInMillis);
-        matchValues.put(DartLogContract.MatchEntry.COLUMN_NAME_GAME, gameType);
+        matchValues.put(DartLogContract.MatchEntry.COLUMN_NAME_GAME, "X01");
+        matchValues.put(DartLogContract.MatchEntry.COLUMN_NAME_STARTING_PLAYER_ID,
+                getPlayerId(db, match.getStartingPlayer()));
+        matchValues.put(DartLogContract.MatchEntry.COLUMN_NAME_WINNER_PLAYER_ID,
+                getPlayerId(db, match.getWinner()));
         return db.insert(DartLogContract.MatchEntry.TABLE_NAME, null, matchValues);
     }
 

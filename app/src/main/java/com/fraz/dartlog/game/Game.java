@@ -58,6 +58,14 @@ public abstract class Game {
         return players.size();
     }
 
+    public X01PlayerData getStartingPlayer() {
+        return players.get(startingPlayer);
+    }
+
+    public X01PlayerData getWinner() {
+        return winner;
+    }
+
     protected void newGame() {
         playOrder = new LinkedList<>();
         winner = null;
