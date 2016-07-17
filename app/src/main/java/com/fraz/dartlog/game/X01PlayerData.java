@@ -1,9 +1,15 @@
 package com.fraz.dartlog.game;
 
+import java.util.LinkedList;
+
 public class X01PlayerData extends PlayerData {
 
     public X01PlayerData(String playerName) {
         super(playerName);
+    }
+
+    public X01PlayerData(String playerName, LinkedList<Integer> playerScores) {
+        super(playerName, playerScores);
     }
 
     public boolean submitScore(int score) {
