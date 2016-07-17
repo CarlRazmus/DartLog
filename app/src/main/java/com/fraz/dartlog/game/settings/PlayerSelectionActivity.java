@@ -18,10 +18,9 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import com.fraz.dartlog.R;
-import com.fraz.dartlog.db.DartLogDbHelper;
+import com.fraz.dartlog.db.DartLogDatabaseHelper;
 import com.fraz.dartlog.game.GameActivity;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 public class PlayerSelectionActivity extends AppCompatActivity implements View.OnClickListener {
@@ -30,14 +29,14 @@ public class PlayerSelectionActivity extends AppCompatActivity implements View.O
     private RecyclerView recyclerView;
     private RecyclerView.Adapter recyclerViewAdapter;
     private RecyclerView.LayoutManager layoutManager;
-    private DartLogDbHelper dbHelper;
+    private DartLogDatabaseHelper dbHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_player_selection);
 
-        dbHelper = new DartLogDbHelper(this);
+        dbHelper = new DartLogDatabaseHelper(this);
 
         Button readyButton = (Button) findViewById(R.id.ready_button);
         assert readyButton != null;

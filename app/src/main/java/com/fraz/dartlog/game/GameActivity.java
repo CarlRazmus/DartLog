@@ -19,7 +19,7 @@ import android.widget.ViewAnimator;
 import com.fraz.dartlog.MainActivity;
 import com.fraz.dartlog.OnBackPressedDialogFragment;
 import com.fraz.dartlog.R;
-import com.fraz.dartlog.db.DartLogDbHelper;
+import com.fraz.dartlog.db.DartLogDatabaseHelper;
 
 import java.util.ArrayList;
 
@@ -29,7 +29,7 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
     private X01 game;
     private GameListAdapter gameListAdapter;
     private ViewAnimator viewAnimator;
-    private DartLogDbHelper dbHelper;
+    private DartLogDatabaseHelper dbHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,7 +38,7 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
 
         setSupportActionBar((Toolbar) findViewById(R.id.game_toolbar));
         viewAnimator = (ViewAnimator) findViewById(R.id.game_input);
-        dbHelper = new DartLogDbHelper(this);
+        dbHelper = new DartLogDatabaseHelper(this);
 
         game = GetGameInstance(savedInstanceState, createPlayerDataList());
         gameListAdapter = new GameListAdapter(this, game);

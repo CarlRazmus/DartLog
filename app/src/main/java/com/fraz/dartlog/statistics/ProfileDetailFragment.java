@@ -10,7 +10,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.fraz.dartlog.R;
-import com.fraz.dartlog.db.DartLogDbHelper;
+import com.fraz.dartlog.db.DartLogDatabaseHelper;
 import com.fraz.dartlog.game.PlayerData;
 
 import java.util.ArrayList;
@@ -40,11 +40,11 @@ public class ProfileDetailFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        DartLogDbHelper dartLogDbHelper = new DartLogDbHelper(getActivity());
+        DartLogDatabaseHelper databaseHelper = new DartLogDatabaseHelper(getActivity());
 
         if (getArguments().containsKey(ARG_ITEM_NAME)) {
             String name = getArguments().getString(ARG_ITEM_NAME);
-            playerData = dartLogDbHelper.getPlayerMatchData(name);
+            playerData = databaseHelper.getPlayerMatchData(name);
 
             Activity activity = this.getActivity();
             CollapsingToolbarLayout appBarLayout = (CollapsingToolbarLayout) activity.findViewById(R.id.toolbar_layout);

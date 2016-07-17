@@ -15,13 +15,13 @@ import java.util.Calendar;
 import java.util.LinkedList;
 import java.util.Locale;
 
-public class DartLogDbHelper extends SQLiteOpenHelper {
+public class DartLogDatabaseHelper extends SQLiteOpenHelper {
 
     // If you change the database schema, you must increment the database version.
     public static final int DATABASE_VERSION = 1;
     public static final String DATABASE_NAME = "DartLog.db";
 
-    public DartLogDbHelper(Context context) {
+    public DartLogDatabaseHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
 
@@ -48,10 +48,7 @@ public class DartLogDbHelper extends SQLiteOpenHelper {
             db.execSQL(createSql);
         }
 
-        addPlayer("Filip");
-        addPlayer("Razmus");
-        addPlayer("Jonathan");
-        addPlayer("Martin");
+        initializePlayers(db);
     }
 
     /**
@@ -106,7 +103,7 @@ public class DartLogDbHelper extends SQLiteOpenHelper {
     /**
      * Get all match data for the player with the given name.
      *
-     * @param playerName  The name of the player.
+     * @param playerName The name of the player.
      * @return List of match data for the given player.
      */
     public ArrayList<PlayerData> getPlayerMatchData(String playerName) {
@@ -177,7 +174,7 @@ public class DartLogDbHelper extends SQLiteOpenHelper {
     /**
      * Get the ids of all the matches the given player has played.
      *
-     * @param playerId  The id of the player.
+     * @param playerId The id of the player.
      * @return List of match ids.
      */
     private ArrayList<Long> getMatchIds(SQLiteDatabase db, long playerId) {

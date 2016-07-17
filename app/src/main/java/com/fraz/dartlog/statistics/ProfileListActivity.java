@@ -19,7 +19,7 @@ import android.widget.TextView;
 
 import com.fraz.dartlog.R;
 
-import com.fraz.dartlog.db.DartLogDbHelper;
+import com.fraz.dartlog.db.DartLogDatabaseHelper;
 
 import java.util.ArrayList;
 
@@ -81,7 +81,7 @@ public class ProfileListActivity extends AppCompatActivity {
     }
 
     private void setupRecyclerView(@NonNull RecyclerView recyclerView) {
-        DartLogDbHelper dbHelper = new DartLogDbHelper(this);
+        DartLogDatabaseHelper dbHelper = new DartLogDatabaseHelper(this);
         ArrayList<String> profiles = dbHelper.getPlayers();
         recyclerView.setAdapter(new ProfilesRecyclerViewAdapter(profiles));
     }
