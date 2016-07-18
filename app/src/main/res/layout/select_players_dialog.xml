@@ -24,6 +24,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginBottom="10dp"
+        android:layout_below="@id/create_new_player_button"
         android:layout_above="@id/done_button">
 
         <ListView
@@ -34,6 +35,5 @@
             android:layout_marginBottom="1dp"
             android:layout_weight="1" />
     </RelativeLayout>
-
 
 </RelativeLayout>
