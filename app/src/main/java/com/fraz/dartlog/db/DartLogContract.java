@@ -12,7 +12,13 @@ public final class DartLogContract {
             "CREATE TABLE " + MatchEntry.TABLE_NAME + " (" +
                     MatchEntry._ID + " INTEGER PRIMARY KEY," +
                     MatchEntry.COLUMN_NAME_DATE + " INTEGER," +
-                    MatchEntry.COLUMN_NAME_GAME + " TEXT)",
+                    MatchEntry.COLUMN_NAME_GAME + " TEXT," +
+                    MatchEntry.COLUMN_NAME_STARTING_PLAYER_ID + " INTEGER," +
+                    MatchEntry.COLUMN_NAME_WINNER_PLAYER_ID + " INTEGER," +
+                    "FOREIGN KEY(" + MatchEntry.COLUMN_NAME_STARTING_PLAYER_ID + ")" +
+                        " REFERENCES " + PlayerEntry.TABLE_NAME + "(" + PlayerEntry._ID + ")," +
+                    "FOREIGN KEY(" + MatchEntry.COLUMN_NAME_WINNER_PLAYER_ID + ")" +
+                        " REFERENCES " + PlayerEntry.TABLE_NAME + "(" + PlayerEntry._ID + "))",
             "CREATE TABLE " + ScoreEntry.TABLE_NAME + " (" +
                     ScoreEntry._ID + " INTEGER PRIMARY KEY," +
                     ScoreEntry.COLUMN_NAME_MATCH_ID + " INTEGER," +
@@ -41,6 +47,8 @@ public final class DartLogContract {
         public static final String TABLE_NAME = "match";
         public static final String COLUMN_NAME_DATE = "date";
         public static final String COLUMN_NAME_GAME = "game";
+        public static final String COLUMN_NAME_WINNER_PLAYER_ID = "winner_id";
+        public static final String COLUMN_NAME_STARTING_PLAYER_ID = "starting_id";
     }
 
     public static abstract class ScoreEntry implements BaseColumns {

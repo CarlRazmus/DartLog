@@ -37,6 +37,14 @@
                 android:text="PLAY DARTS"/>
 
             <Button
+                android:id="@+id/profiles_button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/button_default"
+                android:layout_marginTop="10dp"
+                android:text="PROFILES"/>
+
+            <Button
                 android:id="@+id/stat_button"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

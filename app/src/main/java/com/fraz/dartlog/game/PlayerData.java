@@ -14,6 +14,16 @@ public abstract class PlayerData {
         this.playerName = playerName;
     }
 
+    /**
+     * Constructor used to initialize player data with already known scores.
+     * @param playerName    The name of the player.
+     * @param scoreHistory  The list of scores the player achieved in order.
+     */
+    public PlayerData(String playerName, LinkedList<Integer> scoreHistory) {
+        this.playerName = playerName;
+        this.scoreHistory = scoreHistory;
+    }
+
     public void initPlayerData(int score) {
         this.score = score;
         scoreHistory = new LinkedList<>();

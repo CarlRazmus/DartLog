@@ -1,5 +1,6 @@
 package com.fraz.dartlog.game;
 
+import android.app.DialogFragment;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -16,18 +17,19 @@ import android.widget.ListView;
 import android.widget.ViewAnimator;
 
 import com.fraz.dartlog.MainActivity;
+import com.fraz.dartlog.OnBackPressedDialogFragment;
 import com.fraz.dartlog.R;
-import com.fraz.dartlog.db.DartLogDbHelper;
+import com.fraz.dartlog.db.DartLogDatabaseHelper;
 
 import java.util.ArrayList;
 
 public class GameActivity extends AppCompatActivity implements View.OnClickListener,
-        InputEventListener {
+        InputEventListener, OnBackPressedDialogFragment.OnBackPressedDialogListener {
 
     private X01 game;
     private GameListAdapter gameListAdapter;
     private ViewAnimator viewAnimator;
-    private DartLogDbHelper dbHelper;
+    private DartLogDatabaseHelper dbHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,7 +38,7 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
 
         setSupportActionBar((Toolbar) findViewById(R.id.game_toolbar));
         viewAnimator = (ViewAnimator) findViewById(R.id.game_input);
-        dbHelper = new DartLogDbHelper(this);
+        dbHelper = new DartLogDatabaseHelper(this);
 
         game = GetGameInstance(savedInstanceState, createPlayerDataList());
         gameListAdapter = new GameListAdapter(this, game);
@@ -45,6 +47,12 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
         initNumPadView();
         initGameDoneView();
         updateView();
+    }
+
+    @Override
+    public void onBackPressed() {
+        DialogFragment onBackPressedDialogFragment = new OnBackPressedDialogFragment();
+        onBackPressedDialogFragment.show(getFragmentManager(), "OnBackPressedDialogFragment");
     }
 
     @NonNull
@@ -103,6 +111,7 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
         updateView();
     }
 
+
     private void updateView() {
         gameListAdapter.notifyDataSetChanged();
         scrollToPlayerInList();
@@ -137,11 +146,11 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
                 (ExpandableListView) findViewById(R.id.play_players_listView);
         assert playersListView != null;
 
-        for(int i = 0; i < game.getNumberOfPlayers(); ++i) {
-          if(i == game.getCurrentPlayer())
-              playersListView.expandGroup(i);
-          else
-              playersListView.collapseGroup(i);
+        for (int i = 0; i < game.getNumberOfPlayers(); ++i) {
+            if (i == game.getCurrentPlayer())
+                playersListView.expandGroup(i);
+            else
+                playersListView.collapseGroup(i);
         }
     }
 
@@ -179,5 +188,15 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
         Intent i = new Intent(this, MainActivity.class);
         i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(i);
+    }
+
+    @Override
+    public void onDialogPositiveClick(DialogFragment dialog) {
+        finish();
+    }
+
+    @Override
+    public void onDialogNegativeClick(DialogFragment dialog) {
+        // Do nothing.
     }
 }
