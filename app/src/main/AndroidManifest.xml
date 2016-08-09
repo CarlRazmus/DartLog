@@ -7,7 +7,7 @@
         android:icon="@mipmap/custom_start_icon"
         android:label="@string/app_name"
         android:supportsRtl="true"
-        android:theme="@style/Theme.AppCompat.NoActionBar">
+        android:theme="@style/AppTheme">
         <activity
             android:name=".MainActivity"
             android:label="@string/app_name">
@@ -17,7 +17,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".game.GameActivity" />
+        <activity android:name=".game.GameActivity"/>
         <activity android:name=".statistics.StatisticsActivity" />
         <activity
             android:name=".game.settings.PlayerSelectionActivity"
@@ -25,8 +25,7 @@
         <activity
             android:name=".statistics.ProfileListActivity"
             android:label="@string/title_profile_list"
-            android:parentActivityName=".MainActivity"
-            android:theme="@style/Theme.AppCompat.NoActionBar">
+            android:parentActivityName=".MainActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.fraz.dartlog.MainActivity" />
@@ -34,8 +33,7 @@
         <activity
             android:name=".statistics.ProfileDetailActivity"
             android:label="@string/title_profile_detail"
-            android:parentActivityName=".statistics.ProfileListActivity"
-            android:theme="@style/Theme.AppCompat.NoActionBar">
+            android:parentActivityName=".statistics.ProfileListActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.fraz.dartlog.statistics.ProfileListActivity" />
