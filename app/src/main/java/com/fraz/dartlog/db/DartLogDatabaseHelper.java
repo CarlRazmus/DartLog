@@ -7,9 +7,9 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 import com.fraz.dartlog.game.PlayerData;
-import com.fraz.dartlog.game.X01;
-import com.fraz.dartlog.game.X01PlayerData;
-import com.fraz.dartlog.game.X01ScoreManager;
+import com.fraz.dartlog.game.x01.X01;
+import com.fraz.dartlog.game.x01.X01PlayerData;
+import com.fraz.dartlog.game.x01.X01ScoreManager;
 
 import java.util.ArrayList;
 import java.util.Calendar;

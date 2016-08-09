@@ -8,6 +8,8 @@ import android.widget.BaseExpandableListAdapter;
 import android.widget.TextView;
 
 import com.fraz.dartlog.R;
+import com.fraz.dartlog.game.x01.X01;
+import com.fraz.dartlog.game.x01.X01PlayerData;
 
 import java.util.LinkedList;
 

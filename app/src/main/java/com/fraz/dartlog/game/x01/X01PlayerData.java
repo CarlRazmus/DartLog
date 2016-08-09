@@ -1,4 +1,6 @@
-package com.fraz.dartlog.game;
+package com.fraz.dartlog.game.x01;
+
+import com.fraz.dartlog.game.PlayerData;
 
 import java.util.LinkedList;
 
