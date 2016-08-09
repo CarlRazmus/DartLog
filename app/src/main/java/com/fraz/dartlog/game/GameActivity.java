@@ -40,7 +40,7 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
         viewAnimator = (ViewAnimator) findViewById(R.id.game_input);
         dbHelper = new DartLogDatabaseHelper(this);
 
-        game = GetGameInstance(savedInstanceState, createPlayerDataList());
+        game = GetX01GameInstance(savedInstanceState);
         gameListAdapter = new GameListAdapter(this, game);
 
         initListView();
@@ -56,13 +56,13 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     @NonNull
-    private X01 GetGameInstance(Bundle savedInstanceState, ArrayList<X01PlayerData> playerDataList) {
+    private X01 GetX01GameInstance(Bundle savedInstanceState) {
         if (savedInstanceState != null) {
             X01 game = (X01) savedInstanceState.getSerializable("game");
             if (game != null)
                 return game;
         }
-        return new X01(this, playerDataList, 3);
+        return new X01(this, createPlayerDataList());
     }
 
     @Override
@@ -135,7 +135,7 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
     private ArrayList<X01PlayerData> createPlayerDataList() {
         ArrayList<X01PlayerData> playerDataList = new ArrayList<>();
         for (String playerName : getIntent().getStringArrayListExtra("playerNames")) {
-            playerDataList.add(new X01PlayerData(playerName));
+            playerDataList.add(new X01PlayerData(playerName, new X01ScoreManager(3)));
         }
         return playerDataList;
     }
@@ -147,7 +147,7 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
         assert playersListView != null;
 
         for (int i = 0; i < game.getNumberOfPlayers(); ++i) {
-            if (i == game.getCurrentPlayer())
+            if (i == game.getCurrentPlayerIdx())
                 playersListView.expandGroup(i);
             else
                 playersListView.collapseGroup(i);
@@ -158,7 +158,7 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
     private void scrollToPlayerInList() {
         ListView playersListView = (ListView) findViewById(R.id.play_players_listView);
         assert playersListView != null;
-        playersListView.smoothScrollToPosition(game.getCurrentPlayer());
+        playersListView.smoothScrollToPosition(game.getCurrentPlayerIdx());
     }
 
     private void initNumPadView() {

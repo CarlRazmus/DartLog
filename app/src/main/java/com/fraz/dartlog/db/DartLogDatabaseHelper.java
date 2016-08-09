@@ -9,6 +9,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 import com.fraz.dartlog.game.PlayerData;
 import com.fraz.dartlog.game.X01;
 import com.fraz.dartlog.game.X01PlayerData;
+import com.fraz.dartlog.game.X01ScoreManager;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -114,7 +115,8 @@ public class DartLogDatabaseHelper extends SQLiteOpenHelper {
         ArrayList<PlayerData> playerData = new ArrayList<>();
         for (long matchId : matchIds) {
             LinkedList<Integer> playerScores = getPlayerScores(db, playerId, matchId);
-            playerData.add(new X01PlayerData(playerName, playerScores));
+            X01ScoreManager scoreManager = new X01ScoreManager(playerScores);
+            playerData.add(new X01PlayerData(playerName, scoreManager));
         }
         return playerData;
     }
@@ -135,7 +137,7 @@ public class DartLogDatabaseHelper extends SQLiteOpenHelper {
         }
     }
 
-    private void insertPlayerScores(SQLiteDatabase db, X01PlayerData player, long matchId) {
+    private void insertPlayerScores(SQLiteDatabase db, PlayerData player, long matchId) {
         long playerId = getPlayerId(db, player);
 
         for (int score : player.getScoreHistory()) {
@@ -203,7 +205,7 @@ public class DartLogDatabaseHelper extends SQLiteOpenHelper {
      * @param player The player to find in the database or add if not existing.
      * @return The id of the player in the database.
      */
-    private long getPlayerId(SQLiteDatabase db, X01PlayerData player) {
+    private long getPlayerId(SQLiteDatabase db, PlayerData player) {
         return getPlayerId(db, player.getPlayerName());
     }
 

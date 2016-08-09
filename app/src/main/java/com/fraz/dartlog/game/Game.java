@@ -10,10 +10,9 @@ import java.util.LinkedList;
 public abstract class Game {
 
     protected Activity context;
-    protected ArrayList<X01PlayerData> players;
+    protected ArrayList<? extends PlayerData> players;
     protected int currentPlayerIdx;
-    protected X01PlayerData winner;
-    protected int startingScore;
+    protected PlayerData winner;
     private int startingPlayer;
 
     private LinkedList<Integer> playOrder;
@@ -22,21 +21,20 @@ public abstract class Game {
     protected Game() {
     }
 
-    public Game(Activity context, ArrayList<X01PlayerData> players, int startingScore) {
+    public Game(Activity context, ArrayList<? extends PlayerData> players) {
         this.context = context;
         this.players = players;
-        this.startingScore = startingScore;
     }
 
     public boolean submitScore(int newScore) {
         playOrder.add(currentPlayerIdx);
-        return players.get(currentPlayerIdx).submitScore(newScore);
+        return getPlayer(currentPlayerIdx).submitScore(newScore);
     }
 
     public void undo() {
         if (!playOrder.isEmpty()) {
             int lastPlayerIdx = playOrder.removeLast();
-            players.get(lastPlayerIdx).undo();
+            getPlayer(lastPlayerIdx).undoScore();
             currentPlayerIdx = lastPlayerIdx;
             winner = null;
         }
@@ -46,11 +44,11 @@ public abstract class Game {
         return winner != null;
     }
 
-    public int getCurrentPlayer() {
+    public int getCurrentPlayerIdx() {
         return currentPlayerIdx;
     }
 
-    public X01PlayerData getPlayer(int index) {
+    public PlayerData getPlayer(int index) {
         return players.get(index);
     }
 
@@ -58,11 +56,11 @@ public abstract class Game {
         return players.size();
     }
 
-    public X01PlayerData getStartingPlayer() {
+    public PlayerData getStartingPlayer() {
         return players.get(startingPlayer);
     }
 
-    public X01PlayerData getWinner() {
+    public PlayerData getWinner() {
         return winner;
     }
 
@@ -70,10 +68,10 @@ public abstract class Game {
         playOrder = new LinkedList<>();
         winner = null;
         currentPlayerIdx = startingPlayer;
-        initPlayerData(startingScore);
+        initPlayerData();
     }
 
-    protected void setWinner(X01PlayerData currentPlayer) {
+    protected void setWinner(PlayerData currentPlayer) {
         winner = currentPlayer;
     }
 
@@ -97,9 +95,5 @@ public abstract class Game {
         startingPlayer = (startingPlayer + 1) % players.size();
     }
 
-    protected void initPlayerData(int score) {
-        for (X01PlayerData player : players) {
-            player.initPlayerData(score);
-        }
-    }
+    protected abstract void initPlayerData();
 }
