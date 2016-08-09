@@ -108,6 +108,8 @@ public class ProfileListActivity extends AppCompatActivity {
 
             TextView profileNameView = (TextView) holder.mView.findViewById(R.id.profile_name);
             profileNameView.setText(holder.mItem);
+
+            // Setup view change on click
             holder.mView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

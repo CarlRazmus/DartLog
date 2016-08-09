@@ -115,7 +115,7 @@ public class DartLogDatabaseHelper extends SQLiteOpenHelper {
         ArrayList<PlayerData> playerData = new ArrayList<>();
         for (long matchId : matchIds) {
             LinkedList<Integer> playerScores = getPlayerScores(db, playerId, matchId);
-            X01ScoreManager scoreManager = new X01ScoreManager(playerScores);
+            X01ScoreManager scoreManager = new X01ScoreManager(3, playerScores);
             playerData.add(new X01PlayerData(playerName, scoreManager));
         }
         return playerData;

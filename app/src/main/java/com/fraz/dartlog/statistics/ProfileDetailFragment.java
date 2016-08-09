@@ -14,6 +14,7 @@ import com.fraz.dartlog.db.DartLogDatabaseHelper;
 import com.fraz.dartlog.game.PlayerData;
 
 import java.util.ArrayList;
+import java.util.Locale;
 
 /**
  * A fragment representing a single Profile detail screen.
@@ -59,10 +60,18 @@ public class ProfileDetailFragment extends Fragment {
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.profile_detail, container, false);
 
-        if (playerData != null) {
-            ((TextView) rootView.findViewById(R.id.profile_detail_games_played))
-                    .setText(Integer.toString(playerData.size()));
+        int playerWins = 0;
+        for(PlayerData player : playerData)
+        {
+            if(player.getScore() == 0)
+                playerWins++;
         }
+
+        ((TextView) rootView.findViewById(R.id.profile_detail_games_played))
+                .setText(String.format(Locale.getDefault(), "%d", playerData.size()));
+
+        ((TextView) rootView.findViewById(R.id.profile_detail_games_won))
+                .setText(String.format(Locale.getDefault(), "%d", playerWins));
 
         return rootView;
     }

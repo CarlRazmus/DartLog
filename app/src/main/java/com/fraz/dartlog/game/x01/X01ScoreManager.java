@@ -11,8 +11,9 @@ public class X01ScoreManager extends ScoreManager {
     /** The 'X' in X01 */
     private int x;
 
-    public X01ScoreManager(LinkedList<Integer> scoreHistory)
+    public X01ScoreManager(int x, LinkedList<Integer> scoreHistory)
     {
+        this(x);
         applyScores(scoreHistory);
     }
 
