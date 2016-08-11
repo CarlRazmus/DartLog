@@ -10,42 +10,51 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:gravity="center">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/profile_detail_games_played_label"
-            android:textSize="20sp"
+            android:textSize="15sp"
             android:text="Games played"/>
 
         <TextView
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:id="@+id/profile_detail_games_played"
-            android:textSize="20sp"
-            android:layout_alignTop="@id/profile_detail_games_played_label"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentEnd="true"
-            android:text=""/>
+            android:textSize="25sp"
+            android:gravity="center"
+            android:layout_below="@id/profile_detail_games_played_label"
+            android:layout_alignRight="@id/profile_detail_games_played_label"
+            android:layout_alignEnd="@id/profile_detail_games_played_label"
+            android:layout_alignLeft="@id/profile_detail_games_played_label"
+            android:layout_alignStart="@id/profile_detail_games_played_label"
+            android:text="1"/>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/profile_detail_games_played_label"
             android:id="@+id/profile_detail_games_won_label"
-            android:textSize="20sp"
+            android:layout_marginLeft="30dp"
+            android:layout_toRightOf="@id/profile_detail_games_played_label"
+            android:layout_toEndOf="@id/profile_detail_games_played_label"
+            android:textSize="15sp"
             android:text="Games won"/>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/profile_detail_games_won"
-            android:textSize="20sp"
-            android:layout_alignTop="@id/profile_detail_games_won_label"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentEnd="true"
-            android:text=""/>
+            android:textSize="25sp"
+            android:gravity="center"
+            android:layout_below="@id/profile_detail_games_won_label"
+            android:layout_alignRight="@id/profile_detail_games_won_label"
+            android:layout_alignEnd="@id/profile_detail_games_won_label"
+            android:layout_alignLeft="@id/profile_detail_games_won_label"
+            android:layout_alignStart="@id/profile_detail_games_won_label"
+            android:text="12"/>
     </RelativeLayout>
 
 </LinearLayout>
