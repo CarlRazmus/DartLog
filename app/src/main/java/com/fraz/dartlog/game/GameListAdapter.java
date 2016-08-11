@@ -8,6 +8,8 @@ import android.widget.BaseExpandableListAdapter;
 import android.widget.TextView;
 
 import com.fraz.dartlog.R;
+import com.fraz.dartlog.game.x01.X01;
+import com.fraz.dartlog.game.x01.X01PlayerData;
 
 import java.util.LinkedList;
 
@@ -62,7 +64,7 @@ class GameListAdapter extends BaseExpandableListAdapter {
     public View getGroupView(int position, boolean isExpanded, View view, ViewGroup parent) {
         LayoutInflater inflater = context.getLayoutInflater();
         View listItem = view;
-        X01PlayerData player = game.getPlayer(position);
+        X01PlayerData player = (X01PlayerData) game.getPlayer(position);
 
         if (view == null) {
             listItem = inflater.inflate(R.layout.game_player_list_item, parent, false);
@@ -88,7 +90,7 @@ class GameListAdapter extends BaseExpandableListAdapter {
         if (view == null) {
             listItem = inflater.inflate(R.layout.game_player_child_list_item, parent, false);
         }
-        X01PlayerData player = game.getPlayer(position);
+        X01PlayerData player = (X01PlayerData) game.getPlayer(position);
 
         // Set total score history text
         LinkedList<Integer> scores = new LinkedList<>(player.getTotalScoreHistory());
@@ -124,7 +126,7 @@ class GameListAdapter extends BaseExpandableListAdapter {
     private void setBackgroundColor(X01PlayerData player, int position, View listItem) {
         if (player.getScore() == 0) {
             listItem.setBackgroundResource(R.drawable.game_player_winner);
-        } else if (game.getCurrentPlayer() == position) {
+        } else if (game.getCurrentPlayerIdx() == position) {
             listItem.setBackgroundResource(R.drawable.game_player_active);
         } else {
             listItem.setBackgroundResource(R.drawable.game_player_normal);

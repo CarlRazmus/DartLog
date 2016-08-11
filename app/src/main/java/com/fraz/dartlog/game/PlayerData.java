@@ -1,80 +1,42 @@
 package com.fraz.dartlog.game;
 
-import java.util.Collections;
 import java.util.LinkedList;
 
-public abstract class PlayerData {
+public class PlayerData {
 
     private String playerName;
-    protected LinkedList<Integer> scoreHistory;
-    protected LinkedList<Integer> totalScoreHistory;
-    protected int score;
-
-    public PlayerData(String playerName) {
-        this.playerName = playerName;
-    }
+    protected ScoreManager scoreManager;
 
     /**
-     * Constructor used to initialize player data with already known scores.
-     * @param playerName    The name of the player.
-     * @param scoreHistory  The list of scores the player achieved in order.
+     * Constructor used to initialize player data.
+     * @param playerName  The name of the player.
+     * @param scoreManager  An instance of the scoreManager class.
      */
-    public PlayerData(String playerName, LinkedList<Integer> scoreHistory) {
+    public PlayerData(String playerName, ScoreManager scoreManager) {
         this.playerName = playerName;
-        this.scoreHistory = scoreHistory;
-    }
-
-    public void initPlayerData(int score) {
-        this.score = score;
-        scoreHistory = new LinkedList<>();
-        totalScoreHistory = new LinkedList<>();
-    }
-
-    public void submitScore(int achievedScore, int totalScore) {
-        scoreHistory.add(achievedScore);
-        totalScoreHistory.add(score);
-
-        score = totalScore;
-    }
-
-    public void undo() {
-        if (!scoreHistory.isEmpty())
-            scoreHistory.removeLast();
-
-        if (!totalScoreHistory.isEmpty())
-            score = totalScoreHistory.removeLast();
+        this.scoreManager = scoreManager;
     }
 
     public String getPlayerName() {
         return playerName;
     }
 
-    public int getScore() {
-        return score;
+    public int getScore()
+    {
+        return scoreManager.getScore();
     }
 
-    public int getMaxScore() {
-        if (!scoreHistory.isEmpty())
-            return Collections.max(scoreHistory);
-        else
-            return 0;
+    public boolean submitScore(int score) { return scoreManager.submitScore(score); }
+
+    public void undoScore() { scoreManager.undoScore(); }
+
+    public int getMaxScore() { return scoreManager.getMaxScore(); }
+
+    public float getAvgScore() { return scoreManager.getAvgScore(); }
+
+    public LinkedList<Integer> getScoreHistory() { return scoreManager.getScoreHistory(); }
+
+    public void resetScore() {
+        scoreManager.reset();
     }
-
-    public float getAvgScore() {
-        int sum = 0;
-        for (int score : scoreHistory) {
-            sum += score;
-        }
-
-        if (!scoreHistory.isEmpty())
-            return (float)sum / scoreHistory.size();
-        else
-            return 0;
-    }
-
-    public LinkedList<Integer> getScoreHistory() {
-        return scoreHistory;
-    }
-
-    public LinkedList<Integer> getTotalScoreHistory() { return totalScoreHistory; }
 }

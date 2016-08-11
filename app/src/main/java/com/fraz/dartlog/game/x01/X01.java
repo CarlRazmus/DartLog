@@ -1,9 +1,11 @@
-package com.fraz.dartlog.game;
+package com.fraz.dartlog.game.x01;
 
 import android.app.Activity;
 
 import com.fraz.dartlog.CheckoutChart;
 import com.fraz.dartlog.R;
+import com.fraz.dartlog.game.Game;
+import com.fraz.dartlog.game.PlayerData;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -12,8 +14,8 @@ public class X01 extends Game implements Serializable{
 
     private CheckoutChart checkoutChart;
 
-    public X01(Activity context, ArrayList<X01PlayerData> players, int x) {
-        super(context, players, x*100 + 1);
+    public X01(Activity context, ArrayList<X01PlayerData> players) {
+        super(context, players);
 
         checkoutChart = new CheckoutChart(context, R.raw.checkout_chart);
         newGame();
@@ -29,12 +31,20 @@ public class X01 extends Game implements Serializable{
         return true;
     }
 
+    @Override
+    protected void initPlayerData() {
+        for(PlayerData player : players)
+        {
+            player.resetScore();
+        }
+    }
+
     public String getCheckoutText(PlayerData player) {
         return checkoutChart.getCheckoutText(player.getScore());
     }
 
     private void updateGameState() {
-        X01PlayerData currentPlayer = players.get(currentPlayerIdx);
+        PlayerData currentPlayer = getPlayer(currentPlayerIdx);
         if (currentPlayer.getScore() == 0) {
             setWinner(currentPlayer);
             showWinnerToast();
