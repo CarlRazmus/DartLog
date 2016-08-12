@@ -20,11 +20,13 @@ import com.fraz.dartlog.MainActivity;
 import com.fraz.dartlog.OnBackPressedDialogFragment;
 import com.fraz.dartlog.R;
 import com.fraz.dartlog.db.DartLogDatabaseHelper;
+import com.fraz.dartlog.game.settings.GameData;
 import com.fraz.dartlog.game.x01.X01;
 import com.fraz.dartlog.game.x01.X01PlayerData;
 import com.fraz.dartlog.game.x01.X01ScoreManager;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 
 public class GameActivity extends AppCompatActivity implements View.OnClickListener,
         InputEventListener, OnBackPressedDialogFragment.OnBackPressedDialogListener {
@@ -65,7 +67,7 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
             if (game != null)
                 return game;
         }
-        return new X01(this, createPlayerDataList());
+        return new X01(this, createInitialGameData());
     }
 
     @Override
@@ -130,6 +132,11 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
         ExpandableListView myListView = (ExpandableListView) findViewById(R.id.play_players_listView);
         assert myListView != null;
         myListView.setAdapter(gameListAdapter);
+    }
+
+    private GameData createInitialGameData()
+    {
+        return new GameData(createPlayerDataList(), Calendar.getInstance());
     }
 
     /**

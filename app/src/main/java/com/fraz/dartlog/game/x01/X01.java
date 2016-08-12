@@ -6,16 +6,16 @@ import com.fraz.dartlog.CheckoutChart;
 import com.fraz.dartlog.R;
 import com.fraz.dartlog.game.Game;
 import com.fraz.dartlog.game.PlayerData;
+import com.fraz.dartlog.game.settings.GameData;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 
 public class X01 extends Game implements Serializable{
 
     private CheckoutChart checkoutChart;
 
-    public X01(Activity context, ArrayList<X01PlayerData> players) {
-        super(context, players);
+    public X01(Activity context, GameData gameData) {
+        super(context, gameData);
 
         checkoutChart = new CheckoutChart(context, R.raw.checkout_chart);
         newGame();
@@ -31,14 +31,6 @@ public class X01 extends Game implements Serializable{
         return true;
     }
 
-    @Override
-    protected void initPlayerData() {
-        for(PlayerData player : players)
-        {
-            player.resetScore();
-        }
-    }
-
     public String getCheckoutText(PlayerData player) {
         return checkoutChart.getCheckoutText(player.getScore());
     }
@@ -46,7 +38,7 @@ public class X01 extends Game implements Serializable{
     private void updateGameState() {
         PlayerData currentPlayer = getPlayer(currentPlayerIdx);
         if (currentPlayer.getScore() == 0) {
-            setWinner(currentPlayer);
+            gameData.setWinner(currentPlayer);
             showWinnerToast();
         }
         else {
@@ -60,7 +52,6 @@ public class X01 extends Game implements Serializable{
     }
 
     public void newLeg() {
-        cycleStartingPlayer();
         newGame();
     }
 }

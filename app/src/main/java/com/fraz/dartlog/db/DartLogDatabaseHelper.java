@@ -125,15 +125,15 @@ public class DartLogDatabaseHelper extends SQLiteOpenHelper {
      * Add a match to the database. Date at time of the add is recorded as date of match.
      * All players scores are added.
      *
-     * @param match The match to add.
+     * @param game The match to add.
      */
-    public void addX01Match(X01 match) {
+    public void addX01Match(X01 game) {
         SQLiteDatabase db = getWritableDatabase();
-        Calendar c = Calendar.getInstance();
-        long matchId = insertX01MatchEntry(db, match, c.getTimeInMillis());
+        Calendar c = game.getDate();
+        long matchId = insertX01MatchEntry(db, game, c.getTimeInMillis());
 
-        for (int i = 0; i < match.getNumberOfPlayers(); ++i) {
-            insertPlayerScores(db, match.getPlayer(i), matchId);
+        for (int i = 0; i < game.getNumberOfPlayers(); ++i) {
+            insertPlayerScores(db, game.getPlayer(i), matchId);
         }
     }
 
@@ -232,14 +232,14 @@ public class DartLogDatabaseHelper extends SQLiteOpenHelper {
         return playerId;
     }
 
-    private long insertX01MatchEntry(SQLiteDatabase db, X01 match, Long timeInMillis) {
+    private long insertX01MatchEntry(SQLiteDatabase db, X01 game, Long timeInMillis) {
         ContentValues matchValues = new ContentValues();
         matchValues.put(DartLogContract.MatchEntry.COLUMN_NAME_DATE, timeInMillis);
         matchValues.put(DartLogContract.MatchEntry.COLUMN_NAME_GAME, "X01");
         matchValues.put(DartLogContract.MatchEntry.COLUMN_NAME_STARTING_PLAYER_ID,
-                getPlayerId(db, match.getStartingPlayer()));
+                getPlayerId(db, game.getStartingPlayer()));
         matchValues.put(DartLogContract.MatchEntry.COLUMN_NAME_WINNER_PLAYER_ID,
-                getPlayerId(db, match.getWinner()));
+                getPlayerId(db, game.getWinner()));
         return db.insert(DartLogContract.MatchEntry.TABLE_NAME, null, matchValues);
     }
 
