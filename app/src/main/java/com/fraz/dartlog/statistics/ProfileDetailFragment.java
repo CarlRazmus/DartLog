@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -41,10 +43,10 @@ public class ProfileDetailFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        DartLogDatabaseHelper databaseHelper = new DartLogDatabaseHelper(getActivity());
 
         if (getArguments().containsKey(ARG_ITEM_NAME)) {
             String name = getArguments().getString(ARG_ITEM_NAME);
+            DartLogDatabaseHelper databaseHelper = new DartLogDatabaseHelper(getActivity());
             playerData = databaseHelper.getPlayerMatchData(name);
 
             Activity activity = this.getActivity();
@@ -73,6 +75,69 @@ public class ProfileDetailFragment extends Fragment {
         ((TextView) rootView.findViewById(R.id.profile_detail_games_won))
                 .setText(String.format(Locale.getDefault(), "%d", playerWins));
 
+
+        RecyclerView recyclerView =
+                (RecyclerView) rootView.findViewById(R.id.recent_games_list);
+        assert recyclerView != null;
+        RecentGamesRecyclerViewAdapter recyclerViewAdapter = new ProfileDetailFragment.RecentGamesRecyclerViewAdapter(playerData);
+        recyclerView.setAdapter(recyclerViewAdapter);
+
         return rootView;
+    }
+
+    public class RecentGamesRecyclerViewAdapter
+            extends RecyclerView.Adapter<RecentGamesRecyclerViewAdapter.ViewHolder> {
+
+        private static final int NUMBER_OF_GAMES = 5;
+        private final ArrayList<PlayerData> playerData;
+
+        public RecentGamesRecyclerViewAdapter(ArrayList<PlayerData> playerData) {
+            this.playerData = playerData;
+        }
+
+        @Override
+        public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+            View view = LayoutInflater.from(parent.getContext())
+                    .inflate(R.layout.match_history_list_item, parent, false);
+            return new ViewHolder(view);
+        }
+
+        @Override
+        public void onBindViewHolder(final ViewHolder holder, int position) {
+            holder.mPlayer = playerData.get(position);
+
+            TextView result = (TextView) holder.mView.findViewById(R.id.match_history_result);
+
+            if (holder.mPlayer.getScore() == 0) {
+                result.setText("WIN");
+                result.setTextColor(ContextCompat.getColor(getContext(), R.color.main_green));
+            }
+            else {
+                result.setText("LOSS");
+                result.setTextColor(ContextCompat.getColor(getContext(), R.color.main_red));
+            }
+
+
+            TextView gameType = (TextView) holder.mView.findViewById(R.id.match_history_game_type);
+            gameType.setText("X01");
+
+            TextView date = (TextView) holder.mView.findViewById(R.id.match_history_date);
+            date.setText("");
+        }
+
+        @Override
+        public int getItemCount() {
+            return Math.min(playerData.size(), NUMBER_OF_GAMES);
+        }
+
+        public class ViewHolder extends RecyclerView.ViewHolder {
+            public final View mView;
+            public PlayerData mPlayer;
+
+            public ViewHolder(View view) {
+                super(view);
+                mView = view;
+            }
+        }
     }
 }
