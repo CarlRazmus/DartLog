@@ -21,6 +21,7 @@
         <activity android:name=".statistics.StatisticsActivity" />
         <activity
             android:name=".game.settings.PlayerSelectionActivity"
+            android:label="@string/player_selection"
             android:windowSoftInputMode="stateHidden" />
         <activity
             android:name=".statistics.ProfileListActivity"

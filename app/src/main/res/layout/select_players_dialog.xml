@@ -4,7 +4,7 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/background_dark">
+    android:background="@color/background">
 
     <TextView
         android:id="@+id/title"
@@ -22,7 +22,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:layout_margin="4dp"
+        android:background="@drawable/button_default"
+        android:textSize="20dp"
         android:text="Done"/>
 
      <RelativeLayout

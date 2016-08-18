@@ -8,6 +8,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.support.v7.widget.helper.ItemTouchHelper;
 import android.util.Log;
 import android.view.Gravity;
@@ -34,11 +35,16 @@ public class PlayerSelectionActivity extends AppCompatActivity implements View.O
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_player_selection);
+
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        toolbar.setTitle(getTitle());
 
         dbHelper = new DartLogDatabaseHelper(this);
 
-        Button readyButton = (Button) findViewById(R.id.ready_button);
+        Button readyButton = (Button) findViewById(R.id.start_game_button);
         assert readyButton != null;
         readyButton.setOnClickListener(this);
 
@@ -69,7 +75,7 @@ public class PlayerSelectionActivity extends AppCompatActivity implements View.O
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.ready_button:
+            case R.id.start_game_button:
                 startPlayActivity();
                 break;
         }
