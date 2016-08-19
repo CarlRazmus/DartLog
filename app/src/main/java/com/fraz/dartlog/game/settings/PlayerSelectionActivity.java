@@ -28,7 +28,7 @@ public class PlayerSelectionActivity extends AppCompatActivity implements View.O
     private ArrayList<String> participantNames;
     private AvailablePlayersListAdapter availablePlayersListAdapter;
     private RecyclerView recyclerView;
-    private RecyclerView.Adapter recyclerViewAdapter;
+    private ParticipantsListRecyclerAdapter recyclerViewAdapter;
     private RecyclerView.LayoutManager layoutManager;
     private DartLogDatabaseHelper dbHelper;
 

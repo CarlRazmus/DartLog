@@ -10,27 +10,44 @@ import java.util.ArrayList;
  */
 public class ParticipantSwipeCallback extends ItemTouchHelper.SimpleCallback {
 
-    private ArrayList<String> participantsNames;
-    private RecyclerView.Adapter participantsListAdapter;
+    private ParticipantsListRecyclerAdapter participantsListAdapter;
 
 
     public ParticipantSwipeCallback(int dragDirs, int swipeDirs, ArrayList<String> participantsNames,
-                                    RecyclerView.Adapter participantsListAdapter) {
+                                    ParticipantsListRecyclerAdapter participantsListAdapter) {
         super(dragDirs, swipeDirs);
-
-        this.participantsNames = participantsNames;
         this.participantsListAdapter = participantsListAdapter;
+    }
+
+    @Override
+    public boolean isLongPressDragEnabled() {
+        return true;
+    }
+
+    @Override
+    public boolean isItemViewSwipeEnabled() {
+        return true;
+    }
+
+    @Override
+    public int getMovementFlags(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder) {
+        int dragFlags = ItemTouchHelper.UP | ItemTouchHelper.DOWN;
+        int swipeFlags = ItemTouchHelper.START | ItemTouchHelper.END;
+        return makeMovementFlags(dragFlags, swipeFlags);
     }
 
     @Override
     public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder,
                           RecyclerView.ViewHolder target) {
-        return false;
+        final int fromPos = viewHolder.getAdapterPosition();
+        final int toPos = target.getAdapterPosition();
+        participantsListAdapter.onItemMove(fromPos, toPos);
+
+        return true;
     }
 
     @Override
     public void onSwiped(RecyclerView.ViewHolder viewHolder, int swipeDir) {
-        participantsNames.remove(viewHolder.getAdapterPosition());
-        participantsListAdapter.notifyDataSetChanged();
+        participantsListAdapter.onItemDismiss(viewHolder.getAdapterPosition());
     }
 }

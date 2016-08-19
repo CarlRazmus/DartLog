@@ -10,6 +10,7 @@ import android.widget.TextView;
 import com.fraz.dartlog.R;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 /**
  * Created by CarlR on 03/07/2016.
@@ -34,6 +35,26 @@ public class ParticipantsListRecyclerAdapter extends RecyclerView.Adapter<Partic
         this.participants = participants;
     }
 
+    public void onItemDismiss(int position) {
+        participants.remove(position);
+        notifyItemRemoved(position);
+    }
+
+    public boolean onItemMove(int fromPosition, int toPosition) {
+        if (fromPosition < toPosition) {
+            for (int i = fromPosition; i < toPosition; i++) {
+                Collections.swap(participants, i, i + 1);
+            }
+        } else {
+            for (int i = fromPosition; i > toPosition; i--) {
+                Collections.swap(participants, i, i - 1);
+            }
+        }
+        notifyItemMoved(fromPosition, toPosition);
+        Log.d("onItemMove", "onItemMove was executed");
+        return true;
+    }
+
     // Create new views (invoked by the layout manager)
     @Override
     public ParticipantsListRecyclerAdapter.ViewHolder onCreateViewHolder(ViewGroup parent,
@@ -53,6 +74,7 @@ public class ParticipantsListRecyclerAdapter extends RecyclerView.Adapter<Partic
         // - replace the contents of the view with that element
         holder.mTextView.setText(participants.get(position));
     }
+
 
     @Override
     public int getItemCount() {
