@@ -20,7 +20,7 @@
         <activity android:name=".game.GameActivity"/>
         <activity android:name=".statistics.StatisticsActivity" />
         <activity
-            android:name=".game.settings.PlayerSelectionActivity"
+            android:name=".game.setup.SetupActivity"
             android:label="@string/player_selection"
             android:windowSoftInputMode="stateHidden" />
         <activity

@@ -8,7 +8,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 
-import com.fraz.dartlog.game.settings.PlayerSelectionActivity;
+import com.fraz.dartlog.game.setup.SetupActivity;
 import com.fraz.dartlog.statistics.ProfileListActivity;
 import com.fraz.dartlog.statistics.StatisticsActivity;
 
@@ -62,7 +62,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void startPlayersActivity() {
-        Intent intent = new Intent(this, PlayerSelectionActivity.class);
+        Intent intent = new Intent(this, SetupActivity.class);
         startActivity(intent);
     }
 

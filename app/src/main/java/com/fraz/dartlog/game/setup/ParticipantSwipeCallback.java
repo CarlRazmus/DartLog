@@ -1,4 +1,4 @@
-package com.fraz.dartlog.game.settings;
+package com.fraz.dartlog.game.setup;
 
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;

@@ -1,4 +1,4 @@
-package com.fraz.dartlog.game.settings;
+package com.fraz.dartlog.game.setup;
 
 import android.app.Dialog;
 import android.content.DialogInterface;
@@ -13,9 +13,7 @@ import android.support.v7.widget.helper.ItemTouchHelper;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.Button;
-import android.widget.ListView;
 import android.widget.Toast;
 
 import com.fraz.dartlog.R;
@@ -24,19 +22,21 @@ import com.fraz.dartlog.game.GameActivity;
 
 import java.util.ArrayList;
 
-public class PlayerSelectionActivity extends AppCompatActivity implements View.OnClickListener {
+public class SetupActivity extends AppCompatActivity implements View.OnClickListener {
     private ArrayList<String> participantNames;
-    private AvailablePlayersListAdapter availablePlayersListAdapter;
-    private RecyclerView recyclerView;
-    private ParticipantsListRecyclerAdapter recyclerViewAdapter;
-    private RecyclerView.LayoutManager layoutManager;
+    private AvailablePlayersRecyclerAdapter availablePlayersListAdapter;
+    private ParticipantsListRecyclerAdapter participantsRecyclerAdapter;
+    private RecyclerView participantsRecyclerView;
+    private RecyclerView.LayoutManager participantsLayoutManager;
+    private RecyclerView.LayoutManager availablePlayersLayoutManager;
     private DartLogDatabaseHelper dbHelper;
+    private Dialog selectPlayerDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setContentView(R.layout.activity_player_selection);
+        setContentView(R.layout.activity_setup);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -52,24 +52,25 @@ public class PlayerSelectionActivity extends AppCompatActivity implements View.O
         assert openPlayerSelectionFab != null;
         openPlayerSelectionFab.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                openPlayerSelectionView();
+                openPlayerSelectionDialog();
             }
         });
 
-        recyclerView = (RecyclerView) findViewById(R.id.participants_recycler_view);
+        participantsRecyclerView = (RecyclerView) findViewById(R.id.participants_recycler_view);
 
+        participantsLayoutManager = new LinearLayoutManager(this);
+        availablePlayersLayoutManager = new LinearLayoutManager(this);
         participantNames = new ArrayList<>();
-        layoutManager = new LinearLayoutManager(this);
-        recyclerViewAdapter = new ParticipantsListRecyclerAdapter(participantNames);
-        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(new ParticipantSwipeCallback(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT, participantNames, recyclerViewAdapter));
+        participantsRecyclerAdapter = new ParticipantsListRecyclerAdapter(participantNames);
 
-        // use this setting to improve performance if you know that changes
-        // in content do not change the layout size of the RecyclerView
-        recyclerView.setHasFixedSize(true);
-        recyclerView.setLayoutManager(layoutManager);
-        recyclerView.setAdapter(recyclerViewAdapter);
+        participantsRecyclerView.setHasFixedSize(true);
+        participantsRecyclerView.setLayoutManager(participantsLayoutManager);
+        participantsRecyclerView.setAdapter(participantsRecyclerAdapter);
 
-        itemTouchHelper.attachToRecyclerView(recyclerView);
+        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(new ParticipantSwipeCallback(ItemTouchHelper.UP | ItemTouchHelper.DOWN, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT, participantNames, participantsRecyclerAdapter));
+        itemTouchHelper.attachToRecyclerView(participantsRecyclerView);
+
+        initializeSelectPlayersDialog();
     }
 
     @Override
@@ -81,36 +82,43 @@ public class PlayerSelectionActivity extends AppCompatActivity implements View.O
         }
     }
 
-    private Dialog initializeDialog() {
-        Dialog dialog = new Dialog(this);
 
-        dialog.setContentView(R.layout.select_players_dialog);
-        dialog.setTitle("Select players");
-        dialog.setCancelable(true);
+    private void initializeSelectPlayersDialog(){
+        selectPlayerDialog = new Dialog(this);
+        selectPlayerDialog.setTitle("Select players");
+        selectPlayerDialog.setContentView(R.layout.setup_players_dialog);
+        selectPlayerDialog.setCancelable(true);
 
-        dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+        selectPlayerDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
             @Override
             public void onDismiss(DialogInterface dialog) {
-                Log.d("Dialog", "adding stuff");
                 participantNames.clear();
                 participantNames.addAll(availablePlayersListAdapter.getSelectedPlayers());
-                recyclerViewAdapter.notifyDataSetChanged();
+                participantsRecyclerAdapter.notifyDataSetChanged();
             }
         });
 
-        return dialog;
-    }
-
-    private void openPlayerSelectionView() {
-        final Dialog dialog = initializeDialog();
-        final ListView availablePlayersListView = (ListView) dialog.findViewById(R.id.dialog_players_listView);
-        assert availablePlayersListView != null;
+        final RecyclerView availablePlayersRecyclerView = (RecyclerView) selectPlayerDialog.findViewById(R.id.setup_dialog_available_players);
+        assert availablePlayersRecyclerView != null;
 
         ArrayList<String> playerNames = fetchPlayerNamesFromDataBase();
-        availablePlayersListAdapter = new AvailablePlayersListAdapter(this, playerNames);
-        availablePlayersListView.setAdapter(availablePlayersListAdapter);
+        availablePlayersListAdapter = new AvailablePlayersRecyclerAdapter(this, playerNames);
+        availablePlayersRecyclerView.setAdapter(availablePlayersListAdapter);
+        availablePlayersRecyclerView.setLayoutManager(availablePlayersLayoutManager);
 
-        availablePlayersListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        Button button = (Button) selectPlayerDialog.findViewById(R.id.done_button);
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                selectPlayerDialog.dismiss();
+            }
+        });
+    }
+
+    private void openPlayerSelectionDialog() {
+
+
+        /*availablePlayersRecyclerView.setOnClickListener((new AdapterView.OnItemClickListener() {
 
             @Override
             public void onItemClick(AdapterView<?> arg0, View view, int position, long id) {
@@ -121,17 +129,10 @@ public class PlayerSelectionActivity extends AppCompatActivity implements View.O
                 else
                     view.setBackgroundResource(R.color.background_dark_transparent);
             }
-        });
+        }));
+*/
 
-        Button button = (Button) dialog.findViewById(R.id.done_button);
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dialog.dismiss();
-            }
-        });
-
-        dialog.show();
+        selectPlayerDialog.show();
     }
 
     private ArrayList<String> fetchPlayerNamesFromDataBase() {

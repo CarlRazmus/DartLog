@@ -34,8 +34,8 @@
         android:layout_above="@id/done_button"
         android:layout_marginBottom="10dp">
 
-        <ListView
-            android:id="@+id/dialog_players_listView"
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/setup_dialog_available_players"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginLeft="16dp"

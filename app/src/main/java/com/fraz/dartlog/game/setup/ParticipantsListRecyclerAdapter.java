@@ -1,4 +1,4 @@
-package com.fraz.dartlog.game.settings;
+package com.fraz.dartlog.game.setup;
 
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -70,8 +70,6 @@ public class ParticipantsListRecyclerAdapter extends RecyclerView.Adapter<Partic
     // Replace the contents of a view (invoked by the layout manager)
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        // - get element from your dataset at this position
-        // - replace the contents of the view with that element
         holder.mTextView.setText(participants.get(position));
     }
 
