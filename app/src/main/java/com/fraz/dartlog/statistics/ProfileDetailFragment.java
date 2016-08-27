@@ -17,6 +17,7 @@ import com.fraz.dartlog.game.PlayerData;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Locale;
 
 /**
@@ -100,6 +101,7 @@ public class ProfileDetailFragment extends Fragment {
 
         public RecentGamesRecyclerViewAdapter(ArrayList<GameData> gameData) {
             this.gameData = gameData;
+            Collections.reverse(this.gameData);
         }
 
         @Override
