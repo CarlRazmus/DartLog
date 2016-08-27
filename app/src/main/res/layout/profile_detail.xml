@@ -12,6 +12,8 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="24dp"
         android:gravity="center">
 
         <TextView
@@ -26,6 +28,7 @@
             android:layout_height="wrap_content"
             android:id="@+id/profile_detail_games_played"
             android:textSize="25sp"
+            android:textColor="@color/main_white"
             android:gravity="center"
             android:layout_below="@id/profile_detail_games_played_label"
             android:layout_alignRight="@id/profile_detail_games_played_label"
@@ -49,6 +52,7 @@
             android:layout_height="wrap_content"
             android:id="@+id/profile_detail_games_won"
             android:textSize="25sp"
+            android:textColor="@color/main_white"
             android:gravity="center"
             android:layout_below="@id/profile_detail_games_won_label"
             android:layout_alignRight="@id/profile_detail_games_won_label"
@@ -64,7 +68,6 @@
         android:gravity="center"
         android:text="RECENT GAMES"
         android:textSize="15sp"
-        android:layout_marginTop="10dp"
         android:padding="3dp"
         android:background="@color/main_grey"/>
 

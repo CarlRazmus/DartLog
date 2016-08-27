@@ -4,25 +4,31 @@ import android.app.Activity;
 import android.view.Gravity;
 import android.widget.Toast;
 
-import com.fraz.dartlog.game.settings.GameData;
-
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.LinkedList;
 
 public abstract class Game {
 
-    protected GameData gameData;
+    private LinkedList<Integer> playOrder = new LinkedList<>();;
     protected Activity context;
     protected int currentPlayerIdx;
-    private LinkedList<Integer> playOrder;
+
+    private PlayerData winner = null;
+    private int startingPlayerIdx;
+    private Calendar date;
+    private ArrayList<? extends PlayerData> players;
 
     /** Needed for serialization of subclasses. */
     protected Game() {
     }
 
-    public Game(Activity context, GameData gameData) {
+    public Game(Activity context, ArrayList<? extends PlayerData> players) {
         this.context = context;
-        this.gameData = gameData;
+        this.players = players;
+        this.startingPlayerIdx = 0;
+        this.date = Calendar.getInstance();
+        this.currentPlayerIdx = getStartingPlayerIdx();
     }
 
     public boolean submitScore(int newScore) {
@@ -35,12 +41,12 @@ public abstract class Game {
             int lastPlayerIdx = playOrder.removeLast();
             getPlayer(lastPlayerIdx).undoScore();
             currentPlayerIdx = lastPlayerIdx;
-            gameData.setWinner(null);
+            setWinner(null);
         }
     }
 
     public boolean isGameOver() {
-        return gameData.getWinner() != null;
+        return getWinner() != null;
     }
 
     public int getCurrentPlayerIdx() {
@@ -48,14 +54,21 @@ public abstract class Game {
     }
 
     public PlayerData getPlayer(int index) {
-        return gameData.getPlayer(index);
+        return players.get(index);
     }
 
     protected void newGame() {
         playOrder = new LinkedList<>();
-        int startingPlayer = getNextStartingPlayer(gameData);
-        gameData.newGame(startingPlayer);
-        currentPlayerIdx = startingPlayer;
+        resetPlayers(players);
+        currentPlayerIdx = startingPlayerIdx = getNextStartingPlayer();
+        setWinner(null);
+        date = Calendar.getInstance();
+    }
+
+    private void resetPlayers(ArrayList<? extends PlayerData> players) {
+        for (PlayerData player : players) {
+            player.resetScore();
+        }
     }
 
     protected void showWinnerToast() {
@@ -71,27 +84,39 @@ public abstract class Game {
     }
 
     protected void nextPlayer() {
-        currentPlayerIdx = (currentPlayerIdx + 1) % gameData.getNumberOfPlayers();
+        currentPlayerIdx = (currentPlayerIdx + 1) % getNumberOfPlayers();
     }
 
-    protected int getNextStartingPlayer(GameData lastGameData) {
-        return (lastGameData.getStartingPlayerIdx() + 1) % gameData.getNumberOfPlayers();
+    public int getNextStartingPlayer() {
+        return (getStartingPlayerIdx() + 1) % getNumberOfPlayers();
+    }
+
+    public void setStartingPlayerIdx(int startingPlayerIdx) {
+        this.startingPlayerIdx = startingPlayerIdx;
+    }
+
+    public void setWinner(PlayerData winner) {
+        this.winner = winner;
     }
 
     public int getNumberOfPlayers() {
-        return gameData.getNumberOfPlayers();
+        return players.size();
     }
 
     public Calendar getDate() {
-        return gameData.getDate();
+        return date;
     }
 
-    public PlayerData getStartingPlayer() {
-        return getPlayer(gameData.getStartingPlayerIdx());
+    public int getStartingPlayerIdx() {
+        return startingPlayerIdx;
     }
 
     public PlayerData getWinner()
     {
-        return gameData.getWinner();
+        return winner;
+    }
+
+    public ArrayList<? extends PlayerData> getPlayers() {
+        return players;
     }
 }
