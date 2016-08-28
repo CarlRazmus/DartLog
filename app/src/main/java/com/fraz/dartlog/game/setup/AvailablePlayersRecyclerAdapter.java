@@ -17,7 +17,6 @@ import java.util.List;
 public class AvailablePlayersRecyclerAdapter extends RecyclerView.Adapter<AvailablePlayersRecyclerAdapter.ViewHolder> {
 
     private List<String> availablePlayers;
-    private Activity context;
     private ArrayList<Integer> selectedIndexes;
 
 
@@ -26,8 +25,12 @@ public class AvailablePlayersRecyclerAdapter extends RecyclerView.Adapter<Availa
         selectedIndexes = new ArrayList<>();
     }
 
-    public void toggleSelected(Integer idx)
-    {
+    @Override
+    public int getItemCount() {
+        return availablePlayers.size();
+    }
+
+    public void toggleSelected(Integer idx) {
         if(selectedIndexes.contains(idx))
         {
             selectedIndexes.remove(idx);
@@ -48,14 +51,8 @@ public class AvailablePlayersRecyclerAdapter extends RecyclerView.Adapter<Availa
         for(Integer idx : selectedIndexes){
             selectedPlayers.add(availablePlayers.get(idx));
         }
-
         return selectedPlayers;
     }
-
-    public void clearPlayers() {
-        availablePlayers.clear();
-    }
-
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
 
@@ -95,10 +92,5 @@ public class AvailablePlayersRecyclerAdapter extends RecyclerView.Adapter<Availa
                     v.setBackgroundResource(R.color.background_dark_transparent);
             }
         }));
-    }
-
-    @Override
-    public int getItemCount() {
-        return availablePlayers.size();
     }
 }

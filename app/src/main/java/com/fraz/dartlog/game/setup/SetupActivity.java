@@ -38,31 +38,17 @@ public class SetupActivity extends AppCompatActivity implements View.OnClickList
 
         setContentView(R.layout.activity_setup);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        toolbar.setTitle(getTitle());
-
         dbHelper = new DartLogDatabaseHelper(this);
-
-        Button readyButton = (Button) findViewById(R.id.start_game_button);
-        assert readyButton != null;
-        readyButton.setOnClickListener(this);
-
-        FloatingActionButton openPlayerSelectionFab = (FloatingActionButton) findViewById(R.id.open_player_selection_fab);
-        assert openPlayerSelectionFab != null;
-        openPlayerSelectionFab.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                openPlayerSelectionDialog();
-            }
-        });
-
-        participantsRecyclerView = (RecyclerView) findViewById(R.id.participants_recycler_view);
-
-        participantsLayoutManager = new LinearLayoutManager(this);
-        availablePlayersLayoutManager = new LinearLayoutManager(this);
         participantNames = new ArrayList<>();
         participantsRecyclerAdapter = new ParticipantsListRecyclerAdapter(participantNames);
+        participantsLayoutManager = new LinearLayoutManager(this);
+        availablePlayersLayoutManager = new LinearLayoutManager(this);
 
+        InitializeToolbar();
+        InitializeButton();
+        InitializeFAB();
+
+        participantsRecyclerView = (RecyclerView) findViewById(R.id.participants_recycler_view);
         participantsRecyclerView.setHasFixedSize(true);
         participantsRecyclerView.setLayoutManager(participantsLayoutManager);
         participantsRecyclerView.setAdapter(participantsRecyclerAdapter);
@@ -71,6 +57,28 @@ public class SetupActivity extends AppCompatActivity implements View.OnClickList
         itemTouchHelper.attachToRecyclerView(participantsRecyclerView);
 
         initializeSelectPlayersDialog();
+    }
+
+    private void InitializeFAB() {
+        FloatingActionButton openPlayerSelectionFab = (FloatingActionButton) findViewById(R.id.open_player_selection_fab);
+        assert openPlayerSelectionFab != null;
+        openPlayerSelectionFab.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                openPlayerSelectionDialog();
+            }
+        });
+    }
+
+    private void InitializeButton() {
+        Button readyButton = (Button) findViewById(R.id.start_game_button);
+        assert readyButton != null;
+        readyButton.setOnClickListener(this);
+    }
+
+    private void InitializeToolbar() {
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        toolbar.setTitle(getTitle());
     }
 
     @Override

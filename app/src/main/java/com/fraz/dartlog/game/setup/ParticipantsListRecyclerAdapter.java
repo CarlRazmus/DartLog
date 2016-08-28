@@ -1,7 +1,6 @@
 package com.fraz.dartlog.game.setup;
 
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,21 +17,14 @@ import java.util.Collections;
 public class ParticipantsListRecyclerAdapter extends RecyclerView.Adapter<ParticipantsListRecyclerAdapter.ViewHolder> {
     private ArrayList<String> participants;
 
-    // Provide a reference to the views for each data item
-    // Complex data items may need more than one view per item, and
-    // you provide access to all the views for a data item in a view holder
-    public static class ViewHolder extends RecyclerView.ViewHolder {
-
-        public TextView mTextView;
-
-        public ViewHolder(View participantListItemView) {
-            super(participantListItemView);
-            mTextView = (TextView)participantListItemView.findViewById(R.id.participant_name);
-        }
-    }
 
     public ParticipantsListRecyclerAdapter(ArrayList<String> participants) {
         this.participants = participants;
+    }
+
+    @Override
+    public int getItemCount() {
+        return participants.size();
     }
 
     public void onItemDismiss(int position) {
@@ -51,13 +43,23 @@ public class ParticipantsListRecyclerAdapter extends RecyclerView.Adapter<Partic
             }
         }
         notifyItemMoved(fromPosition, toPosition);
-        Log.d("onItemMove", "onItemMove was executed");
         return true;
+    }
+
+
+    public static class ViewHolder extends RecyclerView.ViewHolder {
+
+        public View listItemView;
+
+        public ViewHolder(View participantListItemView) {
+            super(participantListItemView);
+            listItemView = participantListItemView;
+        }
     }
 
     // Create new views (invoked by the layout manager)
     @Override
-    public ParticipantsListRecyclerAdapter.ViewHolder onCreateViewHolder(ViewGroup parent,
+    public ViewHolder onCreateViewHolder(ViewGroup parent,
                                                    int viewType) {
 
         View listItem = LayoutInflater.from(parent.getContext())
@@ -70,18 +72,8 @@ public class ParticipantsListRecyclerAdapter extends RecyclerView.Adapter<Partic
     // Replace the contents of a view (invoked by the layout manager)
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        holder.mTextView.setText(participants.get(position));
-    }
-
-
-    @Override
-    public int getItemCount() {
-        return participants.size();
-    }
-
-    public void add(int position, String item) {
-        participants.add(position, item);
-        notifyItemInserted(position);
+        TextView participantNameTextView = (TextView)holder.listItemView.findViewById(R.id.participant_name);
+        participantNameTextView.setText(participants.get(position));
     }
 
 }
