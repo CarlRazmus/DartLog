@@ -10,50 +10,46 @@
     tools:context="com.fraz.dartlog.MainActivity"
     android:background="@color/background">
 
-    <RelativeLayout
+    <ImageView
+        android:layout_width="250dp"
+        android:layout_height="250dp"
+        android:src="@drawable/dart_board_800px"
+        android:layout_below="@+id/logo_group"
+        android:layout_centerHorizontal="true"
+        android:alpha=".1"/>
+
+    <LinearLayout
+        android:layout_marginBottom="25dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
         android:layout_alignParentBottom="true"
-        android:id="@+id/button_group">
+        android:orientation="vertical">
 
-        <ImageView
-            android:layout_width="400dp"
-            android:layout_height="400dp"
-            android:src="@drawable/dart_board_800px"
-            android:layout_centerInParent="true"
-            android:alpha=".1"/>
-
-        <LinearLayout
-            android:layout_width="match_parent"
+        <Button
+            android:id="@+id/play_button"
+            android:layout_width="300dp"
             android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:orientation="vertical">
+            android:background="@drawable/button_default"
+            android:text="PLAY DARTS"/>
 
-            <Button
-                android:id="@+id/play_button"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@drawable/button_default"
-                android:text="PLAY DARTS"/>
+        <Button
+            android:id="@+id/profiles_button"
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:background="@drawable/button_default"
+            android:layout_marginTop="10dp"
+            android:text="PROFILES"/>
 
-            <Button
-                android:id="@+id/profiles_button"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@drawable/button_default"
-                android:layout_marginTop="10dp"
-                android:text="PROFILES"/>
-
-            <Button
-                android:id="@+id/stat_button"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@drawable/button_default"
-                android:layout_marginTop="10dp"
-                android:layout_marginBottom="10dp"
-                android:text="SHOW STATISTICS"/>
-        </LinearLayout>
-    </RelativeLayout>
+        <Button
+            android:id="@+id/stat_button"
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:background="@drawable/button_default"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            android:text="SHOW STATISTICS"/>
+    </LinearLayout>
 
     <LinearLayout
         android:layout_width="wrap_content"
