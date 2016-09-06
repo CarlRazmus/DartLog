@@ -10,7 +10,6 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.support.v7.widget.helper.ItemTouchHelper;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
@@ -22,15 +21,15 @@ import com.fraz.dartlog.game.GameActivity;
 
 import java.util.ArrayList;
 
-public class SetupActivity extends AppCompatActivity implements View.OnClickListener {
-    private ArrayList<String> participantNames;
+public class SetupActivity extends AppCompatActivity
+        implements ParticipantsListRecyclerAdapter.OnDragStartListener, View.OnClickListener  {
+
     private AvailablePlayersRecyclerAdapter availablePlayersListAdapter;
     private ParticipantsListRecyclerAdapter participantsRecyclerAdapter;
-    private RecyclerView participantsRecyclerView;
-    private RecyclerView.LayoutManager participantsLayoutManager;
-    private RecyclerView.LayoutManager availablePlayersLayoutManager;
+    private ArrayList<String> participantNames;
     private DartLogDatabaseHelper dbHelper;
     private Dialog selectPlayerDialog;
+    private ItemTouchHelper itemTouchHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,22 +37,22 @@ public class SetupActivity extends AppCompatActivity implements View.OnClickList
 
         setContentView(R.layout.activity_setup);
 
+        RecyclerView.LayoutManager participantsLayoutManager = new LinearLayoutManager(this);
         dbHelper = new DartLogDatabaseHelper(this);
         participantNames = new ArrayList<>();
-        participantsRecyclerAdapter = new ParticipantsListRecyclerAdapter(participantNames);
-        participantsLayoutManager = new LinearLayoutManager(this);
-        availablePlayersLayoutManager = new LinearLayoutManager(this);
+        participantsRecyclerAdapter = new ParticipantsListRecyclerAdapter(this, participantNames);
 
         InitializeToolbar();
         InitializeButton();
         InitializeFAB();
 
-        participantsRecyclerView = (RecyclerView) findViewById(R.id.participants_recycler_view);
+        RecyclerView participantsRecyclerView = (RecyclerView) findViewById(R.id.participants_recycler_view);
+        assert participantsRecyclerView != null;
         participantsRecyclerView.setHasFixedSize(true);
         participantsRecyclerView.setLayoutManager(participantsLayoutManager);
         participantsRecyclerView.setAdapter(participantsRecyclerAdapter);
 
-        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(new ParticipantSwipeCallback(ItemTouchHelper.UP | ItemTouchHelper.DOWN, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT, participantNames, participantsRecyclerAdapter));
+        itemTouchHelper = new ItemTouchHelper(new ParticipantSwipeCallback(ItemTouchHelper.UP | ItemTouchHelper.DOWN, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT, participantNames, participantsRecyclerAdapter));
         itemTouchHelper.attachToRecyclerView(participantsRecyclerView);
 
         initializeSelectPlayersDialog();
@@ -77,6 +76,7 @@ public class SetupActivity extends AppCompatActivity implements View.OnClickList
 
     private void InitializeToolbar() {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        assert toolbar != null;
         setSupportActionBar(toolbar);
         toolbar.setTitle(getTitle());
     }
@@ -90,8 +90,8 @@ public class SetupActivity extends AppCompatActivity implements View.OnClickList
         }
     }
 
-
     private void initializeSelectPlayersDialog(){
+        RecyclerView.LayoutManager availablePlayersLayoutManager = new LinearLayoutManager(this);
         selectPlayerDialog = new Dialog(this);
         selectPlayerDialog.setTitle("Select players");
         selectPlayerDialog.setContentView(R.layout.setup_players_dialog);
@@ -110,7 +110,7 @@ public class SetupActivity extends AppCompatActivity implements View.OnClickList
         assert availablePlayersRecyclerView != null;
 
         ArrayList<String> playerNames = fetchPlayerNamesFromDataBase();
-        availablePlayersListAdapter = new AvailablePlayersRecyclerAdapter(this, playerNames);
+        availablePlayersListAdapter = new AvailablePlayersRecyclerAdapter(playerNames);
         availablePlayersRecyclerView.setAdapter(availablePlayersListAdapter);
         availablePlayersRecyclerView.setLayoutManager(availablePlayersLayoutManager);
 
@@ -124,22 +124,6 @@ public class SetupActivity extends AppCompatActivity implements View.OnClickList
     }
 
     private void openPlayerSelectionDialog() {
-
-
-        /*availablePlayersRecyclerView.setOnClickListener((new AdapterView.OnItemClickListener() {
-
-            @Override
-            public void onItemClick(AdapterView<?> arg0, View view, int position, long id) {
-                availablePlayersListAdapter.toggleSelected(position);
-
-                if (availablePlayersListAdapter.isMarked(position))
-                    view.setBackgroundResource(R.color.game_player_winner);
-                else
-                    view.setBackgroundResource(R.color.background_dark_transparent);
-            }
-        }));
-*/
-
         selectPlayerDialog.show();
     }
 
@@ -167,5 +151,10 @@ public class SetupActivity extends AppCompatActivity implements View.OnClickList
             intent.putStringArrayListExtra("playerNames", participantNames);
             startActivity(intent);
         }
+    }
+
+    @Override
+    public void onDragStarted(RecyclerView.ViewHolder viewHolder) {
+        itemTouchHelper.startDrag(viewHolder);
     }
 }

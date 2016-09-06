@@ -4,15 +4,24 @@
     android:layout_height="48dp"
     android:background="@drawable/background_participant_list_item">
 
+    <ImageView
+        android:id="@+id/handle"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_centerVertical="true"
+        android:src="@drawable/ic_reorder_grey_400_24dp" />
+
     <TextView
+        android:background="@drawable/background_participant_list_item"
         android:id="@+id/participant_name"
-        android:layout_marginLeft="3dp"
+        android:layout_toRightOf="@+id/handle"
+        android:layout_marginLeft="20dp"
         android:layout_height="wrap_content"
         android:layout_width="wrap_content"
         android:layout_centerVertical="true"
-        android:layout_alignParentLeft="true"
         android:textSize="20sp"
-        android:layout_alignParentStart="true"
         android:textColor="@color/main_white"/>
 
 </RelativeLayout>

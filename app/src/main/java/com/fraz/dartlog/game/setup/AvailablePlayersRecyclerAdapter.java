@@ -1,14 +1,11 @@
 package com.fraz.dartlog.game.setup;
+import com.fraz.dartlog.R;
 
-import android.app.Activity;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.TextView;
-
-import com.fraz.dartlog.R;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,7 +17,7 @@ public class AvailablePlayersRecyclerAdapter extends RecyclerView.Adapter<Availa
     private ArrayList<Integer> selectedIndexes;
 
 
-    public AvailablePlayersRecyclerAdapter(Activity context, List<String> availablePlayers) {
+    public AvailablePlayersRecyclerAdapter(List<String> availablePlayers) {
         this.availablePlayers = availablePlayers;
         selectedIndexes = new ArrayList<>();
     }
@@ -70,8 +67,7 @@ public class AvailablePlayersRecyclerAdapter extends RecyclerView.Adapter<Availa
         View listItem = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.available_player_list_item, parent, false);
 
-        ViewHolder vh = new ViewHolder(listItem);
-        return vh;
+        return new ViewHolder(listItem);
     }
 
     @Override
