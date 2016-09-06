@@ -1,24 +1,27 @@
 package com.fraz.dartlog.statistics;
 
+import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.design.widget.FloatingActionButton;
+import android.support.v4.app.DialogFragment;
+import android.support.v4.app.NavUtils;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.support.v4.app.NavUtils;
-import android.support.v7.app.ActionBar;
-import android.view.MenuItem;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import com.fraz.dartlog.R;
-
 import com.fraz.dartlog.db.DartLogDatabaseHelper;
 
 import java.util.ArrayList;
@@ -52,7 +55,8 @@ public class ProfileListActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Not yet implemented...", Snackbar.LENGTH_LONG).show();
+                new AddPlayerDialogFragment().show(getSupportFragmentManager(),
+                        "AddPlayerDialogFragment");
             }
         });
         // Show the Up button in the action bar.
@@ -81,18 +85,23 @@ public class ProfileListActivity extends AppCompatActivity {
     }
 
     private void setupRecyclerView(@NonNull RecyclerView recyclerView) {
-        DartLogDatabaseHelper dbHelper = new DartLogDatabaseHelper(this);
-        ArrayList<String> profiles = dbHelper.getPlayers();
-        recyclerView.setAdapter(new ProfilesRecyclerViewAdapter(profiles));
+        recyclerView.setAdapter(new ProfilesRecyclerViewAdapter(this));
     }
 
     public class ProfilesRecyclerViewAdapter
             extends RecyclerView.Adapter<ProfilesRecyclerViewAdapter.ViewHolder> {
 
-        private final ArrayList<String> profiles;
+        private Context context;
+        private ArrayList<String> profiles;
 
-        public ProfilesRecyclerViewAdapter(ArrayList<String> profiles) {
-            this.profiles = profiles;
+        public ProfilesRecyclerViewAdapter(Context context) {
+            this.context = context;
+            updateDataSetFromDatabase();
+        }
+
+        public void updateDataSetFromDatabase() {
+            this.profiles = new DartLogDatabaseHelper(context).getPlayers();
+            notifyDataSetChanged();
         }
 
         @Override
@@ -145,6 +154,39 @@ public class ProfileListActivity extends AppCompatActivity {
                 super(view);
                 mView = view;
             }
+        }
+    }
+
+    public static class AddPlayerDialogFragment extends DialogFragment {
+        @Override
+        public Dialog onCreateDialog(Bundle savedInstanceState) {
+            // Use the Builder class for convenient dialog construction
+            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity(),
+                    R.style.RedButtonAlertDialog);
+
+            builder.setTitle("Add new profile").setView(R.layout.dialog_add_player)
+                    .setPositiveButton("Add", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            EditText profileNameEditText =
+                                    (EditText) getDialog().findViewById(R.id.add_player_edit_text);
+                            String name = profileNameEditText.getText().toString();
+                            DartLogDatabaseHelper dbHelper = new DartLogDatabaseHelper(getContext());
+                            dbHelper.addPlayer(name);
+                            getProfilesAdapter().updateDataSetFromDatabase();
+                        }
+                    })
+                    .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                        }
+                    });
+            // Create the AlertDialog object and return it
+            return builder.create();
+        }
+
+        private ProfilesRecyclerViewAdapter getProfilesAdapter()
+        {
+            return ((ProfilesRecyclerViewAdapter) ((RecyclerView) getActivity()
+                        .findViewById(R.id.profile_list)).getAdapter());
         }
     }
 }
