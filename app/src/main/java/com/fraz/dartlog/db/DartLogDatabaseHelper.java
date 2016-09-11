@@ -46,15 +46,16 @@ public class DartLogDatabaseHelper extends SQLiteOpenHelper {
     }
 
     public void resetDatabase() {
-        SQLiteDatabase db = getWritableDatabase();
-        for (String deleteSql : DartLogContract.SQL_DELETE_ENTRIES) {
-            db.execSQL(deleteSql);
-        }
-        for (String createSql : DartLogContract.SQL_CREATE_ENTRIES) {
-            db.execSQL(createSql);
-        }
+        try (SQLiteDatabase db = getWritableDatabase()) {
+            for (String deleteSql : DartLogContract.SQL_DELETE_ENTRIES) {
+                db.execSQL(deleteSql);
+            }
+            for (String createSql : DartLogContract.SQL_CREATE_ENTRIES) {
+                db.execSQL(createSql);
+            }
 
-        initializePlayers(db);
+            initializePlayers(db);
+        }
     }
 
     /**
@@ -64,8 +65,9 @@ public class DartLogDatabaseHelper extends SQLiteOpenHelper {
      * @return the row ID of the newly inserted player, or -1 if the player could not be added.
      */
     public long addPlayer(String name) {
-        SQLiteDatabase db = getWritableDatabase();
-        return addPlayer(name, db);
+        try (SQLiteDatabase db = getWritableDatabase()) {
+            return addPlayer(name, db);
+        }
     }
 
     /**
@@ -87,18 +89,19 @@ public class DartLogDatabaseHelper extends SQLiteOpenHelper {
      * @return the player names of all the players in the database.
      */
     public ArrayList<String> getPlayers() {
-        SQLiteDatabase db = getReadableDatabase();
-        String[] projection = {
-                DartLogContract.PlayerEntry.COLUMN_NAME_PLAYER_NAME
-        };
+        ArrayList<String> names;
+        try (SQLiteDatabase db = getReadableDatabase()) {
+            String[] projection = {
+                    DartLogContract.PlayerEntry.COLUMN_NAME_PLAYER_NAME
+            };
 
-        ArrayList<String> names = new ArrayList<>();
-
-        try (Cursor c = db.query(DartLogContract.PlayerEntry.TABLE_NAME, projection,
-                null, null, null, null, null)) {
-            while (c.moveToNext()) {
-                names.add(c.getString(c.getColumnIndex(
-                        DartLogContract.PlayerEntry.COLUMN_NAME_PLAYER_NAME)));
+            names = new ArrayList<>();
+            try (Cursor c = db.query(DartLogContract.PlayerEntry.TABLE_NAME, projection,
+                    null, null, null, null, null)) {
+                while (c.moveToNext()) {
+                    names.add(c.getString(c.getColumnIndex(
+                            DartLogContract.PlayerEntry.COLUMN_NAME_PLAYER_NAME)));
+                }
             }
         }
         return names;
@@ -111,14 +114,16 @@ public class DartLogDatabaseHelper extends SQLiteOpenHelper {
      * @return List of match data for the given player.
      */
     public ArrayList<GameData> getPlayerMatchData(String playerName) {
-        SQLiteDatabase db = getReadableDatabase();
+        ArrayList<GameData> gameData;
+        try (SQLiteDatabase db = getReadableDatabase()) {
 
-        long playerId = getPlayerId(db, playerName);
-        ArrayList<Long> matchIds = getMatchIds(db, playerId);
+            long playerId = getPlayerId(db, playerName);
+            ArrayList<Long> matchIds = getMatchIds(db, playerId);
 
-        ArrayList<GameData> gameData = new ArrayList<>();
-        for (long matchId : matchIds) {
-            gameData.add(getGameData(db, matchId));
+            gameData = new ArrayList<>();
+            for (long matchId : matchIds) {
+                gameData.add(getGameData(db, matchId));
+            }
         }
         return gameData;
     }
@@ -152,11 +157,12 @@ public class DartLogDatabaseHelper extends SQLiteOpenHelper {
      * @param game The match to add.
      */
     public void addX01Match(X01 game) {
-        SQLiteDatabase db = getWritableDatabase();
-        long matchId = insertX01MatchEntry(db, game);
+        try (SQLiteDatabase db = getWritableDatabase()) {
+            long matchId = insertX01MatchEntry(db, game);
 
-        for (int i = 0; i < game.getNumberOfPlayers(); ++i) {
-            insertPlayerScores(db, game.getPlayer(i), matchId);
+            for (int i = 0; i < game.getNumberOfPlayers(); ++i) {
+                insertPlayerScores(db, game.getPlayer(i), matchId);
+            }
         }
     }
 
@@ -241,17 +247,17 @@ public class DartLogDatabaseHelper extends SQLiteOpenHelper {
      */
     private long getPlayerId(SQLiteDatabase db, String playerName) {
         long playerId;
-        Cursor c = db.query(DartLogContract.PlayerEntry.TABLE_NAME,
+        try (Cursor c = db.query(DartLogContract.PlayerEntry.TABLE_NAME,
                 new String[]{DartLogContract.PlayerEntry._ID},
                 String.format("%s = '%s'", DartLogContract.PlayerEntry.COLUMN_NAME_PLAYER_NAME,
-                        playerName), null, null, null, null);
-        if (c.getCount() == 0)
-            playerId = addPlayer(playerName);
-        else {
-            c.moveToFirst();
-            playerId = c.getLong(0);
+                        playerName), null, null, null, null)) {
+            if (c.getCount() == 0)
+                playerId = addPlayer(playerName);
+            else {
+                c.moveToFirst();
+                playerId = c.getLong(0);
+            }
         }
-        c.close();
         return playerId;
     }
 
