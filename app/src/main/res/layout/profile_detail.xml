@@ -21,7 +21,7 @@
             android:layout_height="wrap_content"
             android:id="@+id/profile_detail_games_played_label"
             android:textSize="15sp"
-            android:text="Games played"/>
+            android:text="@string/textView_games_played"/>
 
         <TextView
             android:layout_width="0dp"
@@ -31,9 +31,7 @@
             android:textColor="@color/main_white"
             android:gravity="center"
             android:layout_below="@id/profile_detail_games_played_label"
-            android:layout_alignRight="@id/profile_detail_games_played_label"
             android:layout_alignEnd="@id/profile_detail_games_played_label"
-            android:layout_alignLeft="@id/profile_detail_games_played_label"
             android:layout_alignStart="@id/profile_detail_games_played_label"
             tools:text="30"/>
 
@@ -41,11 +39,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/profile_detail_games_won_label"
-            android:layout_marginLeft="30dp"
-            android:layout_toRightOf="@id/profile_detail_games_played_label"
+            android:layout_marginStart="30dp"
             android:layout_toEndOf="@id/profile_detail_games_played_label"
             android:textSize="15sp"
-            android:text="Games won"/>
+            android:text="@string/games_won"/>
 
         <TextView
             android:layout_width="wrap_content"
@@ -55,9 +52,7 @@
             android:textColor="@color/main_white"
             android:gravity="center"
             android:layout_below="@id/profile_detail_games_won_label"
-            android:layout_alignRight="@id/profile_detail_games_won_label"
             android:layout_alignEnd="@id/profile_detail_games_won_label"
-            android:layout_alignLeft="@id/profile_detail_games_won_label"
             android:layout_alignStart="@id/profile_detail_games_won_label"
             tools:text="12"/>
     </RelativeLayout>
@@ -66,7 +61,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:text="RECENT GAMES"
+        android:text="@string/recent_games"
         android:textSize="15sp"
         android:padding="3dp"
         android:background="@color/main_grey"/>

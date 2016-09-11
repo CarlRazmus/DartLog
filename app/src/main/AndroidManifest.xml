@@ -21,7 +21,7 @@
         <activity android:name=".statistics.StatisticsActivity" />
         <activity
             android:name=".game.setup.SetupActivity"
-            android:label="@string/player_selection"
+            android:label="@string/header_player_selection"
             android:windowSoftInputMode="stateHidden" />
         <activity
             android:name=".statistics.ProfileListActivity"

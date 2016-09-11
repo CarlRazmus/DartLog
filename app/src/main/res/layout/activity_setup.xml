@@ -63,7 +63,7 @@
             android:layout_marginTop="10dp"
             android:layout_marginBottom="10dp"
             android:background="@drawable/button_default"
-            android:text="@string/start_button_text"/>
+            android:text="@string/button_start_game"/>
     </LinearLayout>
 
 </LinearLayout>

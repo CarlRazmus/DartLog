@@ -25,7 +25,6 @@ public class CheckoutChartTest {
     private Resources mockResource;
 
     private static final String TEST_DATA = "120,T20 20 D20\n90,T18 D18";
-    private CheckoutChart checkoutChart;
 
     @Before
     public void setUp() throws Exception {
@@ -36,7 +35,7 @@ public class CheckoutChartTest {
 
     @Test
     public void testGetCheckoutText() throws Exception {
-        checkoutChart = new CheckoutChart(mockContext, R.raw.checkout_chart);
+        CheckoutChart checkoutChart = new CheckoutChart(mockContext, R.raw.checkout_chart);
         assertThat(checkoutChart.getCheckoutText(90), equalTo("T18 D18"));
         assertThat(checkoutChart.getCheckoutText(120), equalTo("T20 20 D20"));
         assertThat(checkoutChart.getCheckoutText(121), equalTo("N/A"));

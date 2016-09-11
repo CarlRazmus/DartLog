@@ -10,7 +10,7 @@ import java.util.LinkedList;
 
 public abstract class Game {
 
-    private LinkedList<Integer> playOrder = new LinkedList<>();;
+    private LinkedList<Integer> playOrder = new LinkedList<>();
     protected Activity context;
     protected int currentPlayerIdx;
 

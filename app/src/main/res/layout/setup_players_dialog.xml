@@ -10,12 +10,11 @@
         android:id="@+id/title"
         android:layout_width="match_parent"
         android:layout_height= "?attr/actionBarSize"
-        android:text="Select Players"
-        android:textSize="30dp"
+        android:text="@string/header_select_players"
+        android:textSize="30sp"
         android:textColor="@color/main_white"
         android:gravity="center"
-        android:background="@color/main_red"
-    />
+        android:background="@color/main_red"/>
 
     <Button
         android:id="@+id/done_button"
@@ -23,8 +22,8 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:background="@drawable/button_default"
-        android:textSize="20dp"
-        android:text="Done"/>
+        android:textSize="20sp"
+        android:text="@string/button_done"/>
 
      <RelativeLayout
         android:id="@+id/players_listview_layout_container"
@@ -40,8 +39,7 @@
             android:layout_height="match_parent"
             android:layout_marginLeft="16dp"
             android:layout_marginRight="16dp"
-            android:layout_marginTop="8dp"
-            android:layout_weight="1"/>
+            android:layout_marginTop="8dp" />
     </RelativeLayout>
 
 </RelativeLayout>

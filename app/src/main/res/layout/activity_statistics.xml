@@ -12,6 +12,6 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="This is the statistics activity!"/>
+        android:text="@string/statistic_activity_temporary_text"/>
 
 </RelativeLayout>

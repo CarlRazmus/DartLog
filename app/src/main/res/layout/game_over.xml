@@ -16,7 +16,7 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="16dp"
             android:layout_marginRight="16dp"
-            android:text="New leg" />
+            android:text="@string/button_new_leg" />
 
         <Button
             android:id="@+id/complete_match"
@@ -24,6 +24,6 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="16dp"
             android:layout_marginRight="16dp"
-            android:text="Complete Match" />
+            android:text="@string/button_complete_match" />
     </LinearLayout>
 </RelativeLayout>
