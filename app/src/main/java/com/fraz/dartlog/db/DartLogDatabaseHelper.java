@@ -91,17 +91,15 @@ public class DartLogDatabaseHelper extends SQLiteOpenHelper {
         String[] projection = {
                 DartLogContract.PlayerEntry.COLUMN_NAME_PLAYER_NAME
         };
-        Cursor c = db.query(DartLogContract.PlayerEntry.TABLE_NAME, projection,
-                null, null, null, null, null);
 
         ArrayList<String> names = new ArrayList<>();
-        try {
+
+        try (Cursor c = db.query(DartLogContract.PlayerEntry.TABLE_NAME, projection,
+                null, null, null, null, null)) {
             while (c.moveToNext()) {
                 names.add(c.getString(c.getColumnIndex(
                         DartLogContract.PlayerEntry.COLUMN_NAME_PLAYER_NAME)));
             }
-        } finally {
-            c.close();
         }
         return names;
     }
@@ -135,8 +133,7 @@ public class DartLogDatabaseHelper extends SQLiteOpenHelper {
                            new X01PlayerData(playerEntry.getKey(), scoreManager));
         }
 
-        Cursor c = getX01MatchEntry(db, matchId);
-        try {
+        try (Cursor c = getX01MatchEntry(db, matchId)) {
             if (c.moveToFirst()) {
                 long dateInMillis = c.getLong(c.getColumnIndex(DartLogContract.MatchEntry.COLUMN_NAME_DATE));
                 String winnerName = c.getString(c.getColumnIndex("winner"));
@@ -144,10 +141,7 @@ public class DartLogDatabaseHelper extends SQLiteOpenHelper {
                 date.setTimeInMillis(dateInMillis);
                 return new GameData(new ArrayList<>(playerData.values()),
                         date, playerData.get(winnerName));
-            }
-            else throw new IllegalArgumentException("Match not found");
-        }finally {
-            c.close();
+            } else throw new IllegalArgumentException("Match not found");
         }
     }
 
@@ -184,10 +178,9 @@ public class DartLogDatabaseHelper extends SQLiteOpenHelper {
                 "              join player p " +
                 "                  on s.player_id = p._ID and s.match_id = ?;";
 
-        Cursor c = db.rawQuery(sql, new String[]{String.valueOf(matchId)});
-
         HashMap<String, LinkedList<Integer>> playerScores = new HashMap<>();
-        try {
+
+        try (Cursor c = db.rawQuery(sql, new String[]{String.valueOf(matchId)})) {
             while (c.moveToNext()) {
                 int score = c.getInt(c.getColumnIndex(
                         DartLogContract.ScoreEntry.COLUMN_NAME_SCORE));
@@ -195,15 +188,12 @@ public class DartLogDatabaseHelper extends SQLiteOpenHelper {
                         DartLogContract.PlayerEntry.COLUMN_NAME_PLAYER_NAME));
                 if (playerScores.containsKey(playerName))
                     playerScores.get(playerName).add(score);
-                else
-                {
+                else {
                     LinkedList<Integer> scores = new LinkedList<>();
                     scores.add(score);
                     playerScores.put(playerName, scores);
                 }
             }
-        } finally {
-            c.close();
         }
         return playerScores;
     }
@@ -215,20 +205,18 @@ public class DartLogDatabaseHelper extends SQLiteOpenHelper {
      * @return List of match ids.
      */
     private ArrayList<Long> getMatchIds(SQLiteDatabase db, long playerId) {
-        Cursor c = db.query(true, DartLogContract.ScoreEntry.TABLE_NAME,
+        ArrayList<Long> matchIds = new ArrayList<>();
+
+        try (Cursor c = db.query(true, DartLogContract.ScoreEntry.TABLE_NAME,
                 new String[]{DartLogContract.ScoreEntry.COLUMN_NAME_MATCH_ID},
                 String.format(Locale.getDefault(), "%s = '%d'",
                         DartLogContract.ScoreEntry.COLUMN_NAME_PLAYER_ID,
                         playerId),
-                null, null, null, null, null);
-        ArrayList<Long> matchIds = new ArrayList<>();
-        try {
+                null, null, null, null, null)) {
             while (c.moveToNext()) {
                 matchIds.add(c.getLong(c.getColumnIndex(
                         DartLogContract.ScoreEntry.COLUMN_NAME_MATCH_ID)));
             }
-        } finally {
-            c.close();
         }
         return matchIds;
     }
