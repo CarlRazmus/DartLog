@@ -28,11 +28,10 @@
         android:layout_marginTop="8dp"
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"
-        android:orientation="vertical"
-        >
+        android:orientation="vertical">
 
         <RelativeLayout
-            android:id="@+id/players_listview_layout_container"
+            android:id="@+id/participants_container"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1">
@@ -48,7 +47,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignBottom="@id/participants_recycler_view"
-                android:layout_alignRight="@id/participants_recycler_view"
                 android:layout_alignEnd="@+id/participants_recycler_view"
                 android:layout_margin="10dp"
                 android:clickable="true"
