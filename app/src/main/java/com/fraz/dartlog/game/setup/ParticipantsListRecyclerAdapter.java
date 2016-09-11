@@ -14,9 +14,7 @@ import com.fraz.dartlog.R;
 import java.util.ArrayList;
 import java.util.Collections;
 
-/**
- * Created by CarlR on 03/07/2016.
- */
+
 public class ParticipantsListRecyclerAdapter
         extends RecyclerView.Adapter<ParticipantsListRecyclerAdapter.ViewHolder> {
 

@@ -5,9 +5,7 @@ import android.support.v7.widget.helper.ItemTouchHelper;
 
 import java.util.ArrayList;
 
-/**
- * Created by CarlR on 04/07/2016.
- */
+
 public class ParticipantSwipeCallback extends ItemTouchHelper.SimpleCallback {
 
     private ParticipantsListRecyclerAdapter participantsListAdapter;
