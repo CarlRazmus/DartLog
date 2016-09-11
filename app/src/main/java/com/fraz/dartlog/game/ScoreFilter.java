@@ -3,7 +3,7 @@ package com.fraz.dartlog.game;
 import android.text.InputFilter;
 import android.text.Spanned;
 
-public class ScoreFilter implements InputFilter {
+class ScoreFilter implements InputFilter {
 
     @Override
     public CharSequence filter(CharSequence source, int start, int end,

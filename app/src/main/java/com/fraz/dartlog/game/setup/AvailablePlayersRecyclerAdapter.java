@@ -27,7 +27,7 @@ public class AvailablePlayersRecyclerAdapter extends RecyclerView.Adapter<Availa
         return availablePlayers.size();
     }
 
-    public void toggleSelected(Integer idx) {
+    private void toggleSelected(Integer idx) {
         if(selectedIndexes.contains(idx))
         {
             selectedIndexes.remove(idx);
@@ -38,7 +38,7 @@ public class AvailablePlayersRecyclerAdapter extends RecyclerView.Adapter<Availa
         }
     }
 
-    public boolean isMarked(Integer idx){
+    private boolean isMarked(Integer idx){
         return selectedIndexes.contains(idx);
     }
 
