@@ -1,10 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
-
-    <!-- Color when the row is selected -->
-    <item android:drawable="@color/light_red" android:state_selected="true">
-    </item>
-
-    <!-- Standard background color -->
     <item android:drawable="@color/background" />
 </selector>

@@ -21,7 +21,7 @@ public class ParticipantSwipeCallback extends ItemTouchHelper.SimpleCallback {
 
     @Override
     public boolean isLongPressDragEnabled() {
-        return true;
+        return false;
     }
 
     @Override
@@ -33,6 +33,7 @@ public class ParticipantSwipeCallback extends ItemTouchHelper.SimpleCallback {
     public int getMovementFlags(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder) {
         int dragFlags = ItemTouchHelper.UP | ItemTouchHelper.DOWN;
         int swipeFlags = ItemTouchHelper.START | ItemTouchHelper.END;
+
         return makeMovementFlags(dragFlags, swipeFlags);
     }
 
@@ -41,8 +42,8 @@ public class ParticipantSwipeCallback extends ItemTouchHelper.SimpleCallback {
                           RecyclerView.ViewHolder target) {
         final int fromPos = viewHolder.getAdapterPosition();
         final int toPos = target.getAdapterPosition();
-        participantsListAdapter.onItemMove(fromPos, toPos);
 
+        participantsListAdapter.onItemMove(fromPos, toPos);
         return true;
     }
 
