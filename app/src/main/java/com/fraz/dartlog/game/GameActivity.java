@@ -136,9 +136,13 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
      * Create and return a list of player data from a list of player names.
      */
     private ArrayList<X01PlayerData> createPlayerDataList() {
+        Intent intent = getIntent();
+        ArrayList<String> playerNames = intent.getStringArrayListExtra("playerNames");
+        int x = intent.getIntExtra("x", 3);
+
         ArrayList<X01PlayerData> playerDataList = new ArrayList<>();
-        for (String playerName : getIntent().getStringArrayListExtra("playerNames")) {
-            playerDataList.add(new X01PlayerData(playerName, new X01ScoreManager(3)));
+        for (String playerName : playerNames) {
+            playerDataList.add(new X01PlayerData(playerName, new X01ScoreManager(x)));
         }
         return playerDataList;
     }

@@ -30,8 +30,32 @@
         android:layout_marginRight="16dp"
         android:orientation="vertical">
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/starting_score">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/score_colon"
+                android:textStyle="bold"
+                android:textSize="18sp"/>
+
+            <Spinner
+                android:id="@+id/score_spinner"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                tools:listitem="@android:layout/simple_list_item_1"/>
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_margin="5dp"
+            android:background="@color/background_dark"/>
+
         <RelativeLayout
-            android:id="@+id/participants_container"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1">
@@ -46,9 +70,8 @@
                 android:id="@+id/open_player_selection_fab"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignBottom="@id/participants_recycler_view"
-                android:layout_alignEnd="@+id/participants_recycler_view"
-                android:layout_margin="10dp"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentBottom="true"
                 android:clickable="true"
                 app:backgroundTint="@color/main_red"
                 android:src="@drawable/ic_group_add_white_24dp"/>

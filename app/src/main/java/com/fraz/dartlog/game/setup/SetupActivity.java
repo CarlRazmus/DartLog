@@ -12,7 +12,10 @@ import android.support.v7.widget.Toolbar;
 import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.Gravity;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.Spinner;
+import android.widget.SpinnerAdapter;
 import android.widget.Toast;
 
 import com.fraz.dartlog.R;
@@ -45,8 +48,10 @@ public class SetupActivity extends AppCompatActivity
         InitializeToolbar();
         InitializeButton();
         InitializeFAB();
+        InitializeRules();
 
-        RecyclerView participantsRecyclerView = (RecyclerView) findViewById(R.id.participants_recycler_view);
+        RecyclerView participantsRecyclerView =
+                (RecyclerView) findViewById(R.id.participants_recycler_view);
         assert participantsRecyclerView != null;
         participantsRecyclerView.setHasFixedSize(true);
         participantsRecyclerView.setLayoutManager(participantsLayoutManager);
@@ -56,6 +61,15 @@ public class SetupActivity extends AppCompatActivity
         itemTouchHelper.attachToRecyclerView(participantsRecyclerView);
 
         initializeSelectPlayersDialog();
+    }
+
+    private void InitializeRules() {
+        Spinner scoreSpinner = (Spinner) findViewById(R.id.score_spinner);
+        assert scoreSpinner != null;
+        SpinnerAdapter spinnerAdapter =
+                new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item,
+                        getResources().getStringArray(R.array.x01_entries));
+        scoreSpinner.setAdapter(spinnerAdapter);
     }
 
     private void InitializeFAB() {
@@ -149,8 +163,14 @@ public class SetupActivity extends AppCompatActivity
         } else {
             Intent intent = new Intent(this, GameActivity.class);
             intent.putStringArrayListExtra("playerNames", participantNames);
+            intent.putExtra("x", getSelectedX());
             startActivity(intent);
         }
+    }
+
+    private int getSelectedX() {
+        Spinner scoreSpinner = (Spinner) findViewById(R.id.score_spinner);
+        return Character.getNumericValue(((String) scoreSpinner.getSelectedItem()).charAt(0));
     }
 
     @Override

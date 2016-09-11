@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="x01_entries">
+        <item>301</item>
+        <item>401</item>
+        <item>501</item>
+        <item>601</item>
+        <item>701</item>
+        <item>801</item>
+    </string-array>
+</resources>
