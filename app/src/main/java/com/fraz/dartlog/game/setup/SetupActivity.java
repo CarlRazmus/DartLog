@@ -20,7 +20,7 @@ import android.widget.Toast;
 
 import com.fraz.dartlog.R;
 import com.fraz.dartlog.db.DartLogDatabaseHelper;
-import com.fraz.dartlog.game.GameActivity;
+import com.fraz.dartlog.game.x01.X01GameActivity;
 
 import java.util.ArrayList;
 
@@ -161,7 +161,7 @@ public class SetupActivity extends AppCompatActivity
         if (participantNames.size() == 0) {
             showMustAddPlayersErrorToast();
         } else {
-            Intent intent = new Intent(this, GameActivity.class);
+            Intent intent = new Intent(this, X01GameActivity.class);
             intent.putStringArrayListExtra("playerNames", participantNames);
             intent.putExtra("x", getSelectedX());
             startActivity(intent);

@@ -9,7 +9,7 @@ import android.widget.TextView;
 
 import com.fraz.dartlog.R;
 
-class NumPadHandler implements View.OnClickListener {
+public class NumPadHandler implements View.OnClickListener {
 
     private final TextView scoreInput;
     private InputEventListener listener;

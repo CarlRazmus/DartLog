@@ -13,7 +13,7 @@ import com.fraz.dartlog.game.x01.X01PlayerData;
 
 import java.util.LinkedList;
 
-class GameListAdapter extends BaseExpandableListAdapter {
+public class GameListAdapter extends BaseExpandableListAdapter {
 
     private X01 game;
     private Activity context;

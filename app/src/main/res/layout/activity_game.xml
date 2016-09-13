@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".game.GameActivity"
+    tools:context=".game.x01.X01GameActivity"
     android:orientation="vertical"
     android:background="@color/background"
     android:keepScreenOn="true">
