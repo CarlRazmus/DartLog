@@ -23,9 +23,6 @@ import com.fraz.dartlog.db.DartLogDatabaseHelper;
 import com.fraz.dartlog.game.GameListAdapter;
 import com.fraz.dartlog.game.InputEventListener;
 import com.fraz.dartlog.game.NumPadHandler;
-import com.fraz.dartlog.game.x01.X01;
-import com.fraz.dartlog.game.x01.X01PlayerData;
-import com.fraz.dartlog.game.x01.X01ScoreManager;
 
 import java.util.ArrayList;
 
@@ -40,7 +37,7 @@ public class X01GameActivity extends AppCompatActivity implements View.OnClickLi
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_game);
+        setContentView(R.layout.activity_x01_game);
 
         setSupportActionBar((Toolbar) findViewById(R.id.game_toolbar));
         viewAnimator = (ViewAnimator) findViewById(R.id.game_input);

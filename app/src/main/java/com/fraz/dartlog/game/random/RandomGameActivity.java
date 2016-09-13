@@ -1,4 +1,4 @@
-package com.fraz.dartlog.game;
+package com.fraz.dartlog.game.random;
 
 import android.app.DialogFragment;
 import android.content.Intent;
@@ -20,13 +20,16 @@ import com.fraz.dartlog.MainActivity;
 import com.fraz.dartlog.OnBackPressedDialogFragment;
 import com.fraz.dartlog.R;
 import com.fraz.dartlog.db.DartLogDatabaseHelper;
+import com.fraz.dartlog.game.GameListAdapter;
+import com.fraz.dartlog.game.InputEventListener;
+import com.fraz.dartlog.game.NumPadHandler;
 import com.fraz.dartlog.game.x01.X01;
 import com.fraz.dartlog.game.x01.X01PlayerData;
 import com.fraz.dartlog.game.x01.X01ScoreManager;
 
 import java.util.ArrayList;
 
-public class GameActivity extends AppCompatActivity implements View.OnClickListener,
+public class RandomGameActivity extends AppCompatActivity implements View.OnClickListener,
         InputEventListener, OnBackPressedDialogFragment.OnBackPressedDialogListener {
 
     private X01 game;
@@ -37,7 +40,7 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_game);
+        setContentView(R.layout.activity_x01_game);
 
         setSupportActionBar((Toolbar) findViewById(R.id.game_toolbar));
         viewAnimator = (ViewAnimator) findViewById(R.id.game_input);

@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".game.random.RandomGameActivity"
+    android:orientation="vertical"
+    android:background="@color/background"
+    android:keepScreenOn="true">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/game_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="?attr/colorPrimary"
+        android:elevation="4dp"/>
+
+    <ExpandableListView
+        android:divider="@drawable/list_divider"
+        android:dividerHeight="1dp"
+        android:id="@+id/play_players_listView"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:groupIndicator="@null"
+        tools:listitem="@layout/game_player_list_item"/>
+
+    <View
+        android:id="@+id/num_pad_divider"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/main_red"/>
+
+    <ViewAnimator
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/game_input">
+
+        <include layout="@layout/game_num_pad"/>
+        <include layout="@layout/game_over"/>
+    </ViewAnimator>
+
+</LinearLayout>
