@@ -30,24 +30,15 @@
         android:layout_marginRight="16dp"
         android:orientation="vertical">
 
-        <LinearLayout
+        <ViewAnimator
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/starting_score">
+            android:id="@+id/game_setup">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/score_colon"
-                android:textStyle="bold"
-                android:textSize="18sp"/>
+            <include layout="@layout/x01_setup" />
+            <include layout="@layout/random_setup" />
+        </ViewAnimator>
 
-            <Spinner
-                android:id="@+id/score_spinner"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                tools:listitem="@android:layout/simple_list_item_1"/>
-        </LinearLayout>
 
         <View
             android:layout_width="match_parent"

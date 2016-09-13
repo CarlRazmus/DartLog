@@ -17,6 +17,7 @@ import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.SpinnerAdapter;
 import android.widget.Toast;
+import android.widget.ViewAnimator;
 
 import com.fraz.dartlog.R;
 import com.fraz.dartlog.db.DartLogDatabaseHelper;
@@ -33,6 +34,7 @@ public class SetupActivity extends AppCompatActivity
     private DartLogDatabaseHelper dbHelper;
     private Dialog selectPlayerDialog;
     private ItemTouchHelper itemTouchHelper;
+    private ViewAnimator viewAnimator;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,6 +51,7 @@ public class SetupActivity extends AppCompatActivity
         InitializeButton();
         InitializeFAB();
         InitializeRules();
+        initializeSettingsView();
 
         RecyclerView participantsRecyclerView =
                 (RecyclerView) findViewById(R.id.participants_recycler_view);
@@ -61,6 +64,21 @@ public class SetupActivity extends AppCompatActivity
         itemTouchHelper.attachToRecyclerView(participantsRecyclerView);
 
         initializeSelectPlayersDialog();
+    }
+
+    private void initializeSettingsView(){
+        String gameType = getIntent().getStringExtra("gameType");
+        viewAnimator = (ViewAnimator) findViewById(R.id.game_setup);
+
+        switch (gameType) {
+            case ("x01"):
+                viewAnimator.setDisplayedChild(0);
+                break;
+            case ("random"):
+                viewAnimator.setDisplayedChild(1);
+                break;
+        }
+
     }
 
     private void InitializeRules() {

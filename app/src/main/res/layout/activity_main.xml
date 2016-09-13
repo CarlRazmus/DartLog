@@ -28,11 +28,19 @@
         android:orientation="vertical">
 
         <Button
-            android:id="@+id/play_button"
+            android:id="@+id/play_x01_button"
             android:layout_width="300dp"
             android:layout_height="wrap_content"
             android:background="@drawable/button_default"
-            android:text="@string/button_play_dart"/>
+            android:text="@string/button_play_x01"/>
+
+        <Button
+            android:id="@+id/play_random_button"
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:background="@drawable/button_default"
+            android:layout_marginTop="10dp"
+            android:text="@string/button_play_random"/>
 
         <Button
             android:id="@+id/profiles_button"
