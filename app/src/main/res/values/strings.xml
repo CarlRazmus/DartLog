@@ -26,7 +26,7 @@
     <string name="button_show_statistics_view">SHOW STATISTICS</string>
     <string name="dart">DART</string>
     <string name="log">LOG</string>
-    <string name="average_score">Average score: </string>
+    <string name="average_score">Average: </string>
     <string name="max_score">Max score:</string>
     <string name="checkout">Checkout:</string>
     <string name="games_won">Games won</string>
