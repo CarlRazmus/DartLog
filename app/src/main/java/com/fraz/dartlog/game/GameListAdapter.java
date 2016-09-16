@@ -17,8 +17,6 @@ public class GameListAdapter extends BaseExpandableListAdapter {
 
     private X01 game;
     private Activity context;
-    private final int colors[] = {R.color.main_red, R.color.main_blue,
-                                  R.color.main_green, R.color.main_yellow};
 
     public GameListAdapter(Activity context, X01 game) {
         this.context = context;
@@ -76,8 +74,7 @@ public class GameListAdapter extends BaseExpandableListAdapter {
         TextView scoreView = (TextView) listItem.findViewById(R.id.game_player_list_item_score);
         scoreView.setText(String.valueOf(player.getScore()));
 
-        setLineColor(position, listItem);
-        setBackgroundColor(player, position, listItem);
+        setBackgroundColor(player, position, listItem.findViewById(R.id.game_player_list_item));
         return listItem;
     }
 
@@ -107,6 +104,8 @@ public class GameListAdapter extends BaseExpandableListAdapter {
         //Set checkout text
         TextView checkout = (TextView) listItem.findViewById(R.id.checkout);
         checkout.setText(game.getCheckoutText(player));
+
+        setBackgroundColor(player, position, listItem.findViewById(R.id.game_player_child_list_item));
         return listItem;
     }
 
@@ -125,16 +124,12 @@ public class GameListAdapter extends BaseExpandableListAdapter {
 
     private void setBackgroundColor(X01PlayerData player, int position, View listItem) {
         if (player.getScore() == 0) {
-            listItem.setBackgroundResource(R.drawable.game_player_winner);
+            listItem.setBackgroundResource(R.color.game_player_winner);
         } else if (game.getCurrentPlayerIdx() == position) {
-            listItem.setBackgroundResource(R.drawable.game_player_active);
+            listItem.setBackgroundResource(R.color.light_grey);
         } else {
-            listItem.setBackgroundResource(R.drawable.game_player_normal);
+            listItem.setBackgroundResource(R.color.main_white);
         }
     }
 
-    private void setLineColor(int position, View listItem) {
-        View lineView = listItem.findViewById(R.id.game_player_list_line);
-        lineView.setBackgroundResource(colors[position % colors.length]);
-    }
 }

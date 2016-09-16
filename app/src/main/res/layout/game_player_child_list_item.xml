@@ -2,12 +2,11 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/light_grey"
+    android:id="@+id/game_player_child_list_item"
+    android:background="@color/main_white"
     android:orientation="vertical"
-    android:paddingEnd="24dp"
-    android:paddingLeft="24dp"
-    android:paddingRight="24dp"
-    android:paddingStart="24dp">
+    android:layout_centerHorizontal="true"
+    android:gravity="center">
 
     <LinearLayout
         android:layout_width="wrap_content"
@@ -20,18 +19,13 @@
             android:id="@+id/total_score_history"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="@color/main_grey"
+            android:textColor="@color/background_dark"
             android:textSize="15sp"
             android:typeface="monospace" />
     </LinearLayout>
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="@color/main_red" />
-
     <RelativeLayout
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:paddingBottom="5dp"
         android:paddingTop="5dp">
@@ -41,7 +35,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/average_score"
-            android:textColor="@color/main_grey"
+            android:layout_marginEnd="5dp"
+            android:textColor="@color/background_dark"
             android:textSize="15sp"
             android:textStyle="bold" />
 
@@ -50,7 +45,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_toEndOf="@id/average_score_label"
-            android:textColor="@color/main_grey"
+            android:textColor="@color/background_dark"
             android:textSize="15sp"
             android:typeface="monospace" />
 
@@ -61,7 +56,8 @@
             android:layout_marginStart="40dp"
             android:layout_toEndOf="@id/average_score"
             android:text="@string/max_score"
-            android:textColor="@color/main_grey"
+            android:layout_marginEnd="5dp"
+            android:textColor="@color/background_dark"
             android:textSize="15sp"
             android:textStyle="bold" />
 
@@ -71,7 +67,7 @@
             android:layout_height="wrap_content"
             android:layout_alignTop="@id/max_score_label"
             android:layout_toEndOf="@id/max_score_label"
-            android:textColor="@color/main_grey"
+            android:textColor="@color/background_dark"
             android:textSize="15sp"
             android:typeface="monospace" />
 
@@ -81,8 +77,9 @@
             android:layout_height="wrap_content"
             android:layout_below="@id/max_score_label"
             android:layout_marginTop="5dp"
+            android:layout_marginEnd="5dp"
             android:text="@string/checkout"
-            android:textColor="@color/main_grey"
+            android:textColor="@color/background_dark"
             android:textSize="15sp"
             android:textStyle="bold" />
 
@@ -92,7 +89,7 @@
             android:layout_height="wrap_content"
             android:layout_alignTop="@id/checkout_label"
             android:layout_toEndOf="@id/checkout_label"
-            android:textColor="@color/main_grey"
+            android:textColor="@color/background_dark"
             android:textSize="15sp"
             android:typeface="monospace" />
     </RelativeLayout>

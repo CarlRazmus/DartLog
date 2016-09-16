@@ -5,20 +5,19 @@
     android:layout_height="match_parent"
     tools:context=".game.x01.X01GameActivity"
     android:orientation="vertical"
-    android:background="@color/background"
+    android:background="@color/background_dark"
     android:keepScreenOn="true">
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/game_toolbar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
-        android:background="?attr/colorPrimary"
+        android:theme="@style/AppBarOverlay"
         android:elevation="4dp"/>
 
     <ExpandableListView
-        android:divider="@drawable/list_divider"
-        android:dividerHeight="1dp"
         android:id="@+id/play_players_listView"
+        android:layout_margin="8dp"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"

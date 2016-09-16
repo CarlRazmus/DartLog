@@ -2,18 +2,13 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@drawable/game_player_normal">
-
-    <View
-        android:layout_width="8dp"
-        android:layout_height="match_parent"
-        android:id="@+id/game_player_list_line"
-        android:background="@color/main_red">
-    </View>
+    android:id="@+id/game_player_list_item"
+    android:background="@color/main_white">
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="@drawable/list_item"
         android:paddingTop="8dp"
         android:paddingBottom="8dp"
         android:paddingLeft="8dp"
@@ -25,7 +20,7 @@
             android:layout_height="wrap_content"
             android:text="@string/player_1"
             android:textSize="20sp"
-            android:textColor="@color/main_white"/>
+            android:textColor="@color/background_dark"/>
 
         <TextView
             android:id="@+id/game_player_list_item_score"
@@ -34,6 +29,6 @@
             android:layout_alignParentEnd="true"
             android:text="@string/_301"
             android:textSize="20sp"
-            android:textColor="@color/main_white"/>
+            android:textColor="@color/background_dark"/>
     </RelativeLayout>
 </LinearLayout>
