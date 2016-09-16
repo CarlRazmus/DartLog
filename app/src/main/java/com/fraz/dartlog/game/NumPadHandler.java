@@ -1,6 +1,8 @@
 package com.fraz.dartlog.game;
 
 import android.text.InputFilter;
+import android.view.HapticFeedbackConstants;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -9,7 +11,7 @@ import android.widget.TextView;
 
 import com.fraz.dartlog.R;
 
-public class NumPadHandler implements View.OnClickListener {
+public class NumPadHandler implements View.OnTouchListener {
 
     private final TextView scoreInput;
     private InputEventListener listener;
@@ -17,32 +19,36 @@ public class NumPadHandler implements View.OnClickListener {
     public NumPadHandler(ViewGroup numpadView) {
         this.scoreInput = (TextView) numpadView.findViewById(R.id.score_input);
         ViewGroup numpad = (ViewGroup) numpadView.findViewById(R.id.num_pad);
-        setClickListenerInView(numpad);
+        setOnTouchListenerInView(numpad);
         initInputField();
     }
 
     @Override
-    public void onClick(View v) {
-        switch(v.getId()) {
-            case R.id.zero:
-            case R.id.one:
-            case R.id.two:
-            case R.id.three:
-            case R.id.four:
-            case R.id.five:
-            case R.id.six:
-            case R.id.seven:
-            case R.id.eight:
-            case R.id.nine:
-                addNumber(((Button) v).getText());
-                break;
-            case R.id.erase:
-                eraseNumber();
-                break;
-            case R.id.enter:
-                enter();
-                break;
+    public boolean onTouch(View view, MotionEvent motionEvent) {
+        if(motionEvent.getAction() == MotionEvent.ACTION_DOWN) {
+            switch (view.getId()) {
+                case R.id.zero:
+                case R.id.one:
+                case R.id.two:
+                case R.id.three:
+                case R.id.four:
+                case R.id.five:
+                case R.id.six:
+                case R.id.seven:
+                case R.id.eight:
+                case R.id.nine:
+                    addNumber(((Button) view).getText());
+                    break;
+                case R.id.erase:
+                    eraseNumber();
+                    break;
+                case R.id.enter:
+                    enter();
+                    break;
+            }
+            view.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
         }
+        return false;
     }
 
     public void setListener(InputEventListener listener) {
@@ -77,13 +83,13 @@ public class NumPadHandler implements View.OnClickListener {
         }
     }
 
-    private void setClickListenerInView(ViewGroup viewGroup) {
+    private void setOnTouchListenerInView(ViewGroup viewGroup) {
         for (int i=0; i < viewGroup.getChildCount(); i++) {
             View v = viewGroup.getChildAt(i);
             if (v instanceof Button || v instanceof ImageButton) {
-                v.setOnClickListener(this);
+                v.setOnTouchListener(this);
             } else if (v instanceof ViewGroup) {
-                setClickListenerInView((ViewGroup) v);
+                setOnTouchListenerInView((ViewGroup) v);
             }
         }
     }
