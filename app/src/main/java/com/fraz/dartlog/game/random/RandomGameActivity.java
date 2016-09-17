@@ -40,7 +40,7 @@ public class RandomGameActivity extends AppCompatActivity implements View.OnClic
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_x01_game);
+        setContentView(R.layout.activity_random_game);
 
         setSupportActionBar((Toolbar) findViewById(R.id.game_toolbar));
         viewAnimator = (ViewAnimator) findViewById(R.id.game_input);

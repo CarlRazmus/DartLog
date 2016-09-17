@@ -42,6 +42,8 @@
     <string name="nine">9</string>
     <string name="button_erase_number">Button to erase the last entered number</string>
     <string name="player_selection">Player Selection</string>
-    <string name="score_colon">Score:</string>
+    <string name="score_colon">Score: </string>
+    <string name="number_of_fields_colon">Nr of fields: </string>
     <string name="x01">X01</string>
+    <string name="field_to_hit">Field to hit:</string>
 </resources>

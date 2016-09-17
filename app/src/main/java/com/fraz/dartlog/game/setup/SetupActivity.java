@@ -3,7 +3,9 @@ package com.fraz.dartlog.game.setup;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -21,9 +23,11 @@ import android.widget.ViewAnimator;
 
 import com.fraz.dartlog.R;
 import com.fraz.dartlog.db.DartLogDatabaseHelper;
+import com.fraz.dartlog.game.random.RandomGameActivity;
 import com.fraz.dartlog.game.x01.X01GameActivity;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 public class SetupActivity extends AppCompatActivity
         implements ParticipantsListRecyclerAdapter.OnDragStartListener, View.OnClickListener  {
@@ -35,6 +39,7 @@ public class SetupActivity extends AppCompatActivity
     private Dialog selectPlayerDialog;
     private ItemTouchHelper itemTouchHelper;
     private ViewAnimator viewAnimator;
+    private String gameType;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,6 +51,8 @@ public class SetupActivity extends AppCompatActivity
         dbHelper = new DartLogDatabaseHelper(this);
         participantNames = new ArrayList<>();
         participantsRecyclerAdapter = new ParticipantsListRecyclerAdapter(this, participantNames);
+
+        gameType = getIntent().getStringExtra("gameType");
 
         InitializeToolbar();
         InitializeButton();
@@ -67,7 +74,6 @@ public class SetupActivity extends AppCompatActivity
     }
 
     private void initializeSettingsView(){
-        String gameType = getIntent().getStringExtra("gameType");
         viewAnimator = (ViewAnimator) findViewById(R.id.game_setup);
 
         switch (gameType) {
@@ -82,12 +88,25 @@ public class SetupActivity extends AppCompatActivity
     }
 
     private void InitializeRules() {
-        Spinner scoreSpinner = (Spinner) findViewById(R.id.score_spinner);
-        assert scoreSpinner != null;
-        SpinnerAdapter spinnerAdapter =
-                new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item,
-                        getResources().getStringArray(R.array.x01_entries));
-        scoreSpinner.setAdapter(spinnerAdapter);
+        Spinner spinner;
+        int spinnerContentId = 0;
+
+        switch (gameType){
+            default:
+            case("x01"):
+                spinner = (Spinner) findViewById(R.id.score_spinner);
+                spinnerContentId = R.array.x01_entries;
+                break;
+            case("random"):
+                spinner = (Spinner) findViewById(R.id.nr_of_fields_spinner);
+                spinnerContentId = R.array.random_entries;
+                break;
+        }
+        assert spinner != null;
+
+        SpinnerAdapter spinnerAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item,
+                        getResources().getStringArray(spinnerContentId));
+        spinner.setAdapter(spinnerAdapter);
     }
 
     private void InitializeFAB() {
@@ -176,19 +195,62 @@ public class SetupActivity extends AppCompatActivity
     }
 
     private void startPlayActivity() {
-        if (participantNames.size() == 0) {
-            showMustAddPlayersErrorToast();
+        if (participantNames.size() > 0) {
+            startActivity(createGameIntent());
         } else {
-            Intent intent = new Intent(this, X01GameActivity.class);
-            intent.putStringArrayListExtra("playerNames", participantNames);
-            intent.putExtra("x", getSelectedX());
-            startActivity(intent);
+            showMustAddPlayersErrorToast();
+        }
+    }
+
+    @NonNull
+    private Intent createGameIntent() {
+        Intent gameIntent;
+        switch (gameType) {
+            case "random":
+                gameIntent = createRandomGameIntent();
+                break;
+            default:
+            case "x01":
+                gameIntent = createX01GameIntent();
+                break;
+        }
+        gameIntent.putStringArrayListExtra("playerNames", participantNames);
+        return gameIntent;
+    }
+
+    private Intent createRandomGameIntent() {
+        Intent intent = new Intent(this, RandomGameActivity.class);
+        intent.putExtra("nrOfFields", getSelectedNrOfFields());
+        return intent;
+    }
+
+    private Intent createX01GameIntent() {
+        Intent intent = new Intent(this, X01GameActivity.class);
+        intent.putExtra("x", getSelectedNrOfFields());
+        return intent;
+    }
+
+    private void putGameExtras(Intent intent) {
+        switch(gameType) {
+            case "x01":
+                intent.putExtra("x", getSelectedX());
+                break;
+            case "random":
+                break;
         }
     }
 
     private int getSelectedX() {
-        Spinner scoreSpinner = (Spinner) findViewById(R.id.score_spinner);
-        return Character.getNumericValue(((String) scoreSpinner.getSelectedItem()).charAt(0));
+        return getSpinnerValue(R.id.score_spinner);
+    }
+
+    private int getSelectedNrOfFields() {
+        return getSpinnerValue(R.id.nr_of_fields_spinner);
+    }
+
+    private int getSpinnerValue(int spinnerId) {
+        Spinner spinner = (Spinner) findViewById(spinnerId);
+        return Character.getNumericValue(((String) spinner.getSelectedItem()).charAt(0));
     }
 
     @Override
