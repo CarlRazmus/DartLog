@@ -73,7 +73,7 @@
                 android:id="@+id/checkout_label"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/checkout"
+                tools:text="@string/double_out"
                 android:layout_marginEnd="5dp"
                 android:textColor="@color/background_dark"
                 android:textSize="15sp"

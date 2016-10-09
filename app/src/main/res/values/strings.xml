@@ -29,7 +29,8 @@
     <string name="log">LOG</string>
     <string name="average_score">Average: </string>
     <string name="max_score">Max score:</string>
-    <string name="checkout">Checkout:</string>
+    <string name="double_out">Double Out:</string>
+    <string name="single_out">Single Out:</string>
     <string name="games_won">Games won</string>
     <string name="recent_games">RECENT GAMES</string>
     <string name="two">2</string>
