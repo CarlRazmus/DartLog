@@ -15,7 +15,6 @@ import java.util.LinkedList;
 public class GameListAdapter extends RecyclerView.Adapter<GameListAdapter.ViewHolder> {
 
     private X01 game;
-    private RecyclerView mRecyclerView;
 
     public GameListAdapter(X01 game) {
         this.game = game;
@@ -45,12 +44,6 @@ public class GameListAdapter extends RecyclerView.Adapter<GameListAdapter.ViewHo
     }
 
     @Override
-    public void onAttachedToRecyclerView(RecyclerView recyclerView) {
-        super.onAttachedToRecyclerView(recyclerView);
-        mRecyclerView = recyclerView;
-    }
-
-    @Override
     public int getItemCount() {
         return game.getNumberOfPlayers();
     }
@@ -70,16 +63,20 @@ public class GameListAdapter extends RecyclerView.Adapter<GameListAdapter.ViewHo
         } else if (game.getCurrentPlayerIdx() == position) {
             holder.itemView.setElevation(8);
             holder.itemView.setBackgroundResource(R.color.main_white);
+            holder.itemView.setAlpha(1f);
+            holder.playerName.setAlpha(1f);
             holder.background_group.setBackgroundResource(R.drawable.main_grey_border_list_item);
 
         } else {
             holder.itemView.setElevation(2);
             holder.itemView.setBackgroundResource(R.color.main_white);
+            holder.itemView.setAlpha(.95f);
+            holder.playerName.setAlpha(.75f);
             holder.background_group.setBackgroundResource(R.drawable.light_grey_border_list_item);
         }
     }
 
-    public void updateCheckoutView(ViewHolder holder) {
+    private void updateCheckoutView(ViewHolder holder) {
         if (holder.getAdapterPosition() == game.getCurrentPlayerIdx()) {
             holder.checkout.setText(game.getCheckoutText(game.getPlayer(holder.getAdapterPosition())));
             holder.checkout_view.setVisibility(View.VISIBLE);
@@ -96,7 +93,7 @@ public class GameListAdapter extends RecyclerView.Adapter<GameListAdapter.ViewHo
         ViewGroup checkout_view;
         ViewGroup background_group;
 
-        public ViewHolder(View itemView) {
+        ViewHolder(View itemView) {
             super(itemView);
             playerName = (TextView) itemView.findViewById(R.id.game_player_list_item_name);
             score = (TextView) itemView.findViewById(R.id.game_player_list_item_score);
