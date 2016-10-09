@@ -4,14 +4,18 @@ import android.app.DialogFragment;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SimpleItemAnimator;
 import android.support.v7.widget.Toolbar;
+import android.transition.TransitionManager;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.TranslateAnimation;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.ViewAnimator;
@@ -33,6 +37,7 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
     private GameListAdapter gameListAdapter;
     private ViewAnimator viewAnimator;
     private DartLogDatabaseHelper dbHelper;
+    private RecyclerView mRecyclerView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,7 +49,8 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
         dbHelper = new DartLogDatabaseHelper(this);
 
         game = GetX01GameInstance(savedInstanceState);
-        gameListAdapter = new GameListAdapter(this, game);
+        gameListAdapter = new GameListAdapter(game);
+        gameListAdapter.setHasStableIds(true);
 
         initListView();
         initNumPadView();
@@ -114,9 +120,8 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
         updateView();
     }
 
-
     private void updateView() {
-        gameListAdapter.notifyDataSetChanged();
+        gameListAdapter.notifyItemRangeChanged(0, game.getNumberOfPlayers());
         scrollToPlayerInList();
         if (game.isGameOver()) {
             setGameDoneView();
@@ -126,9 +131,9 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void initListView() {
-        RecyclerView myListView = (RecyclerView) findViewById(R.id.play_players_listView);
-        assert myListView != null;
-        myListView.setAdapter(gameListAdapter);
+        mRecyclerView = (RecyclerView) findViewById(R.id.play_players_listView);
+        assert mRecyclerView != null;
+        mRecyclerView.setAdapter(gameListAdapter);
     }
 
     /**

@@ -1,11 +1,11 @@
 package com.fraz.dartlog.game;
 
-import android.app.Activity;
+import android.support.annotation.NonNull;
+import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.BaseExpandableListAdapter;
 import android.widget.TextView;
 
 import com.fraz.dartlog.R;
@@ -17,8 +17,9 @@ import java.util.LinkedList;
 public class GameListAdapter extends RecyclerView.Adapter<GameListAdapter.ViewHolder> {
 
     private X01 game;
+    private RecyclerView mRecyclerView;
 
-    public GameListAdapter(Activity context, X01 game) {
+    public GameListAdapter(X01 game) {
         this.game = game;
     }
 
@@ -31,19 +32,24 @@ public class GameListAdapter extends RecyclerView.Adapter<GameListAdapter.ViewHo
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
-        X01PlayerData player = (X01PlayerData) game.getPlayer(position);
+        final X01PlayerData player = (X01PlayerData) game.getPlayer(position);
 
         holder.playerName.setText(player.getPlayerName());
         holder.score.setText(String.valueOf(player.getScore()));
 
-        setBackgroundColor(player, position, holder.listItem);
+        setBackgroundColor(player, position, holder.itemView);
 
         // Set total score history text
         LinkedList<Integer> scores = new LinkedList<>(player.getTotalScoreHistory());
         holder.totalScoreHistory.setText(createScoresString(scores));
 
-        //Set checkout text
-        holder.checkout.setText(game.getCheckoutText(player));
+        updateCheckoutView(holder);
+    }
+
+    @Override
+    public void onAttachedToRecyclerView(RecyclerView recyclerView) {
+        super.onAttachedToRecyclerView(recyclerView);
+        mRecyclerView = recyclerView;
     }
 
     @Override
@@ -63,27 +69,35 @@ public class GameListAdapter extends RecyclerView.Adapter<GameListAdapter.ViewHo
         if (player.getScore() == 0) {
             listItem.setBackgroundResource(R.color.game_player_winner);
         } else if (game.getCurrentPlayerIdx() == position) {
-            listItem.setBackgroundResource(R.color.light_grey);
+            listItem.setBackgroundResource(R.color.main_white);
         } else {
             listItem.setBackgroundResource(R.color.main_white);
         }
     }
 
+    public void updateCheckoutView(ViewHolder holder) {
+        if (holder.getAdapterPosition() == game.getCurrentPlayerIdx()) {
+            holder.checkout.setText(game.getCheckoutText(game.getPlayer(holder.getAdapterPosition())));
+            holder.checkout_view.setVisibility(View.VISIBLE);
+        } else {
+            holder.checkout_view.setVisibility(View.GONE);
+        }
+    }
 
     class ViewHolder extends RecyclerView.ViewHolder {
-        View listItem;
         TextView playerName;
         TextView score;
         TextView totalScoreHistory;
         TextView checkout;
+        ViewGroup checkout_view;
 
         public ViewHolder(View itemView) {
             super(itemView);
-            listItem = itemView;
             playerName = (TextView) itemView.findViewById(R.id.game_player_list_item_name);
-            score = (TextView) listItem.findViewById(R.id.game_player_list_item_score);
-            totalScoreHistory = (TextView) listItem.findViewById(R.id.total_score_history);
-            checkout = (TextView) listItem.findViewById(R.id.checkout);
+            score = (TextView) itemView.findViewById(R.id.game_player_list_item_score);
+            totalScoreHistory = (TextView) itemView.findViewById(R.id.total_score_history);
+            checkout = (TextView) itemView.findViewById(R.id.checkout);
+            checkout_view = (ViewGroup) itemView.findViewById(R.id.checkout_view);
         }
     }
 }

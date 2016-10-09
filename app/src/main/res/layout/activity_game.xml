@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     tools:context=".game.x01.X01GameActivity"
     android:orientation="vertical"
-    android:background="@color/background_dark"
+    android:background="@color/background"
     android:keepScreenOn="true">
 
     <android.support.v7.widget.Toolbar

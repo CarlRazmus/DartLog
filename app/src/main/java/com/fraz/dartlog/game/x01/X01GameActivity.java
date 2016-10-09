@@ -43,7 +43,7 @@ public class X01GameActivity extends AppCompatActivity implements View.OnClickLi
         dbHelper = new DartLogDatabaseHelper(this);
 
         game = GetX01GameInstance(savedInstanceState);
-        gameListAdapter = new GameListAdapter(this, game);
+        gameListAdapter = new GameListAdapter(game);
 
         initListView();
         initNumPadView();

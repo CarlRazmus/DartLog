@@ -18,6 +18,10 @@ public class CheckoutChart implements Serializable{
         initCheckoutMap(context, checkoutChartRawResourceId);
     }
 
+    public boolean checkoutAvailable(int score) {
+        return checkouts.containsKey(score);
+    }
+
     public String getCheckoutText(int score) {
         String checkout = checkouts.get(score);
         if (checkout == null) {
