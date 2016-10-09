@@ -2,10 +2,12 @@
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.NoActionBar">
         <!-- Customize your theme here. -->
+        <item name="android:colorPrimary">@color/primary_color</item>
+        <item name="android:colorAccent">@color/accent_color</item>
     </style>
 
     <style name="AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar">
-        <item name="android:background">@color/main_red</item>
+        <item name="android:background">@color/primary_color</item>
     </style>
 
     <style name="PopupOverlay" parent="ThemeOverlay.AppCompat" />

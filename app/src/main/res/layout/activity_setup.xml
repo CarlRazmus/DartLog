@@ -73,7 +73,7 @@
                 android:layout_alignParentEnd="true"
                 android:layout_alignParentBottom="true"
                 android:clickable="true"
-                app:backgroundTint="@color/main_red"
+                app:backgroundTint="@color/primary_color"
                 android:src="@drawable/ic_group_add_white_24dp"/>
         </RelativeLayout>
 

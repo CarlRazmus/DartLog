@@ -34,6 +34,10 @@ public class X01 extends Game implements Serializable{
         return checkoutChart.getCheckoutText(player.getScore());
     }
 
+    public boolean canCheckout(PlayerData player) {
+        return checkoutChart.checkoutAvailable(player.getScore());
+    }
+
     private void updateGameState() {
         PlayerData currentPlayer = getPlayer(currentPlayerIdx);
         if (currentPlayer.getScore() == 0) {

@@ -13,7 +13,7 @@
         android:textSize="30sp"
         android:textColor="@color/main_white"
         android:gravity="center"
-        android:background="@color/main_red"/>
+        android:background="@color/primary_color"/>
 
     <Button
         android:id="@+id/done_button"
