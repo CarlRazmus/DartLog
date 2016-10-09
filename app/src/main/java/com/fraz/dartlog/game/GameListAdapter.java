@@ -1,7 +1,5 @@
 package com.fraz.dartlog.game;
 
-import android.support.annotation.NonNull;
-import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -37,7 +35,7 @@ public class GameListAdapter extends RecyclerView.Adapter<GameListAdapter.ViewHo
         holder.playerName.setText(player.getPlayerName());
         holder.score.setText(String.valueOf(player.getScore()));
 
-        setBackgroundColor(player, position, holder.itemView);
+        setBackgroundColor(player, position, holder);
 
         // Set total score history text
         LinkedList<Integer> scores = new LinkedList<>(player.getTotalScoreHistory());
@@ -65,13 +63,19 @@ public class GameListAdapter extends RecyclerView.Adapter<GameListAdapter.ViewHo
         return scoreHistoryText.trim();
     }
 
-    private void setBackgroundColor(X01PlayerData player, int position, View listItem) {
+    private void setBackgroundColor(X01PlayerData player, int position,
+                                    ViewHolder holder) {
         if (player.getScore() == 0) {
-            listItem.setBackgroundResource(R.color.game_player_winner);
+            holder.itemView.setBackgroundResource(R.color.game_player_winner);
         } else if (game.getCurrentPlayerIdx() == position) {
-            listItem.setBackgroundResource(R.color.main_white);
+            holder.itemView.setElevation(8);
+            holder.itemView.setBackgroundResource(R.color.main_white);
+            holder.background_group.setBackgroundResource(R.drawable.main_grey_border_list_item);
+
         } else {
-            listItem.setBackgroundResource(R.color.main_white);
+            holder.itemView.setElevation(2);
+            holder.itemView.setBackgroundResource(R.color.main_white);
+            holder.background_group.setBackgroundResource(R.drawable.light_grey_border_list_item);
         }
     }
 
@@ -90,6 +94,7 @@ public class GameListAdapter extends RecyclerView.Adapter<GameListAdapter.ViewHo
         TextView totalScoreHistory;
         TextView checkout;
         ViewGroup checkout_view;
+        ViewGroup background_group;
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -98,6 +103,7 @@ public class GameListAdapter extends RecyclerView.Adapter<GameListAdapter.ViewHo
             totalScoreHistory = (TextView) itemView.findViewById(R.id.total_score_history);
             checkout = (TextView) itemView.findViewById(R.id.checkout);
             checkout_view = (ViewGroup) itemView.findViewById(R.id.checkout_view);
+            background_group = (ViewGroup) itemView.findViewById(R.id.game_player_list_item_background);
         }
     }
 }
