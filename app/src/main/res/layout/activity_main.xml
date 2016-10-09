@@ -71,7 +71,7 @@
             android:layout_height="wrap_content"
             android:text="@string/log"
             android:textSize="30pt"
-            android:textColor="@color/main_red"/>
+            android:textColor="@color/primary_color"/>
     </LinearLayout>
 
 </RelativeLayout>

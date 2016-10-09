@@ -17,6 +17,7 @@
     <string name="player_1">Player 1</string>
     <string name="_301">301</string>
     <string name="button_done">Done</string>
+    <string name="button_submit">Submit</string>
     <string name="contentDescription_handle_to_trigger_drag_event">Handle to trigger drag event</string>
     <string name="contentDescription_main_activity_background_image">Main activity background image</string>
     <string name="button_zero">0</string>
@@ -43,4 +44,5 @@
     <string name="player_selection">Player Selection</string>
     <string name="score_colon">Score:</string>
     <string name="x01">X01</string>
+    <string name="result_win">Winner!</string>
 </resources>

@@ -34,13 +34,13 @@ public class GameListAdapter extends RecyclerView.Adapter<GameListAdapter.ViewHo
         holder.playerName.setText(player.getPlayerName());
         holder.score.setText(String.valueOf(player.getScore()));
 
-        setBackgroundColor(player, position, holder);
+        setBackgroundColor(player, holder);
 
         // Set total score history text
         LinkedList<Integer> scores = new LinkedList<>(player.getTotalScoreHistory());
         holder.totalScoreHistory.setText(createScoresString(scores));
 
-        updateCheckoutView(holder);
+        updateCheckoutView(player, holder);
     }
 
     @Override
@@ -56,29 +56,35 @@ public class GameListAdapter extends RecyclerView.Adapter<GameListAdapter.ViewHo
         return scoreHistoryText.trim();
     }
 
-    private void setBackgroundColor(X01PlayerData player, int position,
-                                    ViewHolder holder) {
+    private void setBackgroundColor(X01PlayerData player, ViewHolder holder) {
         if (player.getScore() == 0) {
-            holder.itemView.setBackgroundResource(R.color.game_player_winner);
-        } else if (game.getCurrentPlayerIdx() == position) {
+            holder.background_group.setBackgroundResource(R.color.accent_color);
+            holder.itemView.setAlpha(1f);
+            holder.playerName.setAlpha(1f);
+        } else if (game.getCurrentPlayerIdx() == holder.getAdapterPosition()) {
             holder.itemView.setElevation(8);
             holder.itemView.setBackgroundResource(R.color.main_white);
             holder.itemView.setAlpha(1f);
             holder.playerName.setAlpha(1f);
             holder.background_group.setBackgroundResource(R.drawable.main_grey_border_list_item);
-
         } else {
             holder.itemView.setElevation(2);
             holder.itemView.setBackgroundResource(R.color.main_white);
-            holder.itemView.setAlpha(.95f);
+            holder.itemView.setAlpha(.85f);
             holder.playerName.setAlpha(.75f);
             holder.background_group.setBackgroundResource(R.drawable.light_grey_border_list_item);
         }
     }
 
-    private void updateCheckoutView(ViewHolder holder) {
-        if (holder.getAdapterPosition() == game.getCurrentPlayerIdx()) {
+    private void updateCheckoutView(X01PlayerData player, ViewHolder holder) {
+        if (player.getScore() == 0) {
+            holder.checkout_view.setVisibility(View.VISIBLE);
+            holder.checkout.setText("");
+            holder.checkoutLabel.setText(R.string.result_win);
+        }
+        else if (holder.getAdapterPosition() == game.getCurrentPlayerIdx()) {
             holder.checkout.setText(game.getCheckoutText(game.getPlayer(holder.getAdapterPosition())));
+            holder.checkoutLabel.setText(R.string.checkout);
             holder.checkout_view.setVisibility(View.VISIBLE);
         } else {
             holder.checkout_view.setVisibility(View.GONE);
@@ -90,6 +96,7 @@ public class GameListAdapter extends RecyclerView.Adapter<GameListAdapter.ViewHo
         TextView score;
         TextView totalScoreHistory;
         TextView checkout;
+        TextView checkoutLabel;
         ViewGroup checkout_view;
         ViewGroup background_group;
 
@@ -99,6 +106,7 @@ public class GameListAdapter extends RecyclerView.Adapter<GameListAdapter.ViewHo
             score = (TextView) itemView.findViewById(R.id.game_player_list_item_score);
             totalScoreHistory = (TextView) itemView.findViewById(R.id.total_score_history);
             checkout = (TextView) itemView.findViewById(R.id.checkout);
+            checkoutLabel = (TextView) itemView.findViewById(R.id.checkout_label);
             checkout_view = (ViewGroup) itemView.findViewById(R.id.checkout_view);
             background_group = (ViewGroup) itemView.findViewById(R.id.game_player_list_item_background);
         }

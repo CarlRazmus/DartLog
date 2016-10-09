@@ -29,12 +29,14 @@
         android:id="@+id/num_pad_divider"
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:background="@color/main_red"/>
+        android:background="@color/primary_color"
+        android:elevation="4dp"/>
 
     <ViewAnimator
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/game_input">
+        android:id="@+id/game_input"
+        android:elevation="4dp">
 
         <include layout="@layout/game_num_pad"/>
         <include layout="@layout/game_over"/>
