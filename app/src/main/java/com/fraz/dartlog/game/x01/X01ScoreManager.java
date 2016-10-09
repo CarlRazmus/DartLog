@@ -6,8 +6,6 @@ import java.util.LinkedList;
 
 public class X01ScoreManager extends ScoreManager {
 
-    private LinkedList<Integer> totalScoreHistory = new LinkedList<>();
-
     /** The 'X' in X01 */
     private int x;
 
@@ -26,30 +24,22 @@ public class X01ScoreManager extends ScoreManager {
         int newScore = getScore() - score;
         if (newScore < 0) {
             super.submitScore(0);
-            totalScoreHistory.add(getScore());
             return false;
         } else {
-            totalScoreHistory.add(getScore());
             super.submitScore(score);
             this.score = newScore;
             return true;
         }
     }
 
-    public LinkedList<Integer> getTotalScoreHistory() { return totalScoreHistory; }
-
     @Override
     public void undoScore() {
         super.undoScore();
-
-        if (!totalScoreHistory.isEmpty())
-            score = totalScoreHistory.removeLast();
     }
 
     @Override
     public void reset() {
         super.reset();
-        totalScoreHistory = new LinkedList<>();
         score = getStartingScore();
     }
 

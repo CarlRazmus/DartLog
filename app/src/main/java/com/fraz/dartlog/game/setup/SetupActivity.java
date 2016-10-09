@@ -226,7 +226,7 @@ public class SetupActivity extends AppCompatActivity
 
     private Intent createX01GameIntent() {
         Intent intent = new Intent(this, X01GameActivity.class);
-        intent.putExtra("x", getSelectedNrOfFields());
+        intent.putExtra("x", getSelectedX());
         return intent;
     }
 
@@ -240,17 +240,15 @@ public class SetupActivity extends AppCompatActivity
         }
     }
 
-    private int getSelectedX() {
-        return getSpinnerValue(R.id.score_spinner);
+    private int getSelectedX()
+    {
+        Spinner spinner = (Spinner) findViewById(R.id.score_spinner);
+        return Character.getNumericValue(((String) spinner.getSelectedItem()).charAt(0));
     }
 
     private int getSelectedNrOfFields() {
-        return getSpinnerValue(R.id.nr_of_fields_spinner);
-    }
-
-    private int getSpinnerValue(int spinnerId) {
-        Spinner spinner = (Spinner) findViewById(spinnerId);
-        return Character.getNumericValue(((String) spinner.getSelectedItem()).charAt(0));
+        Spinner spinner = (Spinner) findViewById(R.id.nr_of_fields_spinner);
+        return Integer.valueOf((String) spinner.getSelectedItem());
     }
 
     @Override

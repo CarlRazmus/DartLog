@@ -6,18 +6,22 @@ import java.util.LinkedList;
 public abstract class ScoreManager {
 
     protected LinkedList<Integer> scoreHistory = new LinkedList<>();
+    protected LinkedList<Integer> totalScoreHistory = new LinkedList<>();
     protected int score;
 
     public ScoreManager() {}
 
     public boolean submitScore(int achievedScore) {
         scoreHistory.add(achievedScore);
+        totalScoreHistory.add(getScore());
         return true;
     }
 
     public void undoScore() {
-        if (!scoreHistory.isEmpty())
+        if (!scoreHistory.isEmpty()) {
             scoreHistory.removeLast();
+            score = totalScoreHistory.removeLast();
+        }
     }
 
     public int getScore() {
@@ -47,8 +51,11 @@ public abstract class ScoreManager {
         return scoreHistory;
     }
 
+    public LinkedList<Integer> getTotalScoreHistory() { return totalScoreHistory; }
+
     public void reset() {
         scoreHistory = new LinkedList<>();
+        totalScoreHistory = new LinkedList<>();
     }
 
     protected void applyScores(LinkedList<Integer> scoreHistory) {
