@@ -25,7 +25,7 @@ public class X01ScoreManager extends ScoreManager {
 
     public boolean submitScore(int score) {
         int newScore = getScore() - score;
-        if (newScore < 0) {
+        if (hasBust(newScore)) {
             super.submitScore(0);
             totalScoreHistory.add(getScore());
             return false;
@@ -77,5 +77,9 @@ public class X01ScoreManager extends ScoreManager {
     private int getStartingScore()
     {
         return x * 100 + 1;
+    }
+
+    private boolean hasBust(int score) {
+        return score < 0 || (score == 1 && mustDoubleOut());
     }
 }
