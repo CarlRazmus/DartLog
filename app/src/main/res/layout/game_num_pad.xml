@@ -38,7 +38,7 @@
                     android:id="@+id/one"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:background="@drawable/button_default"
+                    android:background="@drawable/button_num_pad"
                     android:textColor="@color/main_white"
                     android:text="@string/one" />
 
@@ -47,7 +47,7 @@
                     android:id="@+id/two"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:background="@drawable/button_default"
+                    android:background="@drawable/button_num_pad"
                     android:textColor="@color/main_white"
                     android:text="@string/two" />
 
@@ -56,7 +56,7 @@
                     android:id="@+id/three"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:background="@drawable/button_default"
+                    android:background="@drawable/button_num_pad"
                     android:textColor="@color/main_white"
                     android:text="@string/three" />
         </TableRow>
@@ -67,7 +67,7 @@
                 android:id="@+id/four"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@drawable/button_default"
+                android:background="@drawable/button_num_pad"
                 android:textColor="@color/main_white"
                 android:text="@string/four" />
 
@@ -76,7 +76,7 @@
                 android:id="@+id/five"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@drawable/button_default"
+                android:background="@drawable/button_num_pad"
                 android:textColor="@color/main_white"
                 android:text="@string/five" />
 
@@ -85,7 +85,7 @@
                 android:id="@+id/six"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@drawable/button_default"
+                android:background="@drawable/button_num_pad"
                 android:textColor="@color/main_white"
                 android:text="@string/six" />
         </TableRow>
@@ -96,7 +96,7 @@
                 android:id="@+id/seven"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@drawable/button_default"
+                android:background="@drawable/button_num_pad"
                 android:textColor="@color/main_white"
                 android:text="@string/seven" />
 
@@ -105,7 +105,7 @@
                 android:id="@+id/eight"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@drawable/button_default"
+                android:background="@drawable/button_num_pad"
                 android:textColor="@color/main_white"
                 android:text="@string/eight" />
 
@@ -114,7 +114,7 @@
                 android:id="@+id/nine"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@drawable/button_default"
+                android:background="@drawable/button_num_pad"
                 android:textColor="@color/main_white"
                 android:text="@string/nine" />
         </TableRow>
@@ -126,8 +126,8 @@
                 style="?attr/buttonBarButtonStyle"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@drawable/button_default"
-                android:tint="@color/main_white"
+                android:background="@drawable/button_num_pad"
+                android:tint="@color/primary_color"
                 android:src="@android:drawable/ic_input_delete" />
 
             <Button
@@ -135,7 +135,7 @@
                 android:id="@+id/zero"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@drawable/button_default"
+                android:background="@drawable/button_num_pad"
                 android:textColor="@color/main_white"
                 android:text="@string/button_zero" />
 
@@ -144,7 +144,7 @@
                 android:id="@+id/enter"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@drawable/button_default"
+                android:background="@drawable/button_num_pad"
                 android:textColor="@color/accent_color"
                 android:text="@string/button_submit" />
         </TableRow>

@@ -9,7 +9,8 @@
     <color name="light_grey">#BDBDBD</color>
     <color name="main_grey">#616161</color>
     <color name="primary_color">#B71C1C</color>
-    <color name="accent_color">#FFD740</color>
+    <color name="accent_color">#AEEA00</color>
+    <color name="accent_color_alpha_26">#42AEEA00</color>
     <color name="light_red">#D03535</color>
     <color name="main_blue">#0D47A1</color>
     <color name="main_green">#1B5E20</color>
