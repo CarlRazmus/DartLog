@@ -5,7 +5,7 @@ import java.util.LinkedList;
 public class PlayerData {
 
     private String playerName;
-    protected ScoreManager scoreManager;
+    private ScoreManager scoreManager;
 
     /**
      * Constructor used to initialize player data.

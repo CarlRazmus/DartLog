@@ -141,7 +141,7 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
 
         ArrayList<X01PlayerData> playerDataList = new ArrayList<>();
         for (String playerName : playerNames) {
-            playerDataList.add(new X01PlayerData(playerName, new X01ScoreManager(x)));
+            playerDataList.add(new X01PlayerData(this, playerName, new X01ScoreManager(x)));
         }
         return playerDataList;
     }

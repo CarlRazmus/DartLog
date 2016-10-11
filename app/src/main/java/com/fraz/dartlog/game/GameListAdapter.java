@@ -83,9 +83,8 @@ public class GameListAdapter extends RecyclerView.Adapter<GameListAdapter.ViewHo
             holder.checkoutLabel.setText(R.string.result_win);
         }
         else if (holder.getAdapterPosition() == game.getCurrentPlayerIdx()) {
-            holder.checkout.setText(
-                    game.getCheckoutText((X01PlayerData) game.getPlayer(holder.getAdapterPosition())));
-            if (game.isDoubleOut(player)) {
+            holder.checkout.setText(player.getCheckoutText());
+            if (player.mustDoubleOut()) {
                 holder.checkoutLabel.setText(R.string.double_out);
             } else {
                 holder.checkoutLabel.setText(R.string.single_out);

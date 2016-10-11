@@ -7,6 +7,7 @@ import java.util.LinkedList;
 public class X01ScoreManager extends ScoreManager {
 
     private LinkedList<Integer> totalScoreHistory = new LinkedList<>();
+    private Integer doubleOutsBeforeSingleOut = null;
 
     /** The 'X' in X01 */
     private int x;
@@ -51,6 +52,26 @@ public class X01ScoreManager extends ScoreManager {
         super.reset();
         totalScoreHistory = new LinkedList<>();
         score = getStartingScore();
+    }
+
+    public boolean mustDoubleOut() {
+        if (doubleOutsBeforeSingleOut != null) {
+            int doubleOutTries = 0;
+            if(score <= 50)
+                doubleOutTries += 1;
+            for (Integer score : totalScoreHistory) {
+                if (score <= 50) {
+                    doubleOutTries += 1;
+                }
+            }
+            return doubleOutTries <= doubleOutsBeforeSingleOut;
+        } else {
+            return true;
+        }
+    }
+
+    public void setDoubleOutsBeforeSingleOut(Integer doubleOutsBeforeSingleOut) {
+        this.doubleOutsBeforeSingleOut = doubleOutsBeforeSingleOut;
     }
 
     private int getStartingScore()
