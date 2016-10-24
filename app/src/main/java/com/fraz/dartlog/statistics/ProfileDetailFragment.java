@@ -124,12 +124,12 @@ public class ProfileDetailFragment extends Fragment {
             }
             else {
                 result.setText("LOSS");
-                result.setTextColor(ContextCompat.getColor(getContext(), R.color.main_red));
+                result.setTextColor(ContextCompat.getColor(getContext(), R.color.primary_color));
             }
 
 
             TextView gameType = (TextView) holder.mView.findViewById(R.id.match_history_game_type);
-            gameType.setText("X01");
+            gameType.setText(R.string.x01);
 
             TextView date = (TextView) holder.mView.findViewById(R.id.match_history_date);
             date.setText(

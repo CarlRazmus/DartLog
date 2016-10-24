@@ -1,10 +1,9 @@
 package com.fraz.dartlog.game;
 
-import android.app.Activity;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.BaseExpandableListAdapter;
 import android.widget.TextView;
 
 import com.fraz.dartlog.R;
@@ -13,101 +12,40 @@ import com.fraz.dartlog.game.x01.X01PlayerData;
 
 import java.util.LinkedList;
 
-public class GameListAdapter extends BaseExpandableListAdapter {
+public class GameListAdapter extends RecyclerView.Adapter<GameListAdapter.ViewHolder> {
 
     private X01 game;
-    private Activity context;
-    private final int colors[] = {R.color.main_red, R.color.main_blue,
-                                  R.color.main_green, R.color.main_yellow};
 
-    public GameListAdapter(Activity context, X01 game) {
-        this.context = context;
+    public GameListAdapter(X01 game) {
         this.game = game;
     }
 
     @Override
-    public int getGroupCount() {
-        return game.getNumberOfPlayers();
+    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        View listItem = LayoutInflater.from(parent.getContext()).inflate(
+                R.layout.game_player_list_item, parent, false);
+        return new ViewHolder(listItem);
     }
 
     @Override
-    public int getChildrenCount(int i) {
-        return 1;
-    }
+    public void onBindViewHolder(final ViewHolder holder, int position) {
+        final X01PlayerData player = (X01PlayerData) game.getPlayer(position);
 
-    @Override
-    public Object getGroup(int i) {
-        return game.getPlayer(i);
-    }
+        holder.playerName.setText(player.getPlayerName());
+        holder.score.setText(String.valueOf(player.getScore()));
 
-    @Override
-    public Object getChild(int i, int i1) {
-        return game.getPlayer(i);
-    }
-
-    @Override
-    public long getGroupId(int i) {
-        return i;
-    }
-
-    @Override
-    public long getChildId(int i, int i1) {
-        return i * 100 + i1;
-    }
-
-    @Override
-    public boolean hasStableIds() {
-        return true;
-    }
-
-    @Override
-    public View getGroupView(int position, boolean isExpanded, View view, ViewGroup parent) {
-        LayoutInflater inflater = context.getLayoutInflater();
-        View listItem = view;
-        X01PlayerData player = (X01PlayerData) game.getPlayer(position);
-
-        if (view == null) {
-            listItem = inflater.inflate(R.layout.game_player_list_item, parent, false);
-        }
-
-        TextView playerNameView = (TextView) listItem.findViewById(R.id.game_player_list_item_name);
-        playerNameView.setText(player.getPlayerName());
-
-        TextView scoreView = (TextView) listItem.findViewById(R.id.game_player_list_item_score);
-        scoreView.setText(String.valueOf(player.getScore()));
-
-        setLineColor(position, listItem);
-        setBackgroundColor(player, position, listItem);
-        return listItem;
-    }
-
-    @Override
-    public View getChildView(int position, int childPosition, boolean isLastChild,
-                             View view, ViewGroup parent) {
-        LayoutInflater inflater = context.getLayoutInflater();
-        View listItem = view;
-
-        if (view == null) {
-            listItem = inflater.inflate(R.layout.game_player_child_list_item, parent, false);
-        }
-        X01PlayerData player = (X01PlayerData) game.getPlayer(position);
+        setBackgroundColor(player, holder);
 
         // Set total score history text
         LinkedList<Integer> scores = new LinkedList<>(player.getTotalScoreHistory());
-        scores.addLast(player.getScore());
-        String totalScoreHistoryText = createScoresString(scores);
-        ((TextView) listItem.findViewById(R.id.total_score_history)).setText(totalScoreHistoryText);
+        holder.totalScoreHistory.setText(createScoresString(scores));
 
-        //Set average and max score text
-        TextView avgScore = (TextView) listItem.findViewById(R.id.average_score);
-        TextView maxScore = (TextView) listItem.findViewById(R.id.max_score);
-        avgScore.setText(String.format("%.1f", player.getAvgScore()));
-        maxScore.setText(String.valueOf(player.getMaxScore()));
+        updateCheckoutView(player, holder);
+    }
 
-        //Set checkout text
-        TextView checkout = (TextView) listItem.findViewById(R.id.checkout);
-        checkout.setText(game.getCheckoutText(player));
-        return listItem;
+    @Override
+    public int getItemCount() {
+        return game.getNumberOfPlayers();
     }
 
     private String createScoresString(LinkedList<Integer> scores) {
@@ -118,23 +56,59 @@ public class GameListAdapter extends BaseExpandableListAdapter {
         return scoreHistoryText.trim();
     }
 
-    @Override
-    public boolean isChildSelectable(int i, int i1) {
-        return false;
-    }
-
-    private void setBackgroundColor(X01PlayerData player, int position, View listItem) {
+    private void setBackgroundColor(X01PlayerData player, ViewHolder holder) {
         if (player.getScore() == 0) {
-            listItem.setBackgroundResource(R.drawable.game_player_winner);
-        } else if (game.getCurrentPlayerIdx() == position) {
-            listItem.setBackgroundResource(R.drawable.game_player_active);
+            holder.background_group.setBackgroundResource(R.color.accent_color);
+            holder.itemView.setAlpha(1f);
+            holder.playerName.setAlpha(1f);
+        } else if (game.getCurrentPlayerIdx() == holder.getAdapterPosition()) {
+            holder.itemView.setElevation(8);
+            holder.itemView.setBackgroundResource(R.color.main_white);
+            holder.itemView.setAlpha(1f);
+            holder.playerName.setAlpha(1f);
+            holder.background_group.setBackgroundResource(R.drawable.main_grey_border_list_item);
         } else {
-            listItem.setBackgroundResource(R.drawable.game_player_normal);
+            holder.itemView.setElevation(2);
+            holder.itemView.setBackgroundResource(R.color.main_white);
+            holder.itemView.setAlpha(.85f);
+            holder.playerName.setAlpha(.75f);
+            holder.background_group.setBackgroundResource(R.drawable.light_grey_border_list_item);
         }
     }
 
-    private void setLineColor(int position, View listItem) {
-        View lineView = listItem.findViewById(R.id.game_player_list_line);
-        lineView.setBackgroundResource(colors[position % colors.length]);
+    private void updateCheckoutView(X01PlayerData player, ViewHolder holder) {
+        if (player.getScore() == 0) {
+            holder.checkout_view.setVisibility(View.VISIBLE);
+            holder.checkout.setText("");
+            holder.checkoutLabel.setText(R.string.result_win);
+        }
+        else if (holder.getAdapterPosition() == game.getCurrentPlayerIdx()) {
+            holder.checkout.setText(game.getCheckoutText(game.getPlayer(holder.getAdapterPosition())));
+            holder.checkoutLabel.setText(R.string.checkout);
+            holder.checkout_view.setVisibility(View.VISIBLE);
+        } else {
+            holder.checkout_view.setVisibility(View.GONE);
+        }
+    }
+
+    class ViewHolder extends RecyclerView.ViewHolder {
+        TextView playerName;
+        TextView score;
+        TextView totalScoreHistory;
+        TextView checkout;
+        TextView checkoutLabel;
+        ViewGroup checkout_view;
+        ViewGroup background_group;
+
+        ViewHolder(View itemView) {
+            super(itemView);
+            playerName = (TextView) itemView.findViewById(R.id.game_player_list_item_name);
+            score = (TextView) itemView.findViewById(R.id.game_player_list_item_score);
+            totalScoreHistory = (TextView) itemView.findViewById(R.id.total_score_history);
+            checkout = (TextView) itemView.findViewById(R.id.checkout);
+            checkoutLabel = (TextView) itemView.findViewById(R.id.checkout_label);
+            checkout_view = (ViewGroup) itemView.findViewById(R.id.checkout_view);
+            background_group = (ViewGroup) itemView.findViewById(R.id.game_player_list_item_background);
+        }
     }
 }
