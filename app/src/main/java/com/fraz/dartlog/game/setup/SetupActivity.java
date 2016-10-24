@@ -12,6 +12,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.support.v7.widget.helper.ItemTouchHelper;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
@@ -162,16 +163,21 @@ public class SetupActivity extends AppCompatActivity
             Intent intent = new Intent(this, X01GameActivity.class);
             intent.putStringArrayListExtra("playerNames", participantNames);
             intent.putExtra("x", getSelectedX());
+            intent.putExtra("double_out", getSelectedDoubleOutAttempts());
             startActivity(intent);
         }
     }
 
     private int getSelectedX() {
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
-        String startingScore = sharedPref.getString(
-                getResources().getString(R.string.pref_key_x01_starting_score), "");
+        return Integer.parseInt(sharedPref.getString(
+                getResources().getString(R.string.pref_key_x01_starting_score), "3"));
+    }
 
-        return Character.getNumericValue(startingScore.charAt(0));
+    private int getSelectedDoubleOutAttempts() {
+        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
+        return Integer.parseInt(sharedPref.getString(
+                getResources().getString(R.string.pref_key_x01_double_out_attempts), "5"));
     }
 
     @Override

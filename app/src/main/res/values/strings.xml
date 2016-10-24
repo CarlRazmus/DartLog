@@ -29,8 +29,8 @@
     <string name="log">LOG</string>
     <string name="average_score">Average: </string>
     <string name="max_score">Max score:</string>
-    <string name="double_out">Double Out:</string>
-    <string name="single_out">Single Out:</string>
+    <string name="double_out">Double-out:</string>
+    <string name="single_out">Single-out:</string>
     <string name="games_won">Games won</string>
     <string name="recent_games">RECENT GAMES</string>
     <string name="two">2</string>
@@ -48,8 +48,9 @@
     <string name="result_win">Winner!</string>
 
     <string name="pref_x01_starting_score">Starting score</string>
-    <string name="pref_x01_double_out">Double out</string>
-    <string name="pref_x01_double_out_attempts">Double out attempts</string>
-    <string name="pref_x01_double_out_attempts_summary">Amount of rounds a player has to attempt a double-out checkout. Starts counting when the player starts a round with a score of 50 or below.</string>
+    <string name="pref_x01_double_out">Double-out</string>
+    <string name="pref_x01_double_out_attempts">Checkout</string>
+    <string name="pref_x01_double_out_attempts_dialog">Double-out attempts</string>
     <string name="pref_key_x01_starting_score">pref_x01_starting_score</string>
+    <string name="pref_key_x01_double_out_attempts">pref_x01_double_out_attempts</string>
 </resources>
