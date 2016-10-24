@@ -144,7 +144,7 @@ public class RandomGameActivity extends AppCompatActivity implements View.OnClic
 
         ArrayList<X01PlayerData> playerDataList = new ArrayList<>();
         for (String playerName : playerNames) {
-            playerDataList.add(new X01PlayerData(playerName, new X01ScoreManager(x)));
+            playerDataList.add(new X01PlayerData(this, playerName, new X01ScoreManager(x)));
         }
         return playerDataList;
     }

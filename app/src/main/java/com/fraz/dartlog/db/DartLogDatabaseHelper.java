@@ -26,9 +26,11 @@ public class DartLogDatabaseHelper extends SQLiteOpenHelper {
     // If you change the database schema, you must increment the database version.
     public static final int DATABASE_VERSION = 1;
     public static final String DATABASE_NAME = "DartLog.db";
+    private Context context;
 
     public DartLogDatabaseHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
+        this.context = context;
     }
 
     @Override
@@ -135,7 +137,7 @@ public class DartLogDatabaseHelper extends SQLiteOpenHelper {
         {
             X01ScoreManager scoreManager = new X01ScoreManager(3, playerEntry.getValue());
             playerData.put(playerEntry.getKey(),
-                           new X01PlayerData(playerEntry.getKey(), scoreManager));
+                           new X01PlayerData(context, playerEntry.getKey(), scoreManager));
         }
 
         try (Cursor c = getX01MatchEntry(db, matchId)) {
