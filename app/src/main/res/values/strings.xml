@@ -8,7 +8,7 @@
     <string name="title_profile_detail">Profile Detail</string>
     <string name="header_player_selection">Player Selection</string>
     <string name="button_start_game">START</string>
-    <string name="button_undo">undo</string>
+    <string name="button_undo">UNDO</string>
     <string name="header_select_players">Select Players</string>
     <string name="statistic_activity_temporary_text">This is the statistics activity</string>
     <string name="button_new_leg">New Leg</string>
@@ -17,6 +17,7 @@
     <string name="player_1">Player 1</string>
     <string name="_301">301</string>
     <string name="button_done">Done</string>
+    <string name="button_submit">Submit</string>
     <string name="contentDescription_handle_to_trigger_drag_event">Handle to trigger drag event</string>
     <string name="contentDescription_main_activity_background_image">Main activity background image</string>
     <string name="button_zero">0</string>
@@ -27,9 +28,10 @@
     <string name="button_show_statistics_view">SHOW STATISTICS</string>
     <string name="dart">DART</string>
     <string name="log">LOG</string>
-    <string name="average_score">Average score: </string>
+    <string name="average_score">Average: </string>
     <string name="max_score">Max score:</string>
-    <string name="checkout">Checkout:</string>
+    <string name="double_out">Double Out:</string>
+    <string name="single_out">Single Out:</string>
     <string name="games_won">Games won</string>
     <string name="recent_games">RECENT GAMES</string>
     <string name="two">2</string>
@@ -46,4 +48,5 @@
     <string name="number_of_fields_colon">Nr of fields: </string>
     <string name="x01">X01</string>
     <string name="field_to_hit">Field to hit:</string>
+    <string name="result_win">Winner!</string>
 </resources>

@@ -3,7 +3,6 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
         android:id="@+id/action_undo"
-        android:icon="@android:drawable/ic_menu_revert"
         android:title="@string/button_undo"
         app:showAsAction="always"/>
 

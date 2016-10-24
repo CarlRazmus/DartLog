@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -12,8 +13,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.ExpandableListView;
-import android.widget.ListView;
 import android.widget.ViewAnimator;
 
 import com.fraz.dartlog.MainActivity;
@@ -44,7 +43,7 @@ public class X01GameActivity extends AppCompatActivity implements View.OnClickLi
         dbHelper = new DartLogDatabaseHelper(this);
 
         game = GetX01GameInstance(savedInstanceState);
-        gameListAdapter = new GameListAdapter(this, game);
+        gameListAdapter = new GameListAdapter(game);
 
         initListView();
         initNumPadView();
@@ -118,7 +117,6 @@ public class X01GameActivity extends AppCompatActivity implements View.OnClickLi
     private void updateView() {
         gameListAdapter.notifyDataSetChanged();
         scrollToPlayerInList();
-        setExpandedPlayers();
         if (game.isGameOver()) {
             setGameDoneView();
         } else {
@@ -127,7 +125,7 @@ public class X01GameActivity extends AppCompatActivity implements View.OnClickLi
     }
 
     private void initListView() {
-        ExpandableListView myListView = (ExpandableListView) findViewById(R.id.play_players_listView);
+        RecyclerView myListView = (RecyclerView) findViewById(R.id.play_players_listView);
         assert myListView != null;
         myListView.setAdapter(gameListAdapter);
     }
@@ -142,28 +140,13 @@ public class X01GameActivity extends AppCompatActivity implements View.OnClickLi
 
         ArrayList<X01PlayerData> playerDataList = new ArrayList<>();
         for (String playerName : playerNames) {
-            playerDataList.add(new X01PlayerData(playerName, new X01ScoreManager(x)));
+            playerDataList.add(new X01PlayerData(this, playerName, new X01ScoreManager(x)));
         }
         return playerDataList;
     }
 
-
-    private void setExpandedPlayers() {
-        ExpandableListView playersListView =
-                (ExpandableListView) findViewById(R.id.play_players_listView);
-        assert playersListView != null;
-
-        for (int i = 0; i < game.getNumberOfPlayers(); ++i) {
-            if (i == game.getCurrentPlayerIdx())
-                playersListView.expandGroup(i);
-            else
-                playersListView.collapseGroup(i);
-        }
-    }
-
-
     private void scrollToPlayerInList() {
-        ListView playersListView = (ListView) findViewById(R.id.play_players_listView);
+        RecyclerView playersListView = (RecyclerView) findViewById(R.id.play_players_listView);
         assert playersListView != null;
         playersListView.smoothScrollToPosition(game.getCurrentPlayerIdx());
     }

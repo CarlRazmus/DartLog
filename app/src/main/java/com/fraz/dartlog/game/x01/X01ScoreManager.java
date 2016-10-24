@@ -6,6 +6,8 @@ import java.util.LinkedList;
 
 public class X01ScoreManager extends ScoreManager {
 
+    private Integer doubleOutsBeforeSingleOut = null;
+
     /** The 'X' in X01 */
     private int x;
 
@@ -22,7 +24,7 @@ public class X01ScoreManager extends ScoreManager {
 
     public boolean submitScore(int score) {
         int newScore = getScore() - score;
-        if (newScore < 0) {
+        if (hasBust(newScore)) {
             super.submitScore(0);
             return false;
         } else {
@@ -43,8 +45,32 @@ public class X01ScoreManager extends ScoreManager {
         score = getStartingScore();
     }
 
+    public boolean mustDoubleOut() {
+        if (doubleOutsBeforeSingleOut != null) {
+            int doubleOutTries = 0;
+            if(score <= 50)
+                doubleOutTries += 1;
+            for (Integer score : totalScoreHistory) {
+                if (score <= 50) {
+                    doubleOutTries += 1;
+                }
+            }
+            return doubleOutTries <= doubleOutsBeforeSingleOut;
+        } else {
+            return true;
+        }
+    }
+
+    public void setDoubleOutsBeforeSingleOut(Integer doubleOutsBeforeSingleOut) {
+        this.doubleOutsBeforeSingleOut = doubleOutsBeforeSingleOut;
+    }
+
     private int getStartingScore()
     {
         return x * 100 + 1;
+    }
+
+    private boolean hasBust(int score) {
+        return score < 0 || (score == 1 && mustDoubleOut());
     }
 }

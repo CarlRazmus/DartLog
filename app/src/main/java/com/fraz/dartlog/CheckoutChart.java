@@ -1,29 +1,28 @@
 package com.fraz.dartlog;
 
 import android.content.Context;
+import android.util.SparseArray;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Serializable;
-import java.util.HashMap;
-import java.util.Map;
 
 public class CheckoutChart implements Serializable{
 
-    private Map<Integer, String> checkouts = new HashMap<>();
+    private SparseArray<String> checkouts = new SparseArray<>();
 
     public CheckoutChart(Context context, int checkoutChartRawResourceId) {
         initCheckoutMap(context, checkoutChartRawResourceId);
     }
 
+    public boolean checkoutAvailable(int score) {
+        return checkouts.get(score) != null;
+    }
+
     public String getCheckoutText(int score) {
-        String checkout = checkouts.get(score);
-        if (checkout == null) {
-            checkout = "N/A";
-        }
-        return checkout;
+        return checkouts.get(score, "N/A");
     }
 
     private void initCheckoutMap(Context context, int checkoutChartRawResourceId) {

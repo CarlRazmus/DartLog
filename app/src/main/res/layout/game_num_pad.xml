@@ -17,8 +17,7 @@
         android:stretchColumns="*">
 
         <TableRow
-            android:background="@color/background_dark"
-            android:layout_marginBottom="1dp">
+            android:background="@color/background_dark">
 
             <TextView
                 android:id="@+id/score_input"
@@ -29,113 +28,125 @@
                 android:text="@string/button_zero"
                 android:textColor="@color/main_white"
                 android:layout_column="1"
-                android:padding="3dp"
-                android:textSize="25sp" />
+                android:padding="2dp"
+                android:textSize="30sp" />
         </TableRow>
 
-        <TableRow>
+        <TableRow style="?attr/buttonBarStyle">
                 <Button
+                    style="?attr/buttonBarButtonStyle"
                     android:id="@+id/one"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_margin="1dp"
-                    android:background="@drawable/button_default"
+                    android:background="@drawable/button_num_pad"
+                    android:textColor="@color/main_white"
                     android:text="@string/one" />
 
                 <Button
+                    style="?attr/buttonBarButtonStyle"
                     android:id="@+id/two"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_margin="1dp"
-                    android:background="@drawable/button_default"
+                    android:background="@drawable/button_num_pad"
+                    android:textColor="@color/main_white"
                     android:text="@string/two" />
 
                 <Button
+                    style="?attr/buttonBarButtonStyle"
                     android:id="@+id/three"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_margin="1dp"
-                    android:background="@drawable/button_default"
+                    android:background="@drawable/button_num_pad"
+                    android:textColor="@color/main_white"
                     android:text="@string/three" />
         </TableRow>
 
-        <TableRow>
+        <TableRow style="?attr/buttonBarStyle">
             <Button
+                style="?attr/buttonBarButtonStyle"
                 android:id="@+id/four"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_margin="1dp"
-                android:background="@drawable/button_default"
+                android:background="@drawable/button_num_pad"
+                android:textColor="@color/main_white"
                 android:text="@string/four" />
 
             <Button
+                style="?attr/buttonBarButtonStyle"
                 android:id="@+id/five"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_margin="1dp"
-                android:background="@drawable/button_default"
+                android:background="@drawable/button_num_pad"
+                android:textColor="@color/main_white"
                 android:text="@string/five" />
 
             <Button
+                style="?attr/buttonBarButtonStyle"
                 android:id="@+id/six"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_margin="1dp"
-                android:background="@drawable/button_default"
+                android:background="@drawable/button_num_pad"
+                android:textColor="@color/main_white"
                 android:text="@string/six" />
         </TableRow>
 
-        <TableRow>
+        <TableRow style="?attr/buttonBarStyle">
             <Button
+                style="?attr/buttonBarButtonStyle"
                 android:id="@+id/seven"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_margin="1dp"
-                android:background="@drawable/button_default"
+                android:background="@drawable/button_num_pad"
+                android:textColor="@color/main_white"
                 android:text="@string/seven" />
 
             <Button
+                style="?attr/buttonBarButtonStyle"
                 android:id="@+id/eight"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_margin="1dp"
-                android:background="@drawable/button_default"
+                android:background="@drawable/button_num_pad"
+                android:textColor="@color/main_white"
                 android:text="@string/eight" />
 
             <Button
+                style="?attr/buttonBarButtonStyle"
                 android:id="@+id/nine"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_margin="1dp"
-                android:background="@drawable/button_default"
+                android:background="@drawable/button_num_pad"
+                android:textColor="@color/main_white"
                 android:text="@string/nine" />
         </TableRow>
 
-        <TableRow>
+        <TableRow style="?attr/buttonBarStyle">
             <ImageButton
                 android:contentDescription="@string/button_erase_number"
                 android:id="@+id/erase"
+                style="?attr/buttonBarButtonStyle"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_margin="1dp"
-                android:background="@drawable/button_default"
+                android:background="@drawable/button_num_pad"
+                android:tint="@color/primary_color"
                 android:src="@android:drawable/ic_input_delete" />
 
             <Button
+                style="?attr/buttonBarButtonStyle"
                 android:id="@+id/zero"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_margin="1dp"
-                android:background="@drawable/button_default"
+                android:background="@drawable/button_num_pad"
+                android:textColor="@color/main_white"
                 android:text="@string/button_zero" />
 
             <Button
+                style="?attr/buttonBarButtonStyle"
                 android:id="@+id/enter"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_margin="1dp"
-                android:background="@drawable/button_default"
-                android:text="@string/button_done" />
+                android:background="@drawable/button_num_pad"
+                android:textColor="@color/accent_color"
+                android:text="@string/button_submit" />
         </TableRow>
     </TableLayout>
 </RelativeLayout>

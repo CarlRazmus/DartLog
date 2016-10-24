@@ -30,12 +30,12 @@ public class CheckoutChartTest {
     public void setUp() throws Exception {
         InputStream testInput = new ByteArrayInputStream(TEST_DATA.getBytes());
         when(mockContext.getResources()).thenReturn(mockResource);
-        when(mockResource.openRawResource(R.raw.checkout_chart)).thenReturn(testInput);
+        when(mockResource.openRawResource(R.raw.double_checkout_chart)).thenReturn(testInput);
     }
 
     @Test
     public void testGetCheckoutText() throws Exception {
-        CheckoutChart checkoutChart = new CheckoutChart(mockContext, R.raw.checkout_chart);
+        CheckoutChart checkoutChart = new CheckoutChart(mockContext, R.raw.double_checkout_chart);
         assertThat(checkoutChart.getCheckoutText(90), equalTo("T18 D18"));
         assertThat(checkoutChart.getCheckoutText(120), equalTo("T20 20 D20"));
         assertThat(checkoutChart.getCheckoutText(121), equalTo("N/A"));

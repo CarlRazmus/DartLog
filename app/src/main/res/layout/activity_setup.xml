@@ -39,6 +39,12 @@
             <include layout="@layout/random_setup" />
         </ViewAnimator>
 
+            <Spinner
+                android:id="@+id/score_spinner"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:spinnerMode="dialog"/>
+        </LinearLayout>
 
         <View
             android:layout_width="match_parent"
@@ -55,7 +61,8 @@
                 android:id="@+id/participants_recycler_view"
                 android:scrollbars="vertical"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"/>
+                android:layout_height="match_parent"
+                tools:listitem="@layout/available_player_list_item"/>
 
             <android.support.design.widget.FloatingActionButton
                 android:id="@+id/open_player_selection_fab"
@@ -64,7 +71,7 @@
                 android:layout_alignParentEnd="true"
                 android:layout_alignParentBottom="true"
                 android:clickable="true"
-                app:backgroundTint="@color/main_red"
+                app:backgroundTint="@color/primary_color"
                 android:src="@drawable/ic_group_add_white_24dp"/>
         </RelativeLayout>
 
