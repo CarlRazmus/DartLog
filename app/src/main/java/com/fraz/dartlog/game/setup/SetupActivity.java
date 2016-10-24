@@ -3,7 +3,9 @@ package com.fraz.dartlog.game.setup;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -12,15 +14,13 @@ import android.support.v7.widget.Toolbar;
 import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.Gravity;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.Spinner;
-import android.widget.SpinnerAdapter;
 import android.widget.Toast;
 
 import com.fraz.dartlog.R;
 import com.fraz.dartlog.db.DartLogDatabaseHelper;
 import com.fraz.dartlog.game.x01.X01GameActivity;
+import com.fraz.dartlog.game.x01.X01SettingsFragment;
 
 import java.util.ArrayList;
 
@@ -64,12 +64,10 @@ public class SetupActivity extends AppCompatActivity
     }
 
     private void InitializeRules() {
-        Spinner scoreSpinner = (Spinner) findViewById(R.id.score_spinner);
-        assert scoreSpinner != null;
-        SpinnerAdapter spinnerAdapter =
-                new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item,
-                        getResources().getStringArray(R.array.x01_entries));
-        scoreSpinner.setAdapter(spinnerAdapter);
+        // Display the fragment as the main content.
+        getFragmentManager().beginTransaction()
+                .replace(R.id.x01_setup, new X01SettingsFragment())
+                .commit();
     }
 
     private void InitializeFAB() {
@@ -169,8 +167,11 @@ public class SetupActivity extends AppCompatActivity
     }
 
     private int getSelectedX() {
-        Spinner scoreSpinner = (Spinner) findViewById(R.id.score_spinner);
-        return Character.getNumericValue(((String) scoreSpinner.getSelectedItem()).charAt(0));
+        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
+        String startingScore = sharedPref.getString(
+                getResources().getString(R.string.pref_key_x01_starting_score), "");
+
+        return Character.getNumericValue(startingScore.charAt(0));
     }
 
     @Override
