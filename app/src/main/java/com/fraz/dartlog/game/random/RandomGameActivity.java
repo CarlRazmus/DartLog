@@ -23,6 +23,7 @@ import com.fraz.dartlog.db.DartLogDatabaseHelper;
 import com.fraz.dartlog.game.GameListAdapter;
 import com.fraz.dartlog.game.InputEventListener;
 import com.fraz.dartlog.game.NumPadHandler;
+import com.fraz.dartlog.game.PlayerData;
 import com.fraz.dartlog.game.x01.X01;
 import com.fraz.dartlog.game.x01.X01PlayerData;
 import com.fraz.dartlog.game.x01.X01ScoreManager;
@@ -32,8 +33,8 @@ import java.util.ArrayList;
 public class RandomGameActivity extends AppCompatActivity implements View.OnClickListener,
         InputEventListener, OnBackPressedDialogFragment.OnBackPressedDialogListener {
 
-    private X01 game;
-    private GameListAdapter gameListAdapter;
+    private Random game;
+    private RandomGameListAdapter gameListAdapter;
     private ViewAnimator viewAnimator;
     private DartLogDatabaseHelper dbHelper;
 
@@ -46,8 +47,8 @@ public class RandomGameActivity extends AppCompatActivity implements View.OnClic
         viewAnimator = (ViewAnimator) findViewById(R.id.game_input);
         dbHelper = new DartLogDatabaseHelper(this);
 
-        game = GetX01GameInstance(savedInstanceState);
-        gameListAdapter = new GameListAdapter(this, game);
+        game = GetRandomGameInstance(savedInstanceState);
+        gameListAdapter = new RandomGameListAdapter(this, game);
 
         initListView();
         initNumPadView();
@@ -62,13 +63,14 @@ public class RandomGameActivity extends AppCompatActivity implements View.OnClic
     }
 
     @NonNull
-    private X01 GetX01GameInstance(Bundle savedInstanceState) {
+    private Random GetRandomGameInstance(Bundle savedInstanceState) {
         if (savedInstanceState != null) {
-            X01 game = (X01) savedInstanceState.getSerializable("game");
+            Random game = (Random) savedInstanceState.getSerializable("game");
             if (game != null)
                 return game;
         }
-        return new X01(this, createPlayerDataList());
+        int nrOfFields = getIntent().getIntExtra("nrOfFields", 10);
+        return new Random(this, createPlayerDataList(), nrOfFields);
     }
 
     @Override
@@ -81,12 +83,10 @@ public class RandomGameActivity extends AppCompatActivity implements View.OnClic
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.new_leg:
-                dbHelper.addX01Match(game);
                 game.newLeg();
                 updateView();
                 break;
             case R.id.complete_match:
-                dbHelper.addX01Match(game);
                 completeMatch();
                 break;
         }
@@ -138,14 +138,13 @@ public class RandomGameActivity extends AppCompatActivity implements View.OnClic
     /**
      * Create and return a list of player data from a list of player names.
      */
-    private ArrayList<X01PlayerData> createPlayerDataList() {
+    private ArrayList<PlayerData> createPlayerDataList() {
         Intent intent = getIntent();
         ArrayList<String> playerNames = intent.getStringArrayListExtra("playerNames");
-        int x = intent.getIntExtra("x", 3);
 
-        ArrayList<X01PlayerData> playerDataList = new ArrayList<>();
+        ArrayList<PlayerData> playerDataList = new ArrayList<>();
         for (String playerName : playerNames) {
-            playerDataList.add(new X01PlayerData(playerName, new X01ScoreManager(x)));
+            playerDataList.add(new PlayerData(playerName, new RandomScoreManager()));
         }
         return playerDataList;
     }
