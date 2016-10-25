@@ -138,13 +138,11 @@ public class X01GameActivity extends AppCompatActivity implements View.OnClickLi
         Intent intent = getIntent();
         ArrayList<String> playerNames = intent.getStringArrayListExtra("playerNames");
         int x = intent.getIntExtra("x", 3);
-        int doubleOutAttempts = intent.getIntExtra("double_out", 5);
-        Log.d("mytag", "createPlayerDataList: " + String.valueOf(doubleOutAttempts));
+        int doubleOutAttempts = intent.getIntExtra("double_out", 0);
         ArrayList<X01PlayerData> playerDataList = new ArrayList<>();
         for (String playerName : playerNames) {
             X01ScoreManager scoreManager = new X01ScoreManager(x);
-            if(doubleOutAttempts != -1)
-                scoreManager.setDoubleOutsBeforeSingleOut(doubleOutAttempts);
+            scoreManager.setDoubleOutsBeforeSingleOut(doubleOutAttempts);
             playerDataList.add(new X01PlayerData(this, playerName, scoreManager));
         }
         return playerDataList;

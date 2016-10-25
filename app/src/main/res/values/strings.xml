@@ -49,8 +49,10 @@
 
     <string name="pref_x01_starting_score">Starting score</string>
     <string name="pref_x01_double_out">Double-out</string>
-    <string name="pref_x01_double_out_attempts">Checkout</string>
+    <string name="pref_x01_double_out_attempts">Double-out attempts</string>
     <string name="pref_x01_double_out_attempts_dialog">Double-out attempts</string>
     <string name="pref_key_x01_starting_score">pref_x01_starting_score</string>
     <string name="pref_key_x01_double_out_attempts">pref_x01_double_out_attempts</string>
+    <string name="pref_key_x01_double_out">pref_x01_double_out</string>
+    <string name="pref_x01_double_out_attempts_summary">Single-out allowed after %s attempts on double.</string>
 </resources>
