@@ -58,7 +58,7 @@
                 android:scrollbars="vertical"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                tools:listitem="@layout/available_player_list_item"/>
+                tools:listitem="@layout/participant_list_item"/>
 
             <android.support.design.widget.FloatingActionButton
                 android:id="@+id/open_player_selection_fab"
