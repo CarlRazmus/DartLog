@@ -31,6 +31,7 @@
     <string name="max_score">Max score:</string>
     <string name="double_out">Double-out:</string>
     <string name="single_out">Single-out:</string>
+    <string name="double_out_attempts">Double-out (%d):</string>
     <string name="games_won">Games won</string>
     <string name="recent_games">RECENT GAMES</string>
     <string name="two">2</string>

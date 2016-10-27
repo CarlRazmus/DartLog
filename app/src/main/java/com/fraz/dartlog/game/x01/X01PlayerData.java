@@ -33,7 +33,17 @@ public class X01PlayerData extends PlayerData {
         }
     }
 
-    public boolean mustDoubleOut() {
-        return scoreManager.mustDoubleOut();
+    public X01ScoreManager.Checkout getCurrentCheckoutType() {
+        return scoreManager.getCurrentCheckoutType();
+    }
+
+    public int getRemainingDoubleOutAttempts() {
+        return scoreManager.getRemainingDoubleOutAttempts();
+    }
+
+    private boolean mustDoubleOut() {
+        X01ScoreManager.Checkout checkoutType = getCurrentCheckoutType();
+        return checkoutType == X01ScoreManager.Checkout.DOUBLE ||
+                checkoutType == X01ScoreManager.Checkout.DOUBLE_ATTEMPT;
     }
 }
