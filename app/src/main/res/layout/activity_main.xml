@@ -29,6 +29,7 @@
             android:id="@+id/play_button"
             android:layout_width="300dp"
             android:layout_height="wrap_content"
+            android:layout_margin="8dp"
             android:background="@drawable/button_default"
             android:text="@string/button_play_dart"/>
 
@@ -36,8 +37,8 @@
             android:id="@+id/profiles_button"
             android:layout_width="300dp"
             android:layout_height="wrap_content"
+            android:layout_margin="8dp"
             android:background="@drawable/button_default"
-            android:layout_marginTop="10dp"
             android:text="@string/button_profiles"/>
     </LinearLayout>
 
