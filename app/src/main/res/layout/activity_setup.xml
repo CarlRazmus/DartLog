@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context=".game.setup.SetupActivity"
-    android:background="@color/background">
+    android:background="@color/background_dark">
 
     <android.support.design.widget.AppBarLayout
         android:id="@+id/app_bar"
@@ -22,12 +22,23 @@
 
     </android.support.design.widget.AppBarLayout>
 
+    <FrameLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/x01_setup"/>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/background"/>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="8dp"
-        android:layout_marginLeft="16dp"
-        android:layout_marginRight="16dp"
+        android:layout_marginBottom="@dimen/activity_vertical_margin"
+        android:layout_marginTop="@dimen/activity_vertical_margin"
+        android:layout_marginLeft="@dimen/activity_horizontal_margin"
+        android:layout_marginRight="@dimen/activity_horizontal_margin"
         android:orientation="vertical">
 
         <ViewAnimator
@@ -47,9 +58,10 @@
 
         <View
             android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_margin="5dp"
-            android:background="@color/background_dark"/>
+            android:layout_height="wrap_content"
+            android:textSize="16sp"
+            android:textColor="@android:color/white"
+            android:text="@string/players_colon"/>
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -61,7 +73,7 @@
                 android:scrollbars="vertical"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                tools:listitem="@layout/available_player_list_item"/>
+                tools:listitem="@layout/participant_list_item"/>
 
             <android.support.design.widget.FloatingActionButton
                 android:id="@+id/open_player_selection_fab"

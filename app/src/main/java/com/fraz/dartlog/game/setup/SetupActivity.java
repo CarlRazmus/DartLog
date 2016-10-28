@@ -4,8 +4,10 @@ import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Resources;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.preference.PreferenceManager;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -14,10 +16,7 @@ import android.support.v7.widget.Toolbar;
 import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.Gravity;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.Spinner;
-import android.widget.SpinnerAdapter;
 import android.widget.Toast;
 import android.widget.ViewAnimator;
 
@@ -25,6 +24,7 @@ import com.fraz.dartlog.R;
 import com.fraz.dartlog.db.DartLogDatabaseHelper;
 import com.fraz.dartlog.game.random.RandomGameActivity;
 import com.fraz.dartlog.game.x01.X01GameActivity;
+import com.fraz.dartlog.game.x01.X01SettingsFragment;
 
 import java.util.ArrayList;
 import java.util.Random;
@@ -87,7 +87,7 @@ public class SetupActivity extends AppCompatActivity
 
     }
 
-    private void InitializeRules() {
+    private void InitializeRulesOld(){
         Spinner spinner;
         int spinnerContentId = 0;
 
@@ -105,8 +105,15 @@ public class SetupActivity extends AppCompatActivity
         assert spinner != null;
 
         SpinnerAdapter spinnerAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item,
-                        getResources().getStringArray(spinnerContentId));
+                getResources().getStringArray(spinnerContentId));
         spinner.setAdapter(spinnerAdapter);
+    }
+
+    private void InitializeRules() {
+        // Display the fragment as the main content.
+        getFragmentManager().beginTransaction()
+                .replace(R.id.x01_setup, new X01SettingsFragment())
+                .commit();
     }
 
     private void InitializeFAB() {
@@ -195,10 +202,15 @@ public class SetupActivity extends AppCompatActivity
     }
 
     private void startPlayActivity() {
-        if (participantNames.size() > 0) {
-            startActivity(createGameIntent());
-        } else {
+        if (participantNames.size() == 0) {
             showMustAddPlayersErrorToast();
+        } else {
+            Intent intent = new Intent(this, X01GameActivity.class);
+            intent.putStringArrayListExtra("playerNames", participantNames);
+            intent.putExtra("x", getSelectedX());
+            if (isDoubleOutEnabled())
+                intent.putExtra("double_out", getDoubleOutAttemptsSetting());
+            startActivity(intent);
         }
     }
 
@@ -218,6 +230,16 @@ public class SetupActivity extends AppCompatActivity
         return gameIntent;
     }
 
+    private void putGameExtras(Intent intent) {
+        switch(gameType) {
+            case "x01":
+                intent.putExtra("x", getSelectedX());
+                break;
+            case "random":
+                break;
+        }
+    }
+
     private Intent createRandomGameIntent() {
         Intent intent = new Intent(this, RandomGameActivity.class);
         intent.putExtra("nrOfFields", getSelectedNrOfFields());
@@ -230,17 +252,7 @@ public class SetupActivity extends AppCompatActivity
         return intent;
     }
 
-    private void putGameExtras(Intent intent) {
-        switch(gameType) {
-            case "x01":
-                intent.putExtra("x", getSelectedX());
-                break;
-            case "random":
-                break;
-        }
-    }
-
-    private int getSelectedX()
+    private int getSelectedXOld()
     {
         Spinner spinner = (Spinner) findViewById(R.id.score_spinner);
         return Character.getNumericValue(((String) spinner.getSelectedItem()).charAt(0));
@@ -249,6 +261,23 @@ public class SetupActivity extends AppCompatActivity
     private int getSelectedNrOfFields() {
         Spinner spinner = (Spinner) findViewById(R.id.nr_of_fields_spinner);
         return Integer.valueOf((String) spinner.getSelectedItem());
+
+    private int getSelectedX() {
+        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
+        return Integer.parseInt(sharedPref.getString(
+                getResources().getString(R.string.pref_key_x01_starting_score), "3"));
+    }
+
+    private boolean isDoubleOutEnabled() {
+        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
+        return sharedPref.getBoolean(
+                getResources().getString(R.string.pref_key_x01_double_out), false);
+    }
+
+    private int getDoubleOutAttemptsSetting() {
+        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
+        return Integer.parseInt(sharedPref.getString(
+                getResources().getString(R.string.pref_key_x01_double_out_attempts), "5"));
     }
 
     @Override

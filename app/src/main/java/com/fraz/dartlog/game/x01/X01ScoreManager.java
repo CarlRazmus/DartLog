@@ -6,7 +6,8 @@ import java.util.LinkedList;
 
 public class X01ScoreManager extends ScoreManager {
 
-    private Integer doubleOutsBeforeSingleOut = null;
+    private LinkedList<Integer> totalScoreHistory = new LinkedList<>();
+    private int doubleOutsBeforeSingleOut = -1;
 
     /** The 'X' in X01 */
     private int x;
@@ -45,20 +46,30 @@ public class X01ScoreManager extends ScoreManager {
         score = getStartingScore();
     }
 
+    public Checkout getCurrentCheckoutType() {
+        if (doubleOutsBeforeSingleOut == -1)
+            return Checkout.DOUBLE;
+        else if (getRemainingDoubleOutAttempts() > 0)
+            return Checkout.DOUBLE_ATTEMPT;
+        else
+            return Checkout.SINGLE;
+    }
+
     public boolean mustDoubleOut() {
-        if (doubleOutsBeforeSingleOut != null) {
-            int doubleOutTries = 0;
-            if(score <= 50)
-                doubleOutTries += 1;
-            for (Integer score : totalScoreHistory) {
-                if (score <= 50) {
-                    doubleOutTries += 1;
-                }
+        Checkout checkoutType = getCurrentCheckoutType();
+        return checkoutType == Checkout.DOUBLE || checkoutType == Checkout.DOUBLE_ATTEMPT;
+    }
+
+    public int getRemainingDoubleOutAttempts() {
+        if (doubleOutsBeforeSingleOut == -1)
+            throw new UnsupportedOperationException("Attempts for double outs not used.");
+        int remainingDoubleOutAttempts = doubleOutsBeforeSingleOut;
+        for (Integer score : totalScoreHistory) {
+            if (score <= 50) {
+                remainingDoubleOutAttempts -= 1;
             }
-            return doubleOutTries <= doubleOutsBeforeSingleOut;
-        } else {
-            return true;
         }
+        return Math.max(0, remainingDoubleOutAttempts);
     }
 
     public void setDoubleOutsBeforeSingleOut(Integer doubleOutsBeforeSingleOut) {
@@ -72,5 +83,9 @@ public class X01ScoreManager extends ScoreManager {
 
     private boolean hasBust(int score) {
         return score < 0 || (score == 1 && mustDoubleOut());
+    }
+
+    public enum Checkout {
+        SINGLE, DOUBLE, DOUBLE_ATTEMPT
     }
 }

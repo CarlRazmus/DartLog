@@ -64,13 +64,13 @@ public class GameListAdapter extends RecyclerView.Adapter<GameListAdapter.ViewHo
             holder.itemView.setBackgroundResource(R.color.main_white);
             holder.itemView.setAlpha(1f);
             holder.playerName.setAlpha(1f);
-            holder.background_group.setBackgroundResource(R.drawable.main_grey_border_list_item);
+            holder.background_group.setBackgroundResource(R.drawable.list_item);
         } else {
-            holder.itemView.setElevation(2);
+            holder.itemView.setElevation(4);
             holder.itemView.setBackgroundResource(R.color.main_white);
             holder.itemView.setAlpha(.85f);
             holder.playerName.setAlpha(.75f);
-            holder.background_group.setBackgroundResource(R.drawable.light_grey_border_list_item);
+            holder.background_group.setBackgroundResource(R.drawable.list_item);
         }
     }
 
@@ -80,16 +80,21 @@ public class GameListAdapter extends RecyclerView.Adapter<GameListAdapter.ViewHo
             holder.checkout.setText("");
             holder.checkoutLabel.setText(R.string.result_win);
         }
-        else if (holder.getAdapterPosition() == game.getCurrentPlayerIdx()) {
+        else {
             holder.checkout.setText(player.getCheckoutText());
-            if (player.mustDoubleOut()) {
-                holder.checkoutLabel.setText(R.string.double_out);
-            } else {
-                holder.checkoutLabel.setText(R.string.single_out);
+            switch (player.getCurrentCheckoutType()) {
+                case DOUBLE:
+                    holder.checkoutLabel.setText(R.string.double_out);
+                    break;
+                case DOUBLE_ATTEMPT:
+                    holder.checkoutLabel.setText(R.string.double_out_attempts);
+                    String label = (String) holder.checkoutLabel.getText();
+                    holder.checkoutLabel.setText(String.format(label,
+                            player.getRemainingDoubleOutAttempts()));
+                    break;
+                case SINGLE:
+                    holder.checkoutLabel.setText(R.string.single_out);
             }
-            holder.checkout_view.setVisibility(View.VISIBLE);
-        } else {
-            holder.checkout_view.setVisibility(View.GONE);
         }
     }
 

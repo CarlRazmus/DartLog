@@ -30,8 +30,9 @@
     <string name="log">LOG</string>
     <string name="average_score">Average: </string>
     <string name="max_score">Max score:</string>
-    <string name="double_out">Double Out:</string>
-    <string name="single_out">Single Out:</string>
+    <string name="double_out">Double-out:</string>
+    <string name="single_out">Single-out:</string>
+    <string name="double_out_attempts">Double-out (%d):</string>
     <string name="games_won">Games won</string>
     <string name="recent_games">RECENT GAMES</string>
     <string name="two">2</string>
@@ -46,7 +47,18 @@
     <string name="player_selection">Player Selection</string>
     <string name="score_colon">Score: </string>
     <string name="number_of_fields_colon">Nr of fields: </string>
+    <string name="starting_score_settings_label">Starting score:</string>
     <string name="x01">X01</string>
     <string name="field_to_hit">Field to hit:</string>
     <string name="result_win">Winner!</string>
+    <string name="players_colon">Players:</string>
+
+    <string name="pref_x01_starting_score">Starting score</string>
+    <string name="pref_x01_double_out">Double-out</string>
+    <string name="pref_x01_double_out_attempts">Double-out attempts</string>
+    <string name="pref_x01_double_out_attempts_dialog">Double-out attempts</string>
+    <string name="pref_key_x01_starting_score">pref_x01_starting_score</string>
+    <string name="pref_key_x01_double_out_attempts">pref_x01_double_out_attempts</string>
+    <string name="pref_key_x01_double_out">pref_x01_double_out</string>
+    <string name="pref_x01_double_out_attempts_summary">Single-out allowed after %s turns at a score of 50 or below.</string>
 </resources>

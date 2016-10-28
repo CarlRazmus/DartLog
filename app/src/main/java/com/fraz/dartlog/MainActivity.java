@@ -2,6 +2,7 @@ package com.fraz.dartlog;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -10,7 +11,6 @@ import android.widget.Button;
 
 import com.fraz.dartlog.game.setup.SetupActivity;
 import com.fraz.dartlog.statistics.ProfileListActivity;
-import com.fraz.dartlog.statistics.StatisticsActivity;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -20,19 +20,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         setContentView(R.layout.activity_main);
         Button playButton = (Button) findViewById(R.id.play_x01_button);
         Button profilesButton = (Button) findViewById(R.id.profiles_button);
-        Button statButton = (Button) findViewById(R.id.stat_button);
         Button randomButton = (Button) findViewById(R.id.play_random_button);
 
         assert playButton != null;
         assert profilesButton != null;
-        assert statButton != null;
         assert randomButton != null;
 
         playButton.setOnClickListener(this);
         profilesButton.setOnClickListener(this);
-        statButton.setOnClickListener(this);
-        randomButton.setOnClickListener(this);
 
+        PreferenceManager.setDefaultValues(this, R.xml.x01_preferences, false);
+        randomButton.setOnClickListener(this);
     }
 
     @Override
@@ -66,9 +64,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             case R.id.profiles_button:
                 startProfileActivity();
                 break;
-            case R.id.stat_button:
-                startStatActivity();
-                break;
             case R.id.play_random_button:
                 startPlayersActivity("random");
                 break;
@@ -84,11 +79,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private void startProfileActivity() {
         Intent intent = new Intent(this, ProfileListActivity.class);
-        startActivity(intent);
-    }
-
-    private void startStatActivity() {
-        Intent intent = new Intent(this, StatisticsActivity.class);
         startActivity(intent);
     }
 }
