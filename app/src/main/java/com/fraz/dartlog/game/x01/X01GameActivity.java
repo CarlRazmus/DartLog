@@ -13,6 +13,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.ViewAnimator;
 
 import com.fraz.dartlog.MainActivity;
@@ -32,6 +33,7 @@ public class X01GameActivity extends AppCompatActivity implements View.OnClickLi
     private GameListAdapter gameListAdapter;
     private ViewAnimator viewAnimator;
     private DartLogDatabaseHelper dbHelper;
+    private TextView roundTextView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,6 +43,7 @@ public class X01GameActivity extends AppCompatActivity implements View.OnClickLi
         setSupportActionBar((Toolbar) findViewById(R.id.game_toolbar));
         viewAnimator = (ViewAnimator) findViewById(R.id.game_input);
         dbHelper = new DartLogDatabaseHelper(this);
+        roundTextView = (TextView) findViewById(R.id.game_header_round);
 
         game = GetX01GameInstance(savedInstanceState);
         gameListAdapter = new GameListAdapter(game);
@@ -113,15 +116,19 @@ public class X01GameActivity extends AppCompatActivity implements View.OnClickLi
         updateView();
     }
 
-
     private void updateView() {
         gameListAdapter.notifyDataSetChanged();
         scrollToPlayerInList();
+        updateGameRound();
         if (game.isGameOver()) {
             setGameDoneView();
         } else {
             setNumPadView();
         }
+    }
+
+    private void updateGameRound() {
+        ((TextView) findViewById(R.id.game_header_round)).setText(String.valueOf(game.getRound()));
     }
 
     private void initListView() {
