@@ -1,6 +1,10 @@
 package com.fraz.dartlog.game.random;
 
 import android.app.Activity;
+import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
+import android.util.Log;
 
 import com.fraz.dartlog.CheckoutChart;
 import com.fraz.dartlog.game.Game;
@@ -14,22 +18,58 @@ import java.util.Comparator;
 public class Random extends Game implements Serializable{
 
     private final int nrOfFields;
-    private int nrOfFieldsCounter;
+    private int currentField = 0;
     private ArrayList<Integer> fields = new ArrayList<>();
     java.util.Random rand;
+    private RandomGameActivity context;
 
 
-    public Random(Activity context, ArrayList<? extends PlayerData> playerData, int nrOfFields) {
+    public Random(RandomGameActivity context, ArrayList<? extends PlayerData> playerData, int nrOfFields) {
         super(context, playerData);
+        this.context = context;
         this.nrOfFields = nrOfFields;
-        nrOfFieldsCounter = nrOfFields;
         rand = new java.util.Random();
 
-        newField();
+        addFields(nrOfFields);
+        updateFieldNrTextView();
     }
 
-    private void newField() {
-        fields.add(0, rand.nextInt(20) + 1);
+    private void addFields(int nrOfFields) {
+        for(int i=0; i<nrOfFields; i++)
+            generateRandomFieldNr();
+    }
+
+    private void generateRandomFieldNr() {
+        if(isNetworkAvailable())
+            fields.add(generateRandomNrFromSpace());
+        else
+            fields.add(rand.nextInt(20)+1);
+    }
+
+    private Integer generateRandomNrFromSpace() {
+        return rand.nextInt(20) + 1;
+    }
+
+    private boolean isNetworkAvailable() {
+        boolean haveConnectedWifi = false;
+        boolean haveConnectedMobile = false;
+
+        ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo[] netInfo = cm.getAllNetworkInfo();
+        for (NetworkInfo ni : netInfo) {
+            if (ni.getTypeName().equalsIgnoreCase("WIFI"))
+                if (ni.isConnected())
+                    haveConnectedWifi = true;
+            if (ni.getTypeName().equalsIgnoreCase("MOBILE"))
+                if (ni.isConnected())
+                    haveConnectedMobile = true;
+        }
+        Log.d("Internet connection", String.valueOf(haveConnectedWifi || haveConnectedMobile));
+        return haveConnectedWifi || haveConnectedMobile;
+    }
+
+    public void updateFieldNrTextView(){
+        context.updateCurrentFieldTextView(fields.get(currentField));
     }
 
     public boolean submitScore(int score) {
@@ -41,18 +81,18 @@ public class Random extends Game implements Serializable{
     }
 
     private void updateGameState() {
-        PlayerData currentPlayer = getPlayer(currentPlayerIdx);
-
         nextPlayer();
         if (currentPlayerIdx == 0) {
-            nrOfFieldsCounter -= 1;
-            newField();
+            currentField += 1;
+
+            if (currentField == nrOfFields) {
+                setWinner();
+                showWinnerToast();
+            }
+            else
+                updateFieldNrTextView();
         }
 
-        if (nrOfFieldsCounter == 0) {
-            setWinner();
-            showWinnerToast();
-        }
     }
 
     private void setWinner() {
@@ -69,7 +109,7 @@ public class Random extends Game implements Serializable{
     }
 
     public int getCurrentField() {
-        return fields.get(0);
+        return fields.get(currentField);
     }
 
     public void newLeg() {

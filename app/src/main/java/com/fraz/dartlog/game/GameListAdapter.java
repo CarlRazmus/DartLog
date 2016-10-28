@@ -14,9 +14,9 @@ import java.util.LinkedList;
 
 public class GameListAdapter extends RecyclerView.Adapter<GameListAdapter.ViewHolder> {
 
-    private X01 game;
+    private Game game;
 
-    public GameListAdapter(X01 game) {
+    public GameListAdapter(Game game) {
         this.game = game;
     }
 
@@ -29,7 +29,7 @@ public class GameListAdapter extends RecyclerView.Adapter<GameListAdapter.ViewHo
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
-        final X01PlayerData player = (X01PlayerData) game.getPlayer(position);
+        final PlayerData player = game.getPlayer(position);
 
         holder.playerName.setText(player.getPlayerName());
         holder.score.setText(String.valueOf(player.getScore()));
@@ -39,8 +39,6 @@ public class GameListAdapter extends RecyclerView.Adapter<GameListAdapter.ViewHo
         // Set total score history text
         LinkedList<Integer> scores = new LinkedList<>(player.getTotalScoreHistory());
         holder.totalScoreHistory.setText(createScoresString(scores));
-
-        updateCheckoutView(player, holder);
     }
 
     @Override
@@ -56,7 +54,7 @@ public class GameListAdapter extends RecyclerView.Adapter<GameListAdapter.ViewHo
         return scoreHistoryText.trim();
     }
 
-    private void setBackgroundColor(X01PlayerData player, ViewHolder holder) {
+    private void setBackgroundColor(PlayerData player, ViewHolder holder) {
         if (player.getScore() == 0) {
             holder.background_group.setBackgroundResource(R.color.accent_color);
             holder.itemView.setAlpha(1f);
@@ -95,14 +93,14 @@ public class GameListAdapter extends RecyclerView.Adapter<GameListAdapter.ViewHo
         }
     }
 
-    class ViewHolder extends RecyclerView.ViewHolder {
-        TextView playerName;
-        TextView score;
-        TextView totalScoreHistory;
-        TextView checkout;
-        TextView checkoutLabel;
-        ViewGroup checkout_view;
-        ViewGroup background_group;
+    protected class ViewHolder extends RecyclerView.ViewHolder {
+        public TextView playerName;
+        public TextView score;
+        public TextView totalScoreHistory;
+        public TextView checkout;
+        public TextView checkoutLabel;
+        public ViewGroup checkout_view;
+        public ViewGroup background_group;
 
         ViewHolder(View itemView) {
             super(itemView);

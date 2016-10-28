@@ -19,7 +19,7 @@ public class RandomGameListAdapter extends BaseExpandableListAdapter {
 
     private Random game;
     private Activity context;
-    private final int colors[] = {R.color.main_red, R.color.main_blue,
+    private final int colors[] = {R.color.primary_color, R.color.main_blue,
             R.color.main_green, R.color.main_yellow};
 
 
@@ -80,7 +80,6 @@ public class RandomGameListAdapter extends BaseExpandableListAdapter {
         TextView scoreView = (TextView) listItem.findViewById(R.id.game_player_list_item_score);
         scoreView.setText(String.valueOf(player.getScore()));
 
-        setLineColor(position, listItem);
         setBackgroundColor(player, position, listItem);
         return listItem;
     }
@@ -92,7 +91,7 @@ public class RandomGameListAdapter extends BaseExpandableListAdapter {
         View listItem = view;
 
         if (view == null) {
-            listItem = inflater.inflate(R.layout.game_player_child_list_item, parent, false);
+            listItem = inflater.inflate(R.layout.game_player_list_item, parent, false);
         }
         PlayerData player = (PlayerData) game.getPlayer(position);
 
@@ -101,12 +100,6 @@ public class RandomGameListAdapter extends BaseExpandableListAdapter {
         scores.addLast(player.getScore());
         String totalScoreHistoryText = createScoresString(scores);
         ((TextView) listItem.findViewById(R.id.total_score_history)).setText(totalScoreHistoryText);
-
-        //Set average and max score text
-        TextView avgScore = (TextView) listItem.findViewById(R.id.average_score);
-        TextView maxScore = (TextView) listItem.findViewById(R.id.max_score);
-        avgScore.setText(String.format("%.1f", player.getAvgScore()));
-        maxScore.setText(String.valueOf(player.getMaxScore()));
 
         return listItem;
     }
@@ -132,10 +125,5 @@ public class RandomGameListAdapter extends BaseExpandableListAdapter {
         } else {
             listItem.setBackgroundResource(R.drawable.game_player_normal);
         }
-    }
-
-    private void setLineColor(int position, View listItem) {
-        View lineView = listItem.findViewById(R.id.game_player_list_line);
-        lineView.setBackgroundResource(colors[position % colors.length]);
     }
 }

@@ -39,12 +39,11 @@
             <include layout="@layout/random_setup" />
         </ViewAnimator>
 
-            <Spinner
-                android:id="@+id/score_spinner"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:spinnerMode="dialog"/>
-        </LinearLayout>
+        <Spinner
+            android:id="@+id/score_spinner"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:spinnerMode="dialog"/>
 
         <View
             android:layout_width="match_parent"

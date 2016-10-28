@@ -13,7 +13,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.ViewAnimator;
 import com.fraz.dartlog.MainActivity;
 import com.fraz.dartlog.OnBackPressedDialogFragment;
@@ -23,17 +23,13 @@ import com.fraz.dartlog.game.GameListAdapter;
 import com.fraz.dartlog.game.InputEventListener;
 import com.fraz.dartlog.game.NumPadHandler;
 import com.fraz.dartlog.game.PlayerData;
-import com.fraz.dartlog.game.x01.X01;
-import com.fraz.dartlog.game.x01.X01PlayerData;
-import com.fraz.dartlog.game.x01.X01ScoreManager;
-
 import java.util.ArrayList;
 
 public class RandomGameActivity extends AppCompatActivity implements View.OnClickListener,
         InputEventListener, OnBackPressedDialogFragment.OnBackPressedDialogListener {
 
     private Random game;
-    private RandomGameListAdapter gameListAdapter;
+    private GameListAdapter gameListAdapter;
     private ViewAnimator viewAnimator;
     private DartLogDatabaseHelper dbHelper;
 
@@ -47,7 +43,7 @@ public class RandomGameActivity extends AppCompatActivity implements View.OnClic
         dbHelper = new DartLogDatabaseHelper(this);
 
         game = GetRandomGameInstance(savedInstanceState);
-        gameListAdapter = new RandomGameListAdapter(this, game);
+        gameListAdapter = new GameListAdapter(game);
 
         initListView();
         initNumPadView();
@@ -119,7 +115,6 @@ public class RandomGameActivity extends AppCompatActivity implements View.OnClic
     private void updateView() {
         gameListAdapter.notifyDataSetChanged();
         scrollToPlayerInList();
-        setExpandedPlayers();
         if (game.isGameOver()) {
             setGameDoneView();
         } else {
@@ -127,8 +122,14 @@ public class RandomGameActivity extends AppCompatActivity implements View.OnClic
         }
     }
 
+    public void updateCurrentFieldTextView(int newFieldNr) {
+        TextView myListView = (TextView) findViewById(R.id.current_field_textview);
+        assert myListView != null;
+        myListView.setText(String.valueOf(newFieldNr));
+    }
+
     private void initListView() {
-        ExpandableListView myListView = (ExpandableListView) findViewById(R.id.play_players_listView);
+        RecyclerView myListView = (RecyclerView) findViewById(R.id.play_players_listView);
         assert myListView != null;
         myListView.setAdapter(gameListAdapter);
     }
@@ -147,23 +148,8 @@ public class RandomGameActivity extends AppCompatActivity implements View.OnClic
         return playerDataList;
     }
 
-
-    private void setExpandedPlayers() {
-        ExpandableListView playersListView =
-                (ExpandableListView) findViewById(R.id.play_players_listView);
-        assert playersListView != null;
-
-        for (int i = 0; i < game.getNumberOfPlayers(); ++i) {
-            if (i == game.getCurrentPlayerIdx())
-                playersListView.expandGroup(i);
-            else
-                playersListView.collapseGroup(i);
-        }
-    }
-
-
     private void scrollToPlayerInList() {
-        ListView playersListView = (ListView) findViewById(R.id.play_players_listView);
+        RecyclerView playersListView = (RecyclerView) findViewById(R.id.play_players_listView);
         assert playersListView != null;
         playersListView.smoothScrollToPosition(game.getCurrentPlayerIdx());
     }
