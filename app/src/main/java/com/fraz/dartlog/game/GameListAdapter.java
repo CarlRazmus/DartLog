@@ -1,5 +1,6 @@
 package com.fraz.dartlog.game;
 
+import android.graphics.Typeface;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -81,8 +82,18 @@ public class GameListAdapter extends RecyclerView.Adapter<GameListAdapter.ViewHo
             holder.checkout_view.setVisibility(View.VISIBLE);
             holder.checkout.setText("");
             holder.checkoutLabel.setText(R.string.result_win);
+            holder.current_player_indicator.setVisibility(View.GONE);
+            holder.playerName.setTypeface(null, Typeface.NORMAL);
         }
         else {
+            if (holder.getAdapterPosition() == game.getCurrentPlayerIdx()) {
+                holder.current_player_indicator.setVisibility(View.VISIBLE);
+                holder.playerName.setTypeface(null, Typeface.BOLD);
+            } else {
+                holder.current_player_indicator.setVisibility(View.GONE);
+                holder.playerName.setTypeface(null, Typeface.NORMAL);
+            }
+
             holder.checkout.setText(player.getCheckoutText());
             switch (player.getCurrentCheckoutType()) {
                 case DOUBLE:
@@ -108,6 +119,7 @@ public class GameListAdapter extends RecyclerView.Adapter<GameListAdapter.ViewHo
         TextView checkoutLabel;
         ViewGroup checkout_view;
         ViewGroup background_group;
+        View current_player_indicator;
 
         ViewHolder(View itemView) {
             super(itemView);
@@ -117,7 +129,10 @@ public class GameListAdapter extends RecyclerView.Adapter<GameListAdapter.ViewHo
             checkout = (TextView) itemView.findViewById(R.id.checkout);
             checkoutLabel = (TextView) itemView.findViewById(R.id.checkout_label);
             checkout_view = (ViewGroup) itemView.findViewById(R.id.checkout_view);
-            background_group = (ViewGroup) itemView.findViewById(R.id.game_player_list_item_background);
+            background_group = (ViewGroup)
+                    itemView.findViewById(R.id.game_player_list_item_background);
+            current_player_indicator =
+                    itemView.findViewById(R.id.game_player_list_item_current_player_indicator);
         }
     }
 }

@@ -1,11 +1,11 @@
 package com.fraz.dartlog.game.setup;
-import com.fraz.dartlog.R;
-
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+
+import com.fraz.dartlog.R;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -83,9 +83,9 @@ public class AvailablePlayersRecyclerAdapter extends RecyclerView.Adapter<Availa
                 toggleSelected(holder.getAdapterPosition());
 
                 if (isMarked(holder.getAdapterPosition()))
-                    v.setBackgroundResource(R.color.game_player_winner);
+                    v.setBackgroundResource(R.color.accent_color);
                 else
-                    v.setBackgroundResource(R.color.background_dark_transparent);
+                    v.setBackgroundResource(android.R.color.transparent);
             }
         }));
     }

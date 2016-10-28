@@ -37,7 +37,7 @@
 
         <RelativeLayout
             android:layout_width="0dp"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:layout_weight="1.5"
             android:background="@color/background_dark">
 
@@ -45,8 +45,7 @@
                 android:layout_alignParentBottom="true"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/game_input"
-                android:layout_centerInParent="true">
+                android:id="@+id/game_input">
 
                 <include layout="@layout/game_num_pad"/>
                 <include layout="@layout/game_over"/>
