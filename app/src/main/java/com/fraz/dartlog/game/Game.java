@@ -119,4 +119,8 @@ public abstract class Game {
     public ArrayList<? extends PlayerData> getPlayers() {
         return players;
     }
+
+    public int getRound() {
+        return playOrder.size() / players.size() + 1;
+    }
 }
