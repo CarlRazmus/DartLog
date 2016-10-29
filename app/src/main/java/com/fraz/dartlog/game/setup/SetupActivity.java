@@ -16,7 +16,10 @@ import android.support.v7.widget.Toolbar;
 import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.Gravity;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.Spinner;
+import android.widget.SpinnerAdapter;
 import android.widget.Toast;
 import android.widget.ViewAnimator;
 
@@ -87,7 +90,7 @@ public class SetupActivity extends AppCompatActivity
 
     }
 
-    private void InitializeRulesOld(){
+   /* private void InitializeRulesOld(){
         Spinner spinner;
         int spinnerContentId = 0;
 
@@ -108,7 +111,7 @@ public class SetupActivity extends AppCompatActivity
                 getResources().getStringArray(spinnerContentId));
         spinner.setAdapter(spinnerAdapter);
     }
-
+*/
     private void InitializeRules() {
         // Display the fragment as the main content.
         getFragmentManager().beginTransaction()
@@ -261,6 +264,7 @@ public class SetupActivity extends AppCompatActivity
     private int getSelectedNrOfFields() {
         Spinner spinner = (Spinner) findViewById(R.id.nr_of_fields_spinner);
         return Integer.valueOf((String) spinner.getSelectedItem());
+    }
 
     private int getSelectedX() {
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);

@@ -41,7 +41,7 @@ public class X01PlayerData extends PlayerData {
         return scoreManager.getRemainingDoubleOutAttempts();
     }
 
-    private boolean mustDoubleOut() {
+    public boolean mustDoubleOut() {
         X01ScoreManager.Checkout checkoutType = getCurrentCheckoutType();
         return checkoutType == X01ScoreManager.Checkout.DOUBLE ||
                 checkoutType == X01ScoreManager.Checkout.DOUBLE_ATTEMPT;

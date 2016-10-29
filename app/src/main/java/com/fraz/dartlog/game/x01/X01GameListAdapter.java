@@ -32,11 +32,6 @@ public class X01GameListAdapter extends GameListAdapter {
         }
         else if (holder.getAdapterPosition() == game.getCurrentPlayerIdx()) {
             holder.checkout.setText(player.getCheckoutText());
-            if (player.mustDoubleOut()) {
-                holder.checkoutLabel.setText(R.string.double_out);
-            } else {
-                holder.checkoutLabel.setText(R.string.single_out);
-            }
             holder.checkout_view.setVisibility(View.VISIBLE);
         } else {
             holder.checkout_view.setVisibility(View.GONE);
