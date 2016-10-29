@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/background">
+    android:background="@color/background_dark">
 
     <TextView
         android:id="@+id/title"
@@ -38,7 +39,8 @@
             android:layout_height="match_parent"
             android:layout_marginLeft="16dp"
             android:layout_marginRight="16dp"
-            android:layout_marginTop="8dp" />
+            android:layout_marginTop="8dp"
+            tools:listitem="@layout/available_player_list_item"/>
     </RelativeLayout>
 
 </RelativeLayout>

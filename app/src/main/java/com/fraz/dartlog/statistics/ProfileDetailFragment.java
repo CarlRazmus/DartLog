@@ -120,7 +120,7 @@ public class ProfileDetailFragment extends Fragment {
             if (holder.mGame.getWinner().getPlayerName()
                     .equals(profileName)) {
                 result.setText("WIN");
-                result.setTextColor(ContextCompat.getColor(getContext(), R.color.main_green));
+                result.setTextColor(ContextCompat.getColor(getContext(), R.color.accent_color));
             }
             else {
                 result.setText("LOSS");
