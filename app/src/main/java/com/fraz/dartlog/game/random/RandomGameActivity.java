@@ -29,7 +29,7 @@ public class RandomGameActivity extends AppCompatActivity implements View.OnClic
         InputEventListener, OnBackPressedDialogFragment.OnBackPressedDialogListener {
 
     private Random game;
-    private GameListAdapter gameListAdapter;
+    private RandomGameListAdapter gameListAdapter;
     private ViewAnimator viewAnimator;
     private DartLogDatabaseHelper dbHelper;
 
@@ -43,7 +43,7 @@ public class RandomGameActivity extends AppCompatActivity implements View.OnClic
         dbHelper = new DartLogDatabaseHelper(this);
 
         game = GetRandomGameInstance(savedInstanceState);
-        gameListAdapter = new GameListAdapter(game);
+        gameListAdapter = new RandomGameListAdapter(this, game);
 
         initListView();
         initNumPadView();

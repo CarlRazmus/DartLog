@@ -25,7 +25,7 @@
     <FrameLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/x01_setup"/>
+        android:id="@+id/game_preferences"/>
 
     <View
         android:layout_width="match_parent"
@@ -41,22 +41,7 @@
         android:layout_marginRight="@dimen/activity_horizontal_margin"
         android:orientation="vertical">
 
-        <ViewAnimator
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/game_setup">
-
-            <include layout="@layout/x01_setup" />
-            <include layout="@layout/random_setup" />
-        </ViewAnimator>
-
-        <Spinner
-            android:id="@+id/score_spinner"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:spinnerMode="dialog"/>
-
-        <View
+        <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textSize="16sp"

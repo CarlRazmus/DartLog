@@ -30,7 +30,7 @@ public class X01GameActivity extends AppCompatActivity implements View.OnClickLi
         InputEventListener, OnBackPressedDialogFragment.OnBackPressedDialogListener {
 
     private X01 game;
-    private GameListAdapter gameListAdapter;
+    private X01GameListAdapter gameListAdapter;
     private ViewAnimator viewAnimator;
     private DartLogDatabaseHelper dbHelper;
     private TextView roundTextView;
@@ -46,7 +46,7 @@ public class X01GameActivity extends AppCompatActivity implements View.OnClickLi
         roundTextView = (TextView) findViewById(R.id.game_header_round);
 
         game = GetX01GameInstance(savedInstanceState);
-        gameListAdapter = new GameListAdapter(game);
+        gameListAdapter = new X01GameListAdapter(game);
 
         initListView();
         initNumPadView();

@@ -3,7 +3,6 @@ package com.fraz.dartlog.game.setup;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.res.Resources;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -16,21 +15,19 @@ import android.support.v7.widget.Toolbar;
 import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.Gravity;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
-import android.widget.SpinnerAdapter;
 import android.widget.Toast;
 import android.widget.ViewAnimator;
 
 import com.fraz.dartlog.R;
 import com.fraz.dartlog.db.DartLogDatabaseHelper;
 import com.fraz.dartlog.game.random.RandomGameActivity;
+import com.fraz.dartlog.game.random.RandomSettingsFragment;
 import com.fraz.dartlog.game.x01.X01GameActivity;
 import com.fraz.dartlog.game.x01.X01SettingsFragment;
 
 import java.util.ArrayList;
-import java.util.Random;
 
 public class SetupActivity extends AppCompatActivity
         implements ParticipantsListRecyclerAdapter.OnDragStartListener, View.OnClickListener  {
@@ -61,7 +58,6 @@ public class SetupActivity extends AppCompatActivity
         InitializeButton();
         InitializeFAB();
         InitializeRules();
-        initializeSettingsView();
 
         RecyclerView participantsRecyclerView =
                 (RecyclerView) findViewById(R.id.participants_recycler_view);
@@ -76,47 +72,21 @@ public class SetupActivity extends AppCompatActivity
         initializeSelectPlayersDialog();
     }
 
-    private void initializeSettingsView(){
-        viewAnimator = (ViewAnimator) findViewById(R.id.game_setup);
-
+    private void InitializeRules() {
         switch (gameType) {
             case ("x01"):
-                viewAnimator.setDisplayedChild(0);
+                getFragmentManager().beginTransaction()
+                        .replace(R.id.game_preferences, new X01SettingsFragment())
+                        .commit();
                 break;
             case ("random"):
-                viewAnimator.setDisplayedChild(1);
+                getFragmentManager().beginTransaction()
+                        .replace(R.id.game_preferences, new RandomSettingsFragment())
+                        .commit();
                 break;
-        }
-
-    }
-
-   /* private void InitializeRulesOld(){
-        Spinner spinner;
-        int spinnerContentId = 0;
-
-        switch (gameType){
             default:
-            case("x01"):
-                spinner = (Spinner) findViewById(R.id.score_spinner);
-                spinnerContentId = R.array.x01_entries;
-                break;
-            case("random"):
-                spinner = (Spinner) findViewById(R.id.nr_of_fields_spinner);
-                spinnerContentId = R.array.random_entries;
                 break;
         }
-        assert spinner != null;
-
-        SpinnerAdapter spinnerAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item,
-                getResources().getStringArray(spinnerContentId));
-        spinner.setAdapter(spinnerAdapter);
-    }
-*/
-    private void InitializeRules() {
-        // Display the fragment as the main content.
-        getFragmentManager().beginTransaction()
-                .replace(R.id.x01_setup, new X01SettingsFragment())
-                .commit();
     }
 
     private void InitializeFAB() {
@@ -208,12 +178,7 @@ public class SetupActivity extends AppCompatActivity
         if (participantNames.size() == 0) {
             showMustAddPlayersErrorToast();
         } else {
-            Intent intent = new Intent(this, X01GameActivity.class);
-            intent.putStringArrayListExtra("playerNames", participantNames);
-            intent.putExtra("x", getSelectedX());
-            if (isDoubleOutEnabled())
-                intent.putExtra("double_out", getDoubleOutAttemptsSetting());
-            startActivity(intent);
+            startActivity(createGameIntent());
         }
     }
 
@@ -233,37 +198,17 @@ public class SetupActivity extends AppCompatActivity
         return gameIntent;
     }
 
-    private void putGameExtras(Intent intent) {
-        switch(gameType) {
-            case "x01":
-                intent.putExtra("x", getSelectedX());
-                break;
-            case "random":
-                break;
-        }
-    }
-
     private Intent createRandomGameIntent() {
         Intent intent = new Intent(this, RandomGameActivity.class);
-        intent.putExtra("nrOfFields", getSelectedNrOfFields());
         return intent;
     }
 
     private Intent createX01GameIntent() {
         Intent intent = new Intent(this, X01GameActivity.class);
         intent.putExtra("x", getSelectedX());
+        if (isDoubleOutEnabled())
+            intent.putExtra("double_out", getDoubleOutAttemptsSetting());
         return intent;
-    }
-
-    private int getSelectedXOld()
-    {
-        Spinner spinner = (Spinner) findViewById(R.id.score_spinner);
-        return Character.getNumericValue(((String) spinner.getSelectedItem()).charAt(0));
-    }
-
-    private int getSelectedNrOfFields() {
-        Spinner spinner = (Spinner) findViewById(R.id.nr_of_fields_spinner);
-        return Integer.valueOf((String) spinner.getSelectedItem());
     }
 
     private int getSelectedX() {

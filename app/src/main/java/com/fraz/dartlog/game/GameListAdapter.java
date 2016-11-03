@@ -1,48 +1,25 @@
 package com.fraz.dartlog.game;
 
-import android.graphics.Typeface;
 import android.support.v7.widget.RecyclerView;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.fraz.dartlog.R;
-import com.fraz.dartlog.game.x01.X01;
-import com.fraz.dartlog.game.x01.X01PlayerData;
 
 import java.util.LinkedList;
 
-public class GameListAdapter extends RecyclerView.Adapter<GameListAdapter.ViewHolder> {
+public abstract class GameListAdapter<T extends GameListAdapter.ViewHolder> extends RecyclerView.Adapter<T> {
 
-    private Game game;
+    protected Game game;
 
     public GameListAdapter(Game game) {
         this.game = game;
     }
 
     @Override
-    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View listItem = LayoutInflater.from(parent.getContext()).inflate(
-                R.layout.game_player_list_item, parent, false);
-        return new ViewHolder(listItem);
-    }
+    public abstract T onCreateViewHolder(ViewGroup parent, int viewType);
 
-    @Override
-    public void onBindViewHolder(final ViewHolder holder, int position) {
-        final PlayerData player = game.getPlayer(position);
-
-        holder.playerName.setText(player.getPlayerName());
-        holder.score.setText(String.valueOf(player.getScore()));
-
-        setBackgroundColor(player, holder);
-
-        // Set total score history text
-        LinkedList<Integer> scores = new LinkedList<>(player.getTotalScoreHistory());
-        holder.totalScoreHistory.setText(createScoresString(scores));
-
-        updateCheckoutView(player, holder);
-    }
 
     @Override
     public int getItemCount() {
@@ -55,6 +32,20 @@ public class GameListAdapter extends RecyclerView.Adapter<GameListAdapter.ViewHo
             scoreHistoryText += String.format("%s ", Integer.toString(score));
         }
         return scoreHistoryText.trim();
+    }
+
+    @Override
+    public void onBindViewHolder(T holder, int position) {
+        final PlayerData player = game.getPlayer(position);
+
+        holder.playerName.setText(player.getPlayerName());
+        holder.score.setText(String.valueOf(player.getScore()));
+
+        setBackgroundColor(player, holder);
+
+        // Set total score history text
+        LinkedList<Integer> scores = new LinkedList<>(player.getTotalScoreHistory());
+        holder.totalScoreHistory.setText(createScoresString(scores));
     }
 
     private void setBackgroundColor(PlayerData player, ViewHolder holder) {
@@ -77,58 +68,18 @@ public class GameListAdapter extends RecyclerView.Adapter<GameListAdapter.ViewHo
         }
     }
 
-    private void updateCheckoutView(X01PlayerData player, ViewHolder holder) {
-        if (player.getScore() == 0) {
-            holder.checkout_view.setVisibility(View.VISIBLE);
-            holder.checkout.setText("");
-            holder.checkoutLabel.setText(R.string.result_win);
-            holder.current_player_indicator.setVisibility(View.GONE);
-            holder.playerName.setTypeface(null, Typeface.NORMAL);
-        }
-        else {
-            if (holder.getAdapterPosition() == game.getCurrentPlayerIdx()) {
-                holder.current_player_indicator.setVisibility(View.VISIBLE);
-                holder.playerName.setTypeface(null, Typeface.BOLD);
-            } else {
-                holder.current_player_indicator.setVisibility(View.GONE);
-                holder.playerName.setTypeface(null, Typeface.NORMAL);
-            }
-
-            holder.checkout.setText(player.getCheckoutText());
-            switch (player.getCurrentCheckoutType()) {
-                case DOUBLE:
-                    holder.checkoutLabel.setText(R.string.double_out);
-                    break;
-                case DOUBLE_ATTEMPT:
-                    holder.checkoutLabel.setText(R.string.double_out_attempts);
-                    String label = (String) holder.checkoutLabel.getText();
-                    holder.checkoutLabel.setText(String.format(label,
-                            player.getRemainingDoubleOutAttempts()));
-                    break;
-                case SINGLE:
-                    holder.checkoutLabel.setText(R.string.single_out);
-            }
-        }
-    }
-
-    class ViewHolder extends RecyclerView.ViewHolder {
+    public class ViewHolder extends RecyclerView.ViewHolder {
         TextView playerName;
         TextView score;
         TextView totalScoreHistory;
-        TextView checkout;
-        TextView checkoutLabel;
-        ViewGroup checkout_view;
         ViewGroup background_group;
         View current_player_indicator;
 
-        ViewHolder(View itemView) {
+        public ViewHolder(View itemView) {
             super(itemView);
             playerName = (TextView) itemView.findViewById(R.id.game_player_list_item_name);
             score = (TextView) itemView.findViewById(R.id.game_player_list_item_score);
             totalScoreHistory = (TextView) itemView.findViewById(R.id.total_score_history);
-            checkout = (TextView) itemView.findViewById(R.id.checkout);
-            checkoutLabel = (TextView) itemView.findViewById(R.id.checkout_label);
-            checkout_view = (ViewGroup) itemView.findViewById(R.id.checkout_view);
             background_group = (ViewGroup)
                     itemView.findViewById(R.id.game_player_list_item_background);
             current_player_indicator =
