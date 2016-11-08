@@ -18,6 +18,7 @@ public class RandomScoreManager extends ScoreManager {
     }
 
     public boolean submitScore(int score) {
+        super.submitScore(score);
         this.score += score;
         return true;
     }
