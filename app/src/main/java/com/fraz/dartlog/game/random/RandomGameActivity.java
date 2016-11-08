@@ -19,7 +19,6 @@ import com.fraz.dartlog.MainActivity;
 import com.fraz.dartlog.OnBackPressedDialogFragment;
 import com.fraz.dartlog.R;
 import com.fraz.dartlog.db.DartLogDatabaseHelper;
-import com.fraz.dartlog.game.GameListAdapter;
 import com.fraz.dartlog.game.InputEventListener;
 import com.fraz.dartlog.game.NumPadHandler;
 import com.fraz.dartlog.game.PlayerData;
@@ -115,6 +114,7 @@ public class RandomGameActivity extends AppCompatActivity implements View.OnClic
     private void updateView() {
         gameListAdapter.notifyDataSetChanged();
         scrollToPlayerInList();
+
         if (game.isGameOver()) {
             setGameDoneView();
         } else {
@@ -140,8 +140,8 @@ public class RandomGameActivity extends AppCompatActivity implements View.OnClic
     private ArrayList<PlayerData> createPlayerDataList() {
         Intent intent = getIntent();
         ArrayList<String> playerNames = intent.getStringArrayListExtra("playerNames");
-
         ArrayList<PlayerData> playerDataList = new ArrayList<>();
+
         for (String playerName : playerNames) {
             playerDataList.add(new PlayerData(playerName, new RandomScoreManager()));
         }
@@ -161,10 +161,10 @@ public class RandomGameActivity extends AppCompatActivity implements View.OnClic
 
     private void initGameDoneView() {
         Button newLegButton = (Button) findViewById(R.id.new_leg);
-        Button completeMatchButton = (Button) findViewById(R.id.complete_match);
-
         assert newLegButton != null;
         newLegButton.setOnClickListener(this);
+
+        Button completeMatchButton = (Button) findViewById(R.id.complete_match);
         assert completeMatchButton != null;
         completeMatchButton.setOnClickListener(this);
     }

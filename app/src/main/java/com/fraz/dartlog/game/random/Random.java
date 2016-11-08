@@ -1,12 +1,10 @@
 package com.fraz.dartlog.game.random;
 
-import android.app.Activity;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.util.Log;
 
-import com.fraz.dartlog.CheckoutChart;
 import com.fraz.dartlog.game.Game;
 import com.fraz.dartlog.game.PlayerData;
 
@@ -92,7 +90,6 @@ public class Random extends Game implements Serializable{
             else
                 updateFieldNrTextView();
         }
-
     }
 
     private void setWinner() {
@@ -106,10 +103,6 @@ public class Random extends Game implements Serializable{
                 return playerData.getScore() - t1.getScore();
             }
         });
-    }
-
-    public int getCurrentField() {
-        return fields.get(currentField);
     }
 
     public void newLeg() {
