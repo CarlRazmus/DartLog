@@ -20,7 +20,6 @@ public abstract class GameListAdapter<T extends GameListAdapter.ViewHolder> exte
     @Override
     public abstract T onCreateViewHolder(ViewGroup parent, int viewType);
 
-
     @Override
     public int getItemCount() {
         return game.getNumberOfPlayers();
@@ -49,7 +48,7 @@ public abstract class GameListAdapter<T extends GameListAdapter.ViewHolder> exte
     }
 
     private void setBackgroundColor(PlayerData player, ViewHolder holder) {
-        if (player.getScore() == 0) {
+        if (game.isGameOver() && game.getWinner() == player) {
             holder.background_group.setBackgroundResource(R.color.accent_color);
             holder.itemView.setAlpha(1f);
             holder.playerName.setAlpha(1f);
