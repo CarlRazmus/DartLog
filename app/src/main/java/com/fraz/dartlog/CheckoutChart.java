@@ -22,7 +22,7 @@ public class CheckoutChart implements Serializable{
     }
 
     public String getCheckoutText(int score) {
-        return checkouts.get(score, "N/A");
+        return checkouts.get(score, "No checkout");
     }
 
     private void initCheckoutMap(Context context, int checkoutChartRawResourceId) {

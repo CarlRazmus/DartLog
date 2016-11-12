@@ -1,5 +1,6 @@
 package com.fraz.dartlog.game;
 
+import android.graphics.Typeface;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.ViewGroup;
@@ -52,18 +53,24 @@ public abstract class GameListAdapter<T extends GameListAdapter.ViewHolder> exte
             holder.background_group.setBackgroundResource(R.color.accent_color);
             holder.itemView.setAlpha(1f);
             holder.playerName.setAlpha(1f);
+            holder.current_player_indicator.setAlpha(0.0f);
+            holder.playerName.setTypeface(null, Typeface.NORMAL);
         } else if (game.getCurrentPlayerIdx() == holder.getAdapterPosition()) {
             holder.itemView.setElevation(8);
             holder.itemView.setBackgroundResource(R.color.main_white);
             holder.itemView.setAlpha(1f);
             holder.playerName.setAlpha(1f);
             holder.background_group.setBackgroundResource(R.drawable.list_item);
+            holder.current_player_indicator.setAlpha(1.0f);
+            holder.playerName.setTypeface(null, Typeface.BOLD);
         } else {
             holder.itemView.setElevation(4);
             holder.itemView.setBackgroundResource(R.color.main_white);
             holder.itemView.setAlpha(.85f);
             holder.playerName.setAlpha(.75f);
             holder.background_group.setBackgroundResource(R.drawable.list_item);
+            holder.current_player_indicator.setAlpha(0.0f);
+            holder.playerName.setTypeface(null, Typeface.NORMAL);
         }
     }
 
