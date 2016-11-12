@@ -2,6 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.fraz.dartlog">
 
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <application
         android:allowBackup="true"
         android:icon="@mipmap/custom_start_icon"
@@ -18,6 +19,8 @@
             </intent-filter>
         </activity>
         <activity android:name=".game.x01.X01GameActivity"/>
+        <activity android:name=".game.random.RandomGameActivity"/>
+        <activity android:name=".statistics.StatisticsActivity" />
         <activity
             android:name=".game.setup.SetupActivity"
             android:label="@string/header_player_selection"

@@ -18,16 +18,19 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Button playButton = (Button) findViewById(R.id.play_button);
+        Button playButton = (Button) findViewById(R.id.play_x01_button);
         Button profilesButton = (Button) findViewById(R.id.profiles_button);
+        Button randomButton = (Button) findViewById(R.id.play_random_button);
 
         assert playButton != null;
         assert profilesButton != null;
+        assert randomButton != null;
 
         playButton.setOnClickListener(this);
         profilesButton.setOnClickListener(this);
 
         PreferenceManager.setDefaultValues(this, R.xml.x01_preferences, false);
+        randomButton.setOnClickListener(this);
     }
 
     @Override
@@ -55,17 +58,22 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     public void onClick(View v) {
         switch(v.getId()) {
-            case R.id.play_button:
-                startPlayersActivity();
+            case R.id.play_x01_button:
+                startPlayersActivity("x01");
                 break;
             case R.id.profiles_button:
                 startProfileActivity();
                 break;
+            case R.id.play_random_button:
+                startPlayersActivity("random");
+                break;
+
         }
     }
 
-    private void startPlayersActivity() {
+    private void startPlayersActivity(String gameType) {
         Intent intent = new Intent(this, SetupActivity.class);
+        intent.putExtra("gameType", gameType);
         startActivity(intent);
     }
 

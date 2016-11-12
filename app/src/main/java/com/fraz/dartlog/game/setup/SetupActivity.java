@@ -5,6 +5,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.preference.PreferenceManager;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
@@ -15,10 +16,14 @@ import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Spinner;
 import android.widget.Toast;
+import android.widget.ViewAnimator;
 
 import com.fraz.dartlog.R;
 import com.fraz.dartlog.db.DartLogDatabaseHelper;
+import com.fraz.dartlog.game.random.RandomGameActivity;
+import com.fraz.dartlog.game.random.RandomSettingsFragment;
 import com.fraz.dartlog.game.x01.X01GameActivity;
 import com.fraz.dartlog.game.x01.X01SettingsFragment;
 
@@ -33,6 +38,8 @@ public class SetupActivity extends AppCompatActivity
     private DartLogDatabaseHelper dbHelper;
     private Dialog selectPlayerDialog;
     private ItemTouchHelper itemTouchHelper;
+    private ViewAnimator viewAnimator;
+    private String gameType;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,6 +51,8 @@ public class SetupActivity extends AppCompatActivity
         dbHelper = new DartLogDatabaseHelper(this);
         participantNames = new ArrayList<>();
         participantsRecyclerAdapter = new ParticipantsListRecyclerAdapter(this, participantNames);
+
+        gameType = getIntent().getStringExtra("gameType");
 
         InitializeToolbar();
         InitializeButton();
@@ -64,10 +73,20 @@ public class SetupActivity extends AppCompatActivity
     }
 
     private void InitializeRules() {
-        // Display the fragment as the main content.
-        getFragmentManager().beginTransaction()
-                .replace(R.id.x01_setup, new X01SettingsFragment())
-                .commit();
+        switch (gameType) {
+            case ("x01"):
+                getFragmentManager().beginTransaction()
+                        .replace(R.id.game_preferences, new X01SettingsFragment())
+                        .commit();
+                break;
+            case ("random"):
+                getFragmentManager().beginTransaction()
+                        .replace(R.id.game_preferences, new RandomSettingsFragment())
+                        .commit();
+                break;
+            default:
+                break;
+        }
     }
 
     private void InitializeFAB() {
@@ -159,13 +178,38 @@ public class SetupActivity extends AppCompatActivity
         if (participantNames.size() == 0) {
             showMustAddPlayersErrorToast();
         } else {
-            Intent intent = new Intent(this, X01GameActivity.class);
-            intent.putStringArrayListExtra("playerNames", participantNames);
-            intent.putExtra("x", getSelectedX());
-            if (isDoubleOutEnabled())
-                intent.putExtra("double_out", getDoubleOutAttemptsSetting());
-            startActivity(intent);
+            startActivity(createGameIntent());
         }
+    }
+
+    @NonNull
+    private Intent createGameIntent() {
+        Intent gameIntent;
+        switch (gameType) {
+            case "random":
+                gameIntent = createRandomGameIntent();
+                break;
+            default:
+            case "x01":
+                gameIntent = createX01GameIntent();
+                break;
+        }
+        gameIntent.putStringArrayListExtra("playerNames", participantNames);
+        return gameIntent;
+    }
+
+    private Intent createRandomGameIntent() {
+        Intent intent = new Intent(this, RandomGameActivity.class);
+        intent.putExtra("turns", getSelectedNrTurns());
+        return intent;
+    }
+
+    private Intent createX01GameIntent() {
+        Intent intent = new Intent(this, X01GameActivity.class);
+        intent.putExtra("x", getSelectedX());
+        if (isDoubleOutEnabled())
+            intent.putExtra("double_out", getDoubleOutAttemptsSetting());
+        return intent;
     }
 
     private int getSelectedX() {
@@ -174,6 +218,11 @@ public class SetupActivity extends AppCompatActivity
                 getResources().getString(R.string.pref_key_x01_starting_score), "3"));
     }
 
+    private int getSelectedNrTurns() {
+        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
+        return Integer.parseInt(sharedPref.getString(
+                getResources().getString(R.string.pref_key_random_nr_of_rounds), "10"));
+    }
     private boolean isDoubleOutEnabled() {
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
         return sharedPref.getBoolean(

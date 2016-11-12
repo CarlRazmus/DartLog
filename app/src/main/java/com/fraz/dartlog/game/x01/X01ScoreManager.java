@@ -6,7 +6,6 @@ import java.util.LinkedList;
 
 public class X01ScoreManager extends ScoreManager {
 
-    private LinkedList<Integer> totalScoreHistory = new LinkedList<>();
     private int doubleOutsBeforeSingleOut = -1;
 
     /** The 'X' in X01 */
@@ -27,30 +26,22 @@ public class X01ScoreManager extends ScoreManager {
         int newScore = getScore() - score;
         if (hasBust(newScore)) {
             super.submitScore(0);
-            totalScoreHistory.add(getScore());
             return false;
         } else {
-            totalScoreHistory.add(getScore());
             super.submitScore(score);
             this.score = newScore;
             return true;
         }
     }
 
-    public LinkedList<Integer> getTotalScoreHistory() { return totalScoreHistory; }
-
     @Override
     public void undoScore() {
         super.undoScore();
-
-        if (!totalScoreHistory.isEmpty())
-            score = totalScoreHistory.removeLast();
     }
 
     @Override
     public void reset() {
         super.reset();
-        totalScoreHistory = new LinkedList<>();
         score = getStartingScore();
     }
 
@@ -72,7 +63,7 @@ public class X01ScoreManager extends ScoreManager {
         if (doubleOutsBeforeSingleOut == -1)
             throw new UnsupportedOperationException("Attempts for double outs not used.");
         int remainingDoubleOutAttempts = doubleOutsBeforeSingleOut;
-        for (Integer score : totalScoreHistory) {
+        for (Integer score : getTotalScoreHistory()) {
             if (score <= 50) {
                 remainingDoubleOutAttempts -= 1;
             }

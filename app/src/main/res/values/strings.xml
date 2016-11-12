@@ -22,7 +22,8 @@
     <string name="contentDescription_main_activity_background_image">Main activity background image</string>
     <string name="button_zero">0</string>
     <string name="one">1</string>
-    <string name="button_play_dart">PLAY DART</string>
+    <string name="button_play_x01">PLAY X01</string>
+    <string name="button_play_random">PLAY RANDOM</string>
     <string name="button_profiles">PROFILES</string>
     <string name="button_show_statistics_view">SHOW STATISTICS</string>
     <string name="dart">DART</string>
@@ -44,8 +45,11 @@
     <string name="nine">9</string>
     <string name="button_erase_number">Button to erase the last entered number</string>
     <string name="player_selection">Player Selection</string>
+    <string name="score_colon">Score: </string>
+    <string name="number_of_fields_colon">Nr of fields: </string>
     <string name="starting_score_settings_label">Starting score:</string>
     <string name="x01">X01</string>
+    <string name="field_to_hit">Field to hit:</string>
     <string name="result_win">Winner!</string>
     <string name="players_colon">Players:</string>
 
@@ -58,4 +62,6 @@
     <string name="pref_key_x01_double_out">pref_x01_double_out</string>
     <string name="pref_x01_double_out_attempts_summary">Single-out allowed after %s turns at a score of 50 or below.</string>
     <string name="round">Round</string>
+    <string name="pref_key_random_nr_of_rounds">pref_key_nr_of_rounds</string>
+    <string name="pref_random_nr_of_rounds">Nr of rounds</string>
 </resources>

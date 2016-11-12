@@ -13,47 +13,42 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.ViewAnimator;
 import com.fraz.dartlog.MainActivity;
 import com.fraz.dartlog.OnBackPressedDialogFragment;
 import com.fraz.dartlog.R;
 import com.fraz.dartlog.db.DartLogDatabaseHelper;
-import com.fraz.dartlog.game.GameListAdapter;
 import com.fraz.dartlog.game.InputEventListener;
 import com.fraz.dartlog.game.NumPadHandler;
-import com.fraz.dartlog.game.x01.X01;
-import com.fraz.dartlog.game.x01.X01PlayerData;
-import com.fraz.dartlog.game.x01.X01ScoreManager;
-
+import com.fraz.dartlog.game.PlayerData;
 import java.util.ArrayList;
 
 public class RandomGameActivity extends AppCompatActivity implements View.OnClickListener,
         InputEventListener, OnBackPressedDialogFragment.OnBackPressedDialogListener {
 
-    private X01 game;
-    private GameListAdapter gameListAdapter;
+    private Random game;
+    private RandomGameListAdapter gameListAdapter;
     private ViewAnimator viewAnimator;
     private DartLogDatabaseHelper dbHelper;
-    private RecyclerView mRecyclerView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_x01_game);
+        setContentView(R.layout.activity_random_game);
 
         setSupportActionBar((Toolbar) findViewById(R.id.game_toolbar));
         viewAnimator = (ViewAnimator) findViewById(R.id.game_input);
         dbHelper = new DartLogDatabaseHelper(this);
 
-        game = GetX01GameInstance(savedInstanceState);
-        gameListAdapter = new GameListAdapter(game);
-        gameListAdapter.setHasStableIds(true);
+        game = GetRandomGameInstance(savedInstanceState);
+        gameListAdapter = new RandomGameListAdapter(this, game);
 
         initListView();
         initNumPadView();
         initGameDoneView();
         updateView();
+        updateCurrentFieldTextView(game.getCurrentField());
     }
 
     @Override
@@ -63,31 +58,30 @@ public class RandomGameActivity extends AppCompatActivity implements View.OnClic
     }
 
     @NonNull
-    private X01 GetX01GameInstance(Bundle savedInstanceState) {
+    private Random GetRandomGameInstance(Bundle savedInstanceState) {
         if (savedInstanceState != null) {
-            X01 game = (X01) savedInstanceState.getSerializable("game");
+            Random game = (Random) savedInstanceState.getSerializable("randomGame");
             if (game != null)
                 return game;
         }
-        return new X01(this, createPlayerDataList());
+        int nrOfTurns = getIntent().getIntExtra("turns", 10);
+        return new Random(this, createPlayerDataList(), nrOfTurns);
     }
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putSerializable("game", game);
+        outState.putSerializable("randomGame", game);
     }
 
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.new_leg:
-                dbHelper.addX01Match(game);
                 game.newLeg();
                 updateView();
                 break;
             case R.id.complete_match:
-                dbHelper.addX01Match(game);
                 completeMatch();
                 break;
         }
@@ -119,38 +113,45 @@ public class RandomGameActivity extends AppCompatActivity implements View.OnClic
     }
 
     private void updateView() {
-        gameListAdapter.notifyItemRangeChanged(0, game.getNumberOfPlayers());
+        gameListAdapter.notifyDataSetChanged();
         scrollToPlayerInList();
+
         if (game.isGameOver()) {
             setGameDoneView();
         } else {
             setNumPadView();
+            updateCurrentFieldTextView(game.getCurrentField());
         }
     }
 
+    public void updateCurrentFieldTextView(int newFieldNr) {
+        TextView myListView = (TextView) findViewById(R.id.current_field_textview);
+        assert myListView != null;
+        myListView.setText(String.valueOf(newFieldNr));
+    }
+
     private void initListView() {
-        mRecyclerView = (RecyclerView) findViewById(R.id.play_players_listView);
-        assert mRecyclerView != null;
-        mRecyclerView.setAdapter(gameListAdapter);
+        RecyclerView myListView = (RecyclerView) findViewById(R.id.play_players_listView);
+        assert myListView != null;
+        myListView.setAdapter(gameListAdapter);
     }
 
     /**
      * Create and return a list of player data from a list of player names.
      */
-    private ArrayList<X01PlayerData> createPlayerDataList() {
+    private ArrayList<PlayerData> createPlayerDataList() {
         Intent intent = getIntent();
         ArrayList<String> playerNames = intent.getStringArrayListExtra("playerNames");
-        int x = intent.getIntExtra("x", 3);
+        ArrayList<PlayerData> playerDataList = new ArrayList<>();
 
-        ArrayList<X01PlayerData> playerDataList = new ArrayList<>();
         for (String playerName : playerNames) {
-            playerDataList.add(new X01PlayerData(this, playerName, new X01ScoreManager(x)));
+            playerDataList.add(new PlayerData(playerName, new RandomScoreManager()));
         }
         return playerDataList;
     }
 
     private void scrollToPlayerInList() {
-        ListView playersListView = (ListView) findViewById(R.id.play_players_listView);
+        RecyclerView playersListView = (RecyclerView) findViewById(R.id.play_players_listView);
         assert playersListView != null;
         playersListView.smoothScrollToPosition(game.getCurrentPlayerIdx());
     }
@@ -162,10 +163,10 @@ public class RandomGameActivity extends AppCompatActivity implements View.OnClic
 
     private void initGameDoneView() {
         Button newLegButton = (Button) findViewById(R.id.new_leg);
-        Button completeMatchButton = (Button) findViewById(R.id.complete_match);
-
         assert newLegButton != null;
         newLegButton.setOnClickListener(this);
+
+        Button completeMatchButton = (Button) findViewById(R.id.complete_match);
         assert completeMatchButton != null;
         completeMatchButton.setOnClickListener(this);
     }

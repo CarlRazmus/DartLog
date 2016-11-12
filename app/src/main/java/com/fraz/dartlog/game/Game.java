@@ -73,7 +73,7 @@ public abstract class Game {
 
     protected void showWinnerToast() {
         CharSequence text = String.format("Winner: %s!",
-                getPlayer(currentPlayerIdx).getPlayerName());
+                getWinner().getPlayerName());
         showToast(text);
     }
 

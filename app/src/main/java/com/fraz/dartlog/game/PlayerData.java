@@ -17,6 +17,11 @@ public class PlayerData {
         this.scoreManager = scoreManager;
     }
 
+    public PlayerData(String playerName) {
+        this.playerName = playerName;
+        this.scoreManager = new AdditionScoreManager();
+    }
+
     public String getPlayerName() {
         return playerName;
     }
@@ -35,6 +40,8 @@ public class PlayerData {
     public float getAvgScore() { return scoreManager.getAvgScore(); }
 
     public LinkedList<Integer> getScoreHistory() { return scoreManager.getScoreHistory(); }
+
+    public LinkedList<Integer> getTotalScoreHistory() { return scoreManager.getTotalScoreHistory(); }
 
     public void resetScore() {
         scoreManager.reset();
