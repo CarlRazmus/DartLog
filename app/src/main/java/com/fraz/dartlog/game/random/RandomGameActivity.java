@@ -48,6 +48,7 @@ public class RandomGameActivity extends AppCompatActivity implements View.OnClic
         initNumPadView();
         initGameDoneView();
         updateView();
+        updateCurrentFieldTextView(game.getCurrentField());
     }
 
     @Override
@@ -59,18 +60,18 @@ public class RandomGameActivity extends AppCompatActivity implements View.OnClic
     @NonNull
     private Random GetRandomGameInstance(Bundle savedInstanceState) {
         if (savedInstanceState != null) {
-            Random game = (Random) savedInstanceState.getSerializable("game");
+            Random game = (Random) savedInstanceState.getSerializable("randomGame");
             if (game != null)
                 return game;
         }
-        int nrOfFields = getIntent().getIntExtra("nrOfFields", 10);
-        return new Random(this, createPlayerDataList(), nrOfFields);
+        int nrOfTurns = getIntent().getIntExtra("turns", 10);
+        return new Random(this, createPlayerDataList(), nrOfTurns);
     }
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putSerializable("game", game);
+        outState.putSerializable("randomGame", game);
     }
 
     @Override
@@ -119,6 +120,7 @@ public class RandomGameActivity extends AppCompatActivity implements View.OnClic
             setGameDoneView();
         } else {
             setNumPadView();
+            updateCurrentFieldTextView(game.getCurrentField());
         }
     }
 

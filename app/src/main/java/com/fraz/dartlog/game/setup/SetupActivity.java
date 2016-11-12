@@ -200,6 +200,7 @@ public class SetupActivity extends AppCompatActivity
 
     private Intent createRandomGameIntent() {
         Intent intent = new Intent(this, RandomGameActivity.class);
+        intent.putExtra("turns", getSelectedNrTurns());
         return intent;
     }
 
@@ -217,6 +218,11 @@ public class SetupActivity extends AppCompatActivity
                 getResources().getString(R.string.pref_key_x01_starting_score), "3"));
     }
 
+    private int getSelectedNrTurns() {
+        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
+        return Integer.parseInt(sharedPref.getString(
+                getResources().getString(R.string.pref_key_random_nr_of_rounds), "10"));
+    }
     private boolean isDoubleOutEnabled() {
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
         return sharedPref.getBoolean(

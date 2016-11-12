@@ -62,4 +62,6 @@
     <string name="pref_key_x01_double_out">pref_x01_double_out</string>
     <string name="pref_x01_double_out_attempts_summary">Single-out allowed after %s turns at a score of 50 or below.</string>
     <string name="round">Round</string>
+    <string name="pref_key_random_nr_of_rounds">pref_key_nr_of_rounds</string>
+    <string name="pref_random_nr_of_rounds">Nr of rounds</string>
 </resources>

@@ -9,7 +9,7 @@
         <item>801</item>
     </string-array>
 
-    <string-array name="random_entries">
+    <string-array name="random_nr_of_rounds_entries">
         <item>1</item>
         <item>5</item>
         <item>10</item>

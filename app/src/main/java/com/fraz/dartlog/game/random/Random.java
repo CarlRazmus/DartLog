@@ -19,17 +19,14 @@ public class Random extends Game implements Serializable{
     private int currentField = 0;
     private ArrayList<Integer> fields = new ArrayList<>();
     java.util.Random rand;
-    private RandomGameActivity context;
 
 
     public Random(RandomGameActivity context, ArrayList<? extends PlayerData> playerData, int nrOfFields) {
         super(context, playerData);
-        this.context = context;
         this.nrOfFields = nrOfFields;
         rand = new java.util.Random();
 
         addFields(nrOfFields);
-        updateFieldNrTextView();
     }
 
     private void addFields(int nrOfFields) {
@@ -49,7 +46,7 @@ public class Random extends Game implements Serializable{
     }
 
     private boolean isNetworkAvailable() {
-        boolean haveConnectedWifi = false;
+    /*    boolean haveConnectedWifi = false;
         boolean haveConnectedMobile = false;
 
         ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
@@ -64,10 +61,8 @@ public class Random extends Game implements Serializable{
         }
         Log.d("Internet connection", String.valueOf(haveConnectedWifi || haveConnectedMobile));
         return haveConnectedWifi || haveConnectedMobile;
-    }
-
-    public void updateFieldNrTextView(){
-        context.updateCurrentFieldTextView(fields.get(currentField));
+        */
+        return false;
     }
 
     public boolean submitScore(int score) {
@@ -87,8 +82,6 @@ public class Random extends Game implements Serializable{
                 setWinner();
                 showWinnerToast();
             }
-            else
-                updateFieldNrTextView();
         }
     }
 
@@ -104,8 +97,12 @@ public class Random extends Game implements Serializable{
             }
         });
     }
+    public int getCurrentField(){return fields.get(currentField);}
 
     public void newLeg() {
+        currentField = 0;
+        fields = new ArrayList<Integer>();
+        addFields(nrOfFields);
         newGame();
     }
 }

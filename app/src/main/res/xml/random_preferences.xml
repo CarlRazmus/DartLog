@@ -1,4 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
-
+    <ListPreference
+        android:key="@string/pref_key_random_nr_of_rounds"
+        android:title="@string/pref_random_nr_of_rounds"
+        android:dialogTitle="@string/pref_random_nr_of_rounds"
+        android:entries="@array/random_nr_of_rounds_entries"
+        android:entryValues="@array/random_nr_of_rounds_entries"
+        android:defaultValue="10"
+        android:summary="%s" />
 </PreferenceScreen>
