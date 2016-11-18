@@ -67,5 +67,14 @@ public class X01GameTest {
         onView(withId(R.id.enter)).perform(click());
         onView(withId(R.id.score_input)).check(matches(withText("0")));
 
+        //Check that scores above 180 is not possible to input
+        onView(withId(R.id.one)).perform(click());
+        onView(withId(R.id.eight)).perform(click());
+        onView(withId(R.id.one)).perform(click());
+        onView(withId(R.id.score_input)).check(matches(withText("18")));
+        onView(withId(R.id.zero)).perform(click());
+        onView(withId(R.id.score_input)).check(matches(withText("180")));
+        onView(withId(R.id.zero)).perform(click());
+        onView(withId(R.id.score_input)).check(matches(withText("180")));
     }
 }

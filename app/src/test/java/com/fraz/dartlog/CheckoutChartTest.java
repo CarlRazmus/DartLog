@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.res.Resources;
 
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
@@ -34,6 +35,7 @@ public class CheckoutChartTest {
     }
 
     @Test
+    @Ignore
     public void testGetCheckoutText() throws Exception {
         CheckoutChart checkoutChart = new CheckoutChart(mockContext, R.raw.double_checkout_chart);
         assertThat(checkoutChart.getCheckoutText(90), equalTo("T18 D18"));
