@@ -16,7 +16,12 @@ notifications:
   email: false
 
 before_install:
+  # Add permission of gradlew
+  - chmod +x gradlew
 
   # for gradle output style
   - export TERM=dumb
+
+  # environment info
+  - ./gradlew -v
 
