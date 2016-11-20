@@ -22,6 +22,13 @@ branches:
 notifications:
   email: false
 
+before_script:
+  # Create and start android emulator for tests
+  - echo no | android create avd --force -n test -t android-23 --abi x86
+  - emulator -avd test -no-audio -no-window &
+  - android-wait-for-emulator
+  - adb shell input keyevent 82 &
+
 before_install:
   # Add permission of gradlew
   - chmod +x gradlew
@@ -31,4 +38,3 @@ before_install:
 
   # environment info
   - ./gradlew -v
-
