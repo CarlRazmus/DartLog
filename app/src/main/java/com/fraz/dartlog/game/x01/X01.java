@@ -24,6 +24,10 @@ public class X01 extends Game implements Serializable{
         return true;
     }
 
+    public int getNextStartingPlayer() {
+        return (getStartingPlayerIdx() + 1) % getNumberOfPlayers();
+    }
+
     private void updateGameState() {
         PlayerData currentPlayer = getPlayer(currentPlayerIdx);
         if (currentPlayer.getScore() == 0) {

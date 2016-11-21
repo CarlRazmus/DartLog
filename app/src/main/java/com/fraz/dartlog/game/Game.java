@@ -87,9 +87,7 @@ public abstract class Game {
         currentPlayerIdx = (currentPlayerIdx + 1) % getNumberOfPlayers();
     }
 
-    public int getNextStartingPlayer() {
-        return (getStartingPlayerIdx() + 1) % getNumberOfPlayers();
-    }
+    public abstract int getNextStartingPlayer();
 
     public void setStartingPlayerIdx(int startingPlayerIdx) {
         this.startingPlayerIdx = startingPlayerIdx;
