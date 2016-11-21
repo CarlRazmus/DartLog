@@ -77,16 +77,16 @@ public class AvailablePlayersRecyclerAdapter extends RecyclerView.Adapter<Availa
 
         final View listItemView = holder.listItemView;
         listItemView.setOnClickListener((new View.OnClickListener() {
-
             @Override
             public void onClick(View v) {
                 toggleSelected(holder.getAdapterPosition());
-
-                if (isMarked(holder.getAdapterPosition()))
-                    v.setBackgroundResource(R.color.accent_color);
-                else
-                    v.setBackgroundResource(android.R.color.transparent);
+                notifyItemChanged(holder.getAdapterPosition());
             }
         }));
+
+        if (isMarked(holder.getAdapterPosition()))
+            listItemView.setBackgroundResource(R.color.accent_color);
+        else
+            listItemView.setBackgroundResource(android.R.color.transparent);
     }
 }
