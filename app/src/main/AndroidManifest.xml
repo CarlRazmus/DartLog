@@ -11,22 +11,27 @@
         android:theme="@style/AppTheme">
         <activity
             android:name=".MainActivity"
-            android:label="@string/app_name">
+            android:label="@string/app_name"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".game.x01.X01GameActivity"/>
-        <activity android:name=".game.random.RandomGameActivity"/>
+        <activity android:name=".game.x01.X01GameActivity"
+                  android:screenOrientation="portrait"/>
+        <activity android:name=".game.random.RandomGameActivity"
+                  android:screenOrientation="portrait"/>
         <activity
             android:name=".game.setup.SetupActivity"
             android:label="@string/header_player_selection"
+            android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden" />
         <activity
             android:name=".statistics.ProfileListActivity"
             android:label="@string/title_profile_list"
+            android:screenOrientation="portrait"
             android:parentActivityName=".MainActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
@@ -35,6 +40,7 @@
         <activity
             android:name=".statistics.ProfileDetailActivity"
             android:label="@string/title_profile_detail"
+            android:screenOrientation="portrait"
             android:parentActivityName=".statistics.ProfileListActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
