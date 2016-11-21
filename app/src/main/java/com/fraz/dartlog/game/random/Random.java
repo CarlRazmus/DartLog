@@ -1,10 +1,5 @@
 package com.fraz.dartlog.game.random;
 
-import android.content.Context;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
-import android.util.Log;
-
 import com.fraz.dartlog.game.Game;
 import com.fraz.dartlog.game.PlayerData;
 
@@ -27,6 +22,10 @@ public class Random extends Game implements Serializable{
         rand = new java.util.Random();
 
         addFields(nrOfFields);
+    }
+
+    public int getNextStartingPlayer() {
+        return 0;
     }
 
     private void addFields(int nrOfFields) {
