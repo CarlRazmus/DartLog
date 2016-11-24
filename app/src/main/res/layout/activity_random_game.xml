@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     tools:context=".game.random.RandomGameActivity"
     android:orientation="vertical"
-    android:background="@color/background"
+    android:background="@drawable/background"
     android:keepScreenOn="true">
 
     <android.support.v7.widget.Toolbar
@@ -16,27 +16,12 @@
         android:background="?attr/colorPrimary"
         android:elevation="4dp"/>
 
-    <LinearLayout
-        android:layout_width="match_parent"
+    <include layout="@layout/game_header_random"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:gravity="center">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="20sp"
-            android:text="@string/field_to_hit"
-            android:layout_marginEnd="8dp"/>
-
-        <TextView
-            android:id="@+id/current_field_textview"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="20sp"
-            tools:text="8"/>
-    </LinearLayout>
-
+        android:layout_width="match_parent"
+        android:layout_marginTop="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"/>
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/play_players_listView"
