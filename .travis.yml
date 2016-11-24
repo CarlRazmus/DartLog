@@ -44,4 +44,4 @@ before_install:
   - ./gradlew -v
 
 script:
-  - ./gradlew build connectedCheck -PdisablePreDex
+  - travis_wait ./gradlew build connectedCheck -PdisablePreDex
