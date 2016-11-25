@@ -1,10 +1,11 @@
 language: android
 jdk: oraclejdk8
+sudo: false
 
 android:
   components:
-      - platform-tools
       - tools
+      - platform-tools
       # The BuildTools version used by your project
       - build-tools-24.0.1
       # The SDK version used to compile your project
@@ -27,9 +28,6 @@ notifications:
 
 before_script:
   # Create and start android emulator for tests
-  - android list target
-  - echo no | android create avd --force -n test -t "android-21" --abi armeabi-v7a --tag google_apis
-  - emulator -avd test -no-audio -no-window &
   - android-wait-for-emulator
   - adb shell input keyevent 82 &
 
@@ -37,11 +35,18 @@ before_install:
   # Add permission of gradlew
   - chmod +x gradlew
 
-  # for gradle output style
+  # For gradle output style
   - export TERM=dumb
 
-  # environment info
+  # Environment info
   - ./gradlew -v
 
+  # List targets
+  - android list target
+
+  # Create and start emulator
+  - echo no | android create avd --force -n test -t "android-21" --abi armeabi-v7a --tag google_apis
+  - emulator -avd test -no-audio -no-window &
+
 script:
-  - travis_wait ./gradlew build connectedCheck -PdisablePreDex
+  - ./gradlew build connectedCheck
