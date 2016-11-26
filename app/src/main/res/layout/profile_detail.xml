@@ -20,14 +20,14 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/profile_detail_games_played_label"
-            android:textSize="15sp"
+            android:textSize="16sp"
             android:text="@string/textView_games_played"/>
 
         <TextView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:id="@+id/profile_detail_games_played"
-            android:textSize="25sp"
+            android:textSize="24sp"
             android:textColor="@color/main_white"
             android:gravity="center"
             android:layout_below="@id/profile_detail_games_played_label"
@@ -41,14 +41,14 @@
             android:id="@+id/profile_detail_games_won_label"
             android:layout_marginStart="30dp"
             android:layout_toEndOf="@id/profile_detail_games_played_label"
-            android:textSize="15sp"
+            android:textSize="16sp"
             android:text="@string/games_won"/>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/profile_detail_games_won"
-            android:textSize="25sp"
+            android:textSize="24sp"
             android:textColor="@color/main_white"
             android:gravity="center"
             android:layout_below="@id/profile_detail_games_won_label"
@@ -60,18 +60,18 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center"
         android:text="@string/recent_games"
-        android:textSize="15sp"
-        android:padding="3dp"
-        android:background="@color/main_grey"/>
+        android:textSize="16sp"
+        android:textColor="@color/main_white"
+        android:padding="8dp" />
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recent_games_list"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layoutManager="LinearLayoutManager"
-        tools:listitem="@layout/match_history_list_item">
+        android:clipToPadding="false"
+        tools:listitem="@layout/player_match_statistics">
     </android.support.v7.widget.RecyclerView>
 
 </LinearLayout>

@@ -3,11 +3,12 @@ package com.fraz.dartlog.statistics;
 import android.os.Bundle;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v4.app.Fragment;
-import android.support.v4.content.ContextCompat;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.fraz.dartlog.R;
@@ -99,7 +100,7 @@ public class ProfileDetailFragment extends Fragment {
         private static final int NUMBER_OF_GAMES = 5;
         private final ArrayList<GameData> gameData;
 
-        public RecentGamesRecyclerViewAdapter(ArrayList<GameData> gameData) {
+        RecentGamesRecyclerViewAdapter(ArrayList<GameData> gameData) {
             this.gameData = gameData;
             Collections.reverse(this.gameData);
         }
@@ -107,34 +108,48 @@ public class ProfileDetailFragment extends Fragment {
         @Override
         public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
             View view = LayoutInflater.from(parent.getContext())
-                    .inflate(R.layout.match_history_list_item, parent, false);
+                    .inflate(R.layout.player_match_statistics, parent, false);
             return new ViewHolder(view);
         }
 
         @Override
         public void onBindViewHolder(final ViewHolder holder, int position) {
-            holder.mGame = gameData.get(position);
+            GameData game = gameData.get(position);
 
-            TextView result = (TextView) holder.mView.findViewById(R.id.match_history_result);
+            holder.gameType.setText(R.string.x01);
+            holder.date.setText(new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).
+                            format(game.getDate().getTime()));
 
-            if (holder.mGame.getWinner().getPlayerName()
-                    .equals(profileName)) {
-                result.setText("WIN");
-                result.setTextColor(ContextCompat.getColor(getContext(), R.color.accent_color));
+            addHeaders(holder, game);
+            initializeScoreBoard(holder, game);
+        }
+
+        private void initializeScoreBoard(ViewHolder holder, GameData game) {
+            holder.scoreboard.setAdapter(new MatchStatisticsRecyclerViewAdapter(getContext(), game));
+            holder.scoreboard.setLayoutManager(new GridLayoutManager(getContext(),
+                    game.getNumberOfPlayers() + 1, GridLayoutManager.HORIZONTAL, false));
+        }
+
+        private void addHeaders(final ViewHolder holder, GameData game) {
+            holder.headerGroup.removeAllViews();
+            TextView turnHeader = createHeaderView("Turn", holder.headerGroup);
+            turnHeader.setTextColor(getResources().getColor(R.color.accent_color));
+            holder.headerGroup.addView(turnHeader);
+            for (int i = 0; i < game.getNumberOfPlayers(); i++) {
+                TextView header = createHeaderView(game.getPlayer(i).getPlayerName(), holder.headerGroup);
+                holder.headerGroup.addView(header);
             }
-            else {
-                result.setText("LOSS");
-                result.setTextColor(ContextCompat.getColor(getContext(), R.color.primary_color));
-            }
+        }
 
-
-            TextView gameType = (TextView) holder.mView.findViewById(R.id.match_history_game_type);
-            gameType.setText(R.string.x01);
-
-            TextView date = (TextView) holder.mView.findViewById(R.id.match_history_date);
-            date.setText(
-                    new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).
-                            format(holder.mGame.getDate().getTime()));
+        private TextView createHeaderView(String text, ViewGroup headerGroup)
+        {
+            TextView header = (TextView) LayoutInflater.from(getContext())
+                    .inflate(R.layout.match_statistics_scoreboard_list_item, headerGroup, false);
+            header.setText(text);
+            header.setLayoutParams(new LinearLayout.LayoutParams(
+                    LinearLayout.LayoutParams.WRAP_CONTENT,
+                    LinearLayout.LayoutParams.WRAP_CONTENT));
+            return header;
         }
 
         @Override
@@ -142,14 +157,19 @@ public class ProfileDetailFragment extends Fragment {
             return Math.min(gameData.size(), NUMBER_OF_GAMES);
         }
 
-        public class ViewHolder extends RecyclerView.ViewHolder {
-            public final View mView;
-            public GameData mGame;
+        class ViewHolder extends RecyclerView.ViewHolder {
+            RecyclerView scoreboard;
+            TextView gameType;
+            TextView date;
+            ViewGroup headerGroup;
 
 
-            public ViewHolder(View view) {
+            ViewHolder(View view) {
                 super(view);
-                mView = view;
+                gameType = (TextView) view.findViewById(R.id.match_statistics_game_type);
+                date = (TextView) view.findViewById(R.id.match_statistics_game_date);
+                headerGroup = (ViewGroup) view.findViewById(R.id.match_statistics_scoreboard_header);
+                scoreboard = (RecyclerView) view.findViewById(R.id.match_statistics_scoreboard);
             }
         }
     }
