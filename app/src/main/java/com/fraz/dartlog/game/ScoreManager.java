@@ -58,7 +58,7 @@ public abstract class ScoreManager {
         totalScoreHistory = new LinkedList<>();
     }
 
-    protected void applyScores(LinkedList<Integer> scoreHistory) {
+    public void applyScores(LinkedList<Integer> scoreHistory) {
         for(int score : scoreHistory)
         {
             submitScore(score);

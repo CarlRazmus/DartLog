@@ -138,11 +138,15 @@ public class DartLogDatabaseHelper extends SQLiteOpenHelper {
                 String winnerName = c.getString(c.getColumnIndex("winner"));
                 Calendar date = getDate(c);
                 int x = c.getInt(c.getColumnIndex(DartLogContract.X01Entry.COLUMN_NAME_X));
+                int double_out =
+                        c.getInt(c.getColumnIndex(DartLogContract.X01Entry.COLUMN_NAME_DOUBLE_OUT));
 
                 LinkedHashMap<String, PlayerData> playerData = new LinkedHashMap<>();
                 for (Map.Entry<String, LinkedList<Integer>> playerEntry : matchScores.entrySet())
                 {
-                    X01ScoreManager scoreManager = new X01ScoreManager(x, playerEntry.getValue());
+                    X01ScoreManager scoreManager = new X01ScoreManager(x);
+                    scoreManager.setDoubleOutAttempts(double_out);
+                    scoreManager.applyScores(playerEntry.getValue());
                     playerData.put(playerEntry.getKey(),
                                    new X01PlayerData(context, playerEntry.getKey(), scoreManager));
                 }
@@ -280,12 +284,14 @@ public class DartLogDatabaseHelper extends SQLiteOpenHelper {
         matchValues.put(DartLogContract.X01Entry.COLUMN_NAME_WINNER_PLAYER_ID,
                 getPlayerId(db, game.getWinner()));
         matchValues.put(DartLogContract.X01Entry.COLUMN_NAME_X, game.getX());
+        matchValues.put(DartLogContract.X01Entry.COLUMN_NAME_DOUBLE_OUT,
+                game.getDoubleOutAttempts());
         return db.insert(DartLogContract.X01Entry.TABLE_NAME, null, matchValues);
     }
 
     private Cursor getX01MatchEntry(SQLiteDatabase db, long matchId) {
-        String sql = "SELECT m.x, m.date, w.name as winner" +
-                "     FROM match m" +
+        String sql = "SELECT m.double_out, m.x, m.date, w.name as winner" +
+                "     FROM x01 m" +
                 "          join player w" +
                 "               on w._ID = m.winner_id" +
                 "     WHERE m._ID = ?;";

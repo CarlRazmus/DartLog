@@ -2,22 +2,14 @@ package com.fraz.dartlog.game.x01;
 
 import com.fraz.dartlog.game.ScoreManager;
 
-import java.util.LinkedList;
-
 public class X01ScoreManager extends ScoreManager {
 
-    private int doubleOutsBeforeSingleOut = -1;
+    private int doubleOutAttempts = -1;
 
     /** The 'X' in X01 */
     private int x;
 
-    public X01ScoreManager(int x, LinkedList<Integer> scoreHistory)
-    {
-        this(x);
-        applyScores(scoreHistory);
-    }
-
-    X01ScoreManager(int x) {
+    public X01ScoreManager(int x) {
         this.x = x;
         score = getStartingScore();
     }
@@ -46,7 +38,7 @@ public class X01ScoreManager extends ScoreManager {
     }
 
     Checkout getCurrentCheckoutType() {
-        if (doubleOutsBeforeSingleOut == -1)
+        if (doubleOutAttempts == -1)
             return Checkout.DOUBLE;
         else if (getRemainingDoubleOutAttempts() > 0)
             return Checkout.DOUBLE_ATTEMPT;
@@ -60,9 +52,9 @@ public class X01ScoreManager extends ScoreManager {
     }
 
     int getRemainingDoubleOutAttempts() {
-        if (doubleOutsBeforeSingleOut == -1)
+        if (doubleOutAttempts == -1)
             throw new UnsupportedOperationException("Attempts for double outs not used.");
-        int remainingDoubleOutAttempts = doubleOutsBeforeSingleOut;
+        int remainingDoubleOutAttempts = doubleOutAttempts;
         for (Integer score : getTotalScoreHistory()) {
             if (score <= 50) {
                 remainingDoubleOutAttempts -= 1;
@@ -71,8 +63,8 @@ public class X01ScoreManager extends ScoreManager {
         return Math.max(0, remainingDoubleOutAttempts);
     }
 
-    void setDoubleOutsBeforeSingleOut(Integer doubleOutsBeforeSingleOut) {
-        this.doubleOutsBeforeSingleOut = doubleOutsBeforeSingleOut;
+    public void setDoubleOutAttempts(int doubleOutAttempts) {
+        this.doubleOutAttempts = doubleOutAttempts;
     }
 
     private int getStartingScore()
@@ -86,6 +78,10 @@ public class X01ScoreManager extends ScoreManager {
 
     int getX() {
         return x;
+    }
+
+    int getDoubleOutAttempts() {
+        return doubleOutAttempts;
     }
 
     enum Checkout {

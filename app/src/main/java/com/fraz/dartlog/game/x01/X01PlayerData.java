@@ -50,4 +50,8 @@ public class X01PlayerData extends PlayerData {
     int getX() {
         return scoreManager.getX();
     }
+
+    int getDoubleOutAttempts() {
+        return scoreManager.getDoubleOutAttempts();
+    }
 }

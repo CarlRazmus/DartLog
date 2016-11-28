@@ -51,4 +51,8 @@ public class X01 extends Game implements Serializable{
     public int getX() {
         return ((X01PlayerData)getPlayer(0)).getX();
     }
+
+    public int getDoubleOutAttempts() {
+        return ((X01PlayerData)getPlayer(0)).getDoubleOutAttempts();
+    }
 }

@@ -13,6 +13,7 @@ final class DartLogContract {
                 X01Entry._ID + " INTEGER PRIMARY KEY," +
                 X01Entry.COLUMN_NAME_DATE + " INTEGER," +
                 X01Entry.COLUMN_NAME_X + " INTEGER," +
+                X01Entry.COLUMN_NAME_DOUBLE_OUT + " INTEGER," +
                 X01Entry.COLUMN_NAME_WINNER_PLAYER_ID + " INTEGER," +
                 "FOREIGN KEY(" + X01Entry.COLUMN_NAME_X + ")" +
                     " REFERENCES " + PlayerEntry.TABLE_NAME + "(" + PlayerEntry._ID + ")," +
@@ -47,6 +48,7 @@ final class DartLogContract {
         static final String COLUMN_NAME_DATE = "date";
         static final String COLUMN_NAME_WINNER_PLAYER_ID = "winner_id";
         static final String COLUMN_NAME_X = "x";
+        static final String COLUMN_NAME_DOUBLE_OUT = "double_out";
     }
 
     static abstract class ScoreEntry implements BaseColumns {
