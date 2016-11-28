@@ -5,8 +5,8 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.support.annotation.NonNull;
 
-import com.fraz.dartlog.game.Game;
 import com.fraz.dartlog.game.GameData;
 import com.fraz.dartlog.game.PlayerData;
 import com.fraz.dartlog.game.x01.X01;
@@ -24,8 +24,8 @@ import java.util.Map;
 public class DartLogDatabaseHelper extends SQLiteOpenHelper {
 
     // If you change the database schema, you must increment the database version.
-    public static final int DATABASE_VERSION = 1;
-    public static final String DATABASE_NAME = "DartLog.db";
+    private static final int DATABASE_VERSION = 1;
+    private static final String DATABASE_NAME = "DartLog.db";
     private Context context;
 
     public DartLogDatabaseHelper(Context context) {
@@ -47,7 +47,7 @@ public class DartLogDatabaseHelper extends SQLiteOpenHelper {
         resetDatabase();
     }
 
-    public void resetDatabase() {
+    private void resetDatabase() {
         try (SQLiteDatabase db = getWritableDatabase()) {
             for (String deleteSql : DartLogContract.SQL_DELETE_ENTRIES) {
                 db.execSQL(deleteSql);
@@ -132,24 +132,34 @@ public class DartLogDatabaseHelper extends SQLiteOpenHelper {
 
     private GameData getGameData(SQLiteDatabase db, long matchId) {
         HashMap<String, LinkedList<Integer>> matchScores = getMatchScores(db, matchId);
-        LinkedHashMap<String, PlayerData> playerData = new LinkedHashMap<>();
-        for (Map.Entry<String, LinkedList<Integer>> playerEntry : matchScores.entrySet())
-        {
-            X01ScoreManager scoreManager = new X01ScoreManager(3, playerEntry.getValue());
-            playerData.put(playerEntry.getKey(),
-                           new X01PlayerData(context, playerEntry.getKey(), scoreManager));
-        }
 
         try (Cursor c = getX01MatchEntry(db, matchId)) {
             if (c.moveToFirst()) {
-                long dateInMillis = c.getLong(c.getColumnIndex(DartLogContract.MatchEntry.COLUMN_NAME_DATE));
                 String winnerName = c.getString(c.getColumnIndex("winner"));
-                Calendar date = Calendar.getInstance();
-                date.setTimeInMillis(dateInMillis);
+                Calendar date = getDate(c);
+                int x = c.getInt(c.getColumnIndex(DartLogContract.X01Entry.COLUMN_NAME_X));
+
+                LinkedHashMap<String, PlayerData> playerData = new LinkedHashMap<>();
+                for (Map.Entry<String, LinkedList<Integer>> playerEntry : matchScores.entrySet())
+                {
+                    X01ScoreManager scoreManager = new X01ScoreManager(x, playerEntry.getValue());
+                    playerData.put(playerEntry.getKey(),
+                                   new X01PlayerData(context, playerEntry.getKey(), scoreManager));
+                }
+
+
                 return new GameData(new ArrayList<>(playerData.values()),
                         date, playerData.get(winnerName));
             } else throw new IllegalArgumentException("Match not found");
         }
+    }
+
+    @NonNull
+    private Calendar getDate(Cursor c) {
+        long dateInMillis = c.getLong(c.getColumnIndex(DartLogContract.X01Entry.COLUMN_NAME_DATE));
+        Calendar date = Calendar.getInstance();
+        date.setTimeInMillis(dateInMillis);
+        return date;
     }
 
     /**
@@ -263,18 +273,18 @@ public class DartLogDatabaseHelper extends SQLiteOpenHelper {
         return playerId;
     }
 
-    private long insertX01MatchEntry(SQLiteDatabase db, Game game) {
+    private long insertX01MatchEntry(SQLiteDatabase db, X01 game) {
         ContentValues matchValues = new ContentValues();
-        matchValues.put(DartLogContract.MatchEntry.COLUMN_NAME_DATE,
+        matchValues.put(DartLogContract.X01Entry.COLUMN_NAME_DATE,
                 game.getDate().getTimeInMillis());
-        matchValues.put(DartLogContract.MatchEntry.COLUMN_NAME_GAME, "X01");
-        matchValues.put(DartLogContract.MatchEntry.COLUMN_NAME_WINNER_PLAYER_ID,
+        matchValues.put(DartLogContract.X01Entry.COLUMN_NAME_WINNER_PLAYER_ID,
                 getPlayerId(db, game.getWinner()));
-        return db.insert(DartLogContract.MatchEntry.TABLE_NAME, null, matchValues);
+        matchValues.put(DartLogContract.X01Entry.COLUMN_NAME_X, game.getX());
+        return db.insert(DartLogContract.X01Entry.TABLE_NAME, null, matchValues);
     }
 
     private Cursor getX01MatchEntry(SQLiteDatabase db, long matchId) {
-        String sql = "SELECT m.date, w.name as winner" +
+        String sql = "SELECT m.x, m.date, w.name as winner" +
                 "     FROM match m" +
                 "          join player w" +
                 "               on w._ID = m.winner_id" +

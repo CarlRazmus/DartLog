@@ -17,7 +17,7 @@ public class X01ScoreManager extends ScoreManager {
         applyScores(scoreHistory);
     }
 
-    public X01ScoreManager(int x) {
+    X01ScoreManager(int x) {
         this.x = x;
         score = getStartingScore();
     }
@@ -45,7 +45,7 @@ public class X01ScoreManager extends ScoreManager {
         score = getStartingScore();
     }
 
-    public Checkout getCurrentCheckoutType() {
+    Checkout getCurrentCheckoutType() {
         if (doubleOutsBeforeSingleOut == -1)
             return Checkout.DOUBLE;
         else if (getRemainingDoubleOutAttempts() > 0)
@@ -54,12 +54,12 @@ public class X01ScoreManager extends ScoreManager {
             return Checkout.SINGLE;
     }
 
-    public boolean mustDoubleOut() {
+    private boolean mustDoubleOut() {
         Checkout checkoutType = getCurrentCheckoutType();
         return checkoutType == Checkout.DOUBLE || checkoutType == Checkout.DOUBLE_ATTEMPT;
     }
 
-    public int getRemainingDoubleOutAttempts() {
+    int getRemainingDoubleOutAttempts() {
         if (doubleOutsBeforeSingleOut == -1)
             throw new UnsupportedOperationException("Attempts for double outs not used.");
         int remainingDoubleOutAttempts = doubleOutsBeforeSingleOut;
@@ -71,7 +71,7 @@ public class X01ScoreManager extends ScoreManager {
         return Math.max(0, remainingDoubleOutAttempts);
     }
 
-    public void setDoubleOutsBeforeSingleOut(Integer doubleOutsBeforeSingleOut) {
+    void setDoubleOutsBeforeSingleOut(Integer doubleOutsBeforeSingleOut) {
         this.doubleOutsBeforeSingleOut = doubleOutsBeforeSingleOut;
     }
 
@@ -84,7 +84,11 @@ public class X01ScoreManager extends ScoreManager {
         return score < 0 || (score == 1 && mustDoubleOut());
     }
 
-    public enum Checkout {
+    int getX() {
+        return x;
+    }
+
+    enum Checkout {
         SINGLE, DOUBLE, DOUBLE_ATTEMPT
     }
 }
