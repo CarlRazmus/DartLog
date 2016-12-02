@@ -6,6 +6,8 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.support.annotation.NonNull;
+import android.util.SparseArray;
+import android.util.SparseLongArray;
 
 import com.fraz.dartlog.game.GameData;
 import com.fraz.dartlog.game.PlayerData;
@@ -16,6 +18,7 @@ import com.fraz.dartlog.game.x01.X01ScoreManager;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.Locale;
@@ -176,20 +179,27 @@ public class DartLogDatabaseHelper extends SQLiteOpenHelper {
         try (SQLiteDatabase db = getWritableDatabase()) {
             long matchId = insertX01MatchEntry(db, game);
 
-            for (int i = 0; i < game.getNumberOfPlayers(); ++i) {
-                insertPlayerScores(db, game.getPlayer(i), matchId);
-            }
+            insertScores(db, game, matchId);
         }
     }
 
-    private void insertPlayerScores(SQLiteDatabase db, PlayerData player, long matchId) {
-        long playerId = getPlayerId(db, player);
+    private void insertScores(SQLiteDatabase db, X01 game, long matchId) {
+        SparseLongArray playerIds = new SparseLongArray();
+        SparseArray<Iterator<Integer>> playerScoreIterators = new SparseArray<>();
 
-        for (int score : player.getScoreHistory()) {
+        for (int i = 0; i < game.getNumberOfPlayers(); i++) {
+            PlayerData player = game.getPlayer(i);
+            long playerId = getPlayerId(db, player);
+            playerIds.append(i, playerId);
+            playerScoreIterators.append(i, player.getScoreHistory().iterator());
+        }
+
+        for (Integer i : game.getPlayOrder()) {
+            int score = playerScoreIterators.get(i).next();
             ContentValues values = new ContentValues();
             values.put(DartLogContract.ScoreEntry.COLUMN_NAME_SCORE, score);
             values.put(DartLogContract.ScoreEntry.COLUMN_NAME_MATCH_ID, matchId);
-            values.put(DartLogContract.ScoreEntry.COLUMN_NAME_PLAYER_ID, playerId);
+            values.put(DartLogContract.ScoreEntry.COLUMN_NAME_PLAYER_ID, playerIds.get(i));
             db.insert(DartLogContract.ScoreEntry.TABLE_NAME, null, values);
         }
     }

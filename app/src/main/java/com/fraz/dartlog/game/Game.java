@@ -10,6 +10,7 @@ import java.util.LinkedList;
 
 public abstract class Game {
 
+
     private LinkedList<Integer> playOrder = new LinkedList<>();
     protected Activity context;
     protected int currentPlayerIdx;
@@ -85,6 +86,10 @@ public abstract class Game {
 
     protected void nextPlayer() {
         currentPlayerIdx = (currentPlayerIdx + 1) % getNumberOfPlayers();
+    }
+
+    public LinkedList<Integer> getPlayOrder() {
+        return playOrder;
     }
 
     public abstract int getNextStartingPlayer();
