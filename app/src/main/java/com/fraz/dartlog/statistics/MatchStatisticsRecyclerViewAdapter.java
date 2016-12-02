@@ -2,6 +2,7 @@ package com.fraz.dartlog.statistics;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -39,14 +40,14 @@ public class MatchStatisticsRecyclerViewAdapter extends RecyclerView.Adapter<
         String text;
         if (row == 0) {
             text = Integer.toString(column + 1);
-            holder.scoreView.setTextColor(context.getResources().getColor(R.color.accent_color));
+            holder.scoreView.setTypeface(Typeface.DEFAULT_BOLD);
         }
         else {
             text = getScore(row, column);
             holder.scoreView.setTextColor(Color.BLACK);
+            holder.scoreView.setTypeface(Typeface.DEFAULT);
         }
         holder.scoreView.setText(text);
-
     }
 
     private String getScore(int row, int column) {

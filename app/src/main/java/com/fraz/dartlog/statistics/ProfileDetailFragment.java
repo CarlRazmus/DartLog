@@ -1,5 +1,6 @@
 package com.fraz.dartlog.statistics;
 
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v4.app.Fragment;
@@ -133,10 +134,13 @@ public class ProfileDetailFragment extends Fragment {
         private void addHeaders(final ViewHolder holder, GameData game) {
             holder.headerGroup.removeAllViews();
             TextView turnHeader = createHeaderView("Turn", holder.headerGroup);
-            turnHeader.setTextColor(getResources().getColor(R.color.accent_color));
+            turnHeader.setTypeface(Typeface.DEFAULT_BOLD);
             holder.headerGroup.addView(turnHeader);
             for (int i = 0; i < game.getNumberOfPlayers(); i++) {
-                TextView header = createHeaderView(game.getPlayer(i).getPlayerName(), holder.headerGroup);
+                PlayerData player = game.getPlayer(i);
+                TextView header = createHeaderView(player.getPlayerName(), holder.headerGroup);
+                if (game.getWinner() == player)
+                    header.setTextColor(getResources().getColor(R.color.accent_color));
                 holder.headerGroup.addView(header);
             }
         }
