@@ -16,11 +16,11 @@ public class NumPadHandler implements View.OnTouchListener {
     private final TextView scoreInput;
     private InputEventListener listener;
 
-    public NumPadHandler(ViewGroup numpadView) {
+    public NumPadHandler(ViewGroup numpadView, int maxScore) {
         this.scoreInput = (TextView) numpadView.findViewById(R.id.score_input);
         ViewGroup numpad = (ViewGroup) numpadView.findViewById(R.id.num_pad);
         setOnTouchListenerInView(numpad);
-        initInputField();
+        initInputField(maxScore);
     }
 
     @Override
@@ -94,9 +94,9 @@ public class NumPadHandler implements View.OnTouchListener {
         }
     }
 
-    private void initInputField() {
+    private void initInputField(int maxScore) {
         InputFilter[] inputFilters = new InputFilter[1];
-        inputFilters[0] = new ScoreFilter();
+        inputFilters[0] = new ScoreFilter(maxScore);
         scoreInput.setFilters(inputFilters);
     }
 }

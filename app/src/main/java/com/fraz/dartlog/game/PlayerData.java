@@ -17,11 +17,6 @@ public class PlayerData {
         this.scoreManager = scoreManager;
     }
 
-    public PlayerData(String playerName) {
-        this.playerName = playerName;
-        this.scoreManager = new AdditionScoreManager();
-    }
-
     public String getPlayerName() {
         return playerName;
     }

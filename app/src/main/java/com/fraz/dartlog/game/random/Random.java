@@ -10,26 +10,27 @@ import java.util.Comparator;
 
 public class Random extends Game implements Serializable{
 
-    private final int nrOfFields;
-    private int currentField = 0;
+    private final int nrOfTurns;
     private ArrayList<Integer> fields = new ArrayList<>();
     java.util.Random rand;
 
 
-    public Random(RandomGameActivity context, ArrayList<? extends PlayerData> playerData, int nrOfFields) {
+    public Random(RandomGameActivity context, ArrayList<? extends PlayerData> playerData, int nrOfTurns) {
         super(context, playerData);
-        this.nrOfFields = nrOfFields;
+        this.nrOfTurns = nrOfTurns;
         rand = new java.util.Random();
 
-        addFields(nrOfFields);
+        addFields(nrOfTurns);
     }
 
     public int getNextStartingPlayer() {
         return 0;
     }
 
-    private void addFields(int nrOfFields) {
-        for(int i=0; i<nrOfFields; i++)
+    public int getCurrentField(){return fields.get(getTurn() - 1);}
+
+    private void addFields(int nrOfTurns) {
+        for(int i=0; i<nrOfTurns; i++)
             generateRandomFieldNr();
     }
 
@@ -74,13 +75,9 @@ public class Random extends Game implements Serializable{
 
     private void updateGameState() {
         nextPlayer();
-        if (currentPlayerIdx == 0) {
-            currentField += 1;
-
-            if (currentField == nrOfFields) {
-                setWinner();
-                showWinnerToast();
-            }
+        if (getTurn() == nrOfTurns + 1) {
+            setWinner();
+            showWinnerToast();
         }
     }
 
@@ -96,12 +93,10 @@ public class Random extends Game implements Serializable{
             }
         });
     }
-    public int getCurrentField(){return fields.get(currentField);}
 
     public void newLeg() {
-        currentField = 0;
-        fields = new ArrayList<Integer>();
-        addFields(nrOfFields);
+        fields = new ArrayList<>();
+        addFields(nrOfTurns);
         newGame();
     }
 }

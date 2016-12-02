@@ -4,23 +4,60 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:orientation="vertical"
     android:gravity="center">
 
-    <TextView
-        android:id="@+id/game_header_field_label"
+    <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/field_to_hit"
-        android:textSize="20sp"
-        android:textColor="@color/main_white"/>
+        android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/current_field_textview"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_toEndOf="@id/game_header_field_label"
-        android:layout_alignBaseline="@id/game_header_field_label"
-        android:layout_marginStart="8dp"
-        android:textSize="20sp"
-        android:textColor="@color/main_white"/>
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp">
+            <TextView
+                android:id="@+id/game_header_round_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/turn"
+                android:textSize="20sp"
+                android:textColor="@color/main_white"/>
+
+            <TextView
+                android:id="@+id/game_header_turn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toEndOf="@id/game_header_round_label"
+                android:layout_alignBaseline="@id/game_header_round_label"
+                android:layout_marginStart="8dp"
+                android:textSize="20sp"
+                android:textColor="@color/main_white"
+                tools:text="1"/>
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp">
+            <TextView
+                android:id="@+id/game_header_field_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/field_to_hit"
+                android:textSize="20sp"
+                android:textColor="@color/main_white"/>
+
+            <TextView
+                android:id="@+id/current_field_textview"
+                android:layout_width="40sp"
+                android:layout_height="wrap_content"
+                android:layout_toEndOf="@id/game_header_field_label"
+                android:layout_alignBaseline="@id/game_header_field_label"
+                android:layout_marginStart="8dp"
+                android:textSize="20sp"
+                android:textColor="@color/main_white"
+                tools:text="17"/>
+        </RelativeLayout>
+    </LinearLayout>
 </RelativeLayout>

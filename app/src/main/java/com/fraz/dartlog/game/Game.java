@@ -118,7 +118,7 @@ public abstract class Game {
         return players;
     }
 
-    public int getRound() {
+    public int getTurn() {
         return playOrder.size() / players.size() + 1;
     }
 }

@@ -20,7 +20,6 @@ import com.fraz.dartlog.MainActivity;
 import com.fraz.dartlog.OnBackPressedDialogFragment;
 import com.fraz.dartlog.R;
 import com.fraz.dartlog.db.DartLogDatabaseHelper;
-import com.fraz.dartlog.game.GameListAdapter;
 import com.fraz.dartlog.game.InputEventListener;
 import com.fraz.dartlog.game.NumPadHandler;
 
@@ -119,16 +118,16 @@ public class X01GameActivity extends AppCompatActivity implements View.OnClickLi
     private void updateView() {
         gameListAdapter.notifyDataSetChanged();
         scrollToPlayerInList();
-        updateGameRound();
         if (game.isGameOver()) {
             setGameDoneView();
         } else {
             setNumPadView();
+            updateGameRound();
         }
     }
 
     private void updateGameRound() {
-        ((TextView) findViewById(R.id.game_header_round)).setText(String.valueOf(game.getRound()));
+        ((TextView) findViewById(R.id.game_header_round)).setText(String.valueOf(game.getTurn()));
     }
 
     private void initListView() {
@@ -161,7 +160,7 @@ public class X01GameActivity extends AppCompatActivity implements View.OnClickLi
     }
 
     private void initNumPadView() {
-        NumPadHandler numPadHandler = new NumPadHandler((ViewGroup) findViewById(R.id.num_pad_view));
+        NumPadHandler numPadHandler = new NumPadHandler((ViewGroup) findViewById(R.id.num_pad_view), 180);
         numPadHandler.setListener(this);
     }
 

@@ -115,12 +115,12 @@ public class RandomGameActivity extends AppCompatActivity implements View.OnClic
     private void updateView() {
         gameListAdapter.notifyDataSetChanged();
         scrollToPlayerInList();
-
         if (game.isGameOver()) {
             setGameDoneView();
         } else {
             setNumPadView();
             updateCurrentFieldTextView(game.getCurrentField());
+            updateGameRound();
         }
     }
 
@@ -134,6 +134,10 @@ public class RandomGameActivity extends AppCompatActivity implements View.OnClic
         RecyclerView myListView = (RecyclerView) findViewById(R.id.play_players_listView);
         assert myListView != null;
         myListView.setAdapter(gameListAdapter);
+    }
+
+    private void updateGameRound() {
+        ((TextView) findViewById(R.id.game_header_turn)).setText(String.valueOf(game.getTurn()));
     }
 
     /**
@@ -157,7 +161,7 @@ public class RandomGameActivity extends AppCompatActivity implements View.OnClic
     }
 
     private void initNumPadView() {
-        NumPadHandler numPadHandler = new NumPadHandler((ViewGroup) findViewById(R.id.num_pad_view));
+        NumPadHandler numPadHandler = new NumPadHandler((ViewGroup) findViewById(R.id.num_pad_view), 9);
         numPadHandler.setListener(this);
     }
 
