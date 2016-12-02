@@ -49,7 +49,7 @@
     <string name="number_of_fields_colon">Nr of fields: </string>
     <string name="starting_score_settings_label">Starting score:</string>
     <string name="x01">X01</string>
-    <string name="field_to_hit">Field to hit:</string>
+    <string name="field_to_hit">Field</string>
     <string name="result_win">Winner!</string>
     <string name="players_colon">Players:</string>
 
