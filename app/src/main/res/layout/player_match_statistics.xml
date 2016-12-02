@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     app:cardBackgroundColor="@color/light_grey"
     app:cardElevation="@dimen/cardview_default_elevation"
-    app:cardCornerRadius="@dimen/cardview_default_radius"
+    app:cardCornerRadius="0dp"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginBottom="4dp"
@@ -15,7 +15,6 @@
         android:id="@+id/player_match_statistics_background"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="1dp"
         android:background="@drawable/list_item"
         android:orientation="vertical">
 
