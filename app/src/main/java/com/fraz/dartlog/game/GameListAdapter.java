@@ -44,7 +44,7 @@ public abstract class GameListAdapter<T extends GameListAdapter.ViewHolder> exte
         setBackgroundColor(player, holder);
 
         // Set total score history text
-        LinkedList<Integer> scores = new LinkedList<>(player.getTotalScoreHistory());
+        LinkedList<Integer> scores = new LinkedList<>(player.getScoreHistory());
         holder.totalScoreHistory.setText(createScoresString(scores));
     }
 
