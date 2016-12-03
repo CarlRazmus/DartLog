@@ -64,4 +64,5 @@
     <string name="turn">Turn</string>
     <string name="pref_key_random_nr_of_rounds">pref_key_nr_of_rounds</string>
     <string name="pref_random_nr_of_rounds">Nr of rounds</string>
+    <string name="summary">SUMMARY</string>
 </resources>
