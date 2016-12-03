@@ -147,7 +147,7 @@ public class X01GameActivity extends AppCompatActivity implements View.OnClickLi
         ArrayList<X01PlayerData> playerDataList = new ArrayList<>();
         for (String playerName : playerNames) {
             X01ScoreManager scoreManager = new X01ScoreManager(x);
-            scoreManager.setDoubleOutsBeforeSingleOut(doubleOutAttempts);
+            scoreManager.setDoubleOutAttempts(doubleOutAttempts);
             playerDataList.add(new X01PlayerData(this, playerName, scoreManager));
         }
         return playerDataList;

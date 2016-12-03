@@ -25,7 +25,7 @@ public class X01PlayerData extends PlayerData {
         return scoreManager.getTotalScoreHistory();
     }
 
-    public String getCheckoutText() {
+    String getCheckoutText() {
         if (mustDoubleOut()) {
             return doubleCheckoutChart.getCheckoutText(getScore());
         } else {
@@ -33,17 +33,25 @@ public class X01PlayerData extends PlayerData {
         }
     }
 
-    public X01ScoreManager.Checkout getCurrentCheckoutType() {
+    X01ScoreManager.Checkout getCurrentCheckoutType() {
         return scoreManager.getCurrentCheckoutType();
     }
 
-    public int getRemainingDoubleOutAttempts() {
+    int getRemainingDoubleOutAttempts() {
         return scoreManager.getRemainingDoubleOutAttempts();
     }
 
-    public boolean mustDoubleOut() {
+    private boolean mustDoubleOut() {
         X01ScoreManager.Checkout checkoutType = getCurrentCheckoutType();
         return checkoutType == X01ScoreManager.Checkout.DOUBLE ||
                 checkoutType == X01ScoreManager.Checkout.DOUBLE_ATTEMPT;
+    }
+
+    int getX() {
+        return scoreManager.getX();
+    }
+
+    int getDoubleOutAttempts() {
+        return scoreManager.getDoubleOutAttempts();
     }
 }

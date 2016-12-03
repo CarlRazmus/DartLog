@@ -10,7 +10,7 @@ import java.util.ArrayList;
 
 public class X01 extends Game implements Serializable{
 
-    public X01(Activity context, ArrayList<? extends X01PlayerData> playerData) {
+    X01(Activity context, ArrayList<? extends X01PlayerData> playerData) {
         super(context, playerData);
     }
 
@@ -44,8 +44,15 @@ public class X01 extends Game implements Serializable{
         showToast(text);
     }
 
-    public void newLeg() {
+    void newLeg() {
         newGame();
     }
 
+    public int getX() {
+        return ((X01PlayerData)getPlayer(0)).getX();
+    }
+
+    public int getDoubleOutAttempts() {
+        return ((X01PlayerData)getPlayer(0)).getDoubleOutAttempts();
+    }
 }
