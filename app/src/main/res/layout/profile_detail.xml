@@ -9,53 +9,71 @@
     tools:context="com.fraz.dartlog.statistics.ProfileDetailFragment"
     android:orientation="vertical">
 
-    <RelativeLayout
+    <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:layout_marginBottom="24dp"
-        android:gravity="center">
+        android:text="@string/summary"
+        android:textSize="16sp"
+        android:textColor="@color/main_white"
+        android:padding="8dp" />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/profile_detail_games_played_label"
-            android:textSize="16sp"
-            android:text="@string/textView_games_played"/>
+    <android.support.v7.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:contentPadding="8dp"
+        app:cardBackgroundColor="@color/main_white"
+        app:cardElevation="@dimen/cardview_default_elevation"
+        app:cardCornerRadius="0dp">
 
-        <TextView
-            android:layout_width="0dp"
+        <RelativeLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/profile_detail_games_played"
-            android:textSize="24sp"
-            android:textColor="@color/main_white"
-            android:gravity="center"
-            android:layout_below="@id/profile_detail_games_played_label"
-            android:layout_alignEnd="@id/profile_detail_games_played_label"
-            android:layout_alignStart="@id/profile_detail_games_played_label"
-            tools:text="30"/>
+            android:gravity="center">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/profile_detail_games_won_label"
-            android:layout_marginStart="30dp"
-            android:layout_toEndOf="@id/profile_detail_games_played_label"
-            android:textSize="16sp"
-            android:text="@string/games_won"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/profile_detail_games_played_label"
+                android:textSize="16sp"
+                android:textColor="@color/main_grey"
+                android:text="@string/textView_games_played"/>
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/profile_detail_games_won"
-            android:textSize="24sp"
-            android:textColor="@color/main_white"
-            android:gravity="center"
-            android:layout_below="@id/profile_detail_games_won_label"
-            android:layout_alignEnd="@id/profile_detail_games_won_label"
-            android:layout_alignStart="@id/profile_detail_games_won_label"
-            tools:text="12"/>
-    </RelativeLayout>
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:id="@+id/profile_detail_games_played"
+                android:textSize="24sp"
+                android:textColor="@color/accent_color"
+                android:gravity="center"
+                android:layout_below="@id/profile_detail_games_played_label"
+                android:layout_alignEnd="@id/profile_detail_games_played_label"
+                android:layout_alignStart="@id/profile_detail_games_played_label"
+                tools:text="30"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/profile_detail_games_won_label"
+                android:layout_marginStart="30dp"
+                android:layout_toEndOf="@id/profile_detail_games_played_label"
+                android:textColor="@color/main_grey"
+                android:textSize="16sp"
+                android:text="@string/games_won"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/profile_detail_games_won"
+                android:textSize="24sp"
+                android:textColor="@color/accent_color"
+                android:gravity="center"
+                android:layout_below="@id/profile_detail_games_won_label"
+                android:layout_alignEnd="@id/profile_detail_games_won_label"
+                android:layout_alignStart="@id/profile_detail_games_won_label"
+                tools:text="12"/>
+
+        </RelativeLayout>
+    </android.support.v7.widget.CardView>
 
     <TextView
         android:layout_width="match_parent"
