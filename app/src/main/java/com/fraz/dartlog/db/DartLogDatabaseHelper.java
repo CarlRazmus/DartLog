@@ -315,12 +315,11 @@ public class DartLogDatabaseHelper extends SQLiteOpenHelper {
         playersNames.add("Razmus");
         playersNames.add("Filip");
         playersNames.add("Jonathan");
-        playersNames.add("Martin");
-        playersNames.add("Erik");
-        playersNames.add("Fredrik");
         playersNames.add("Stefan");
+        playersNames.add("Fredrik");
+        playersNames.add("Tommy");
+        playersNames.add("Johnny");
         playersNames.add("Maria");
-        playersNames.add("Gustav");
 
         for (String name : playersNames) {
             addPlayer(name, db);
