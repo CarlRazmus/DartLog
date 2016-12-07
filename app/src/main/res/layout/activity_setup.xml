@@ -67,6 +67,8 @@
                 android:layout_alignParentEnd="true"
                 android:layout_alignParentBottom="true"
                 android:clickable="true"
+                android:layout_marginBottom="8dp"
+                android:layout_marginRight="8dp"
                 app:backgroundTint="@color/primary_color"
                 android:src="@drawable/ic_group_add_white_24dp"/>
         </RelativeLayout>
