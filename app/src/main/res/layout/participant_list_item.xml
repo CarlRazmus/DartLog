@@ -33,6 +33,7 @@
             android:layout_width="wrap_content"
             android:layout_centerVertical="true"
             android:textSize="15sp"
+            android:textStyle="bold"
             android:textColor="@color/background_dark"
             tools:text="PlayerName"/>
 
