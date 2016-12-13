@@ -4,17 +4,8 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:paddingBottom="8dp"
     android:background="@color/background_dark">
-
-    <TextView
-        android:id="@+id/title"
-        android:layout_width="match_parent"
-        android:layout_height= "?attr/actionBarSize"
-        android:text="@string/header_select_players"
-        android:textSize="30sp"
-        android:textColor="@color/main_white"
-        android:gravity="center"
-        android:background="@color/primary_color"/>
 
     <Button
         android:id="@+id/done_button"
@@ -22,16 +13,15 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:background="@drawable/button_default"
-        android:textSize="20sp"
+        android:layout_margin="8dp"
         android:text="@string/button_done"/>
 
      <RelativeLayout
         android:id="@+id/participants_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/title"
         android:layout_above="@id/done_button"
-        android:layout_marginBottom="10dp">
+        android:layout_margin="8dp">
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/setup_dialog_available_players"

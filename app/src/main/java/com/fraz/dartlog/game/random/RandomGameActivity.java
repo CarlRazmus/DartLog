@@ -49,6 +49,7 @@ public class RandomGameActivity extends AppCompatActivity implements View.OnClic
         initGameDoneView();
         updateView();
         updateCurrentFieldTextView(game.getCurrentField());
+        updateNextFieldTextView(game.getNextField());
     }
 
     @Override
@@ -120,8 +121,19 @@ public class RandomGameActivity extends AppCompatActivity implements View.OnClic
         } else {
             setNumPadView();
             updateCurrentFieldTextView(game.getCurrentField());
+            updateNextFieldTextView(game.getNextField());
             updateGameRound();
         }
+    }
+
+    public void updateNextFieldTextView(int nextFieldNr){
+        TextView myListView = (TextView) findViewById(R.id.next_field_textview);
+        assert myListView != null;
+
+        if(nextFieldNr != 0)
+            myListView.setText(String.valueOf(nextFieldNr));
+        else
+            myListView.setText("");
     }
 
     public void updateCurrentFieldTextView(int newFieldNr) {

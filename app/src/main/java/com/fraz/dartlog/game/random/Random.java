@@ -29,6 +29,18 @@ public class Random extends Game implements Serializable{
 
     public int getCurrentField(){return fields.get(getTurn() - 1);}
 
+    public int getNextField() {
+        int field = 0;
+
+        try {
+            field = fields.get(getTurn());
+        }
+        catch (Exception e)
+        {
+            e.getMessage();
+        }
+        return field;
+    }
     private void addFields(int nrOfTurns) {
         for(int i=0; i<nrOfTurns; i++)
             generateRandomFieldNr();
@@ -38,7 +50,7 @@ public class Random extends Game implements Serializable{
         if(isNetworkAvailable())
             fields.add(generateRandomNrFromSpace());
         else
-            fields.add(rand.nextInt(20)+1);
+            fields.add(rand.nextInt(20) + 1);
     }
 
     private Integer generateRandomNrFromSpace() {

@@ -44,14 +44,17 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="16sp"
+            android:textSize="15sp"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp"
             android:textColor="@android:color/white"
             android:text="@string/players_colon"/>
 
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="1">
+            android:layout_weight="1"
+            android:layout_marginBottom="8dp">
 
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/participants_recycler_view"
@@ -67,6 +70,8 @@
                 android:layout_alignParentEnd="true"
                 android:layout_alignParentBottom="true"
                 android:clickable="true"
+                android:layout_marginBottom="8dp"
+                android:layout_marginRight="8dp"
                 app:backgroundTint="@color/primary_color"
                 android:src="@drawable/ic_group_add_white_24dp"/>
         </RelativeLayout>
