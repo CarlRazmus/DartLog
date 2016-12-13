@@ -89,33 +89,84 @@ public class ProfileDetailFragment extends Fragment {
                 (RecyclerView) rootView.findViewById(R.id.recent_games_list);
         assert recyclerView != null;
         RecentGamesRecyclerViewAdapter recyclerViewAdapter =
-                new ProfileDetailFragment.RecentGamesRecyclerViewAdapter(playerGameData);
+                new ProfileDetailFragment.RecentGamesRecyclerViewAdapter(playerGameData,
+                        getBestGame(playerGameData));
         recyclerView.setAdapter(recyclerViewAdapter);
 
         return rootView;
     }
 
+    private GameData getBestGame(ArrayList<GameData> playerGameData) {
+        if (playerGameData.isEmpty())
+            return null;
+
+        GameData currentBestGame = null;
+        int scores = Integer.MAX_VALUE;
+        for (GameData gameData : playerGameData) {
+            if (gameData.getWinner().getPlayerName().equals(profileName) &&
+                gameData.getPlayer(profileName).getScoreHistory().size() < scores) {
+                    currentBestGame = gameData;
+            }
+        }
+        return currentBestGame;
+    }
+
     public class RecentGamesRecyclerViewAdapter
-            extends RecyclerView.Adapter<RecentGamesRecyclerViewAdapter.ViewHolder> {
+            extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
         private static final int NUMBER_OF_GAMES = 5;
+        private static final int TYPE_HEADER = 0;
+        private static final int TYPE_ITEM = 1;
         private final ArrayList<GameData> gameData;
+        private GameData bestGame;
 
-        RecentGamesRecyclerViewAdapter(ArrayList<GameData> gameData) {
+        RecentGamesRecyclerViewAdapter(ArrayList<GameData> gameData, GameData bestGame) {
             this.gameData = gameData;
+            this.bestGame = bestGame;
             Collections.reverse(this.gameData);
         }
 
         @Override
-        public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            View view = LayoutInflater.from(parent.getContext())
-                    .inflate(R.layout.player_match_statistics, parent, false);
-            return new ViewHolder(view);
+        public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+            View view;
+            if (viewType == TYPE_HEADER) {
+                view = LayoutInflater.from(parent.getContext())
+                        .inflate(R.layout.match_statistics_header, parent, false);
+                return new HeaderViewHolder(view);
+            } else {
+                view = LayoutInflater.from(parent.getContext())
+                        .inflate(R.layout.match_statistics, parent, false);
+                return new GameViewHolder(view);
+
+            }
         }
 
         @Override
-        public void onBindViewHolder(final ViewHolder holder, int position) {
-            GameData game = gameData.get(position);
+        public void onBindViewHolder(final RecyclerView.ViewHolder holder, int position) {
+            if (holder.getItemViewType() == TYPE_HEADER) {
+                bindHeaderViewHolder((HeaderViewHolder) holder, position);
+            } else {
+                bindGameViewHolder((GameViewHolder) holder, position);
+            }
+        }
+
+        private void bindHeaderViewHolder(HeaderViewHolder holder, int position) {
+            TextView itemView = (TextView) holder.itemView;
+            if(isBestGameHeader(position))
+                itemView.setText(R.string.best_game);
+            else
+                itemView.setText(R.string.recent_games);
+        }
+
+        private void bindGameViewHolder(GameViewHolder holder, int position) {
+            GameData game;
+            if (position == 1)
+                game = bestGame;
+            else if (bestGame == null)
+                game = gameData.get(position - 2);
+            else
+                game = gameData.get(position - 3);
+
 
             holder.gameType.setText(R.string.x01);
             holder.date.setText(new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).
@@ -125,13 +176,13 @@ public class ProfileDetailFragment extends Fragment {
             initializeScoreBoard(holder, game);
         }
 
-        private void initializeScoreBoard(ViewHolder holder, GameData game) {
+        private void initializeScoreBoard(GameViewHolder holder, GameData game) {
             holder.scoreboard.setAdapter(new MatchStatisticsRecyclerViewAdapter(getContext(), game));
             holder.scoreboard.setLayoutManager(new GridLayoutManager(getContext(),
                     game.getNumberOfPlayers() + 1, GridLayoutManager.HORIZONTAL, false));
         }
 
-        private void addHeaders(final ViewHolder holder, GameData game) {
+        private void addHeaders(final GameViewHolder holder, GameData game) {
             holder.headerGroup.removeAllViews();
             TextView turnHeader = createHeaderView("Turn", holder.headerGroup);
             turnHeader.setTypeface(Typeface.DEFAULT_BOLD);
@@ -158,17 +209,50 @@ public class ProfileDetailFragment extends Fragment {
 
         @Override
         public int getItemCount() {
-            return Math.min(gameData.size(), NUMBER_OF_GAMES);
+            int extraItems = 2;
+            if (bestGame != null)
+                extraItems++;
+            return Math.min(gameData.size(), NUMBER_OF_GAMES) + extraItems;
         }
 
-        class ViewHolder extends RecyclerView.ViewHolder {
+        @Override
+        public int getItemViewType(int position) {
+            if (isHeader(position))
+                return TYPE_HEADER;
+
+            return TYPE_ITEM;
+        }
+
+        private boolean isHeader(int position) {
+            return isBestGameHeader(position) || isRecentGameHeader(position);
+        }
+
+        private boolean isRecentGameHeader(int position) {
+            if (bestGame != null)
+                return position == 2;
+            else
+                return position == 1;
+        }
+
+        private boolean isBestGameHeader(int position) {
+            return position == 0;
+        }
+
+        class HeaderViewHolder extends RecyclerView.ViewHolder {
+
+            HeaderViewHolder(View view) {
+                super(view);
+            }
+        }
+
+        class GameViewHolder extends RecyclerView.ViewHolder {
             RecyclerView scoreboard;
             TextView gameType;
             TextView date;
             ViewGroup headerGroup;
 
 
-            ViewHolder(View view) {
+            GameViewHolder(View view) {
                 super(view);
                 gameType = (TextView) view.findViewById(R.id.match_statistics_game_type);
                 date = (TextView) view.findViewById(R.id.match_statistics_game_date);

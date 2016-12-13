@@ -75,20 +75,19 @@
         </RelativeLayout>
     </android.support.v7.widget.CardView>
 
-    <TextView
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/best_games_list"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/recent_games"
-        android:textSize="16sp"
-        android:textColor="@color/main_white"
-        android:padding="8dp" />
+        app:layoutManager="LinearLayoutManager"
+        tools:listitem="@layout/match_statistics"/>
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recent_games_list"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layoutManager="LinearLayoutManager"
-        tools:listitem="@layout/player_match_statistics">
+        tools:listitem="@layout/match_statistics">
     </android.support.v7.widget.RecyclerView>
 
 </LinearLayout>
