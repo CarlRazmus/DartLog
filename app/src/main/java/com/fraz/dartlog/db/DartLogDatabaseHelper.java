@@ -9,6 +9,7 @@ import android.support.annotation.NonNull;
 import android.util.SparseArray;
 import android.util.SparseLongArray;
 
+import com.fraz.dartlog.game.Game;
 import com.fraz.dartlog.game.GameData;
 import com.fraz.dartlog.game.PlayerData;
 import com.fraz.dartlog.game.x01.X01;
@@ -163,7 +164,7 @@ public class DartLogDatabaseHelper extends SQLiteOpenHelper {
 
     @NonNull
     private Calendar getDate(Cursor c) {
-        long dateInMillis = c.getLong(c.getColumnIndex(DartLogContract.X01Entry.COLUMN_NAME_DATE));
+        long dateInMillis = c.getLong(c.getColumnIndex(DartLogContract.MatchEntry.COLUMN_NAME_DATE));
         Calendar date = Calendar.getInstance();
         date.setTimeInMillis(dateInMillis);
         return date;
@@ -177,13 +178,13 @@ public class DartLogDatabaseHelper extends SQLiteOpenHelper {
      */
     public void addX01Match(X01 game) {
         try (SQLiteDatabase db = getWritableDatabase()) {
-            long matchId = insertX01MatchEntry(db, game);
-
-            insertScores(db, game, matchId);
+            long matchId = insertMatchEntry(db, game);
+            long x01MatchId = insertX01Entry(db, game, matchId);
+            insertScores(db, game, x01MatchId);
         }
     }
 
-    private void insertScores(SQLiteDatabase db, X01 game, long matchId) {
+    private void insertScores(SQLiteDatabase db, X01 game, long x01MatchId) {
         SparseLongArray playerIds = new SparseLongArray();
         SparseArray<Iterator<Integer>> playerScoreIterators = new SparseArray<>();
 
@@ -198,13 +199,13 @@ public class DartLogDatabaseHelper extends SQLiteOpenHelper {
             int score = playerScoreIterators.get(i).next();
             ContentValues values = new ContentValues();
             values.put(DartLogContract.ScoreEntry.COLUMN_NAME_SCORE, score);
-            values.put(DartLogContract.ScoreEntry.COLUMN_NAME_MATCH_ID, matchId);
+            values.put(DartLogContract.ScoreEntry.COLUMN_NAME_MATCH_ID, x01MatchId);
             values.put(DartLogContract.ScoreEntry.COLUMN_NAME_PLAYER_ID, playerIds.get(i));
             db.insert(DartLogContract.ScoreEntry.TABLE_NAME, null, values);
         }
     }
 
-    private HashMap<String, LinkedList<Integer>> getMatchScores(SQLiteDatabase db, long matchId) {
+    private HashMap<String, LinkedList<Integer>> getMatchScores(SQLiteDatabase db, long x01MatchId) {
         String sql = "SELECT p.name, s.score " +
                 "          FROM match_score s " +
                 "              join player p " +
@@ -212,7 +213,7 @@ public class DartLogDatabaseHelper extends SQLiteOpenHelper {
 
         HashMap<String, LinkedList<Integer>> playerScores = new HashMap<>();
 
-        try (Cursor c = db.rawQuery(sql, new String[]{String.valueOf(matchId)})) {
+        try (Cursor c = db.rawQuery(sql, new String[]{String.valueOf(x01MatchId)})) {
             while (c.moveToNext()) {
                 int score = c.getInt(c.getColumnIndex(
                         DartLogContract.ScoreEntry.COLUMN_NAME_SCORE));
@@ -237,7 +238,7 @@ public class DartLogDatabaseHelper extends SQLiteOpenHelper {
      * @return List of match ids.
      */
     private ArrayList<Long> getMatchIds(SQLiteDatabase db, long playerId) {
-        ArrayList<Long> matchIds = new ArrayList<>();
+        ArrayList<Long> x01MatchIds = new ArrayList<>();
 
         try (Cursor c = db.query(true, DartLogContract.ScoreEntry.TABLE_NAME,
                 new String[]{DartLogContract.ScoreEntry.COLUMN_NAME_MATCH_ID},
@@ -246,11 +247,11 @@ public class DartLogDatabaseHelper extends SQLiteOpenHelper {
                         playerId),
                 null, null, null, null, null)) {
             while (c.moveToNext()) {
-                matchIds.add(c.getLong(c.getColumnIndex(
+                x01MatchIds.add(c.getLong(c.getColumnIndex(
                         DartLogContract.ScoreEntry.COLUMN_NAME_MATCH_ID)));
             }
         }
-        return matchIds;
+        return x01MatchIds;
     }
 
     /**
@@ -287,26 +288,36 @@ public class DartLogDatabaseHelper extends SQLiteOpenHelper {
         return playerId;
     }
 
-    private long insertX01MatchEntry(SQLiteDatabase db, X01 game) {
+    private long insertMatchEntry(SQLiteDatabase db, Game game){
         ContentValues matchValues = new ContentValues();
-        matchValues.put(DartLogContract.X01Entry.COLUMN_NAME_DATE,
+
+        matchValues.put(DartLogContract.MatchEntry.COLUMN_NAME_DATE,
                 game.getDate().getTimeInMillis());
-        matchValues.put(DartLogContract.X01Entry.COLUMN_NAME_WINNER_PLAYER_ID,
+        matchValues.put(DartLogContract.MatchEntry.COLUMN_NAME_WINNER_PLAYER_ID,
                 getPlayerId(db, game.getWinner()));
+
+        return db.insert(DartLogContract.MatchEntry.TABLE_NAME, null, matchValues);
+    }
+
+    private long insertX01Entry(SQLiteDatabase db, X01 game, long matchId) {
+        ContentValues matchValues = new ContentValues();
         matchValues.put(DartLogContract.X01Entry.COLUMN_NAME_X, game.getX());
+        matchValues.put(DartLogContract.X01Entry.COLUMN_NAME_MATCH_ID, matchId);
         matchValues.put(DartLogContract.X01Entry.COLUMN_NAME_DOUBLE_OUT,
                 game.getDoubleOutAttempts());
         return db.insert(DartLogContract.X01Entry.TABLE_NAME, null, matchValues);
     }
 
-    private Cursor getX01MatchEntry(SQLiteDatabase db, long matchId) {
-        String sql = "SELECT m.double_out, m.x, m.date, w.name as winner" +
-                "     FROM x01 m" +
-                "          join player w" +
-                "               on w._ID = m.winner_id" +
-                "     WHERE m._ID = ?;";
+    private Cursor getX01MatchEntry(SQLiteDatabase db, long x01MatchId) {
+        String sql = "SELECT x.double_out, x.x, m.date, p.name as winner" +
+                "     FROM x01 x" +
+                "          join match_entry m" +
+                "               on m._ID = x.match_id" +
+                "          join player p" +
+                "               on p._ID = m.winner_id" +
+                "     WHERE x._ID = ?;";
 
-        return db.rawQuery(sql, new String[]{String.valueOf(matchId)});
+        return db.rawQuery(sql, new String[]{String.valueOf(x01MatchId)});
     }
 
     private void initializePlayers(SQLiteDatabase db) {
