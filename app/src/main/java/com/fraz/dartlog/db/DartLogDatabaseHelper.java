@@ -128,13 +128,13 @@ public class DartLogDatabaseHelper extends SQLiteOpenHelper {
 
             gameData = new ArrayList<>();
             for (long matchId : matchIds) {
-                gameData.add(getGameData(db, matchId));
+                gameData.add(getX01GameData(db, matchId));
             }
         }
         return gameData;
     }
 
-    private GameData getGameData(SQLiteDatabase db, long matchId) {
+    private GameData getX01GameData(SQLiteDatabase db, long matchId) {
         HashMap<String, LinkedList<Integer>> matchScores = getMatchScores(db, matchId);
 
         try (Cursor c = getX01MatchEntry(db, matchId)) {
@@ -184,7 +184,7 @@ public class DartLogDatabaseHelper extends SQLiteOpenHelper {
         }
     }
 
-    private void insertScores(SQLiteDatabase db, X01 game, long x01MatchId) {
+    private void insertScores(SQLiteDatabase db, Game game, long matchId) {
         SparseLongArray playerIds = new SparseLongArray();
         SparseArray<Iterator<Integer>> playerScoreIterators = new SparseArray<>();
 
@@ -199,13 +199,13 @@ public class DartLogDatabaseHelper extends SQLiteOpenHelper {
             int score = playerScoreIterators.get(i).next();
             ContentValues values = new ContentValues();
             values.put(DartLogContract.ScoreEntry.COLUMN_NAME_SCORE, score);
-            values.put(DartLogContract.ScoreEntry.COLUMN_NAME_MATCH_ID, x01MatchId);
+            values.put(DartLogContract.ScoreEntry.COLUMN_NAME_MATCH_ID, matchId);
             values.put(DartLogContract.ScoreEntry.COLUMN_NAME_PLAYER_ID, playerIds.get(i));
             db.insert(DartLogContract.ScoreEntry.TABLE_NAME, null, values);
         }
     }
 
-    private HashMap<String, LinkedList<Integer>> getMatchScores(SQLiteDatabase db, long x01MatchId) {
+    private HashMap<String, LinkedList<Integer>> getMatchScores(SQLiteDatabase db, long matchId) {
         String sql = "SELECT p.name, s.score " +
                 "          FROM match_score s " +
                 "              join player p " +
@@ -213,7 +213,7 @@ public class DartLogDatabaseHelper extends SQLiteOpenHelper {
 
         HashMap<String, LinkedList<Integer>> playerScores = new HashMap<>();
 
-        try (Cursor c = db.rawQuery(sql, new String[]{String.valueOf(x01MatchId)})) {
+        try (Cursor c = db.rawQuery(sql, new String[]{String.valueOf(matchId)})) {
             while (c.moveToNext()) {
                 int score = c.getInt(c.getColumnIndex(
                         DartLogContract.ScoreEntry.COLUMN_NAME_SCORE));
@@ -238,7 +238,7 @@ public class DartLogDatabaseHelper extends SQLiteOpenHelper {
      * @return List of match ids.
      */
     private ArrayList<Long> getMatchIds(SQLiteDatabase db, long playerId) {
-        ArrayList<Long> x01MatchIds = new ArrayList<>();
+        ArrayList<Long> matchIds = new ArrayList<>();
 
         try (Cursor c = db.query(true, DartLogContract.ScoreEntry.TABLE_NAME,
                 new String[]{DartLogContract.ScoreEntry.COLUMN_NAME_MATCH_ID},
@@ -247,11 +247,11 @@ public class DartLogDatabaseHelper extends SQLiteOpenHelper {
                         playerId),
                 null, null, null, null, null)) {
             while (c.moveToNext()) {
-                x01MatchIds.add(c.getLong(c.getColumnIndex(
+                matchIds.add(c.getLong(c.getColumnIndex(
                         DartLogContract.ScoreEntry.COLUMN_NAME_MATCH_ID)));
             }
         }
-        return x01MatchIds;
+        return matchIds;
     }
 
     /**
