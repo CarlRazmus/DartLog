@@ -74,7 +74,7 @@ public class ProfileDetailFragment extends Fragment {
         for(GameData game : playerGameData)
         {
             PlayerData player = game.getPlayer(profileName);
-            if(player.getScore() == 0)
+            if(player == game.getWinner())
                 playerWins++;
         }
 
