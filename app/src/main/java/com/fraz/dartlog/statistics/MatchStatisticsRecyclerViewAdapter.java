@@ -18,11 +18,9 @@ import java.util.LinkedList;
 public class MatchStatisticsRecyclerViewAdapter extends RecyclerView.Adapter<
         MatchStatisticsRecyclerViewAdapter.ViewHolder> {
 
-    private Context context;
     private GameData game;
 
-    public MatchStatisticsRecyclerViewAdapter(Context context, GameData game) {
-        this.context = context;
+    public MatchStatisticsRecyclerViewAdapter(GameData game) {
         this.game = game;
     }
 
@@ -37,7 +35,7 @@ public class MatchStatisticsRecyclerViewAdapter extends RecyclerView.Adapter<
     public void onBindViewHolder(ViewHolder holder, int position) {
         int row = position % (game.getNumberOfPlayers() + 1);
         int column = position / (game.getNumberOfPlayers() + 1);
-        String text;
+        String text = "";
         if (row == 0) {
             text = Integer.toString(column + 1);
             holder.scoreView.setTypeface(Typeface.DEFAULT_BOLD);
@@ -63,7 +61,11 @@ public class MatchStatisticsRecyclerViewAdapter extends RecyclerView.Adapter<
 
     @Override
     public int getItemCount() {
-        int turns = game.getWinner().getTotalScoreHistory().size() + 1;
+        int turns = game.getWinner().getTotalScoreHistory().size();
+
+        if(game.getGameType() == "x01")
+            turns = turns + 1;
+
         return turns + turns * game.getNumberOfPlayers();
     }
 

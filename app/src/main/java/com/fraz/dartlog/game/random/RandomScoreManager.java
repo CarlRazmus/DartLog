@@ -18,8 +18,8 @@ public class RandomScoreManager extends ScoreManager {
     }
 
     public boolean submitScore(int score) {
-        super.submitScore(score);
         this.score += score;
+        super.submitScore(score);
         return true;
     }
 
@@ -32,5 +32,13 @@ public class RandomScoreManager extends ScoreManager {
     public void reset() {
         super.reset();
         score = 0;
+    }
+
+    @Override
+    public void applyScores(LinkedList<Integer> scoreHistory) {
+        for(int score : scoreHistory)
+        {
+            submitScore(score);
+        }
     }
 }

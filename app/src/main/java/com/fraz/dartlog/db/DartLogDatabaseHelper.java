@@ -12,6 +12,8 @@ import android.util.SparseLongArray;
 import com.fraz.dartlog.game.Game;
 import com.fraz.dartlog.game.GameData;
 import com.fraz.dartlog.game.PlayerData;
+import com.fraz.dartlog.game.random.Random;
+import com.fraz.dartlog.game.random.RandomScoreManager;
 import com.fraz.dartlog.game.x01.X01;
 import com.fraz.dartlog.game.x01.X01PlayerData;
 import com.fraz.dartlog.game.x01.X01ScoreManager;
@@ -125,13 +127,49 @@ public class DartLogDatabaseHelper extends SQLiteOpenHelper {
 
             long playerId = getPlayerId(db, playerName);
             ArrayList<Long> matchIds = getMatchIds(db, playerId);
+            HashMap<Long, String> gameTypes = new HashMap<>();
+            for(long matchId : matchIds)
+                gameTypes.put(matchId, getGameType(db, matchId));
 
             gameData = new ArrayList<>();
-            for (long matchId : matchIds) {
-                gameData.add(getX01GameData(db, matchId));
+            for (long MatchId : matchIds) {
+                String gameType = gameTypes.get(MatchId);
+                
+                switch (gameType){
+                    case "x01":
+                        gameData.add(getX01GameData(db, MatchId));
+                        break;
+                    case "random":
+                        gameData.add(getRandomGameData(db, MatchId));
+                        break;
+                        
+                }
             }
         }
         return gameData;
+    }
+
+    private GameData getRandomGameData(SQLiteDatabase db, long matchId) {
+        HashMap<String, LinkedList<Integer>> matchScores = getMatchScores(db, matchId);
+
+        try (Cursor c = getRandomMatchEntry(db, matchId)) {
+            if (c.moveToFirst()) {
+                String winnerName = c.getString(c.getColumnIndex("winner"));
+                Calendar date = getDate(c);
+
+                LinkedHashMap<String, PlayerData> playerData = new LinkedHashMap<>();
+                for (Map.Entry<String, LinkedList<Integer>> playerEntry : matchScores.entrySet())
+                {
+                    RandomScoreManager scoreManager = new RandomScoreManager();
+                    scoreManager.applyScores(playerEntry.getValue());
+                    playerData.put(playerEntry.getKey(),
+                            new PlayerData(playerEntry.getKey(), scoreManager));
+                }
+
+                return new GameData(new ArrayList<>(playerData.values()),
+                        date, playerData.get(winnerName), "random");
+            } else throw new IllegalArgumentException("Match not found");
+        }
     }
 
     private GameData getX01GameData(SQLiteDatabase db, long matchId) {
@@ -157,7 +195,7 @@ public class DartLogDatabaseHelper extends SQLiteOpenHelper {
 
 
                 return new GameData(new ArrayList<>(playerData.values()),
-                        date, playerData.get(winnerName));
+                        date, playerData.get(winnerName), "x01");
             } else throw new IllegalArgumentException("Match not found");
         }
     }
@@ -178,9 +216,23 @@ public class DartLogDatabaseHelper extends SQLiteOpenHelper {
      */
     public void addX01Match(X01 game) {
         try (SQLiteDatabase db = getWritableDatabase()) {
-            long matchId = insertMatchEntry(db, game);
-            long x01MatchId = insertX01Entry(db, game, matchId);
-            insertScores(db, game, x01MatchId);
+            long matchId = insertMatchEntry(db, game, "x01");
+            insertX01Entry(db, game, matchId);
+            insertScores(db, game, matchId);
+        }
+    }
+
+    /**
+     * Add a match to the database. Date at time of the add is recorded as date of match.
+     * All players scores are added.
+     *
+     * @param game The match to add.
+     */
+    public void addRandomMatch(Random game) {
+        try (SQLiteDatabase db = getWritableDatabase()) {
+            long matchId = insertMatchEntry(db, game, "random");
+            insertRandomEntry(db, game, matchId);
+            insertScores(db, game, matchId);
         }
     }
 
@@ -255,6 +307,33 @@ public class DartLogDatabaseHelper extends SQLiteOpenHelper {
     }
 
     /**
+     * Get the game type of a match
+     *
+     * @param matchId The id of the match.
+     * @return The game type of the game (x01, random).
+     */
+    private String getGameType(SQLiteDatabase db, long matchId) {
+        String gameType = "";
+
+        try (Cursor c = db.query(true, DartLogContract.MatchEntry.TABLE_NAME,
+                new String[]{DartLogContract.MatchEntry.COLUMN_NAME_GAME_TYPE},
+                String.format(Locale.getDefault(), "%s = '%d'",
+                        DartLogContract.MatchEntry._ID,
+                        matchId),
+                null, null, null, null, null)) {
+            if (c.moveToFirst()) {
+                gameType = c.getString(c.getColumnIndex(
+                        DartLogContract.MatchEntry.COLUMN_NAME_GAME_TYPE));
+                while (c.moveToNext()) {
+                    /* If more than one row of data is found we have encountered an error. */
+                   throw new Error();
+                }
+            }
+        }
+        return gameType;
+    }
+
+    /**
      * Gets the ID of a player in the database. Adds a new player if id does not exist.
      *
      * @param db     The database.
@@ -288,11 +367,12 @@ public class DartLogDatabaseHelper extends SQLiteOpenHelper {
         return playerId;
     }
 
-    private long insertMatchEntry(SQLiteDatabase db, Game game){
+    private long insertMatchEntry(SQLiteDatabase db, Game game, String gameType){
         ContentValues matchValues = new ContentValues();
 
         matchValues.put(DartLogContract.MatchEntry.COLUMN_NAME_DATE,
                 game.getDate().getTimeInMillis());
+        matchValues.put(DartLogContract.MatchEntry.COLUMN_NAME_GAME_TYPE, gameType);
         matchValues.put(DartLogContract.MatchEntry.COLUMN_NAME_WINNER_PLAYER_ID,
                 getPlayerId(db, game.getWinner()));
 
@@ -308,16 +388,36 @@ public class DartLogDatabaseHelper extends SQLiteOpenHelper {
         return db.insert(DartLogContract.X01Entry.TABLE_NAME, null, matchValues);
     }
 
-    private Cursor getX01MatchEntry(SQLiteDatabase db, long x01MatchId) {
+    private long insertRandomEntry(SQLiteDatabase db, Random game, long matchId) {
+        ContentValues matchValues = new ContentValues();
+        matchValues.put(DartLogContract.RandomEntry.COLUMN_NAME_MATCH_ID, matchId);
+        matchValues.put(DartLogContract.RandomEntry.COLUMN_NAME_TURNS, game.getNrOfTurns());
+        return db.insert(DartLogContract.RandomEntry.TABLE_NAME, null, matchValues);
+    }
+
+    private Cursor getX01MatchEntry(SQLiteDatabase db, long matchId) {
         String sql = "SELECT x.double_out, x.x, m.date, p.name as winner" +
                 "     FROM x01 x" +
                 "          join match_entry m" +
                 "               on m._ID = x.match_id" +
                 "          join player p" +
                 "               on p._ID = m.winner_id" +
-                "     WHERE x._ID = ?;";
+                "     WHERE x.match_id = ?;";
 
-        return db.rawQuery(sql, new String[]{String.valueOf(x01MatchId)});
+        return db.rawQuery(sql, new String[]{String.valueOf(matchId)});
+    }
+
+
+    private Cursor getRandomMatchEntry(SQLiteDatabase db, long matchId) {
+        String sql = "SELECT r.turns, m.date, p.name as winner" +
+                "     FROM random r" +
+                "          join match_entry m" +
+                "               on m._ID = r.match_id" +
+                "          join player p" +
+                "               on p._ID = m.winner_id" +
+                "     WHERE r.match_id = ?;";
+
+        return db.rawQuery(sql, new String[]{String.valueOf(matchId)});
     }
 
     private void initializePlayers(SQLiteDatabase db) {

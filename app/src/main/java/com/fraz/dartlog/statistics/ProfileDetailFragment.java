@@ -103,10 +103,11 @@ public class ProfileDetailFragment extends Fragment {
         GameData currentBestGame = null;
         int scores = Integer.MAX_VALUE;
         for (GameData gameData : playerGameData) {
-            if (gameData.getWinner().getPlayerName().equals(profileName) &&
-                gameData.getPlayer(profileName).getScoreHistory().size() < scores) {
-                    currentBestGame = gameData;
-            }
+            if(gameData.getGameType() == "x01")
+                if (gameData.getWinner().getPlayerName().equals(profileName) &&
+                    gameData.getPlayer(profileName).getScoreHistory().size() < scores) {
+                        currentBestGame = gameData;
+                }
         }
         return currentBestGame;
     }
@@ -168,7 +169,7 @@ public class ProfileDetailFragment extends Fragment {
                 game = gameData.get(position - 3);
 
 
-            holder.gameType.setText(R.string.x01);
+            holder.gameType.setText(game.getGameType());
             holder.date.setText(new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).
                             format(game.getDate().getTime()));
 
@@ -177,7 +178,7 @@ public class ProfileDetailFragment extends Fragment {
         }
 
         private void initializeScoreBoard(GameViewHolder holder, GameData game) {
-            holder.scoreboard.setAdapter(new MatchStatisticsRecyclerViewAdapter(getContext(), game));
+            holder.scoreboard.setAdapter(new MatchStatisticsRecyclerViewAdapter(game));
             holder.scoreboard.setLayoutManager(new GridLayoutManager(getContext(),
                     game.getNumberOfPlayers() + 1, GridLayoutManager.HORIZONTAL, false));
         }

@@ -8,14 +8,16 @@ public class GameData {
     private PlayerData winner = null;
     private Calendar date;
     private ArrayList<? extends PlayerData> players;
+    private String gameType;
 
 
     public GameData(ArrayList<? extends PlayerData> players, Calendar date,
-                    PlayerData winner) {
+                    PlayerData winner, String gameType) {
 
         this.players = players;
         this.date = date;
         this.winner = winner;
+        this.gameType = gameType;
     }
 
     public PlayerData getWinner() {
@@ -42,4 +44,6 @@ public class GameData {
     {
         return date;
     }
+
+    public String getGameType() { return gameType; }
 }

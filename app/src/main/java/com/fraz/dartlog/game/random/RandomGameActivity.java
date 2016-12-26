@@ -79,10 +79,12 @@ public class RandomGameActivity extends AppCompatActivity implements View.OnClic
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.new_leg:
+                dbHelper.addRandomMatch(game);
                 game.newLeg();
                 updateView();
                 break;
             case R.id.complete_match:
+                dbHelper.addRandomMatch(game);
                 completeMatch();
                 break;
         }
