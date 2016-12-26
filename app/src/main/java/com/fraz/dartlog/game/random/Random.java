@@ -15,32 +15,6 @@ public class Random extends Game implements Serializable{
     java.util.Random rand;
 
 
-    public Random(RandomGameActivity context, ArrayList<? extends PlayerData> playerData, int nrOfTurns) {
-        super(context, playerData);
-        this.nrOfTurns = nrOfTurns;
-        rand = new java.util.Random();
-
-        addFields(nrOfTurns);
-    }
-
-    public int getNextStartingPlayer() {
-        return 0;
-    }
-
-    public int getCurrentField(){return fields.get(getTurn() - 1);}
-
-    public int getNextField() {
-        int field = 0;
-
-        try {
-            field = fields.get(getTurn());
-        }
-        catch (Exception e)
-        {
-            e.getMessage();
-        }
-        return field;
-    }
     private void addFields(int nrOfTurns) {
         for(int i=0; i<nrOfTurns; i++)
             generateRandomFieldNr();
@@ -77,13 +51,6 @@ public class Random extends Game implements Serializable{
         return false;
     }
 
-    public boolean submitScore(int score) {
-        if (!isGameOver()) {
-            super.submitScore(score);
-            updateGameState();
-        }
-        return true;
-    }
 
     private void updateGameState() {
         nextPlayer();
@@ -106,9 +73,49 @@ public class Random extends Game implements Serializable{
         });
     }
 
+
+    public Random(RandomGameActivity context, ArrayList<? extends PlayerData> playerData, int nrOfTurns) {
+        super(context, playerData);
+        this.nrOfTurns = nrOfTurns;
+        rand = new java.util.Random();
+
+        addFields(nrOfTurns);
+    }
+
+    public int getNextStartingPlayer() {
+        return 0;
+    }
+
+    public int getCurrentField(){return fields.get(getTurn() - 1);}
+
+    public int getNextField() {
+        int field = 0;
+
+        try {
+            field = fields.get(getTurn());
+        }
+        catch (Exception e)
+        {
+            e.getMessage();
+        }
+        return field;
+    }
+
+    public int getNrOfTurns(){
+        return nrOfTurns;
+    }
+
     public void newLeg() {
         fields = new ArrayList<>();
         addFields(nrOfTurns);
         newGame();
+    }
+
+    public boolean submitScore(int score) {
+        if (!isGameOver()) {
+            super.submitScore(score);
+            updateGameState();
+        }
+        return true;
     }
 }
