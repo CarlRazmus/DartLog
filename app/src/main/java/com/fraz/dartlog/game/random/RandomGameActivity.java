@@ -175,7 +175,7 @@ public class RandomGameActivity extends AppCompatActivity implements View.OnClic
     }
 
     private void initNumPadView() {
-        NumPadHandler numPadHandler = new NumPadHandler((ViewGroup) findViewById(R.id.num_pad_view), 9);
+        NumPadHandler numPadHandler = new NumPadHandler((ViewGroup) findViewById(R.id.num_pad), 9);
         numPadHandler.setListener(this);
     }
 
