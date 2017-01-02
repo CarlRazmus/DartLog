@@ -1,6 +1,5 @@
 package com.fraz.dartlog.game.random;
 
-import android.app.Fragment;
 import android.os.Bundle;
 import android.preference.PreferenceFragment;
 
