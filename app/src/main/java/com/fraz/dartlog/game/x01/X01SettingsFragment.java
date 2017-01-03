@@ -17,7 +17,6 @@ public class X01SettingsFragment extends PreferenceFragment {
 
         // Load the preferences from an XML resource
         addPreferencesFromResource(R.xml.x01_preferences);
-
     }
 
     @Override
@@ -41,7 +40,7 @@ public class X01SettingsFragment extends PreferenceFragment {
                 FrameLayout frame = (FrameLayout) getActivity().findViewById(R.id.game_preferences);
 
                 ViewGroup.LayoutParams param = frame.getLayoutParams();
-                param.height = height + (listView.getDividerHeight() * adapter.getCount()) + 50;
+                param.height = height + (listView.getDividerHeight() * adapter.getCount());
                 frame.setLayoutParams(param);
             }
         }
