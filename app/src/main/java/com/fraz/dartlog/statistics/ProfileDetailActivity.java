@@ -2,10 +2,11 @@ package com.fraz.dartlog.statistics;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.widget.Toolbar;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.app.ActionBar;
 import android.support.v4.app.NavUtils;
+import android.support.v4.view.ViewPager;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 
 import com.fraz.dartlog.R;
@@ -36,14 +37,9 @@ public class ProfileDetailActivity extends AppCompatActivity {
         if (savedInstanceState == null) {
             // Create the detail fragment and add it to the activity
             // using a fragment transaction.
-            Bundle arguments = new Bundle();
-            arguments.putString(ProfileDetailFragment.ARG_ITEM_NAME,
-                    getIntent().getStringExtra(ProfileDetailFragment.ARG_ITEM_NAME));
-            ProfileDetailFragment fragment = new ProfileDetailFragment();
-            fragment.setArguments(arguments);
-            getSupportFragmentManager().beginTransaction()
-                    .add(R.id.profile_detail_container, fragment)
-                    .commit();
+            ViewPager viewPager = (ViewPager) findViewById(R.id.profile_detail_view_pager);
+            viewPager.setAdapter(new ProfileDetailFragmentPagerAdapter(getSupportFragmentManager(),
+                    getIntent().getStringExtra(ProfileDetailFragment.ARG_ITEM_NAME)));
         }
     }
 
