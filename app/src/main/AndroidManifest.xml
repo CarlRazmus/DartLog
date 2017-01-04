@@ -37,6 +37,8 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.fraz.dartlog.MainActivity" />
         </activity>
+        <activity android:name=".SignInActivity"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".statistics.ProfileDetailActivity"
             android:label="@string/title_profile_detail"

@@ -18,7 +18,34 @@
         android:alpha=".1"/>
 
     <LinearLayout
-        android:layout_marginBottom="64dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="70dp"
+        android:id="@+id/logo_group">
+
+        <TextView
+            android:id="@+id/dart_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/dart"
+            android:textSize="64sp"
+            android:textColor="@color/main_white"
+            android:alpha=".80"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/log"
+            android:textSize="64sp"
+            android:textColor="@color/primary_color"
+            android:alpha=".80"/>
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:layout_marginTop="110dp"
+        android:layout_below="@id/logo_group"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
@@ -50,30 +77,24 @@
             android:text="@string/button_profiles"/>
     </LinearLayout>
 
-    <LinearLayout
+    <TextView
+        android:id="@+id/loginStatusTextView"
+        android:layout_margin="8dp"
+        android:layout_centerHorizontal="true"
+        android:layout_alignParentBottom="true"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:visibility="invisible"
+        tools:text="Logged in as First name Last name"/>
+
+    <com.google.android.gms.common.SignInButton
+        android:id="@+id/sign_in_button"
+        android:layout_above="@id/loginStatusTextView"
+        android:layout_margin="8dp"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="24dp"
-        android:id="@+id/logo_group">
+        android:layout_width="300dp"
+        android:layout_height="wrap_content" />
 
-        <TextView
-            android:id="@+id/dart_text"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/dart"
-            android:textSize="64sp"
-            android:textColor="@color/main_white"
-            android:alpha=".80"/>
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/log"
-            android:textSize="64sp"
-            android:textColor="@color/primary_color"
-            android:alpha=".80"/>
-    </LinearLayout>
 
 </RelativeLayout>
 
