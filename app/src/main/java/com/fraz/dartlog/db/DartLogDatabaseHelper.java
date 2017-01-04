@@ -202,7 +202,7 @@ public class DartLogDatabaseHelper extends SQLiteOpenHelper {
 
     @NonNull
     private Calendar getDate(Cursor c) {
-        long dateInMillis = c.getLong(c.getColumnIndex(DartLogContract.MatchEntry.COLUMN_NAME_DATE));
+        long dateInMillis = c.getLong(c.getColumnIndex(DartLogContract.Match.COLUMN_NAME_DATE));
         Calendar date = Calendar.getInstance();
         date.setTimeInMillis(dateInMillis);
         return date;
@@ -315,15 +315,15 @@ public class DartLogDatabaseHelper extends SQLiteOpenHelper {
     private String getGameType(SQLiteDatabase db, long matchId) {
         String gameType = "";
 
-        try (Cursor c = db.query(true, DartLogContract.MatchEntry.TABLE_NAME,
-                new String[]{DartLogContract.MatchEntry.COLUMN_NAME_GAME_TYPE},
+        try (Cursor c = db.query(true, DartLogContract.Match.TABLE_NAME,
+                new String[]{DartLogContract.Match.COLUMN_NAME_GAME_TYPE},
                 String.format(Locale.getDefault(), "%s = '%d'",
-                        DartLogContract.MatchEntry._ID,
+                        DartLogContract.Match._ID,
                         matchId),
                 null, null, null, null, null)) {
             if (c.moveToFirst()) {
                 gameType = c.getString(c.getColumnIndex(
-                        DartLogContract.MatchEntry.COLUMN_NAME_GAME_TYPE));
+                        DartLogContract.Match.COLUMN_NAME_GAME_TYPE));
                 while (c.moveToNext()) {
                     /* If more than one row of data is found we have encountered an error. */
                    throw new Error();
@@ -370,13 +370,13 @@ public class DartLogDatabaseHelper extends SQLiteOpenHelper {
     private long insertMatchEntry(SQLiteDatabase db, Game game, String gameType){
         ContentValues matchValues = new ContentValues();
 
-        matchValues.put(DartLogContract.MatchEntry.COLUMN_NAME_DATE,
+        matchValues.put(DartLogContract.Match.COLUMN_NAME_DATE,
                 game.getDate().getTimeInMillis());
-        matchValues.put(DartLogContract.MatchEntry.COLUMN_NAME_GAME_TYPE, gameType);
-        matchValues.put(DartLogContract.MatchEntry.COLUMN_NAME_WINNER_PLAYER_ID,
+        matchValues.put(DartLogContract.Match.COLUMN_NAME_GAME_TYPE, gameType);
+        matchValues.put(DartLogContract.Match.COLUMN_NAME_WINNER_PLAYER_ID,
                 getPlayerId(db, game.getWinner()));
 
-        return db.insert(DartLogContract.MatchEntry.TABLE_NAME, null, matchValues);
+        return db.insert(DartLogContract.Match.TABLE_NAME, null, matchValues);
     }
 
     private long insertX01Entry(SQLiteDatabase db, X01 game, long matchId) {
@@ -398,7 +398,7 @@ public class DartLogDatabaseHelper extends SQLiteOpenHelper {
     private Cursor getX01MatchEntry(SQLiteDatabase db, long matchId) {
         String sql = "SELECT x.double_out, x.x, m.date, p.name as winner" +
                 "     FROM x01 x" +
-                "          join match_entry m" +
+                "          join match m" +
                 "               on m._ID = x.match_id" +
                 "          join player p" +
                 "               on p._ID = m.winner_id" +
@@ -411,7 +411,7 @@ public class DartLogDatabaseHelper extends SQLiteOpenHelper {
     private Cursor getRandomMatchEntry(SQLiteDatabase db, long matchId) {
         String sql = "SELECT r.turns, m.date, p.name as winner" +
                 "     FROM random r" +
-                "          join match_entry m" +
+                "          join match m" +
                 "               on m._ID = r.match_id" +
                 "          join player p" +
                 "               on p._ID = m.winner_id" +
