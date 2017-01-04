@@ -21,6 +21,11 @@ import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.common.api.OptionalPendingResult;
+import com.google.android.gms.common.api.ResultCallback;
+import com.google.android.gms.common.api.Status;
+
+import static com.google.android.gms.common.api.CommonStatusCodes.SIGN_IN_REQUIRED;
 
 public class MainActivity extends AppCompatActivity
         implements  GoogleApiClient.OnConnectionFailedListener, View.OnClickListener {
@@ -29,6 +34,8 @@ public class MainActivity extends AppCompatActivity
     private static final int RC_SIGN_IN = 1001;
     private static final String TAG = "SignInActivity";
     private TextView loginStatusTextView;
+    private SignInButton signInButton;
+    private Button signOutButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,30 +51,42 @@ public class MainActivity extends AppCompatActivity
 
         playButton.setOnClickListener(this);
         profilesButton.setOnClickListener(this);
-
-        PreferenceManager.setDefaultValues(this, R.xml.x01_preferences, false);
         randomButton.setOnClickListener(this);
 
+        PreferenceManager.setDefaultValues(this, R.xml.x01_preferences, false);
 
-        // Configure sign-in to request the user's ID, email address, and basic
-        // profile. ID and basic profile are included in DEFAULT_SIGN_IN.
+        loginStatusTextView = (TextView) findViewById(R.id.login_status_textview);
+        signInButton = (SignInButton) findViewById(R.id.sign_in_button);
+        signInButton.setOnClickListener(this);
+        signOutButton = (Button) findViewById(R.id.sign_out_button);
+        signOutButton.setOnClickListener(this);
+
+        // Configure sign-in. ID and basic profile are included in DEFAULT_SIGN_IN.
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestEmail()
                 .build();
 
-        // Build a GoogleApiClient with access to the Google Sign-In API and the
-        // options specified by gso.
+        // Build a GoogleApiClient with access to the Google Sign-In API
         mGoogleApiClient = new GoogleApiClient.Builder(this)
-                .enableAutoManage(this /* FragmentActivity */, this /* OnConnectionFailedListener */)
+                .enableAutoManage(this, this)
                 .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
                 .build();
 
-        // Set the dimensions of the sign-in button.
-        SignInButton signInButton = (SignInButton) findViewById(R.id.sign_in_button);
-        signInButton.setSize(SignInButton.SIZE_STANDARD);
-        signInButton.setOnClickListener(this);
+        OptionalPendingResult<GoogleSignInResult> pendingResult =
+                Auth.GoogleSignInApi.silentSignIn(mGoogleApiClient);
 
-        loginStatusTextView = (TextView) findViewById(R.id.loginStatusTextView);
+        if (pendingResult.isDone()) {
+            // There's immediate result available.
+            handleSignInResult(pendingResult.get());
+        } else {
+            // There's no immediate result ready.
+            pendingResult.setResultCallback(new ResultCallback<GoogleSignInResult>() {
+                @Override
+                public void onResult(@NonNull GoogleSignInResult result) {
+                    handleSignInResult(result);
+                }
+            });
+        }
     }
 
     @Override
@@ -85,9 +104,8 @@ public class MainActivity extends AppCompatActivity
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        if (id == R.id.action_settings)
             return true;
-        }
 
         return super.onOptionsItemSelected(item);
     }
@@ -104,17 +122,32 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
+    private void signOut() {
+        Auth.GoogleSignInApi.signOut(mGoogleApiClient).setResultCallback(
+                new ResultCallback<Status>() {
+                    @Override
+                    public void onResult(Status status) {
+                        loginStatusTextView.setText("User was logged out");
+                        signInButton.setVisibility(View.VISIBLE);
+                        signOutButton.setVisibility(View.INVISIBLE);
+                    }
+                });
+    }
+
     private void handleSignInResult(GoogleSignInResult result) {
         Log.d(TAG, "SIGN IN RESULT: " + result.isSuccess());
         if (result.isSuccess()) {
             // Signed in successfully, show authenticated UI.
             GoogleSignInAccount acct = result.getSignInAccount();
-            loginStatusTextView.setText("Logged in as \"" + acct.getDisplayName() + "\"");
+            loginStatusTextView.setText("Logged in as \n" + acct.getDisplayName());
+            signInButton.setVisibility(View.INVISIBLE);
+            signOutButton.setVisibility(View.VISIBLE);
 
         } else {
             // Signed in unsuccessfully, show unauthenticated UI.
-            loginStatusTextView.setText("Failed to log in \n " +
-                    "status: " + result.getStatus() + "\n");
+            if(result.getStatus().getStatusCode() != SIGN_IN_REQUIRED)
+                loginStatusTextView.setText("Failed to log in with " +
+                        "status code: " + result.getStatus().getStatusCode() + "\n");
         }
         loginStatusTextView.setVisibility(View.VISIBLE);
 
@@ -130,7 +163,6 @@ public class MainActivity extends AppCompatActivity
         startActivityForResult(signInIntent, RC_SIGN_IN);
     }
 
-
     @Override
     public void onClick(View v) {
         switch(v.getId()) {
@@ -145,6 +177,9 @@ public class MainActivity extends AppCompatActivity
                 break;
             case R.id.sign_in_button:
                 signIn();
+                break;
+            case R.id.sign_out_button:
+                signOut();
                 break;
         }
     }

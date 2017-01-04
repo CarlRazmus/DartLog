@@ -77,23 +77,37 @@
             android:text="@string/button_profiles"/>
     </LinearLayout>
 
-    <TextView
-        android:id="@+id/loginStatusTextView"
-        android:layout_margin="8dp"
-        android:layout_centerHorizontal="true"
-        android:layout_alignParentBottom="true"
+    <Button
+        android:id="@+id/sign_out_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:textSize="12sp"
+        android:layout_margin="8dp"
+        android:text="Log Out"
+        android:visibility="invisible"/>
+
+
+    <TextView
+        android:id="@+id/login_status_textview"
+        android:layout_width="210dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_margin="8dp"
+        android:textAlignment="center"
         android:visibility="invisible"
         tools:text="Logged in as First name Last name"/>
 
     <com.google.android.gms.common.SignInButton
         android:id="@+id/sign_in_button"
-        android:layout_above="@id/loginStatusTextView"
+        android:layout_above="@id/login_status_textview"
         android:layout_margin="8dp"
         android:layout_centerHorizontal="true"
         android:layout_width="300dp"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"/>
+
 
 
 </RelativeLayout>
