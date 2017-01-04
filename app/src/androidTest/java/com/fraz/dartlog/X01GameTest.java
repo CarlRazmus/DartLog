@@ -44,6 +44,8 @@ public class X01GameTest {
 
     @Test
     public void testNumPadInput() {
+        onView(withId(R.id.score_input)).check(matches(withText("No score")));
+
         // Press buttons on the numpad.
         onView(withId(R.id.one)).perform(click());
         onView(withId(R.id.two)).perform(click());
@@ -59,13 +61,13 @@ public class X01GameTest {
         // Check that when erasing all digits the score field displays 0.
         onView(withId(R.id.erase)).perform(click());
         onView(withId(R.id.erase)).perform(click());
-        onView(withId(R.id.score_input)).check(matches(withText("0")));
+        onView(withId(R.id.score_input)).check(matches(withText("No score")));
 
         // Check that 0 is displayed after enter is pressed.
         onView(withId(R.id.one)).perform(click());
         onView(withId(R.id.two)).perform(click());
-        onView(withId(R.id.enter)).perform(click());
-        onView(withId(R.id.score_input)).check(matches(withText("0")));
+        onView(withId(R.id.score_input)).perform(click());
+        onView(withId(R.id.score_input)).check(matches(withText("No score")));
 
         //Check that scores above 180 is not possible to input
         onView(withId(R.id.one)).perform(click());

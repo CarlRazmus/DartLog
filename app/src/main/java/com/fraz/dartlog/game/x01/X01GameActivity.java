@@ -160,7 +160,7 @@ public class X01GameActivity extends AppCompatActivity implements View.OnClickLi
     }
 
     private void initNumPadView() {
-        NumPadHandler numPadHandler = new NumPadHandler((ViewGroup) findViewById(R.id.num_pad_view), 180);
+        NumPadHandler numPadHandler = new NumPadHandler((ViewGroup) findViewById(R.id.num_pad), 180);
         numPadHandler.setListener(this);
     }
 

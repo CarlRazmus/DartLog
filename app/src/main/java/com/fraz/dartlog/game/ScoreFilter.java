@@ -15,10 +15,14 @@ class ScoreFilter implements InputFilter {
     public CharSequence filter(CharSequence source, int start, int end,
                                Spanned dest, int dstart, int dend) {
 
-        int number = Integer.parseInt(dest.toString() + source);
-        if (number > maxScore)
-            return "";
-        else
-            return source;
+        try {
+            int number = Integer.parseInt(dest.toString() + source);
+            if (number > maxScore)
+                return source.subSequence(start, end - 1);
+        } catch (NumberFormatException e) {
+            return null;
+        }
+
+        return null;
     }
 }

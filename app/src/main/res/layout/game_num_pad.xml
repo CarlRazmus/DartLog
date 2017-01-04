@@ -1,152 +1,118 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
+<GridLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/num_pad_view"
+    android:id="@+id/num_pad"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@color/background_dark"
+    android:columnCount="4"
     tools:showIn="@layout/activity_x01_game">
 
-    <TableLayout
-        android:id="@+id/num_pad"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
-        android:background="#000000"
-        android:stretchColumns="*">
+    <Button
+        style="?attr/buttonBarButtonStyle"
+        android:id="@+id/one"
+        android:background="@drawable/button_num_pad"
+        android:textColor="@color/main_white"
+        android:layout_columnWeight="1"
+        android:text="@string/one" />
 
-        <TableRow
-            android:background="@color/background_dark">
+    <Button
+        style="?attr/buttonBarButtonStyle"
+        android:id="@+id/two"
+        android:background="@drawable/button_num_pad"
+        android:textColor="@color/main_white"
+        android:layout_columnWeight="1"
+        android:text="@string/two" />
 
-            <TextView
-                android:id="@+id/score_input"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:maxLength="3"
-                android:text="@string/button_zero"
-                android:textColor="@color/main_white"
-                android:layout_column="1"
-                android:padding="2dp"
-                android:textSize="30sp" />
-        </TableRow>
+    <Button
+        style="?attr/buttonBarButtonStyle"
+        android:id="@+id/three"
+        android:background="@drawable/button_num_pad"
+        android:textColor="@color/main_white"
+        android:layout_columnWeight="1"
+        android:text="@string/three" />
 
-        <TableRow style="?attr/buttonBarStyle">
-                <Button
-                    style="?attr/buttonBarButtonStyle"
-                    android:id="@+id/one"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:background="@drawable/button_num_pad"
-                    android:textColor="@color/main_white"
-                    android:text="@string/one" />
+    <ImageButton
+        android:contentDescription="@string/button_erase_number"
+        android:id="@+id/erase"
+        style="?attr/buttonBarButtonStyle"
+        android:background="@drawable/button_num_pad"
+        android:layout_columnWeight="1"
+        android:tint="@color/primary_color"
+        android:layout_rowSpan="2"
+        android:layout_gravity="fill"
+        android:src="@android:drawable/ic_input_delete" />
 
-                <Button
-                    style="?attr/buttonBarButtonStyle"
-                    android:id="@+id/two"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:background="@drawable/button_num_pad"
-                    android:textColor="@color/main_white"
-                    android:text="@string/two" />
+    <Button
+        style="?attr/buttonBarButtonStyle"
+        android:id="@+id/four"
+        android:background="@drawable/button_num_pad"
+        android:textColor="@color/main_white"
+        android:layout_columnWeight="1"
+        android:text="@string/four" />
 
-                <Button
-                    style="?attr/buttonBarButtonStyle"
-                    android:id="@+id/three"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:background="@drawable/button_num_pad"
-                    android:textColor="@color/main_white"
-                    android:text="@string/three" />
-        </TableRow>
+    <Button
+        style="?attr/buttonBarButtonStyle"
+        android:id="@+id/five"
+        android:background="@drawable/button_num_pad"
+        android:textColor="@color/main_white"
+        android:layout_columnWeight="1"
+        android:text="@string/five" />
 
-        <TableRow style="?attr/buttonBarStyle">
-            <Button
-                style="?attr/buttonBarButtonStyle"
-                android:id="@+id/four"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="@drawable/button_num_pad"
-                android:textColor="@color/main_white"
-                android:text="@string/four" />
+    <Button
+        style="?attr/buttonBarButtonStyle"
+        android:id="@+id/six"
+        android:background="@drawable/button_num_pad"
+        android:textColor="@color/main_white"
+        android:layout_columnWeight="1"
+        android:text="@string/six" />
 
-            <Button
-                style="?attr/buttonBarButtonStyle"
-                android:id="@+id/five"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="@drawable/button_num_pad"
-                android:textColor="@color/main_white"
-                android:text="@string/five" />
+    <Button
+        style="?attr/buttonBarButtonStyle"
+        android:id="@+id/seven"
+        android:background="@drawable/button_num_pad"
+        android:textColor="@color/main_white"
+        android:layout_columnWeight="1"
+        android:text="@string/seven" />
 
-            <Button
-                style="?attr/buttonBarButtonStyle"
-                android:id="@+id/six"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="@drawable/button_num_pad"
-                android:textColor="@color/main_white"
-                android:text="@string/six" />
-        </TableRow>
+    <Button
+        style="?attr/buttonBarButtonStyle"
+        android:id="@+id/eight"
+        android:background="@drawable/button_num_pad"
+        android:textColor="@color/main_white"
+        android:layout_columnWeight="1"
+        android:text="@string/eight" />
 
-        <TableRow style="?attr/buttonBarStyle">
-            <Button
-                style="?attr/buttonBarButtonStyle"
-                android:id="@+id/seven"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="@drawable/button_num_pad"
-                android:textColor="@color/main_white"
-                android:text="@string/seven" />
+    <Button
+        style="?attr/buttonBarButtonStyle"
+        android:id="@+id/nine"
+        android:background="@drawable/button_num_pad"
+        android:textColor="@color/main_white"
+        android:layout_columnWeight="1"
+        android:text="@string/nine" />
 
-            <Button
-                style="?attr/buttonBarButtonStyle"
-                android:id="@+id/eight"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="@drawable/button_num_pad"
-                android:textColor="@color/main_white"
-                android:text="@string/eight" />
+    <Button
+        style="?attr/buttonBarButtonStyle"
+        android:id="@+id/zero"
+        android:background="@drawable/button_num_pad"
+        android:textColor="@color/main_white"
+        android:layout_columnWeight="1"
+        android:text="@string/button_zero" />
 
-            <Button
-                style="?attr/buttonBarButtonStyle"
-                android:id="@+id/nine"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="@drawable/button_num_pad"
-                android:textColor="@color/main_white"
-                android:text="@string/nine" />
-        </TableRow>
+    <FrameLayout
+        android:layout_columnSpan="4"
+        android:layout_gravity="fill_horizontal"
+        android:padding="8dp" >
 
-        <TableRow style="?attr/buttonBarStyle">
-            <ImageButton
-                android:contentDescription="@string/button_erase_number"
-                android:id="@+id/erase"
-                style="?attr/buttonBarButtonStyle"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="@drawable/button_num_pad"
-                android:tint="@color/primary_color"
-                android:src="@android:drawable/ic_input_delete" />
-
-            <Button
-                style="?attr/buttonBarButtonStyle"
-                android:id="@+id/zero"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="@drawable/button_num_pad"
-                android:textColor="@color/main_white"
-                android:text="@string/button_zero" />
-
-            <Button
-                style="?attr/buttonBarButtonStyle"
-                android:id="@+id/enter"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="@drawable/button_num_pad"
-                android:textColor="@color/accent_color"
-                android:text="@string/button_submit" />
-        </TableRow>
-    </TableLayout>
-</RelativeLayout>
+        <Button
+            style="?attr/buttonBarButtonStyle"
+            android:layout_height="match_parent"
+            android:layout_width="match_parent"
+            android:id="@+id/score_input"
+            android:background="@drawable/button_default"
+            android:textColor="@color/main_white"
+            android:elevation="8dp"
+            android:text="@string/no_score" />
+    </FrameLayout>
+</GridLayout>
