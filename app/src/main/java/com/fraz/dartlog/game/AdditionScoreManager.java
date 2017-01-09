@@ -7,31 +7,39 @@ import java.util.LinkedList;
  */
 public class AdditionScoreManager extends ScoreManager {
 
-    private LinkedList<Integer> totalScoreHistory = new LinkedList<>();
+    public AdditionScoreManager()
+    {
+        score = 0;
+    }
+
+    public AdditionScoreManager(LinkedList<Integer> scoreHistory)
+    {
+        applyScores(scoreHistory);
+    }
 
     public boolean submitScore(int score) {
-        int newScore = getScore() + score;
-
-        totalScoreHistory.add(getScore());
+        this.score += score;
         super.submitScore(score);
-        this.score = newScore;
         return true;
     }
 
-    public LinkedList<Integer> getTotalScoreHistory() { return totalScoreHistory; }
 
     @Override
     public void undoScore() {
-        super.undoScore();
+        if (!totalScoreHistory.isEmpty()) {
+            totalScoreHistory.removeLast();
+            scoreHistory.removeLast();
 
-        if (!totalScoreHistory.isEmpty())
-            score = totalScoreHistory.removeLast();
+            if (totalScoreHistory.isEmpty())
+                score = 0;
+            else
+                score = totalScoreHistory.getLast();
+        }
     }
 
     @Override
     public void reset() {
         super.reset();
-        totalScoreHistory = new LinkedList<>();
         score = 0;
     }
 }

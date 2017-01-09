@@ -19,6 +19,7 @@ import com.fraz.dartlog.MainActivity;
 import com.fraz.dartlog.OnBackPressedDialogFragment;
 import com.fraz.dartlog.R;
 import com.fraz.dartlog.db.DartLogDatabaseHelper;
+import com.fraz.dartlog.game.AdditionScoreManager;
 import com.fraz.dartlog.game.InputEventListener;
 import com.fraz.dartlog.game.NumPadHandler;
 import com.fraz.dartlog.game.PlayerData;
@@ -163,7 +164,7 @@ public class RandomGameActivity extends AppCompatActivity implements View.OnClic
         ArrayList<PlayerData> playerDataList = new ArrayList<>();
 
         for (String playerName : playerNames) {
-            playerDataList.add(new PlayerData(playerName, new RandomScoreManager()));
+            playerDataList.add(new PlayerData(playerName, new AdditionScoreManager()));
         }
         return playerDataList;
     }
