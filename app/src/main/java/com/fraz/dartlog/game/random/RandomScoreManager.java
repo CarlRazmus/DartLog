@@ -25,7 +25,7 @@ public class RandomScoreManager extends ScoreManager {
 
     @Override
     public void undoScore() {
-        super.undoScore();
+
     }
 
     @Override

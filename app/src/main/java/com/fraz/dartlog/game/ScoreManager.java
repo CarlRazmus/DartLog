@@ -17,12 +17,7 @@ public abstract class ScoreManager {
         return true;
     }
 
-    public void undoScore() {
-        if (!scoreHistory.isEmpty()) {
-            scoreHistory.removeLast();
-            score = totalScoreHistory.removeLast();
-        }
-    }
+    public abstract void undoScore();
 
     public int getScore() {
         return score;

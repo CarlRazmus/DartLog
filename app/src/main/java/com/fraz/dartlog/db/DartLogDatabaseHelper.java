@@ -9,6 +9,7 @@ import android.support.annotation.NonNull;
 import android.util.SparseArray;
 import android.util.SparseLongArray;
 
+import com.fraz.dartlog.game.AdditionScoreManager;
 import com.fraz.dartlog.game.Game;
 import com.fraz.dartlog.game.GameData;
 import com.fraz.dartlog.game.PlayerData;
@@ -160,7 +161,7 @@ public class DartLogDatabaseHelper extends SQLiteOpenHelper {
                 LinkedHashMap<String, PlayerData> playerData = new LinkedHashMap<>();
                 for (Map.Entry<String, LinkedList<Integer>> playerEntry : matchScores.entrySet())
                 {
-                    RandomScoreManager scoreManager = new RandomScoreManager();
+                    AdditionScoreManager scoreManager = new AdditionScoreManager();
                     scoreManager.applyScores(playerEntry.getValue());
                     playerData.put(playerEntry.getKey(),
                             new PlayerData(playerEntry.getKey(), scoreManager));

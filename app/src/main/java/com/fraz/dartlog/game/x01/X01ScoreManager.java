@@ -28,7 +28,10 @@ public class X01ScoreManager extends ScoreManager {
 
     @Override
     public void undoScore() {
-        super.undoScore();
+        if (!scoreHistory.isEmpty()) {
+            scoreHistory.removeLast();
+            score = totalScoreHistory.removeLast();
+        }
     }
 
     @Override
