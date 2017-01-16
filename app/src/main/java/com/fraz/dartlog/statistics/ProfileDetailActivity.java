@@ -32,15 +32,9 @@ public class ProfileDetailActivity extends AppCompatActivity {
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
 
-        // savedInstanceState is non-null when there is fragment state
-        // saved (e.g. when rotating the screen from portrait to landscape).
-        if (savedInstanceState == null) {
-            // Create the detail fragment and add it to the activity
-            // using a fragment transaction.
-            ViewPager viewPager = (ViewPager) findViewById(R.id.profile_detail_view_pager);
-            viewPager.setAdapter(new ProfileDetailFragmentPagerAdapter(getSupportFragmentManager(),
-                    getIntent().getStringExtra(ProfileDetailFragment.ARG_ITEM_NAME)));
-        }
+        ViewPager viewPager = (ViewPager) findViewById(R.id.profile_detail_view_pager);
+        viewPager.setAdapter(new ProfileDetailFragmentPagerAdapter(getSupportFragmentManager(),
+                getIntent().getStringExtra(ProfileDetailFragment.ARG_ITEM_NAME)));
     }
 
     @Override

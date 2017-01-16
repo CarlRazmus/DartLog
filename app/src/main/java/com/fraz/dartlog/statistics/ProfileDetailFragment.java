@@ -2,10 +2,11 @@ package com.fraz.dartlog.statistics;
 
 import android.graphics.Typeface;
 import android.os.Bundle;
-import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
+import android.text.format.DateUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,7 +20,9 @@ import com.fraz.dartlog.game.PlayerData;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
+import java.util.Date;
 import java.util.Locale;
 
 /**
@@ -64,11 +67,15 @@ public class ProfileDetailFragment extends Fragment {
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.profile_detail, container, false);
 
-        CollapsingToolbarLayout appBarLayout =
-                (CollapsingToolbarLayout) getActivity().findViewById(R.id.toolbar_layout);
-        if (appBarLayout != null) {
-            appBarLayout.setTitle(profileName);
+        Toolbar toolbar =
+                (Toolbar) getActivity().findViewById(R.id.detail_toolbar);
+        if (toolbar != null) {
+            toolbar.setTitle(profileName);
         }
+
+        TextView summaryHeader =
+                (TextView) rootView.findViewById(R.id.profile_detail_summary_label);
+        summaryHeader.setText(R.string.summary);
 
         int playerWins = 0;
         for(GameData game : playerGameData)
@@ -152,11 +159,10 @@ public class ProfileDetailFragment extends Fragment {
         }
 
         private void bindHeaderViewHolder(HeaderViewHolder holder, int position) {
-            TextView itemView = (TextView) holder.itemView;
             if(isBestGameHeader(position))
-                itemView.setText(R.string.best_game);
+                holder.header.setText(R.string.best_game);
             else
-                itemView.setText(R.string.recent_games);
+                holder.header.setText(R.string.recent_games);
         }
 
         private void bindGameViewHolder(GameViewHolder holder, int position) {
@@ -169,9 +175,15 @@ public class ProfileDetailFragment extends Fragment {
                 game = gameData.get(position - 3);
 
 
-            holder.gameType.setText(game.getGameType());
-            holder.date.setText(new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).
-                            format(game.getDate().getTime()));
+            holder.gameType.setText(game.getGameType().toUpperCase());
+
+            Date date = game.getDate().getTime();
+            if (DateUtils.isToday(date.getTime()))
+                holder.date.setText(DateUtils.getRelativeTimeSpanString(date.getTime(),
+                        Calendar.getInstance().getTimeInMillis(), DateUtils.HOUR_IN_MILLIS));
+            else
+                holder.date.setText(new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).
+                        format(date));
 
             addHeaders(holder, game);
             initializeScoreBoard(holder, game);
@@ -241,8 +253,11 @@ public class ProfileDetailFragment extends Fragment {
 
         class HeaderViewHolder extends RecyclerView.ViewHolder {
 
+            TextView header;
+
             HeaderViewHolder(View view) {
                 super(view);
+                header = (TextView) view.findViewById(R.id.player_match_statistics_header);
             }
         }
 

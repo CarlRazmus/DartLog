@@ -3,19 +3,23 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    app:cardBackgroundColor="@color/light_grey"
-    app:cardElevation="@dimen/cardview_default_elevation"
+    app:cardBackgroundColor="@color/main_white"
+    app:cardElevation="0dp"
     app:cardCornerRadius="0dp"
+    app:contentPaddingTop="8dp"
+    app:contentPaddingBottom="8dp"
+    app:contentPaddingLeft="16dp"
+    app:contentPaddingRight="16dp"
+    android:layout_marginBottom="1dp"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginBottom="4dp"
     android:id="@+id/player_match_statistics">
 
     <RelativeLayout
         android:id="@+id/player_match_statistics_background"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/list_item"
+        android:background="@color/light_grey"
         android:orientation="vertical">
 
         <TextView
@@ -23,8 +27,11 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             tools:text="X01"
-            android:padding="8dp"
-            android:textSize="15sp"
+            android:paddingTop="4dp"
+            android:paddingBottom="4dp"
+            android:paddingStart="8dp"
+            android:paddingEnd="8dp"
+            android:textSize="13sp"
             android:layout_alignParentStart="true"
             android:layout_toStartOf="@+id/match_statistics_game_date"
             android:background="@color/main_white"
@@ -35,10 +42,12 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             tools:text="2016-10-24"
-            android:padding="8dp"
-            android:textSize="15sp"
+            android:paddingTop="4dp"
+            android:paddingBottom="4dp"
+            android:paddingStart="8dp"
+            android:paddingEnd="8dp"
+            android:textSize="13sp"
             android:layout_alignParentEnd="true"
-            android:layout_marginStart="1dp"
             android:layout_alignBottom="@id/match_statistics_game_type"
             android:layout_alignTop="@id/match_statistics_game_type"
             android:background="@color/main_white"
@@ -52,16 +61,25 @@
             android:layout_below="@id/match_statistics_game_type"
             android:background="@color/main_white"
             android:layout_marginTop="1dp"
-            android:layout_marginEnd="1dp"
             android:orientation="vertical">
-
         </LinearLayout>
+
+        <View
+            android:id="@+id/match_statistics_header_delimiter"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:background="@color/light_grey"
+            android:layout_toEndOf="@id/match_statistics_scoreboard_header"
+            android:layout_below="@id/match_statistics_game_type"
+            android:layout_alignBottom="@id/match_statistics_scoreboard_header"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp"/>
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/match_statistics_scoreboard"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_toEndOf="@id/match_statistics_scoreboard_header"
+            android:layout_toEndOf="@id/match_statistics_header_delimiter"
             android:layout_alignTop="@id/match_statistics_scoreboard_header"
             android:layout_alignBottom="@id/match_statistics_scoreboard_header"
             android:nestedScrollingEnabled="false"
@@ -70,5 +88,4 @@
             android:fadingEdgeLength="50dp"
             android:requiresFadingEdge="horizontal"/>
     </RelativeLayout>
-
 </android.support.v7.widget.CardView>
