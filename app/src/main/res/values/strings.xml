@@ -50,6 +50,8 @@
     <string name="x01">X01</string>
     <string name="field_to_hit">Field</string>
     <string name="result_win">Winner!</string>
+    <string name="win">WIN</string>
+    <string name="loss">LOSS</string>
     <string name="players_colon">Players:</string>
     <string name="summary">SUMMARY</string>
     <string name="next">next</string>
