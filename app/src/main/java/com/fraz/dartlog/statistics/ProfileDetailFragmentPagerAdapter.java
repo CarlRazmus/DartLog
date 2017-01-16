@@ -5,10 +5,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
-/**
- * Created by Filip on 2017-01-03.
- */
-
 public class ProfileDetailFragmentPagerAdapter extends FragmentPagerAdapter {
 
     private String profileName;
@@ -20,9 +16,18 @@ public class ProfileDetailFragmentPagerAdapter extends FragmentPagerAdapter {
 
     @Override
     public Fragment getItem(int position) {
+        Fragment fragment;
+        switch (position){
+            default:
+            case 0:
+                fragment = new ProfileDetailFragment();
+                break;
+            case 1:
+                fragment = new MatchHistoryFragment();
+                break;
+        }
         Bundle arguments = new Bundle();
         arguments.putString(ProfileDetailFragment.ARG_ITEM_NAME, profileName);
-        ProfileDetailFragment fragment = new ProfileDetailFragment();
         fragment.setArguments(arguments);
         return fragment;
     }
@@ -34,9 +39,12 @@ public class ProfileDetailFragmentPagerAdapter extends FragmentPagerAdapter {
 
     @Override
     public CharSequence getPageTitle(int position) {
-        if (position == 0)
-            return "Overview";
-        else
-            return "Match history";
+        switch (position){
+            default:
+            case 0:
+                return "Overview";
+            case 1:
+                return "Match history";
+        }
     }
 }
