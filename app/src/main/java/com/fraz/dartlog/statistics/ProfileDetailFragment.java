@@ -180,7 +180,9 @@ public class ProfileDetailFragment extends Fragment {
             Date date = game.getDate().getTime();
             if (DateUtils.isToday(date.getTime()))
                 holder.date.setText(DateUtils.getRelativeTimeSpanString(date.getTime(),
-                        Calendar.getInstance().getTimeInMillis(), DateUtils.HOUR_IN_MILLIS));
+                        Calendar.getInstance().getTimeInMillis(),
+                        DateUtils.SECOND_IN_MILLIS,
+                        DateUtils.FORMAT_ABBREV_ALL));
             else
                 holder.date.setText(new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).
                         format(date));
