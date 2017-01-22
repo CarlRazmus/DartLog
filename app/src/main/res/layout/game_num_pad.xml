@@ -15,6 +15,8 @@
         android:background="@drawable/button_num_pad"
         android:textColor="@color/main_white"
         android:layout_columnWeight="1"
+        android:layout_column="0"
+        android:layout_row="0"
         android:text="@string/one" />
 
     <Button
@@ -23,6 +25,8 @@
         android:background="@drawable/button_num_pad"
         android:textColor="@color/main_white"
         android:layout_columnWeight="1"
+        android:layout_column="1"
+        android:layout_row="0"
         android:text="@string/two" />
 
     <Button
@@ -31,18 +35,9 @@
         android:background="@drawable/button_num_pad"
         android:textColor="@color/main_white"
         android:layout_columnWeight="1"
+        android:layout_column="2"
+        android:layout_row="0"
         android:text="@string/three" />
-
-    <ImageButton
-        android:contentDescription="@string/button_erase_number"
-        android:id="@+id/erase"
-        style="?attr/buttonBarButtonStyle"
-        android:background="@drawable/button_num_pad"
-        android:layout_columnWeight="1"
-        android:tint="@color/primary_color"
-        android:layout_rowSpan="2"
-        android:layout_gravity="fill"
-        android:src="@android:drawable/ic_input_delete" />
 
     <Button
         style="?attr/buttonBarButtonStyle"
@@ -50,6 +45,8 @@
         android:background="@drawable/button_num_pad"
         android:textColor="@color/main_white"
         android:layout_columnWeight="1"
+        android:layout_column="0"
+        android:layout_row="1"
         android:text="@string/four" />
 
     <Button
@@ -58,6 +55,8 @@
         android:background="@drawable/button_num_pad"
         android:textColor="@color/main_white"
         android:layout_columnWeight="1"
+        android:layout_column="1"
+        android:layout_row="1"
         android:text="@string/five" />
 
     <Button
@@ -66,6 +65,8 @@
         android:background="@drawable/button_num_pad"
         android:textColor="@color/main_white"
         android:layout_columnWeight="1"
+        android:layout_column="2"
+        android:layout_row="1"
         android:text="@string/six" />
 
     <Button
@@ -74,6 +75,8 @@
         android:background="@drawable/button_num_pad"
         android:textColor="@color/main_white"
         android:layout_columnWeight="1"
+        android:layout_column="0"
+        android:layout_row="2"
         android:text="@string/seven" />
 
     <Button
@@ -81,6 +84,8 @@
         android:id="@+id/eight"
         android:background="@drawable/button_num_pad"
         android:textColor="@color/main_white"
+        android:layout_column="1"
+        android:layout_row="2"
         android:layout_columnWeight="1"
         android:text="@string/eight" />
 
@@ -89,6 +94,8 @@
         android:id="@+id/nine"
         android:background="@drawable/button_num_pad"
         android:textColor="@color/main_white"
+        android:layout_column="2"
+        android:layout_row="2"
         android:layout_columnWeight="1"
         android:text="@string/nine" />
 
@@ -97,22 +104,35 @@
         android:id="@+id/zero"
         android:background="@drawable/button_num_pad"
         android:textColor="@color/main_white"
+        android:layout_column="1"
+        android:layout_row="3"
         android:layout_columnWeight="1"
         android:text="@string/button_zero" />
 
-    <FrameLayout
-        android:layout_columnSpan="4"
-        android:layout_gravity="fill_horizontal"
-        android:padding="8dp" >
+    <Button
+        style="?attr/buttonBarButtonStyle"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_column="2"
+        android:layout_row="3"
+        android:id="@+id/score_input"
+        android:background="@color/accent_color"
+        android:textColor="@color/main_white"
+        android:elevation="8dp"
+        android:layout_gravity="fill"
+        android:layout_columnWeight="1"
+        android:text="@string/no_score" />
 
-        <Button
-            style="?attr/buttonBarButtonStyle"
-            android:layout_height="match_parent"
-            android:layout_width="match_parent"
-            android:id="@+id/score_input"
-            android:background="@drawable/button_default"
-            android:textColor="@color/main_white"
-            android:elevation="8dp"
-            android:text="@string/no_score" />
-    </FrameLayout>
+    <ImageButton
+        android:contentDescription="@string/button_erase_number"
+        android:id="@+id/erase"
+        style="?attr/buttonBarButtonStyle"
+        android:background="@color/primary_color"
+        android:layout_columnWeight="1"
+        android:tint="@color/main_white"
+        android:layout_gravity="fill"
+        android:layout_column="0"
+        android:layout_row="3"
+        android:src="@android:drawable/ic_input_delete" />
+
 </GridLayout>
