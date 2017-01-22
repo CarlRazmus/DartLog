@@ -16,7 +16,6 @@
     <string name="player_1">Player 1</string>
     <string name="_301">301</string>
     <string name="button_done">Done</string>
-    <string name="button_submit">Submit</string>
     <string name="contentDescription_handle_to_trigger_drag_event">Handle to trigger drag event</string>
     <string name="contentDescription_main_activity_background_image">Main activity background image</string>
     <string name="button_zero">0</string>
@@ -69,4 +68,6 @@
     <string name="pref_x01_double_out_attempts_summary">Single-out after %s turns below 50.</string>
     <string name="pref_key_random_nr_of_rounds">pref_key_nr_of_rounds</string>
     <string name="pref_random_nr_of_rounds">Nr of rounds</string>
+    <string name="zero">0</string>
+    <string name="submit">SUBMIT</string>
 </resources>
