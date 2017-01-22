@@ -7,17 +7,20 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.TextView;
 
 import com.fraz.dartlog.R;
 
 public class NumPadHandler implements View.OnTouchListener {
 
-    private final Button scoreInput;
+    private final Button submitButton;
     private InputEventListener listener;
+    private final TextView scoreInput;
 
     public NumPadHandler(ViewGroup numpadView, int maxScore) {
-        scoreInput = (Button) numpadView.findViewById(R.id.score_input);
+        submitButton = (Button) numpadView.findViewById(R.id.score_input);
         ViewGroup numpad = (ViewGroup) numpadView.findViewById(R.id.num_pad);
+        scoreInput = (TextView) numpadView.findViewById(R.id.score_input_textview);
         setOnTouchListenerInView(numpad);
         initInputField(maxScore);
     }
@@ -56,8 +59,11 @@ public class NumPadHandler implements View.OnTouchListener {
 
     private void enter() {
         int score = getInput();
+        String zeroScore = scoreInput.getResources().getString(R.string.zero);
         listener.enter(score);
-        scoreInput.setText(R.string.no_score);
+        submitButton.setText(R.string.no_score);
+        scoreInput.setText(zeroScore);
+        scoreInput.setVisibility(View.GONE);
     }
 
     private int getInput() {
@@ -73,18 +79,22 @@ public class NumPadHandler implements View.OnTouchListener {
         if (!isNoScore(scoreText) && length > 1) {
             scoreInput.setText(scoreText.subSequence(0, length - 1));
         } else {
-            scoreInput.setText(R.string.no_score);
+            scoreInput.setText(R.string.zero);
+            submitButton.setText(R.string.no_score);
         }
     }
 
     private void addNumber(CharSequence number) {
         CharSequence scoreText = scoreInput.getText();
         if (isNoScore(scoreText)) {
-            if (!number.equals("0"))
-                scoreInput.setText(number);
+            scoreInput.setText(number);
+            if (!number.equals(R.string.zero)) {
+                submitButton.setText(R.string.submit);
+            }
         } else {
             scoreInput.setText(String.format("%s%s", scoreText, number));
         }
+        scoreInput.setVisibility(View.VISIBLE);
     }
 
     private void setOnTouchListenerInView(ViewGroup viewGroup) {
@@ -105,7 +115,7 @@ public class NumPadHandler implements View.OnTouchListener {
     }
 
     private boolean isNoScore(CharSequence scoreText) {
-        String noScore = scoreInput.getResources().getString(R.string.no_score);
-        return scoreText.equals(noScore);
+        String zeroScore = scoreInput.getResources().getString(R.string.zero);
+        return (scoreText.length() == 0 || scoreText.equals(zeroScore));
     }
 }
