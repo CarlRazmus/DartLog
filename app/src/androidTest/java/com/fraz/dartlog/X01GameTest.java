@@ -44,39 +44,45 @@ public class X01GameTest {
 
     @Test
     public void testNumPadInput() {
-        onView(withId(R.id.score_input)).check(matches(withText("No score")));
+        onView(withId(R.id.submit_button)).check(matches(withText("No score")));
 
         // Press buttons on the numpad.
         onView(withId(R.id.one)).perform(click());
         onView(withId(R.id.two)).perform(click());
         onView(withId(R.id.three)).perform(click());
 
-        // Check that the numpad score field is updated.
-        onView(withId(R.id.score_input)).check(matches(withText("123")));
+        // Check that the numpad score field and submit button is updated.
+        onView(withId(R.id.score_view)).check(matches(withText("123")));
+        onView(withId(R.id.submit_button)).check(matches(withText("SUBMIT")));
 
         // Check that erase removes the last digit.
         onView(withId(R.id.erase)).perform(click());
-        onView(withId(R.id.score_input)).check(matches(withText("12")));
+        onView(withId(R.id.score_view)).check(matches(withText("12")));
+        onView(withId(R.id.submit_button)).check(matches(withText("SUBMIT")));
 
-        // Check that when erasing all digits the score field displays 0.
+        // Check that when erasing all digits the score field displays 0 and submit button
+        // displays "no score".
         onView(withId(R.id.erase)).perform(click());
         onView(withId(R.id.erase)).perform(click());
-        onView(withId(R.id.score_input)).check(matches(withText("No score")));
+        onView(withId(R.id.score_view)).check(matches(withText("0")));
+        onView(withId(R.id.submit_button)).check(matches(withText("NO SCORE")));
 
-        // Check that 0 is displayed after enter is pressed.
+        // Check that score field shows 0 and that submit button is set to "no score" after
+        // submit button is pressed.
         onView(withId(R.id.one)).perform(click());
         onView(withId(R.id.two)).perform(click());
-        onView(withId(R.id.score_input)).perform(click());
-        onView(withId(R.id.score_input)).check(matches(withText("No score")));
+        onView(withId(R.id.submit_button)).perform(click());
+        onView(withId(R.id.score_view)).check(matches(withText("0")));
+        onView(withId(R.id.submit_button)).check(matches(withText("No score")));
 
         //Check that scores above 180 is not possible to input
         onView(withId(R.id.one)).perform(click());
         onView(withId(R.id.eight)).perform(click());
         onView(withId(R.id.one)).perform(click());
-        onView(withId(R.id.score_input)).check(matches(withText("18")));
+        onView(withId(R.id.submit_button)).check(matches(withText("18")));
         onView(withId(R.id.zero)).perform(click());
-        onView(withId(R.id.score_input)).check(matches(withText("180")));
+        onView(withId(R.id.submit_button)).check(matches(withText("180")));
         onView(withId(R.id.zero)).perform(click());
-        onView(withId(R.id.score_input)).check(matches(withText("180")));
+        onView(withId(R.id.submit_button)).check(matches(withText("180")));
     }
 }

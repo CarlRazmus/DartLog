@@ -9,7 +9,7 @@
     tools:showIn="@layout/activity_x01_game">
 
     <TextView
-        android:id="@+id/score_input_textview"
+        android:id="@+id/score_view"
         android:layout_height="wrap_content"
         android:layout_width="fill_parent"
         android:layout_marginEnd="40dp"
@@ -27,7 +27,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/background_dark"
-        android:layout_below="@id/score_input_textview"
+        android:layout_below="@id/score_view"
         android:columnCount="4">
 
     <Button
@@ -136,7 +136,7 @@
         android:layout_height="match_parent"
         android:layout_column="2"
         android:layout_row="3"
-        android:id="@+id/score_input"
+        android:id="@+id/submit_button"
         android:background="@color/accent_color"
         android:textColor="@color/main_white"
         android:elevation="8dp"
