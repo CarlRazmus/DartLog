@@ -65,7 +65,7 @@ public class X01GameTest {
         onView(withId(R.id.erase)).perform(click());
         onView(withId(R.id.erase)).perform(click());
         onView(withId(R.id.score_view)).check(matches(withText("0")));
-        onView(withId(R.id.submit_button)).check(matches(withText("NO SCORE")));
+        onView(withId(R.id.submit_button)).check(matches(withText("No score")));
 
         // Check that score field shows 0 and that submit button is set to "no score" after
         // submit button is pressed.
@@ -79,10 +79,10 @@ public class X01GameTest {
         onView(withId(R.id.one)).perform(click());
         onView(withId(R.id.eight)).perform(click());
         onView(withId(R.id.one)).perform(click());
-        onView(withId(R.id.submit_button)).check(matches(withText("18")));
+        onView(withId(R.id.score_view)).check(matches(withText("18")));
         onView(withId(R.id.zero)).perform(click());
-        onView(withId(R.id.submit_button)).check(matches(withText("180")));
+        onView(withId(R.id.score_view)).check(matches(withText("180")));
         onView(withId(R.id.zero)).perform(click());
-        onView(withId(R.id.submit_button)).check(matches(withText("180")));
+        onView(withId(R.id.score_view)).check(matches(withText("180")));
     }
 }
