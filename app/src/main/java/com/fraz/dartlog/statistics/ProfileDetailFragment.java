@@ -1,16 +1,12 @@
 package com.fraz.dartlog.statistics;
 
-import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.text.format.DateUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.fraz.dartlog.R;
@@ -18,11 +14,8 @@ import com.fraz.dartlog.db.DartLogDatabaseHelper;
 import com.fraz.dartlog.game.GameData;
 import com.fraz.dartlog.game.PlayerData;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Collections;
-import java.util.Date;
 import java.util.Locale;
 
 /**
@@ -110,7 +103,7 @@ public class ProfileDetailFragment extends Fragment {
         GameData currentBestGame = null;
         int scores = Integer.MAX_VALUE;
         for (GameData gameData : playerGameData) {
-            if(gameData.getGameType() == "x01")
+            if(gameData.getGameType().equals("x01"))
                 if (gameData.getWinner().getPlayerName().equals(profileName) &&
                     gameData.getPlayer(profileName).getScoreHistory().size() < scores) {
                         currentBestGame = gameData;
@@ -142,10 +135,8 @@ public class ProfileDetailFragment extends Fragment {
                         .inflate(R.layout.match_statistics_header, parent, false);
                 return new HeaderViewHolder(view);
             } else {
-                view = LayoutInflater.from(parent.getContext())
-                        .inflate(R.layout.match_statistics, parent, false);
+                view = new MatchTableView(getContext());
                 return new GameViewHolder(view);
-
             }
         }
 
@@ -174,52 +165,7 @@ public class ProfileDetailFragment extends Fragment {
             else
                 game = gameData.get(position - 3);
 
-
-            holder.gameType.setText(game.getGameType().toUpperCase());
-
-            Date date = game.getDate().getTime();
-            if (DateUtils.isToday(date.getTime()))
-                holder.date.setText(DateUtils.getRelativeTimeSpanString(date.getTime(),
-                        Calendar.getInstance().getTimeInMillis(),
-                        DateUtils.SECOND_IN_MILLIS,
-                        DateUtils.FORMAT_ABBREV_ALL));
-            else
-                holder.date.setText(new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).
-                        format(date));
-
-            addHeaders(holder, game);
-            initializeScoreBoard(holder, game);
-        }
-
-        private void initializeScoreBoard(GameViewHolder holder, GameData game) {
-            holder.scoreboard.setAdapter(new MatchStatisticsRecyclerViewAdapter(game));
-            holder.scoreboard.setLayoutManager(new GridLayoutManager(getContext(),
-                    game.getNumberOfPlayers() + 1, GridLayoutManager.HORIZONTAL, false));
-        }
-
-        private void addHeaders(final GameViewHolder holder, GameData game) {
-            holder.headerGroup.removeAllViews();
-            TextView turnHeader = createHeaderView("Turn", holder.headerGroup);
-            turnHeader.setTypeface(Typeface.DEFAULT_BOLD);
-            holder.headerGroup.addView(turnHeader);
-            for (int i = 0; i < game.getNumberOfPlayers(); i++) {
-                PlayerData player = game.getPlayer(i);
-                TextView header = createHeaderView(player.getPlayerName(), holder.headerGroup);
-                if (game.getWinner() == player)
-                    header.setTextColor(getResources().getColor(R.color.accent_color));
-                holder.headerGroup.addView(header);
-            }
-        }
-
-        private TextView createHeaderView(String text, ViewGroup headerGroup)
-        {
-            TextView header = (TextView) LayoutInflater.from(getContext())
-                    .inflate(R.layout.match_statistics_scoreboard_list_item, headerGroup, false);
-            header.setText(text);
-            header.setLayoutParams(new LinearLayout.LayoutParams(
-                    LinearLayout.LayoutParams.WRAP_CONTENT,
-                    LinearLayout.LayoutParams.WRAP_CONTENT));
-            return header;
+            holder.matchTable.setGame(game);
         }
 
         @Override
@@ -254,9 +200,7 @@ public class ProfileDetailFragment extends Fragment {
         }
 
         class HeaderViewHolder extends RecyclerView.ViewHolder {
-
             TextView header;
-
             HeaderViewHolder(View view) {
                 super(view);
                 header = (TextView) view.findViewById(R.id.player_match_statistics_header);
@@ -264,18 +208,10 @@ public class ProfileDetailFragment extends Fragment {
         }
 
         class GameViewHolder extends RecyclerView.ViewHolder {
-            RecyclerView scoreboard;
-            TextView gameType;
-            TextView date;
-            ViewGroup headerGroup;
-
-
+            MatchTableView matchTable;
             GameViewHolder(View view) {
                 super(view);
-                gameType = (TextView) view.findViewById(R.id.match_statistics_game_type);
-                date = (TextView) view.findViewById(R.id.match_statistics_game_date);
-                headerGroup = (ViewGroup) view.findViewById(R.id.match_statistics_scoreboard_header);
-                scoreboard = (RecyclerView) view.findViewById(R.id.match_statistics_scoreboard);
+                matchTable = (MatchTableView) view;
             }
         }
     }
