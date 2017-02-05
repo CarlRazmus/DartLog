@@ -1,6 +1,7 @@
 package com.fraz.dartlog.statistics;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.text.format.DateUtils;
 import android.view.LayoutInflater;
@@ -39,13 +40,23 @@ public class MatchRecyclerViewAdapter extends RecyclerView.Adapter<MatchRecycler
     }
 
     @Override
-    public void onBindViewHolder(final ViewHolder holder, int position) {
+    public void onBindViewHolder(final ViewHolder holder, final int position) {
         GameData game = gameData.get(position);
 
         holder.gameType.setText(game.getGameType().toUpperCase());
         bindPlayers(holder, game);
         bindResult(holder, game);
         bindDate(holder, game);
+
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(context, MatchPagerActivity.class);
+                intent.putExtra(MatchPagerActivity.ARG_ITEM_NAME, playerName);
+                intent.putExtra(MatchPagerActivity.ARG_ITEM_POSITION, holder.getAdapterPosition());
+                context.startActivity(intent);
+            }
+        });
     }
 
     private void bindPlayers(ViewHolder holder, GameData game) {

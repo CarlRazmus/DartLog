@@ -1,9 +1,10 @@
 package com.fraz.dartlog.game;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Calendar;
 
-public class GameData {
+public class GameData implements Serializable {
 
     private PlayerData winner = null;
     private Calendar date;

@@ -5,6 +5,7 @@ import android.graphics.Typeface;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.format.DateUtils;
+import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,6 +26,12 @@ public class MatchTableView extends FrameLayout {
 
     private final View layout;
     private GameData game;
+
+    public MatchTableView(Context context, AttributeSet attrs) {
+        super(context, attrs);
+        LayoutInflater inflater = LayoutInflater.from(context);
+        layout = inflater.inflate(R.layout.match_statistics, this);
+    }
 
     public MatchTableView(Context context) {
         super(context);
