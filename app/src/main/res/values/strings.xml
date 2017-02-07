@@ -6,7 +6,7 @@
     <string name="cancel">Cancel</string>
     <string name="title_profile_list">Profiles</string>
     <string name="title_profile_detail">Profile Detail</string>
-    <string name="title_match_activity">match</string>
+    <string name="title_match_activity">Match</string>
     <string name="button_start_game">START</string>
     <string name="button_undo">UNDO</string>
     <string name="header_select_players">Select Players</string>

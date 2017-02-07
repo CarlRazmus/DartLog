@@ -1,16 +1,18 @@
 package com.fraz.dartlog.statistics;
 
 import android.os.Bundle;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 
 import com.fraz.dartlog.R;
 import com.fraz.dartlog.db.DartLogDatabaseHelper;
 import com.fraz.dartlog.game.GameData;
 
 import java.util.ArrayList;
+import java.util.Locale;
 
-public class MatchPagerActivity extends FragmentActivity {
+public class MatchPagerActivity extends AppCompatActivity {
 
     public static final String ARG_ITEM_NAME = "ARG_NAME";
     public static final String ARG_ITEM_POSITION = "ARG_POSITION";
@@ -29,5 +31,22 @@ public class MatchPagerActivity extends FragmentActivity {
         ViewPager matchPager = (ViewPager) findViewById(R.id.match_pager);
         matchPager.setAdapter(adapter);
         matchPager.setCurrentItem(position);
+        matchPager.addOnPageChangeListener(new OnPageChangeListener());
+        UpdateToolbar(position);
+    }
+
+    private void UpdateToolbar(int position) {
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setTitle(
+                String.format(Locale.getDefault(), "%s #%d", getTitle(), position + 1));
+    }
+
+    class OnPageChangeListener extends ViewPager.SimpleOnPageChangeListener
+    {
+        @Override
+        public void onPageSelected(int position) {
+            UpdateToolbar(position);
+        }
     }
 }
