@@ -47,4 +47,12 @@ public class GameData implements Serializable {
     }
 
     public String getGameType() { return gameType; }
+
+    public String[] getPlayerNames() {
+        String[] names = new String[players.size()];
+        for (int i = 0; i < players.size(); i++) {
+            names[i] = players.get(i).getPlayerName();
+        }
+        return names;
+    }
 }
