@@ -1,15 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="background">#37474F</color>
-    <color name="background_dark">#263238</color>
-    <color name="main_white">#FFFFFF</color>
-    <color name="light_grey">#9D9D9D</color>
-    <color name="main_grey">#616161</color>
-    <color name="primary_color">#B90504</color>
-    <color name="accent_color">#7AB317</color>
-    <color name="accent_color_alpha_26">#42AEEA00</color>
-    <color name="light_red">#D03535</color>
+    <color name="primary">#B90504</color>
+    <color name="accent">#7AB317</color>
+    <color name="accent_alpha_26">#42AEEA00</color>
 
+    <color name="background">#212121</color>
+    <color name="background_transparent">#EF212121</color>
+    <color name="background_blue">#263238</color>
+
+    <color name="button_background_transparent">#AF424242</color>
+
+    <color name="main_white">#FFFFFF</color>
+    <color name="light_grey">#BDBDBD</color>
+    <color name="main_grey">#616161</color>
+    <color name="light_red">#D03535</color>
     <color name="green_win">#7AB317</color>
     <color name="red_loss">#B90504</color>
+
 </resources>

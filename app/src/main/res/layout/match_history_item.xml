@@ -35,7 +35,7 @@
         android:textStyle="bold"
         android:layout_alignBottom="@id/match_history_players"
         android:layout_alignTop="@id/match_history_game_type"
-        tools:textColor="@color/accent_color"
+        tools:textColor="@color/accent"
         tools:text="WIN"/>
 
     <TextView

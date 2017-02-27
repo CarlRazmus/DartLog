@@ -24,7 +24,7 @@
             android:layout_width="2dp"
             android:layout_height="0dp"
             android:id="@+id/game_player_list_item_current_player_indicator"
-            android:background="@color/primary_color"
+            android:background="@color/primary"
             android:layout_marginEnd="8dp"
             android:layout_alignTop="@+id/game_player_list_item_name"
             android:layout_alignBottom="@+id/game_player_list_item_score" />
@@ -36,7 +36,7 @@
             android:layout_toEndOf="@id/game_player_list_item_current_player_indicator"
             android:text="@string/player_1"
             android:textSize="15sp"
-            android:textColor="@color/background_dark"/>
+            android:textColor="@color/background_blue"/>
 
         <TextView
             android:id="@+id/total_score_history"
@@ -66,7 +66,7 @@
             android:layout_below="@id/game_player_list_item_name"
             tools:text="32"
             android:textSize="20sp"
-            android:textColor="@color/background_dark"/>
+            android:textColor="@color/background_blue"/>
 
         <LinearLayout
             android:layout_width="200dp"
@@ -83,7 +83,7 @@
                 android:layout_height="wrap_content"
                 tools:text="@string/double_out"
                 android:layout_marginEnd="5dp"
-                android:textColor="@color/background_dark"
+                android:textColor="@color/background_blue"
                 android:textSize="12sp"
                 android:textStyle="bold"/>
 
@@ -91,7 +91,7 @@
                 android:id="@+id/checkout"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="@color/background_dark"
+                android:textColor="@color/background_blue"
                 android:textSize="12sp"
                 tools:text="D9"
                 android:typeface="monospace" />

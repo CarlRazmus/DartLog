@@ -85,7 +85,7 @@ public class AvailablePlayersRecyclerAdapter extends RecyclerView.Adapter<Availa
         }));
 
         if (isMarked(holder.getAdapterPosition()))
-            listItemView.setBackgroundResource(R.color.accent_color);
+            listItemView.setBackgroundResource(R.color.accent);
         else
             listItemView.setBackgroundResource(android.R.color.transparent);
     }

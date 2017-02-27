@@ -206,7 +206,7 @@ public class ProfileDetailFragment extends Fragment {
                 PlayerData player = game.getPlayer(i);
                 TextView header = createHeaderView(player.getPlayerName(), holder.headerGroup);
                 if (game.getWinner() == player)
-                    header.setTextColor(getResources().getColor(R.color.accent_color));
+                    header.setTextColor(getResources().getColor(R.color.accent));
                 holder.headerGroup.addView(header);
             }
         }
