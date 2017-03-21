@@ -54,11 +54,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private void initializeAndPopulateNavigationDrawer(){
 
-        /*SecondaryDrawerItem item1 = new SecondaryDrawerItem().withIdentifier(1).withName(R.string.drawer_item_profile);
+        SecondaryDrawerItem item1 = new SecondaryDrawerItem().withIdentifier(1).withName(R.string.drawer_item_profile);
         item1.withSelectable(false);
         PrimaryDrawerItem item2 = new PrimaryDrawerItem().withIdentifier(2).withName(R.string.drawer_item_friends);
         item2.withSelectable(true);
-        PrimaryDrawerItem item3 = new PrimaryDrawerItem().withIdentifier(3).withName(R.string.drawer_item_settings);
+        /*PrimaryDrawerItem item3 = new PrimaryDrawerItem().withIdentifier(3).withName(R.string.drawer_item_settings);
         item3.withSelectable(true);
         SecondaryDrawerItem item4 = new SecondaryDrawerItem().withIdentifier(4).withName(R.string.drawer_item_feedback);
         item4.withSelectable(true);
@@ -69,9 +69,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         AccountHeader headerResult = new AccountHeaderBuilder()
                 .withActivity(this)
                 .withHeaderBackground(R.drawable.profile_background)
-                //.addProfiles(
-                //        new ProfileDrawerItem().withName("Raz Lind").withEmail("fakeMail@DaShit.com").withIcon(getResources().getDrawable(R.drawable.ic_account_circle_blue_grey_600_24dp))
-                //)
+                .addProfiles(
+                        new ProfileDrawerItem().withName("").withEmail("").withIcon(getResources().getDrawable(R.drawable.ic_account_circle_blue_grey_600_24dp))
+                )
                 .withOnAccountHeaderListener(new AccountHeader.OnAccountHeaderListener() {
                     @Override
                     public boolean onProfileChanged(View view, IProfile profile, boolean currentProfile) {
@@ -87,12 +87,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 .withAccountHeader(
                         headerResult
                 )
-          /*      .addDrawerItems(
+                .addDrawerItems(
                         item1,
-                        item2,
-                        new DividerDrawerItem(),
-                        item3
-                )*/
+                        item2
+                        //new DividerDrawerItem(),
+                )
                 .withFooterDivider(true)
              /*   .addStickyDrawerItems(
                         item4,
