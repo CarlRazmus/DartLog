@@ -72,4 +72,5 @@
     <string name="submit">SUBMIT</string>
     <string name="drawer_item_profile">Profile</string>
     <string name="drawer_item_friends">friends</string>
+    <string name="drawer_item_statistics">statistics</string>
 </resources>

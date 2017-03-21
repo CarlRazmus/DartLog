@@ -17,4 +17,20 @@
     <color name="green_win">#7AB317</color>
     <color name="red_loss">#B90504</color>
 
+    <!-- OVERWRITE THESE COLORS FOR A LIGHT THEME -->
+    <!-- MaterialDrawer DEFAULT colors -->
+    <color name="material_drawer_background">#EF212121</color>
+
+    <!-- Material DEFAULT text / items colors -->
+    <color name="material_drawer_icons">#FFF</color>
+    <color name="material_drawer_primary_text">#EDFFFFFF</color>
+    <color name="material_drawer_primary_icon">#8A000000</color>
+    <color name="material_drawer_secondary_text">#8EFFFFFF</color>
+    <color name="material_drawer_hint_text">#42FFFFFF</color>
+    <color name="material_drawer_divider">#3FFFFFFF</color>
+    <!-- Material DEFAULT drawer colors -->
+    <color name="material_drawer_selected">#EF212121</color>
+    <color name="material_drawer_selected_text">#8EFFFFFF</color>
+    <color name="material_drawer_header_selection_text">#FFFFFF</color>
+
 </resources>

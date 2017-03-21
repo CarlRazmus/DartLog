@@ -58,13 +58,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         item1.withSelectable(false);
         PrimaryDrawerItem item2 = new PrimaryDrawerItem().withIdentifier(2).withName(R.string.drawer_item_friends);
         item2.withSelectable(true);
-        /*PrimaryDrawerItem item3 = new PrimaryDrawerItem().withIdentifier(3).withName(R.string.drawer_item_settings);
+        PrimaryDrawerItem item3 = new PrimaryDrawerItem().withIdentifier(3).withName(R.string.drawer_item_statistics);
         item3.withSelectable(true);
-        SecondaryDrawerItem item4 = new SecondaryDrawerItem().withIdentifier(4).withName(R.string.drawer_item_feedback);
-        item4.withSelectable(true);
-        SecondaryDrawerItem item5 = new SecondaryDrawerItem().withIdentifier(4).withName(R.string.drawer_item_logout);
-        item4.withSelectable(true);
-*/
+
         // Create the AccountHeader
         AccountHeader headerResult = new AccountHeaderBuilder()
                 .withActivity(this)
@@ -89,7 +85,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 )
                 .addDrawerItems(
                         item1,
-                        item2
+                        item2,
+                        item3
                         //new DividerDrawerItem(),
                 )
                 .withFooterDivider(true)
