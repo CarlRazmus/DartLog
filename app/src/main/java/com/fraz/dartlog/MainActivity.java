@@ -54,19 +54,19 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private void initializeAndPopulateNavigationDrawer(){
 
-        SecondaryDrawerItem item1 = new SecondaryDrawerItem().withIdentifier(1).withName(R.string.drawer_item_profile);
-        item1.withSelectable(false);
-        PrimaryDrawerItem item2 = new PrimaryDrawerItem().withIdentifier(2).withName(R.string.drawer_item_friends);
+        PrimaryDrawerItem homeItem = new PrimaryDrawerItem().withIdentifier(2).withName(R.string.drawer_item_home).withIcon(R.drawable.ic_home_white_24dp).withIconColorRes(R.color.md_red_700);
+        homeItem.withSelectable(true);
+        PrimaryDrawerItem item1 = new PrimaryDrawerItem().withIdentifier(2).withName(R.string.drawer_item_friends).withIcon(R.drawable.ic_group_white_24dp).withIconColorRes(R.color.md_red_700);
+        item1.withSelectable(true);
+        PrimaryDrawerItem item2 = new PrimaryDrawerItem().withIdentifier(3).withName(R.string.drawer_item_statistics).withIcon(R.drawable.ic_poll_white_24dp);
         item2.withSelectable(true);
-        PrimaryDrawerItem item3 = new PrimaryDrawerItem().withIdentifier(3).withName(R.string.drawer_item_statistics);
-        item3.withSelectable(true);
 
         // Create the AccountHeader
         AccountHeader headerResult = new AccountHeaderBuilder()
                 .withActivity(this)
                 .withHeaderBackground(R.drawable.profile_background)
                 .addProfiles(
-                        new ProfileDrawerItem().withName("").withEmail("").withIcon(getResources().getDrawable(R.drawable.ic_account_circle_blue_grey_600_24dp))
+                        new ProfileDrawerItem().withName("").withEmail("").withIcon(getResources().getDrawable(R.drawable.ic_account_circle_white_36dp))
                 )
                 .withOnAccountHeaderListener(new AccountHeader.OnAccountHeaderListener() {
                     @Override
@@ -84,10 +84,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         headerResult
                 )
                 .addDrawerItems(
-                        item1,
+                        homeItem,
+                        new DividerDrawerItem(),
                         item2,
-                        item3
-                        //new DividerDrawerItem(),
+                        item1
                 )
                 .withFooterDivider(true)
              /*   .addStickyDrawerItems(
