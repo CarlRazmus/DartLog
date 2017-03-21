@@ -68,7 +68,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         // Create the AccountHeader
         AccountHeader headerResult = new AccountHeaderBuilder()
                 .withActivity(this)
-                //.withHeaderBackground(R.drawable.profile_background)
+                .withHeaderBackground(R.drawable.profile_background)
                 //.addProfiles(
                 //        new ProfileDrawerItem().withName("Raz Lind").withEmail("fakeMail@DaShit.com").withIcon(getResources().getDrawable(R.drawable.ic_account_circle_blue_grey_600_24dp))
                 //)
