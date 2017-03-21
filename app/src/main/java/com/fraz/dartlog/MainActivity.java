@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -11,8 +12,21 @@ import android.widget.Button;
 
 import com.fraz.dartlog.game.setup.SetupActivity;
 import com.fraz.dartlog.statistics.ProfileListActivity;
+import com.mikepenz.materialdrawer.AccountHeader;
+import com.mikepenz.materialdrawer.AccountHeaderBuilder;
+import com.mikepenz.materialdrawer.Drawer;
+import com.mikepenz.materialdrawer.DrawerBuilder;
+import com.mikepenz.materialdrawer.model.DividerDrawerItem;
+import com.mikepenz.materialdrawer.model.PrimaryDrawerItem;
+import com.mikepenz.materialdrawer.model.ProfileDrawerItem;
+import com.mikepenz.materialdrawer.model.SecondaryDrawerItem;
+import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
+import com.mikepenz.materialdrawer.model.interfaces.IProfile;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
+
+    Drawer navigationDrawer;
+    Toolbar myToolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,8 +43,70 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         playButton.setOnClickListener(this);
         profilesButton.setOnClickListener(this);
 
+        myToolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(myToolbar);
+
+        initializeAndPopulateNavigationDrawer();
+
         PreferenceManager.setDefaultValues(this, R.xml.x01_preferences, false);
         randomButton.setOnClickListener(this);
+    }
+
+    private void initializeAndPopulateNavigationDrawer(){
+
+        /*SecondaryDrawerItem item1 = new SecondaryDrawerItem().withIdentifier(1).withName(R.string.drawer_item_profile);
+        item1.withSelectable(false);
+        PrimaryDrawerItem item2 = new PrimaryDrawerItem().withIdentifier(2).withName(R.string.drawer_item_friends);
+        item2.withSelectable(true);
+        PrimaryDrawerItem item3 = new PrimaryDrawerItem().withIdentifier(3).withName(R.string.drawer_item_settings);
+        item3.withSelectable(true);
+        SecondaryDrawerItem item4 = new SecondaryDrawerItem().withIdentifier(4).withName(R.string.drawer_item_feedback);
+        item4.withSelectable(true);
+        SecondaryDrawerItem item5 = new SecondaryDrawerItem().withIdentifier(4).withName(R.string.drawer_item_logout);
+        item4.withSelectable(true);
+*/
+        // Create the AccountHeader
+        AccountHeader headerResult = new AccountHeaderBuilder()
+                .withActivity(this)
+                //.withHeaderBackground(R.drawable.profile_background)
+                //.addProfiles(
+                //        new ProfileDrawerItem().withName("Raz Lind").withEmail("fakeMail@DaShit.com").withIcon(getResources().getDrawable(R.drawable.ic_account_circle_blue_grey_600_24dp))
+                //)
+                .withOnAccountHeaderListener(new AccountHeader.OnAccountHeaderListener() {
+                    @Override
+                    public boolean onProfileChanged(View view, IProfile profile, boolean currentProfile) {
+                        return false;
+                    }
+                })
+                .build();
+
+        navigationDrawer = new DrawerBuilder()
+                .withActivity(this)
+                .withToolbar(myToolbar)
+                .withSliderBackgroundColor(getResources().getColor(R.color.background_transparent))
+                .withAccountHeader(
+                        headerResult
+                )
+          /*      .addDrawerItems(
+                        item1,
+                        item2,
+                        new DividerDrawerItem(),
+                        item3
+                )*/
+                .withFooterDivider(true)
+             /*   .addStickyDrawerItems(
+                        item4,
+                        item3,
+                        item5
+                )*/
+                .withOnDrawerItemClickListener(new Drawer.OnDrawerItemClickListener() {
+                    @Override
+                    public boolean onItemClick(View view, int position, IDrawerItem drawerItem) {
+                        navigationDrawer.closeDrawer();
+                        return true;
+                    }
+                })
+                .build();
     }
 
     @Override
