@@ -102,6 +102,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         return true;
                     }
                 })
+                .withSelectedItem(-1)
                 .build();
     }
 
@@ -139,7 +140,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             case R.id.play_random_button:
                 startPlayersActivity("random");
                 break;
-
         }
     }
 
