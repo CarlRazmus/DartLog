@@ -30,7 +30,7 @@
     <color name="material_drawer_divider">#3FFFFFFF</color>
     <!-- Material DEFAULT drawer colors -->
     <color name="material_drawer_selected">#EF212121</color>
-    <color name="material_drawer_selected_text">#8EFFFFFF</color>
+    <color name="material_drawer_selected_text">#B90504</color>
     <color name="material_drawer_header_selection_text">#FFFFFF</color>
 
 </resources>

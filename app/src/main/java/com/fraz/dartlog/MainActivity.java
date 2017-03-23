@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -55,11 +56,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private void initializeAndPopulateNavigationDrawer(){
 
         PrimaryDrawerItem homeItem = new PrimaryDrawerItem().withIdentifier(2).withName(R.string.drawer_item_home).withIcon(R.drawable.ic_home_white_24dp).withIconColorRes(R.color.md_red_700);
-        homeItem.withSelectable(true);
         PrimaryDrawerItem item1 = new PrimaryDrawerItem().withIdentifier(2).withName(R.string.drawer_item_friends).withIcon(R.drawable.ic_group_white_24dp).withIconColorRes(R.color.md_red_700);
-        item1.withSelectable(true);
         PrimaryDrawerItem item2 = new PrimaryDrawerItem().withIdentifier(3).withName(R.string.drawer_item_statistics).withIcon(R.drawable.ic_poll_white_24dp);
-        item2.withSelectable(true);
 
         // Create the AccountHeader
         AccountHeader headerResult = new AccountHeaderBuilder()
