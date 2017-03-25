@@ -61,7 +61,7 @@ public class ProfileDetailFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.profile_detail, container, false);
 
         Toolbar toolbar =
-                (Toolbar) getActivity().findViewById(R.id.detail_toolbar);
+                (Toolbar) getActivity().findViewById(R.id.toolbar);
         if (toolbar != null) {
             toolbar.setTitle(profileName);
         }
