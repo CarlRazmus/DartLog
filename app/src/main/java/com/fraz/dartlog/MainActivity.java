@@ -10,7 +10,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
-import android.widget.TextView;
 
 import com.fraz.dartlog.game.setup.SetupActivity;
 import com.fraz.dartlog.statistics.ProfileListActivity;
@@ -27,8 +26,9 @@ import com.google.android.gms.common.api.Status;
 
 import static com.google.android.gms.common.api.CommonStatusCodes.SIGN_IN_REQUIRED;
 
-public class MainActivity extends AppCompatActivity
-        implements  GoogleApiClient.OnConnectionFailedListener, View.OnClickListener {
+public class MainActivity extends MenuBackground implements  GoogleApiClient.OnConnectionFailedListener, View.OnClickListener {
+
+
 
     private GoogleApiClient mGoogleApiClient;
     private static final int RC_SIGN_IN = 1001;
@@ -39,8 +39,7 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        super.onCreate(savedInstanceState, this, R.layout.activity_main);
         Button playButton = (Button) findViewById(R.id.play_x01_button);
         Button profilesButton = (Button) findViewById(R.id.profiles_button);
         Button randomButton = (Button) findViewById(R.id.play_random_button);

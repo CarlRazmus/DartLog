@@ -2,12 +2,14 @@ package com.fraz.dartlog.statistics;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.widget.Toolbar;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.app.ActionBar;
 import android.support.v4.app.NavUtils;
+import android.support.v4.view.ViewPager;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 
+import com.fraz.dartlog.MenuBackground;
 import com.fraz.dartlog.R;
 
 /**
@@ -16,35 +18,15 @@ import com.fraz.dartlog.R;
  * item details are presented side-by-side with a list of items
  * in a {@link ProfileListActivity}.
  */
-public class ProfileDetailActivity extends AppCompatActivity {
+public class ProfileDetailActivity extends MenuBackground {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_profile_detail);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.detail_toolbar);
-        setSupportActionBar(toolbar);
+        super.onCreate(savedInstanceState, this, R.layout.activity_profile_detail);
 
-        // Show the Up button in the action bar.
-        ActionBar actionBar = getSupportActionBar();
-        if (actionBar != null) {
-            actionBar.setDisplayHomeAsUpEnabled(true);
-        }
-
-        // savedInstanceState is non-null when there is fragment state
-        // saved (e.g. when rotating the screen from portrait to landscape).
-        if (savedInstanceState == null) {
-            // Create the detail fragment and add it to the activity
-            // using a fragment transaction.
-            Bundle arguments = new Bundle();
-            arguments.putString(ProfileDetailFragment.ARG_ITEM_NAME,
-                    getIntent().getStringExtra(ProfileDetailFragment.ARG_ITEM_NAME));
-            ProfileDetailFragment fragment = new ProfileDetailFragment();
-            fragment.setArguments(arguments);
-            getSupportFragmentManager().beginTransaction()
-                    .add(R.id.profile_detail_container, fragment)
-                    .commit();
-        }
+        ViewPager viewPager = (ViewPager) findViewById(R.id.profile_detail_view_pager);
+        viewPager.setAdapter(new ProfileDetailFragmentPagerAdapter(getSupportFragmentManager(),
+                getIntent().getStringExtra(ProfileDetailFragment.ARG_ITEM_NAME)));
     }
 
     @Override

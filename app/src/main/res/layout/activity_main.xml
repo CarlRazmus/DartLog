@@ -1,10 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.fraz.dartlog.MainActivity"
     android:background="@drawable/background">
+
+    <android.support.design.widget.AppBarLayout
+        android:id="@+id/app_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:theme="@style/AppBarOverlay">
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            app:popupTheme="@style/PopupOverlay" />
+    </android.support.design.widget.AppBarLayout>
 
     <ImageView
         android:contentDescription="@string/contentDescription_main_activity_background_image"
@@ -18,34 +32,7 @@
         android:alpha=".1"/>
 
     <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="70dp"
-        android:id="@+id/logo_group">
-
-        <TextView
-            android:id="@+id/dart_text"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/dart"
-            android:textSize="64sp"
-            android:textColor="@color/main_white"
-            android:alpha=".80"/>
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/log"
-            android:textSize="64sp"
-            android:textColor="@color/primary_color"
-            android:alpha=".80"/>
-    </LinearLayout>
-
-
-    <LinearLayout
-        android:layout_marginTop="110dp"
-        android:layout_below="@id/logo_group"
+        android:layout_marginBottom="200dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
@@ -77,38 +64,31 @@
             android:text="@string/button_profiles"/>
     </LinearLayout>
 
-    <Button
-        android:id="@+id/sign_out_button"
+    <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentBottom="true"
-        android:textSize="12sp"
-        android:layout_margin="8dp"
-        android:text="Log Out"
-        android:visibility="invisible"/>
-
-
-    <TextView
-        android:id="@+id/login_status_textview"
-        android:layout_width="210dp"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:layout_margin="8dp"
-        android:textAlignment="center"
-        android:visibility="invisible"
-        tools:text="Logged in as First name Last name"/>
+        android:layout_below="@id/app_bar"
+        android:layout_marginTop="24dp"
+        android:id="@+id/logo_group">
 
-    <com.google.android.gms.common.SignInButton
-        android:id="@+id/sign_in_button"
-        android:layout_above="@id/login_status_textview"
-        android:layout_margin="8dp"
-        android:layout_centerHorizontal="true"
-        android:layout_width="300dp"
-        android:layout_height="wrap_content"/>
+        <TextView
+            android:id="@+id/dart_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/dart"
+            android:textSize="64sp"
+            android:textColor="@color/main_white"
+            android:alpha=".80"/>
 
-
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/log"
+            android:textSize="64sp"
+            android:textColor="@color/primary"
+            android:alpha=".80"/>
+    </LinearLayout>
 
 </RelativeLayout>
 
