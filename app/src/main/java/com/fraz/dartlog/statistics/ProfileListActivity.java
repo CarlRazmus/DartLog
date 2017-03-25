@@ -57,11 +57,6 @@ public class ProfileListActivity extends MenuBackground {
                         "AddPlayerDialogFragment");
             }
         });
-        // Show the Up button in the action bar.
-        ActionBar actionBar = getSupportActionBar();
-        if (actionBar != null) {
-            actionBar.setDisplayHomeAsUpEnabled(true);
-        }
 
         View recyclerView = findViewById(R.id.profile_list);
         assert recyclerView != null;

@@ -1,14 +1,18 @@
 package com.fraz.dartlog;
 
 import android.app.Activity;
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
 
+import com.fraz.dartlog.statistics.ProfileDetailActivity;
+import com.fraz.dartlog.statistics.ProfileDetailFragment;
+import com.fraz.dartlog.statistics.ProfileListActivity;
 import com.mikepenz.materialdrawer.AccountHeader;
 import com.mikepenz.materialdrawer.AccountHeaderBuilder;
 import com.mikepenz.materialdrawer.Drawer;
@@ -96,11 +100,50 @@ public class MenuBackground extends AppCompatActivity {
                 .withOnDrawerItemClickListener(new Drawer.OnDrawerItemClickListener() {
                     @Override
                     public boolean onItemClick(View view, int position, IDrawerItem drawerItem) {
+                        itemClickedEvent(position);
                         navigationDrawer.closeDrawer();
                         return true;
                     }
                 })
                 .withSelectedItem(-1)
                 .build();
+    }
+
+    private final int HOME = 1;
+    private final int STATISTICS = 3;
+    private final int FRIENDS = 4;
+
+    private void itemClickedEvent(int position) {
+        switch (position){
+            case(HOME):
+                openHomeActivity();
+                break;
+            case(STATISTICS):
+                openStatisticsActivity();
+                break;
+            case(FRIENDS):
+                openFriendsActivity();
+                break;
+            default:
+                throw new Error("Non defined item clicked");
+        }
+    }
+
+    private void openStatisticsActivity() {
+        //TODO This depends on whom are logged in. Change this later.
+/*        Intent intent = new Intent(this, ProfileDetailActivity.class);
+        intent.putExtra(ProfileDetailFragment.ARG_ITEM_NAME, "Filip");
+
+        this.startActivity(intent);*/
+    }
+
+    private void openHomeActivity() {
+        Intent intent = new Intent(this, MainActivity.class);
+        startActivity(intent);
+    }
+
+    private void openFriendsActivity() {
+        Intent intent = new Intent(this, ProfileListActivity.class);
+        startActivity(intent);
     }
 }
