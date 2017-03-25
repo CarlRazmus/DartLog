@@ -19,6 +19,7 @@ import android.widget.Button;
 import android.widget.Toast;
 import android.widget.ViewAnimator;
 
+import com.fraz.dartlog.MenuBackground;
 import com.fraz.dartlog.R;
 import com.fraz.dartlog.db.DartLogDatabaseHelper;
 import com.fraz.dartlog.game.random.RandomGameActivity;
@@ -28,7 +29,7 @@ import com.fraz.dartlog.game.x01.X01SettingsFragment;
 
 import java.util.ArrayList;
 
-public class SetupActivity extends AppCompatActivity
+public class SetupActivity extends MenuBackground
         implements ParticipantsListRecyclerAdapter.OnDragStartListener, View.OnClickListener  {
 
     private AvailablePlayersRecyclerAdapter availablePlayersListAdapter;
@@ -42,9 +43,7 @@ public class SetupActivity extends AppCompatActivity
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
-        setContentView(R.layout.activity_setup);
+        super.onCreate(savedInstanceState, this, R.layout.activity_setup);
 
         RecyclerView.LayoutManager participantsLayoutManager = new LinearLayoutManager(this);
         dbHelper = new DartLogDatabaseHelper(this);

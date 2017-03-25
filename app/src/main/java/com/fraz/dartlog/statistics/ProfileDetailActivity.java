@@ -9,6 +9,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 
+import com.fraz.dartlog.MenuBackground;
 import com.fraz.dartlog.R;
 
 /**
@@ -17,20 +18,11 @@ import com.fraz.dartlog.R;
  * item details are presented side-by-side with a list of items
  * in a {@link ProfileListActivity}.
  */
-public class ProfileDetailActivity extends AppCompatActivity {
+public class ProfileDetailActivity extends MenuBackground {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_profile_detail);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.detail_toolbar);
-        setSupportActionBar(toolbar);
-
-        // Show the Up button in the action bar.
-        ActionBar actionBar = getSupportActionBar();
-        if (actionBar != null) {
-            actionBar.setDisplayHomeAsUpEnabled(true);
-        }
+        super.onCreate(savedInstanceState, this, R.layout.activity_profile_detail);
 
         ViewPager viewPager = (ViewPager) findViewById(R.id.profile_detail_view_pager);
         viewPager.setAdapter(new ProfileDetailFragmentPagerAdapter(getSupportFragmentManager(),
