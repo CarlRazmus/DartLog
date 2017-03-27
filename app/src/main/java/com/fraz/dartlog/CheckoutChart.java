@@ -1,17 +1,17 @@
 package com.fraz.dartlog;
 
 import android.content.Context;
-import android.util.SparseArray;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Serializable;
+import java.util.HashMap;
 
-public class CheckoutChart implements Serializable{
+public class CheckoutChart implements Serializable {
 
-    private SparseArray<String> checkouts = new SparseArray<>();
+    private HashMap<Integer, String> checkouts = new HashMap<>();
 
     public CheckoutChart(Context context, int checkoutChartRawResourceId) {
         initCheckoutMap(context, checkoutChartRawResourceId);
@@ -22,7 +22,11 @@ public class CheckoutChart implements Serializable{
     }
 
     public String getCheckoutText(int score) {
-        return checkouts.get(score, "No checkout");
+        String checkoutText = checkouts.get(score);
+        if (checkoutText == null)
+            return "No checkout";
+        else
+            return checkoutText;
     }
 
     private void initCheckoutMap(Context context, int checkoutChartRawResourceId) {

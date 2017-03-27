@@ -1,6 +1,5 @@
 package com.fraz.dartlog.statistics;
 
-import android.content.Context;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.support.v7.widget.RecyclerView;
@@ -35,9 +34,9 @@ public class MatchStatisticsRecyclerViewAdapter extends RecyclerView.Adapter<
     public void onBindViewHolder(ViewHolder holder, int position) {
         int row = position % (game.getNumberOfPlayers() + 1);
         int column = position / (game.getNumberOfPlayers() + 1);
-        String text = "";
+        String text;
         if (row == 0) {
-            text = Integer.toString(column + 1);
+            text = Integer.toString(column);
             holder.scoreView.setTypeface(Typeface.DEFAULT_BOLD);
         }
         else {
@@ -61,11 +60,7 @@ public class MatchStatisticsRecyclerViewAdapter extends RecyclerView.Adapter<
 
     @Override
     public int getItemCount() {
-        int turns = game.getWinner().getTotalScoreHistory().size();
-
-        if(game.getGameType() == "x01")
-            turns = turns + 1;
-
+        int turns = game.getWinner().getTotalScoreHistory().size() + 1;
         return turns + turns * game.getNumberOfPlayers();
     }
 
