@@ -11,7 +11,6 @@ public class GameData implements Serializable {
     private ArrayList<? extends PlayerData> players;
     private String gameType;
 
-
     public GameData(ArrayList<? extends PlayerData> players, Calendar date,
                     PlayerData winner, String gameType) {
 
@@ -54,5 +53,9 @@ public class GameData implements Serializable {
             names[i] = players.get(i).getPlayerName();
         }
         return names;
+    }
+
+    public int getTurns() {
+        return getWinner().getTotalScoreHistory().size();
     }
 }
