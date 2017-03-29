@@ -18,11 +18,10 @@ public class AdditionScoreManager extends ScoreManager {
     }
 
     public boolean submitScore(int score) {
-        this.score += score;
         super.submitScore(score);
+        this.score += score;
         return true;
     }
-
 
     @Override
     public void undoScore() {
