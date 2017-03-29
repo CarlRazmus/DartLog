@@ -1,15 +1,15 @@
 package com.fraz.dartlog.game;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Calendar;
 
-public class GameData {
+public class GameData implements Serializable {
 
     private PlayerData winner = null;
     private Calendar date;
     private ArrayList<? extends PlayerData> players;
     private String gameType;
-
 
     public GameData(ArrayList<? extends PlayerData> players, Calendar date,
                     PlayerData winner, String gameType) {
@@ -46,4 +46,16 @@ public class GameData {
     }
 
     public String getGameType() { return gameType; }
+
+    public String[] getPlayerNames() {
+        String[] names = new String[players.size()];
+        for (int i = 0; i < players.size(); i++) {
+            names[i] = players.get(i).getPlayerName();
+        }
+        return names;
+    }
+
+    public int getTurns() {
+        return getWinner().getTotalScoreHistory().size();
+    }
 }
