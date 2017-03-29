@@ -48,6 +48,11 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.fraz.dartlog.statistics.ProfileListActivity" />
         </activity>
+        <activity
+            android:name=".statistics.MatchPagerActivity"
+            android:label="@string/title_match_activity"
+            android:screenOrientation="portrait">
+        </activity>
     </application>
 
 </manifest>

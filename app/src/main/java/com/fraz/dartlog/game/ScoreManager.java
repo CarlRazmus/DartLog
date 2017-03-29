@@ -1,9 +1,10 @@
 package com.fraz.dartlog.game;
 
+import java.io.Serializable;
 import java.util.Collections;
 import java.util.LinkedList;
 
-public abstract class ScoreManager {
+public abstract class ScoreManager implements Serializable {
 
     protected LinkedList<Integer> scoreHistory = new LinkedList<>();
     protected LinkedList<Integer> totalScoreHistory = new LinkedList<>();

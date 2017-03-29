@@ -1,8 +1,9 @@
 package com.fraz.dartlog.game;
 
+import java.io.Serializable;
 import java.util.LinkedList;
 
-public class PlayerData {
+public class PlayerData implements Serializable {
 
     private String playerName;
     private ScoreManager scoreManager;

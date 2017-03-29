@@ -50,7 +50,7 @@ public class DartLogDatabaseHelper extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-
+        //resetDatabase();
     }
 
     private void resetDatabase() {

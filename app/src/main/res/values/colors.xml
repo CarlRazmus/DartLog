@@ -33,4 +33,12 @@
     <color name="material_drawer_selected_text">#B90504</color>
     <color name="material_drawer_header_selection_text">#FFFFFF</color>
 
+    <color name="chart_color1">#FFCC0000</color>
+    <color name="chart_color2">#FF5B9C0A</color>
+    <color name="chart_color3">#FF0A0D9C</color>
+    <color name="chart_color4">#FF990A9C</color>
+    <color name="chart_color5">#FF7F00</color>
+    <color name="chart_color6">#007FFF</color>
+    <color name="chart_color7">#FF00FF</color>
+    <color name="chart_color8">#FFFF00</color>
 </resources>
