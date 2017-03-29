@@ -1,10 +1,11 @@
 package com.fraz.dartlog;
 
+import android.app.Dialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -22,7 +23,6 @@ import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.OptionalPendingResult;
 import com.google.android.gms.common.api.ResultCallback;
-import com.google.android.gms.common.api.Status;
 
 import static com.google.android.gms.common.api.CommonStatusCodes.SIGN_IN_REQUIRED;
 
@@ -33,9 +33,7 @@ public class MainActivity extends MenuBackground implements  GoogleApiClient.OnC
     private GoogleApiClient mGoogleApiClient;
     private static final int RC_SIGN_IN = 1001;
     private static final String TAG = "SignInActivity";
-    private TextView loginStatusTextView;
-    private SignInButton signInButton;
-    private Button signOutButton;
+    private Dialog logInDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,6 +41,7 @@ public class MainActivity extends MenuBackground implements  GoogleApiClient.OnC
         Button playButton = (Button) findViewById(R.id.play_x01_button);
         Button profilesButton = (Button) findViewById(R.id.profiles_button);
         Button randomButton = (Button) findViewById(R.id.play_random_button);
+        logInDialog = new Dialog(this);
 
         assert playButton != null;
         assert profilesButton != null;
@@ -52,13 +51,17 @@ public class MainActivity extends MenuBackground implements  GoogleApiClient.OnC
         profilesButton.setOnClickListener(this);
         randomButton.setOnClickListener(this);
 
-        PreferenceManager.setDefaultValues(this, R.xml.x01_preferences, false);
+        logInDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
+            @Override
+            public void onCancel(DialogInterface dialog) {
+                System.exit(1);
+            }
+        });
 
-        loginStatusTextView = (TextView) findViewById(R.id.login_status_textview);
-        signInButton = (SignInButton) findViewById(R.id.sign_in_button);
-        signInButton.setOnClickListener(this);
-        signOutButton = (Button) findViewById(R.id.sign_out_button);
-        signOutButton.setOnClickListener(this);
+        Button logOutButton = (Button) findViewById(R.id.log_out_button);
+        logOutButton.setOnClickListener(this);
+
+        PreferenceManager.setDefaultValues(this, R.xml.x01_preferences, false);
 
         // Configure sign-in. ID and basic profile are included in DEFAULT_SIGN_IN.
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
@@ -71,22 +74,69 @@ public class MainActivity extends MenuBackground implements  GoogleApiClient.OnC
                 .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
                 .build();
 
+        User.setGoogleApiClient(mGoogleApiClient);
+
         OptionalPendingResult<GoogleSignInResult> pendingResult =
                 Auth.GoogleSignInApi.silentSignIn(mGoogleApiClient);
 
         if (pendingResult.isDone()) {
             // There's immediate result available.
             handleSignInResult(pendingResult.get());
+            initializeAndPopulateNavigationDrawer();
         } else {
+            final Bundle bundle = savedInstanceState;
             // There's no immediate result ready.
             pendingResult.setResultCallback(new ResultCallback<GoogleSignInResult>() {
                 @Override
                 public void onResult(@NonNull GoogleSignInResult result) {
                     handleSignInResult(result);
+                    initializeAndPopulateNavigationDrawer();
                 }
             });
         }
     }
+
+    private void handleSignInResult(GoogleSignInResult result) {
+        Log.d(TAG, "SIGN IN RESULT: " + result.isSuccess());
+        if (result.isSuccess()) {
+            // Signed in successfully, show authenticated UI.
+            GoogleSignInAccount acct = result.getSignInAccount();
+            Log.d("SIGN_IN", "Successful Sign in");
+            Log.d("SIGN_IN", "name: " + acct.getDisplayName());
+            Log.d("SIGN_IN", "email: " + acct.getEmail());
+            User.setFullName(acct.getDisplayName());
+            User.setEmail(acct.getEmail());
+            if(logInDialog.isShowing())
+                logInDialog.dismiss();
+
+        } else {
+            // Sign in unsuccessful, show log in UI.
+            if(result.getStatus().getStatusCode() != SIGN_IN_REQUIRED)
+                Log.d("SIGN_IN", "Failed to log in with status code: " + result.getStatus().getStatusCode());
+            if(!logInDialog.isShowing())
+                openLogInDialog();
+        }
+    }
+
+    private void openLogInDialog() {
+        logInDialog.show();
+        logInDialog.setTitle("Log in");
+        logInDialog.setContentView(R.layout.login_dialog);
+        logInDialog.setCancelable(true);
+
+        SignInButton signInButton = (SignInButton)logInDialog.findViewById(R.id.sign_in_button);
+        signInButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                switch (v.getId()) {
+                    case R.id.sign_in_button:
+                        signIn();
+                        break;
+                }
+            }
+        });
+    }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -100,15 +150,8 @@ public class MainActivity extends MenuBackground implements  GoogleApiClient.OnC
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings)
-            return true;
-
         return super.onOptionsItemSelected(item);
     }
-
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -121,36 +164,6 @@ public class MainActivity extends MenuBackground implements  GoogleApiClient.OnC
         }
     }
 
-    private void signOut() {
-        Auth.GoogleSignInApi.signOut(mGoogleApiClient).setResultCallback(
-                new ResultCallback<Status>() {
-                    @Override
-                    public void onResult(Status status) {
-                        loginStatusTextView.setText("User was logged out");
-                        signInButton.setVisibility(View.VISIBLE);
-                        signOutButton.setVisibility(View.INVISIBLE);
-                    }
-                });
-    }
-
-    private void handleSignInResult(GoogleSignInResult result) {
-        Log.d(TAG, "SIGN IN RESULT: " + result.isSuccess());
-        if (result.isSuccess()) {
-            // Signed in successfully, show authenticated UI.
-            GoogleSignInAccount acct = result.getSignInAccount();
-            loginStatusTextView.setText("Logged in as \n" + acct.getDisplayName());
-            signInButton.setVisibility(View.INVISIBLE);
-            signOutButton.setVisibility(View.VISIBLE);
-
-        } else {
-            // Signed in unsuccessfully, show unauthenticated UI.
-            if(result.getStatus().getStatusCode() != SIGN_IN_REQUIRED)
-                loginStatusTextView.setText("Failed to log in with " +
-                        "status code: " + result.getStatus().getStatusCode() + "\n");
-        }
-        loginStatusTextView.setVisibility(View.VISIBLE);
-
-    }
 
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
@@ -161,6 +174,7 @@ public class MainActivity extends MenuBackground implements  GoogleApiClient.OnC
         Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(mGoogleApiClient);
         startActivityForResult(signInIntent, RC_SIGN_IN);
     }
+
 
     @Override
     public void onClick(View v) {
@@ -173,12 +187,6 @@ public class MainActivity extends MenuBackground implements  GoogleApiClient.OnC
                 break;
             case R.id.play_random_button:
                 startPlayersActivity("random");
-                break;
-            case R.id.sign_in_button:
-                signIn();
-                break;
-            case R.id.sign_out_button:
-                signOut();
                 break;
         }
     }

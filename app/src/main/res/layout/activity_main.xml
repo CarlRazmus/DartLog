@@ -89,6 +89,5 @@
             android:textColor="@color/primary"
             android:alpha=".80"/>
     </LinearLayout>
-
 </RelativeLayout>
 
