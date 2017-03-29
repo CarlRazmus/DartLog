@@ -34,7 +34,7 @@
             android:layout_centerVertical="true"
             android:textSize="15sp"
             android:textStyle="bold"
-            android:textColor="@color/background_dark"
+            android:textColor="@color/background_blue"
             tools:text="PlayerName"/>
 
     </RelativeLayout>

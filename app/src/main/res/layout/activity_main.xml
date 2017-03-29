@@ -1,16 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.fraz.dartlog.MainActivity"
     android:background="@drawable/background">
 
+    <android.support.design.widget.AppBarLayout
+        android:id="@+id/app_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:theme="@style/AppBarOverlay">
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            app:popupTheme="@style/PopupOverlay" />
+    </android.support.design.widget.AppBarLayout>
+
     <ImageView
         android:contentDescription="@string/contentDescription_main_activity_background_image"
         android:layout_width="300dp"
         android:layout_height="300dp"
-        android:src="@drawable/dart_board_800px"
+        android:src="@drawable/dart_board_400px"
         android:layout_centerInParent="true"
         android:translationY="400dp"
         android:scaleX="3"
@@ -18,7 +32,7 @@
         android:alpha=".1"/>
 
     <LinearLayout
-        android:layout_marginBottom="64dp"
+        android:layout_marginBottom="200dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
@@ -54,6 +68,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
+        android:layout_below="@id/app_bar"
         android:layout_marginTop="24dp"
         android:id="@+id/logo_group">
 
@@ -71,7 +86,7 @@
             android:layout_height="wrap_content"
             android:text="@string/log"
             android:textSize="64sp"
-            android:textColor="@color/primary_color"
+            android:textColor="@color/primary"
             android:alpha=".80"/>
     </LinearLayout>
 

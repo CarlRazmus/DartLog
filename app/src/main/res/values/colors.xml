@@ -1,15 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="background">#37474F</color>
-    <color name="background_dark">#263238</color>
-    <color name="main_white">#FFFFFF</color>
-    <color name="light_grey">#9D9D9D</color>
-    <color name="main_grey">#616161</color>
-    <color name="primary_color">#B90504</color>
-    <color name="accent_color">#7AB317</color>
-    <color name="accent_color_alpha_26">#42AEEA00</color>
-    <color name="light_red">#D03535</color>
+    <color name="primary">#B90504</color>
+    <color name="accent">#7AB317</color>
+    <color name="accent_alpha_26">#42AEEA00</color>
 
+    <color name="background">#212121</color>
+    <color name="background_transparent">#EF212121</color>
+    <color name="background_blue">#263238</color>
+
+    <color name="button_background_transparent">#AF424242</color>
+
+    <color name="main_white">#FFFFFF</color>
+    <color name="light_grey">#BDBDBD</color>
+    <color name="main_grey">#616161</color>
+    <color name="light_red">#D03535</color>
     <color name="green_win">#7AB317</color>
     <color name="red_loss">#B90504</color>
 
@@ -21,4 +25,21 @@
     <color name="chart_color6">#007FFF</color>
     <color name="chart_color7">#FF00FF</color>
     <color name="chart_color8">#FFFF00</color>
+
+    <!-- OVERWRITE THESE COLORS FOR A LIGHT THEME -->
+    <!-- MaterialDrawer DEFAULT colors -->
+    <color name="material_drawer_background">#EF212121</color>
+
+    <!-- Material DEFAULT text / items colors -->
+    <color name="material_drawer_icons">#FFF</color>
+    <color name="material_drawer_primary_text">#EDFFFFFF</color>
+    <color name="material_drawer_primary_icon">#8A000000</color>
+    <color name="material_drawer_secondary_text">#8EFFFFFF</color>
+    <color name="material_drawer_hint_text">#42FFFFFF</color>
+    <color name="material_drawer_divider">#3FFFFFFF</color>
+    <!-- Material DEFAULT drawer colors -->
+    <color name="material_drawer_selected">#EF212121</color>
+    <color name="material_drawer_selected_text">#B90504</color>
+    <color name="material_drawer_header_selection_text">#FFFFFF</color>
+
 </resources>

@@ -50,7 +50,7 @@ public abstract class GameListAdapter<T extends GameListAdapter.ViewHolder> exte
 
     private void setBackgroundColor(PlayerData player, ViewHolder holder) {
         if (game.isGameOver() && game.getWinner() == player) {
-            holder.background_group.setBackgroundResource(R.color.accent_color);
+            holder.background_group.setBackgroundResource(R.color.accent);
             holder.itemView.setAlpha(1f);
             holder.playerName.setAlpha(1f);
             holder.current_player_indicator.setAlpha(0.0f);

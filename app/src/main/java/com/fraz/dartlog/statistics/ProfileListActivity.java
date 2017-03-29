@@ -21,6 +21,7 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.fraz.dartlog.MenuBackground;
 import com.fraz.dartlog.R;
 import com.fraz.dartlog.db.DartLogDatabaseHelper;
 
@@ -34,7 +35,7 @@ import java.util.ArrayList;
  * item details. On tablets, the activity presents the list of items and
  * item details side-by-side using two vertical panes.
  */
-public class ProfileListActivity extends AppCompatActivity {
+public class ProfileListActivity extends MenuBackground {
 
     /**
      * Whether or not the activity is in two-pane mode, i.e. running on a tablet
@@ -44,13 +45,8 @@ public class ProfileListActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_profile_list);
-
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        assert toolbar != null;
-        toolbar.setTitle(getTitle());
+        super.onCreate(savedInstanceState, this, R.layout.activity_profile_list);
+        myToolbar.setTitle(getTitle());
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         assert fab != null;
@@ -61,11 +57,6 @@ public class ProfileListActivity extends AppCompatActivity {
                         "AddPlayerDialogFragment");
             }
         });
-        // Show the Up button in the action bar.
-        ActionBar actionBar = getSupportActionBar();
-        if (actionBar != null) {
-            actionBar.setDisplayHomeAsUpEnabled(true);
-        }
 
         View recyclerView = findViewById(R.id.profile_list);
         assert recyclerView != null;
