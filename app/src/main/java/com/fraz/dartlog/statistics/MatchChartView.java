@@ -5,8 +5,6 @@ import android.content.res.TypedArray;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.util.AttributeSet;
-import android.util.TypedValue;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.widget.GridLayout;
 import android.widget.TextView;
@@ -15,7 +13,6 @@ import com.db.chart.model.LineSet;
 import com.db.chart.view.ChartView;
 import com.db.chart.view.LineChartView;
 import com.fraz.dartlog.R;
-import com.fraz.dartlog.Util;
 import com.fraz.dartlog.game.GameData;
 import com.fraz.dartlog.game.PlayerData;
 
@@ -89,21 +86,14 @@ public class MatchChartView extends GridLayout{
     }
 
     private void addPlayerButton(GridLayout grid, int playerIdx, String playerName, int color){
-        TextView textView = new TextView(getContext());
-        textView.setGravity(Gravity.CENTER);
-        textView.setElevation(Util.pxFromDp(getContext(), 2));
-        GridLayout.LayoutParams layoutParams = new GridLayout.LayoutParams();
-        int marginDp = (int) Util.pxFromDp(getContext(), 8);
-        layoutParams.setMargins(marginDp, marginDp, marginDp, marginDp);
+        TextView textView = (TextView) LayoutInflater.from(getContext())
+                .inflate(R.layout.chart_legend_label, grid, false);
+        GridLayout.LayoutParams layoutParams = (LayoutParams) textView.getLayoutParams();
         layoutParams.columnSpec = GridLayout.spec(playerIdx % 3, 1f);
         layoutParams.rowSpec = GridLayout.spec(playerIdx / 3 + 1);
         textView.setLayoutParams(layoutParams);
         textView.setBackgroundColor(color);
-        textView.setTextColor(Color.WHITE);
         textView.setText(playerName);
-        textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 12);
-        int paddingDp = (int) Util.pxFromDp(getContext(), 4);
-        textView.setPadding(paddingDp, paddingDp, paddingDp, paddingDp);
         setRowCount(playerIdx / 3 + 2);
         grid.addView(textView);
     }
