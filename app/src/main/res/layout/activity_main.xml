@@ -10,7 +10,7 @@
         android:contentDescription="@string/contentDescription_main_activity_background_image"
         android:layout_width="300dp"
         android:layout_height="300dp"
-        android:src="@drawable/dart_board_800px"
+        android:src="@drawable/dart_board_400px"
         android:layout_centerInParent="true"
         android:translationY="400dp"
         android:scaleX="3"
