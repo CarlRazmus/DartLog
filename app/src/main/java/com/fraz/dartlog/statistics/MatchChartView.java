@@ -1,26 +1,31 @@
 package com.fraz.dartlog.statistics;
 
 import android.content.Context;
+import android.content.res.ColorStateList;
 import android.content.res.TypedArray;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
+import android.view.View;
+import android.widget.Button;
 import android.widget.GridLayout;
-import android.widget.TextView;
 
+import com.db.chart.model.ChartSet;
 import com.db.chart.model.LineSet;
-import com.db.chart.view.ChartView;
 import com.db.chart.view.LineChartView;
 import com.fraz.dartlog.R;
 import com.fraz.dartlog.game.GameData;
 import com.fraz.dartlog.game.PlayerData;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 
 public class MatchChartView extends GridLayout{
 
     private GameData gameData;
+    private LineChartView matchChart;
+    private int showIdx = -1;
 
     public MatchChartView(Context context) {
         super(context);
@@ -40,7 +45,7 @@ public class MatchChartView extends GridLayout{
     }
 
     public void initMatchChart() {
-        LineChartView matchChart = (LineChartView) findViewById(R.id.line_chart);
+        matchChart = (LineChartView) findViewById(R.id.line_chart);
         GridLayout grid = (GridLayout) findViewById(R.id.match_chart_grid);
         String[] playerNames = gameData.getPlayerNames();
 
@@ -49,7 +54,7 @@ public class MatchChartView extends GridLayout{
         for (int i = 0; i < playerNames.length; i++) {
             String playerName = playerNames[i];
             int color = colors.getColor(i % colors.length(), 0);
-            addDataForPlayer(matchChart, gameData.getPlayer(playerName), gameData.getTurns(),
+            addDataForPlayer(gameData.getPlayer(playerName), gameData.getTurns(),
                     color);
             addPlayerButton(grid, i, playerName, color);
         }
@@ -61,10 +66,13 @@ public class MatchChartView extends GridLayout{
             halfLinePaint.setColor(Color.BLACK);
             matchChart.setValueThreshold(50, 50, halfLinePaint);
         }
-        matchChart.show();
+        if (showIdx == -1)
+            matchChart.show();
+        else
+            matchChart.show(showIdx);
     }
 
-    private void addDataForPlayer(ChartView matchChart, PlayerData player, int matchTurns, int color) {
+    private void addDataForPlayer(PlayerData player, int matchTurns, int color) {
         LineSet dataSet = new LineSet(new String[]{}, new float[]{});
         LinkedList<Integer> totalScores = player.getTotalScoreHistory();
         int playedTurns = totalScores.size();
@@ -85,17 +93,33 @@ public class MatchChartView extends GridLayout{
         matchChart.addData(dataSet);
     }
 
-    private void addPlayerButton(GridLayout grid, int playerIdx, String playerName, int color){
-        TextView textView = (TextView) LayoutInflater.from(getContext())
+    private void addPlayerButton(GridLayout grid, final int playerIdx, String playerName, int color){
+        Button button = (Button) LayoutInflater.from(getContext())
                 .inflate(R.layout.chart_legend_label, grid, false);
-        GridLayout.LayoutParams layoutParams = (LayoutParams) textView.getLayoutParams();
+        GridLayout.LayoutParams layoutParams = (LayoutParams) button.getLayoutParams();
         layoutParams.columnSpec = GridLayout.spec(playerIdx % 3, 1f);
         layoutParams.rowSpec = GridLayout.spec(playerIdx / 3 + 1);
-        textView.setLayoutParams(layoutParams);
-        textView.setBackgroundColor(color);
-        textView.setText(playerName);
+        button.setLayoutParams(layoutParams);
+        button.setBackgroundTintList(ColorStateList.valueOf(color));
+        button.setText(playerName);
+        button.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ArrayList<ChartSet> data = matchChart.getData();
+                for (int i = 0; i < data.size(); i++) {
+                    LineSet lineSet = (LineSet) data.get(i);
+                    if (showIdx != playerIdx && i != playerIdx) {
+                        lineSet.setVisible(false);
+                    } else {
+                        lineSet.setVisible(true);
+                    }
+                }
+                showIdx = showIdx == playerIdx ? -1 : playerIdx;
+                matchChart.notifyDataUpdate();
+            }
+        });
         setRowCount(playerIdx / 3 + 2);
-        grid.addView(textView);
+        grid.addView(button);
     }
 
     public void setGame(GameData gameData) {
