@@ -33,9 +33,11 @@ public class MatchFragment extends Fragment {
         Bundle args = getArguments();
         MatchTableView matchTable = (MatchTableView) layout.findViewById(R.id.match_table);
         MatchChartView matchChart = (MatchChartView) layout.findViewById(R.id.match_chart);
+        ScoreChartView scoreChart = (ScoreChartView) layout.findViewById(R.id.score_chart);
         gameData = (GameData) args.getSerializable(ARG_GAME_DATA);
         matchTable.setGame(gameData);
         matchChart.setGame(gameData);
+        scoreChart.setGame(gameData);
         return layout;
     }
 }
