@@ -1,5 +1,6 @@
 package com.fraz.dartlog.statistics;
 
+import android.content.Context;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.support.v7.widget.RecyclerView;
@@ -18,6 +19,7 @@ public class MatchStatisticsRecyclerViewAdapter extends RecyclerView.Adapter<
         MatchStatisticsRecyclerViewAdapter.ViewHolder> {
 
     private GameData game;
+    private Context context;
 
     public MatchStatisticsRecyclerViewAdapter(GameData game) {
         this.game = game;
@@ -25,7 +27,8 @@ public class MatchStatisticsRecyclerViewAdapter extends RecyclerView.Adapter<
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext())
+        context = parent.getContext();
+        View view = LayoutInflater.from(context)
                 .inflate(R.layout.match_statistics_scoreboard_list_item, parent, false);
         return new ViewHolder(view);
     }
@@ -37,11 +40,12 @@ public class MatchStatisticsRecyclerViewAdapter extends RecyclerView.Adapter<
         String text;
         if (row == 0) {
             text = Integer.toString(column);
+            holder.scoreView.setTextColor(Color.BLACK);
             holder.scoreView.setTypeface(Typeface.DEFAULT_BOLD);
         }
         else {
             text = getScore(row, column);
-            holder.scoreView.setTextColor(Color.BLACK);
+            holder.scoreView.setTextColor(context.getResources().getColor(R.color.main_grey));
             holder.scoreView.setTypeface(Typeface.DEFAULT);
         }
         holder.scoreView.setText(text);
