@@ -31,8 +31,9 @@ public class ScoreChartView extends GameChart{
 
             scoreChart.setYAxis(false);
             scoreChart.setXAxis(false);
-            scoreChart.setBarSpacing(48f);
-            scoreChart.setRoundCorners(8f);
+            scoreChart.setBarSpacing(160f / scoreChart.getData().size());
+            scoreChart.setRoundCorners(4f);
+            scoreChart.setStep(1);
             scoreChart.show();
         }
     }
