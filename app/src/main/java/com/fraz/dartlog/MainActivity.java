@@ -58,9 +58,6 @@ public class MainActivity extends MenuBackground implements  GoogleApiClient.OnC
             }
         });
 
-        Button logOutButton = (Button) findViewById(R.id.log_out_button);
-        logOutButton.setOnClickListener(this);
-
         PreferenceManager.setDefaultValues(this, R.xml.x01_preferences, false);
 
         // Configure sign-in. ID and basic profile are included in DEFAULT_SIGN_IN.
