@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.GridLayout;
+import android.widget.TextView;
 
 import com.db.chart.model.ChartSet;
 import com.db.chart.view.ChartView;
@@ -21,17 +22,20 @@ public abstract class GameChart extends GridLayout {
 
     private GameData gameData;
     private int showIdx = -1;
+    private TextView titleView;
 
     public GameChart(Context context, int layoutId) {
         super(context);
         LayoutInflater inflater = LayoutInflater.from(context);
         inflater.inflate(layoutId, this);
+        titleView = (TextView) findViewById(R.id.chart_title);
     }
 
     public GameChart(Context context, AttributeSet attrs, int layoutId) {
         super(context, attrs);
         LayoutInflater inflater = LayoutInflater.from(context);
         inflater.inflate(layoutId, this);
+        titleView = (TextView) findViewById(R.id.chart_title);
     }
 
     public GameData getGameData() {
@@ -60,11 +64,11 @@ public abstract class GameChart extends GridLayout {
                 .inflate(R.layout.chart_legend_label, grid, false);
         GridLayout.LayoutParams layoutParams = (LayoutParams) button.getLayoutParams();
         layoutParams.columnSpec = GridLayout.spec(playerIdx % 3, 1f);
-        layoutParams.rowSpec = GridLayout.spec(playerIdx / 3 + 1);
+        layoutParams.rowSpec = GridLayout.spec(playerIdx / 3 + 3);
         button.setLayoutParams(layoutParams);
         button.setBackgroundTintList(ColorStateList.valueOf(color));
         button.setText(playerName);
-        setRowCount(playerIdx / 3 + 2);
+        setRowCount(playerIdx / 3 + 3);
         grid.addView(button);
         button.setOnClickListener(new LegendLabelOnClickListener(chartView, playerIdx));
     }
@@ -101,6 +105,11 @@ public abstract class GameChart extends GridLayout {
             showIdx = showIdx == legendIdx ? -1 : legendIdx;
             chartView.notifyDataUpdate();
         }
+    }
+
+    public void setTitle(String title)
+    {
+        titleView.setText(title);
     }
 
     protected abstract ChartSet getPlayerChartSet(PlayerData player, int color);

@@ -24,6 +24,7 @@ public class MatchChartView extends GameChart{
     }
 
     public void initMatchChart() {
+        setTitle("Total score by turn");
         LineChartView matchChart = (LineChartView) findViewById(R.id.line_chart);
 
         addGameData(matchChart);

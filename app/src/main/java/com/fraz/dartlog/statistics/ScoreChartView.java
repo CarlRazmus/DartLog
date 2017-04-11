@@ -20,6 +20,7 @@ public class ScoreChartView extends GameChart{
     }
 
     public void initMatchChart() {
+        setTitle("Scoring statistics");
         if(!getGameData().getGameType().equals("x01"))
             setVisibility(GONE);
         else {
