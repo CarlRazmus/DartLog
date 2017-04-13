@@ -137,8 +137,7 @@ public class SetupActivity extends MenuBackground
         final RecyclerView availablePlayersRecyclerView = (RecyclerView) selectPlayerDialog.findViewById(R.id.setup_dialog_available_players);
         assert availablePlayersRecyclerView != null;
 
-        ArrayList<String> playerNames = fetchPlayerNamesFromDataBase();
-        availablePlayersListAdapter = new AvailablePlayersRecyclerAdapter(playerNames);
+        availablePlayersListAdapter = new AvailablePlayersRecyclerAdapter();
         availablePlayersRecyclerView.setAdapter(availablePlayersListAdapter);
         availablePlayersRecyclerView.setLayoutManager(availablePlayersLayoutManager);
 
@@ -152,6 +151,8 @@ public class SetupActivity extends MenuBackground
     }
 
     private void openPlayerSelectionDialog() {
+        ArrayList<String> playerNames = fetchPlayerNamesFromDataBase();
+        availablePlayersListAdapter.setAvailablePlayers(playerNames);
         selectPlayerDialog.show();
     }
 

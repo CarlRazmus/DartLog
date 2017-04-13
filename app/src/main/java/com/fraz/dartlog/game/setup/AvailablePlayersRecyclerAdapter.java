@@ -13,13 +13,20 @@ import java.util.List;
 
 public class AvailablePlayersRecyclerAdapter extends RecyclerView.Adapter<AvailablePlayersRecyclerAdapter.ViewHolder> {
 
-    private List<String> availablePlayers;
-    private ArrayList<Integer> selectedIndexes;
+    private ArrayList<String> availablePlayers;
+    private ArrayList<Integer> selectedIndexes = new ArrayList<>();
 
 
-    public AvailablePlayersRecyclerAdapter(List<String> availablePlayers) {
+    public AvailablePlayersRecyclerAdapter(){
+        this.availablePlayers = new ArrayList();
+    }
+
+    public AvailablePlayersRecyclerAdapter(ArrayList<String> availablePlayers) {
         this.availablePlayers = availablePlayers;
-        selectedIndexes = new ArrayList<>();
+    }
+
+    public void setAvailablePlayers(ArrayList<String> playersList){
+        this.availablePlayers = playersList;
     }
 
     @Override

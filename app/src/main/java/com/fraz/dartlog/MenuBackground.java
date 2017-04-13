@@ -1,14 +1,21 @@
 package com.fraz.dartlog;
 
 import android.app.Activity;
+import android.app.Dialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.v4.app.DialogFragment;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.EditText;
 
+import com.fraz.dartlog.db.DartLogDatabaseHelper;
 import com.fraz.dartlog.game.setup.SetupActivity;
 import com.fraz.dartlog.statistics.ProfileListActivity;
 import com.mikepenz.materialdrawer.AccountHeader;
@@ -62,6 +69,7 @@ public class MenuBackground extends AppCompatActivity {
         SecondaryDrawerItem gamesHeader = new SecondaryDrawerItem().withIdentifier(2).withName(R.string.games);
         PrimaryDrawerItem gameRandomItem = new PrimaryDrawerItem().withIdentifier(2).withName(R.string.random).withIcon(R.drawable.ic_home_white_24dp);
         PrimaryDrawerItem profilesItem = new PrimaryDrawerItem().withIdentifier(2).withName(R.string.drawer_item_profiles).withIcon(R.drawable.ic_group_white_24dp);
+        PrimaryDrawerItem addProfileItem = new PrimaryDrawerItem().withIdentifier(2).withName(R.string.add_profile).withIcon(R.drawable.ic_person_add);
 
         // Create an empty AccountHeader
         AccountHeader headerResult = new AccountHeaderBuilder()
@@ -83,7 +91,8 @@ public class MenuBackground extends AppCompatActivity {
                         gameX01Item,
                         gameRandomItem,
                         new DividerDrawerItem(),
-                        profilesItem
+                        profilesItem,
+                        addProfileItem
                 )
                 .withFooterDivider(true)
                 .withOnDrawerItemClickListener(new Drawer.OnDrawerItemClickListener() {
@@ -101,7 +110,8 @@ public class MenuBackground extends AppCompatActivity {
     private final int HOME = 1;
     private final int X01 = 4;
     private final int RANDOM = 5;
-    private final int FRIENDS = 7;
+    private final int PROFILES = 7;
+    private final int ADD_PROFILE = 8;
 
     private void itemClickedEvent(int position) {
         switch (position){
@@ -114,13 +124,22 @@ public class MenuBackground extends AppCompatActivity {
             case(RANDOM):
                 startGameActivity("random");
                 break;
-            case(FRIENDS):
+            case(PROFILES):
                 openFriendsActivity();
+                break;
+            case(ADD_PROFILE):
+                openAddPlayerDialog();
                 break;
             default:
                 throw new Error("Non defined item clicked");
         }
     }
+
+    private void openAddPlayerDialog() {
+        new AddPlayerDialogFragment().show(getSupportFragmentManager(),
+                "AddPlayerDialogFragment");
+    }
+
     private void startGameActivity(String gameType) {
         Intent intent = new Intent(this, SetupActivity.class);
         intent.putExtra("gameType", gameType);
@@ -135,5 +154,32 @@ public class MenuBackground extends AppCompatActivity {
     private void openFriendsActivity() {
         Intent intent = new Intent(this, ProfileListActivity.class);
         startActivity(intent);
+    }
+
+    public static class AddPlayerDialogFragment extends DialogFragment {
+        @NonNull
+        @Override
+        public Dialog onCreateDialog(Bundle savedInstanceState) {
+            // Use the Builder class for convenient dialog construction
+            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity(),
+                    R.style.RedButtonAlertDialog);
+
+            builder.setTitle("Add new profile").setView(R.layout.dialog_add_player)
+                    .setPositiveButton("Add", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            EditText profileNameEditText =
+                                    (EditText) getDialog().findViewById(R.id.add_player_edit_text);
+                            String name = profileNameEditText.getText().toString();
+                            DartLogDatabaseHelper dbHelper = new DartLogDatabaseHelper(getContext());
+                            dbHelper.addPlayer(name);
+                        }
+                    })
+                    .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                        }
+                    });
+            // Create the AlertDialog object and return it
+            return builder.create();
+        }
     }
 }
