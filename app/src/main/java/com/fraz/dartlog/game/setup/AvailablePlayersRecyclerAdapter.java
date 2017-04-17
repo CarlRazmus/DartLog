@@ -3,6 +3,8 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.TextView;
 
 import com.fraz.dartlog.R;
@@ -19,10 +21,6 @@ public class AvailablePlayersRecyclerAdapter extends RecyclerView.Adapter<Availa
 
     public AvailablePlayersRecyclerAdapter(){
         this.availablePlayers = new ArrayList();
-    }
-
-    public AvailablePlayersRecyclerAdapter(ArrayList<String> availablePlayers) {
-        this.availablePlayers = availablePlayers;
     }
 
     public void setAvailablePlayers(ArrayList<String> playersList){
@@ -43,10 +41,6 @@ public class AvailablePlayersRecyclerAdapter extends RecyclerView.Adapter<Availa
         {
             selectedIndexes.add(idx);
         }
-    }
-
-    private boolean isMarked(Integer idx){
-        return selectedIndexes.contains(idx);
     }
 
     public ArrayList<String> getSelectedPlayers() {
@@ -78,22 +72,24 @@ public class AvailablePlayersRecyclerAdapter extends RecyclerView.Adapter<Availa
     }
 
     @Override
-    public void onBindViewHolder(final ViewHolder holder, int position) {
+    public void onBindViewHolder(final ViewHolder holder, final int position) {
         TextView availablePlayerNameTextView = (TextView)holder.listItemView.findViewById(R.id.available_player_name);
         availablePlayerNameTextView.setText(availablePlayers.get(position));
+
+        final CheckBox checkBox = (CheckBox)holder.listItemView.findViewById(R.id.checkbox);
+        checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                toggleSelected(holder.getAdapterPosition());
+            }
+        });
 
         final View listItemView = holder.listItemView;
         listItemView.setOnClickListener((new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                toggleSelected(holder.getAdapterPosition());
-                notifyItemChanged(holder.getAdapterPosition());
+                checkBox.toggle();
             }
         }));
-
-        if (isMarked(holder.getAdapterPosition()))
-            listItemView.setBackgroundResource(R.color.accent);
-        else
-            listItemView.setBackgroundResource(android.R.color.transparent);
     }
 }
