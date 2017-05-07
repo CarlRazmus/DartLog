@@ -60,11 +60,13 @@ public class AvailablePlayersRecyclerAdapter extends RecyclerView.Adapter<Availa
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
 
-        public View listItemView;
+        public CheckBox statusCheckBox;
+        public TextView nameTextView;
 
         public ViewHolder(View listItem) {
             super(listItem);
-            listItemView = listItem;
+            statusCheckBox = (CheckBox)listItem.findViewById(R.id.checkbox);
+            nameTextView = (TextView)listItem.findViewById(R.id.available_player_name);
         }
     }
 
@@ -78,14 +80,11 @@ public class AvailablePlayersRecyclerAdapter extends RecyclerView.Adapter<Availa
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, final int position) {
-        TextView availablePlayerNameTextView = (TextView)holder.listItemView.findViewById(R.id.available_player_name);
-        availablePlayerNameTextView.setText(availablePlayers.get(position));
+        holder.nameTextView.setText(availablePlayers.get(position));
 
-        final CheckBox checkBox = (CheckBox)holder.listItemView.findViewById(R.id.checkbox);
+        final CheckBox checkBox = holder.statusCheckBox;
         checkBox.setOnCheckedChangeListener(null);
-
         checkBox.setChecked(selectedIndexes.contains(position));
-
         checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -93,7 +92,7 @@ public class AvailablePlayersRecyclerAdapter extends RecyclerView.Adapter<Availa
             }
         });
 
-        final View listItemView = holder.listItemView;
+        final View listItemView = holder.itemView;
         listItemView.setOnClickListener((new View.OnClickListener() {
             @Override
             public void onClick(View v) {
