@@ -39,14 +39,10 @@ public class AvailablePlayersRecyclerAdapter extends RecyclerView.Adapter<Availa
     }
 
     private void toggleSelected(Integer idx) {
-        if(selectedIndexes.contains(idx))
-        {
+        if (selectedIndexes.contains(idx))
             selectedIndexes.remove(idx);
-        }
         else
-        {
             selectedIndexes.add(idx);
-        }
     }
 
     public ArrayList<String> getSelectedPlayers() {
@@ -59,7 +55,6 @@ public class AvailablePlayersRecyclerAdapter extends RecyclerView.Adapter<Availa
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
-
         public CheckBox statusCheckBox;
         public TextView nameTextView;
 
