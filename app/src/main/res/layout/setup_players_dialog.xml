@@ -7,21 +7,35 @@
     android:paddingBottom="8dp"
     android:background="@color/background">
 
+    <TextView
+        android:id="@+id/header"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Select players"
+        android:textColor="@color/main_white"
+        android:layout_centerHorizontal="true"
+        android:textSize="20sp"
+        android:layout_marginTop="8dp"/>
     <Button
         android:id="@+id/done_button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:background="@drawable/button_default"
-        android:layout_margin="8dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginLeft="8dp"
         android:text="@string/button_done"/>
 
      <RelativeLayout
         android:id="@+id/participants_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_above="@id/done_button"
+        android:layout_below="@id/header"
+         android:layout_above="@id/done_button"
         android:layout_margin="8dp">
+
+
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/setup_dialog_available_players"
