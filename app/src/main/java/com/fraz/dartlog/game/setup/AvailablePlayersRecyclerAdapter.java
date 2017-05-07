@@ -10,7 +10,6 @@ import android.widget.TextView;
 import com.fraz.dartlog.R;
 
 import java.util.ArrayList;
-import java.util.List;
 
 
 public class AvailablePlayersRecyclerAdapter extends RecyclerView.Adapter<AvailablePlayersRecyclerAdapter.ViewHolder> {
@@ -20,11 +19,18 @@ public class AvailablePlayersRecyclerAdapter extends RecyclerView.Adapter<Availa
 
 
     public AvailablePlayersRecyclerAdapter(){
-        this.availablePlayers = new ArrayList();
+        availablePlayers = new ArrayList();
     }
 
     public void setAvailablePlayers(ArrayList<String> playersList){
         this.availablePlayers = playersList;
+    }
+
+    public void setSelectedPlayers(ArrayList<String> playerNames){
+        selectedIndexes.clear();
+        for(String name : playerNames)
+            selectedIndexes.add(availablePlayers.indexOf(name));
+        notifyDataSetChanged();
     }
 
     @Override
@@ -64,7 +70,6 @@ public class AvailablePlayersRecyclerAdapter extends RecyclerView.Adapter<Availa
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-
         View listItem = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.available_player_list_item, parent, false);
 
@@ -77,6 +82,10 @@ public class AvailablePlayersRecyclerAdapter extends RecyclerView.Adapter<Availa
         availablePlayerNameTextView.setText(availablePlayers.get(position));
 
         final CheckBox checkBox = (CheckBox)holder.listItemView.findViewById(R.id.checkbox);
+        checkBox.setOnCheckedChangeListener(null);
+
+        checkBox.setChecked(selectedIndexes.contains(position));
+
         checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {

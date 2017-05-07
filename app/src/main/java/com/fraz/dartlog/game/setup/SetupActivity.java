@@ -119,7 +119,7 @@ public class SetupActivity extends MenuBackground
     }
 
     private void initializeSelectPlayersDialog(){
-        RecyclerView.LayoutManager availablePlayersLayoutManager = new LinearLayoutManager(this);
+        final RecyclerView.LayoutManager availablePlayersLayoutManager = new LinearLayoutManager(this);
         selectPlayerDialog = new Dialog(this);
         selectPlayerDialog.setTitle("Select players");
         selectPlayerDialog.setContentView(R.layout.setup_players_dialog);
@@ -133,6 +133,14 @@ public class SetupActivity extends MenuBackground
                 participantsRecyclerAdapter.notifyDataSetChanged();
             }
         });
+
+        selectPlayerDialog.setOnShowListener(new DialogInterface.OnShowListener() {
+            @Override
+            public void onShow(DialogInterface dialog) {
+                availablePlayersListAdapter.setSelectedPlayers(participantNames);
+            }
+        });
+
 
         final RecyclerView availablePlayersRecyclerView = (RecyclerView) selectPlayerDialog.findViewById(R.id.setup_dialog_available_players);
         assert availablePlayersRecyclerView != null;
