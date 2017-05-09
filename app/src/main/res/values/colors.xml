@@ -11,6 +11,7 @@
     <color name="button_background_transparent">#AF424242</color>
 
     <color name="main_white">#FFFFFF</color>
+    <color name="main_white_transparent">#CCFFFFFF</color>
     <color name="light_grey">#BDBDBD</color>
     <color name="main_grey">#616161</color>
     <color name="light_red">#D03535</color>
