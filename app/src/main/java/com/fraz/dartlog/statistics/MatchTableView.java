@@ -1,7 +1,7 @@
 package com.fraz.dartlog.statistics;
 
 import android.content.Context;
-import android.graphics.Typeface;
+import android.graphics.Color;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
@@ -43,20 +43,15 @@ public class MatchTableView extends FrameLayout {
 
         scoreboard.setAdapter(new MatchStatisticsRecyclerViewAdapter(game));
         scoreboard.setLayoutManager(new GridLayoutManager(getContext(),
-                game.getNumberOfPlayers() + 1, GridLayoutManager.HORIZONTAL, false));
+                game.getNumberOfPlayers(), GridLayoutManager.HORIZONTAL, false));
     }
 
     private void addHeaders(View layout) {
         ViewGroup headerGroup = (ViewGroup) layout.findViewById(R.id.match_statistics_scoreboard_header);
         headerGroup.removeAllViews();
-        TextView turnHeader = createHeaderView("Turn", headerGroup);
-        turnHeader.setTypeface(Typeface.DEFAULT_BOLD);
-        headerGroup.addView(turnHeader);
         for (int i = 0; i < game.getNumberOfPlayers(); i++) {
             PlayerData player = game.getPlayer(i);
             TextView header = createHeaderView(player.getPlayerName(), headerGroup);
-            if (game.getWinner() == player)
-                header.setTextColor(getResources().getColor(R.color.accent));
             headerGroup.addView(header);
         }
     }
@@ -66,6 +61,7 @@ public class MatchTableView extends FrameLayout {
         TextView header = (TextView) LayoutInflater.from(getContext())
                 .inflate(R.layout.match_statistics_scoreboard_list_item, headerGroup, false);
         header.setText(text);
+        header.setTextColor(Color.BLACK);
         header.setLayoutParams(new LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.WRAP_CONTENT,
                 LinearLayout.LayoutParams.WRAP_CONTENT));
