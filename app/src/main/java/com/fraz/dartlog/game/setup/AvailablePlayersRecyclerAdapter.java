@@ -3,23 +3,34 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.TextView;
 
 import com.fraz.dartlog.R;
 
 import java.util.ArrayList;
-import java.util.List;
 
 
 public class AvailablePlayersRecyclerAdapter extends RecyclerView.Adapter<AvailablePlayersRecyclerAdapter.ViewHolder> {
 
-    private List<String> availablePlayers;
-    private ArrayList<Integer> selectedIndexes;
+    private ArrayList<String> availablePlayers;
+    private ArrayList<Integer> selectedIndexes = new ArrayList<>();
 
 
-    public AvailablePlayersRecyclerAdapter(List<String> availablePlayers) {
-        this.availablePlayers = availablePlayers;
-        selectedIndexes = new ArrayList<>();
+    public AvailablePlayersRecyclerAdapter(){
+        availablePlayers = new ArrayList();
+    }
+
+    public void setAvailablePlayers(ArrayList<String> playersList){
+        this.availablePlayers = playersList;
+    }
+
+    public void setSelectedPlayers(ArrayList<String> playerNames){
+        selectedIndexes.clear();
+        for(String name : playerNames)
+            selectedIndexes.add(availablePlayers.indexOf(name));
+        notifyDataSetChanged();
     }
 
     @Override
@@ -28,18 +39,10 @@ public class AvailablePlayersRecyclerAdapter extends RecyclerView.Adapter<Availa
     }
 
     private void toggleSelected(Integer idx) {
-        if(selectedIndexes.contains(idx))
-        {
+        if (selectedIndexes.contains(idx))
             selectedIndexes.remove(idx);
-        }
         else
-        {
             selectedIndexes.add(idx);
-        }
-    }
-
-    private boolean isMarked(Integer idx){
-        return selectedIndexes.contains(idx);
     }
 
     public ArrayList<String> getSelectedPlayers() {
@@ -52,18 +55,18 @@ public class AvailablePlayersRecyclerAdapter extends RecyclerView.Adapter<Availa
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
-
-        public View listItemView;
+        public CheckBox statusCheckBox;
+        public TextView nameTextView;
 
         public ViewHolder(View listItem) {
             super(listItem);
-            listItemView = listItem;
+            statusCheckBox = (CheckBox)listItem.findViewById(R.id.checkbox);
+            nameTextView = (TextView)listItem.findViewById(R.id.available_player_name);
         }
     }
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-
         View listItem = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.available_player_list_item, parent, false);
 
@@ -71,22 +74,25 @@ public class AvailablePlayersRecyclerAdapter extends RecyclerView.Adapter<Availa
     }
 
     @Override
-    public void onBindViewHolder(final ViewHolder holder, int position) {
-        TextView availablePlayerNameTextView = (TextView)holder.listItemView.findViewById(R.id.available_player_name);
-        availablePlayerNameTextView.setText(availablePlayers.get(position));
+    public void onBindViewHolder(final ViewHolder holder, final int position) {
+        holder.nameTextView.setText(availablePlayers.get(position));
 
-        final View listItemView = holder.listItemView;
+        final CheckBox checkBox = holder.statusCheckBox;
+        checkBox.setOnCheckedChangeListener(null);
+        checkBox.setChecked(selectedIndexes.contains(position));
+        checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                toggleSelected(holder.getAdapterPosition());
+            }
+        });
+
+        final View listItemView = holder.itemView;
         listItemView.setOnClickListener((new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                toggleSelected(holder.getAdapterPosition());
-                notifyItemChanged(holder.getAdapterPosition());
+                checkBox.toggle();
             }
         }));
-
-        if (isMarked(holder.getAdapterPosition()))
-            listItemView.setBackgroundResource(R.color.accent);
-        else
-            listItemView.setBackgroundResource(android.R.color.transparent);
     }
 }

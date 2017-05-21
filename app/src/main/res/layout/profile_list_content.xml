@@ -2,13 +2,30 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="horizontal"
-    android:background="@drawable/list_item">
+    android:layout_marginBottom="1dp"
+    android:background="@color/main_white"
+    android:animateLayoutChanges="true">
 
-    <TextView
-        android:id="@+id/profile_name"
-        android:layout_width="wrap_content"
+    <RelativeLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="@dimen/text_margin"
-        android:textAppearance="?attr/textAppearanceListItem" />
+        android:paddingTop="12dp"
+        android:paddingBottom="12dp"
+        android:background="@drawable/list_item">
+
+        <TextView
+            android:background="@drawable/list_item"
+            android:id="@+id/profile_name"
+            android:layout_alignParentStart="true"
+            android:layout_marginStart="20dp"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:layout_centerVertical="true"
+            android:textSize="15sp"
+            android:textStyle="bold"
+            android:textColor="@color/md_black_1000"
+            tools:text="PlayerName"/>
+    </RelativeLayout>
 </LinearLayout>
