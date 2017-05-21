@@ -4,7 +4,6 @@ import android.content.Context;
 import android.graphics.Typeface;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.text.format.DateUtils;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,11 +15,6 @@ import android.widget.TextView;
 import com.fraz.dartlog.R;
 import com.fraz.dartlog.game.GameData;
 import com.fraz.dartlog.game.PlayerData;
-
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.Locale;
 
 public class MatchTableView extends FrameLayout {
 
@@ -45,25 +39,11 @@ public class MatchTableView extends FrameLayout {
     }
 
     private void initializeScoreBoard(View layout) {
-        TextView gameType = (TextView) layout.findViewById(R.id.match_statistics_game_type);
         RecyclerView scoreboard = (RecyclerView) layout.findViewById(R.id.match_statistics_scoreboard);
-        TextView dateView = (TextView) layout.findViewById(R.id.match_statistics_game_date);
 
         scoreboard.setAdapter(new MatchStatisticsRecyclerViewAdapter(game));
         scoreboard.setLayoutManager(new GridLayoutManager(getContext(),
                 game.getNumberOfPlayers() + 1, GridLayoutManager.HORIZONTAL, false));
-
-        gameType.setText(game.getGameType().toUpperCase());
-
-        Date date = game.getDate().getTime();
-        if (DateUtils.isToday(date.getTime()))
-            dateView.setText(DateUtils.getRelativeTimeSpanString(date.getTime(),
-                    Calendar.getInstance().getTimeInMillis(),
-                    DateUtils.SECOND_IN_MILLIS,
-                    DateUtils.FORMAT_ABBREV_ALL));
-        else
-            dateView.setText(new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).
-                    format(date));
     }
 
     private void addHeaders(View layout) {
