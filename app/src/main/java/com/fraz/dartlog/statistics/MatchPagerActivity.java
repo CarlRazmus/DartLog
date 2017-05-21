@@ -16,6 +16,7 @@ public class MatchPagerActivity extends AppCompatActivity {
 
     public static final String ARG_ITEM_NAME = "ARG_NAME";
     public static final String ARG_ITEM_POSITION = "ARG_POSITION";
+    private ArrayList<GameData> playerGameData;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -23,7 +24,7 @@ public class MatchPagerActivity extends AppCompatActivity {
         String profileName = getIntent().getStringExtra(ARG_ITEM_NAME);
         int position = getIntent().getIntExtra(ARG_ITEM_POSITION, 0);
         DartLogDatabaseHelper databaseHelper = new DartLogDatabaseHelper(this);
-        ArrayList<GameData> playerGameData = databaseHelper.getPlayerMatchData(profileName);
+        playerGameData = databaseHelper.getPlayerMatchData(profileName);
         setContentView(R.layout.activity_match_pager);
 
         MatchPagerAdapter adapter =
@@ -39,7 +40,8 @@ public class MatchPagerActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle(
-                String.format(Locale.getDefault(), "%s #%d", getTitle(), position + 1));
+                String.format(Locale.getDefault(), "%s %d",
+                        getTitle(), position + 1));
     }
 
     class OnPageChangeListener extends ViewPager.SimpleOnPageChangeListener

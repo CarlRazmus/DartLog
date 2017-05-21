@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<GridLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/match_chart_grid"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/main_white"
+    android:columnCount="3">
+
+    <TextView
+        android:gravity="center"
+        android:id="@+id/chart_title"
+        android:layout_row="0"
+        android:textSize="13sp"
+        android:textColor="@color/main_grey"
+        android:layout_margin="8dp"
+        android:layout_columnSpan="3"
+        tools:text="Title"/>
+
+    <com.db.chart.view.LineChartView
+        android:id="@+id/line_chart"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:layout_columnSpan="3"
+        android:padding="12dp"
+        android:layout_row="1"/>
+</GridLayout>

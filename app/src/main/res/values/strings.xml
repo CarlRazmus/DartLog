@@ -74,6 +74,7 @@
     <string name="drawer_item_statistics">Statistics</string>
     <string name="drawer_item_profiles">Profiles</string>
     <string name="drawer_item_home">Home</string>
+    <string name="winner">WINNER</string>
     <string name="random">Random</string>
     <string name="games">Games</string>
     <string name="add_profile">Add profile</string>
