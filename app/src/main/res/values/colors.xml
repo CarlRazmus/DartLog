@@ -17,14 +17,14 @@
     <color name="green_win">#7AB317</color>
     <color name="red_loss">#B90504</color>
 
-    <color name="chart_color1">#FFCC0000</color>
-    <color name="chart_color2">#FF5B9C0A</color>
-    <color name="chart_color3">#FF0A0D9C</color>
-    <color name="chart_color4">#FF990A9C</color>
-    <color name="chart_color5">#FF7F00</color>
-    <color name="chart_color6">#007FFF</color>
-    <color name="chart_color7">#FF00FF</color>
-    <color name="chart_color8">#FFFF00</color>
+    <color name="chart_color1">#375E97</color>
+    <color name="chart_color2">#CF3721</color>
+    <color name="chart_color3">#FAAF08</color>
+    <color name="chart_color4">#3F681C</color>
+    <color name="chart_color5">#283655</color>
+    <color name="chart_color6">#F25C00</color>
+    <color name="chart_color7">#92AAC7</color>
+    <color name="chart_color8">#B3C100</color>
 
     <!-- OVERWRITE THESE COLORS FOR A LIGHT THEME -->
     <!-- MaterialDrawer DEFAULT colors -->

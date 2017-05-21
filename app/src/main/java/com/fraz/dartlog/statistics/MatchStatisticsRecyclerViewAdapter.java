@@ -1,6 +1,6 @@
 package com.fraz.dartlog.statistics;
 
-import android.graphics.Color;
+import android.content.Context;
 import android.graphics.Typeface;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -18,6 +18,7 @@ public class MatchStatisticsRecyclerViewAdapter extends RecyclerView.Adapter<
         MatchStatisticsRecyclerViewAdapter.ViewHolder> {
 
     private GameData game;
+    private Context context;
 
     public MatchStatisticsRecyclerViewAdapter(GameData game) {
         this.game = game;
@@ -25,30 +26,24 @@ public class MatchStatisticsRecyclerViewAdapter extends RecyclerView.Adapter<
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext())
+        context = parent.getContext();
+        View view = LayoutInflater.from(context)
                 .inflate(R.layout.match_statistics_scoreboard_list_item, parent, false);
         return new ViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        int row = position % (game.getNumberOfPlayers() + 1);
-        int column = position / (game.getNumberOfPlayers() + 1);
+        int row = position % game.getNumberOfPlayers();
+        int column = position / game.getNumberOfPlayers();
         String text;
-        if (row == 0) {
-            text = Integer.toString(column);
-            holder.scoreView.setTypeface(Typeface.DEFAULT_BOLD);
-        }
-        else {
-            text = getScore(row, column);
-            holder.scoreView.setTextColor(Color.BLACK);
-            holder.scoreView.setTypeface(Typeface.DEFAULT);
-        }
+        text = getScore(row, column);
+        holder.scoreView.setTypeface(Typeface.DEFAULT);
         holder.scoreView.setText(text);
     }
 
     private String getScore(int row, int column) {
-        PlayerData player = game.getPlayer(row - 1);
+        PlayerData player = game.getPlayer(row);
         LinkedList<Integer> scores = player.getTotalScoreHistory();
         if (column < scores.size())
             return Integer.toString(scores.get(column));
@@ -61,7 +56,7 @@ public class MatchStatisticsRecyclerViewAdapter extends RecyclerView.Adapter<
     @Override
     public int getItemCount() {
         int turns = game.getWinner().getTotalScoreHistory().size() + 1;
-        return turns + turns * game.getNumberOfPlayers();
+        return turns * game.getNumberOfPlayers();
     }
 
     class ViewHolder extends RecyclerView.ViewHolder {
