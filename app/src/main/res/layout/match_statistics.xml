@@ -8,9 +8,20 @@
     android:background="@color/main_white"
     android:orientation="vertical">
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:id="@+id/player_match_statistics_title"
+        android:textSize="13sp"
+        android:textColor="@color/main_grey"
+        android:layout_marginBottom="8dp"
+        tools:text="Title"/>
+
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_below="@id/player_match_statistics_title"
         android:id="@+id/match_statistics_scoreboard_names"
         android:background="@color/main_white"
         android:orientation="vertical">

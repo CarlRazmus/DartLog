@@ -78,4 +78,5 @@
     <string name="random">Random</string>
     <string name="games">Games</string>
     <string name="add_profile">Add profile</string>
+    <string name="match_table_3_dart_score_title">Scores per turn</string>
 </resources>

@@ -39,6 +39,11 @@ public class MatchTableView extends FrameLayout {
         setGame(game);
     }
 
+    private void setTitle() {
+        TextView titleView = (TextView) findViewById(R.id.player_match_statistics_title);
+        titleView.setText(R.string.match_table_3_dart_score_title);
+    }
+
     private void initializeScoreBoard(View layout) {
         RecyclerView scoreboard = (RecyclerView) layout.findViewById(R.id.match_statistics_scoreboard);
 
@@ -73,6 +78,7 @@ public class MatchTableView extends FrameLayout {
 
     public void setGame(GameData game) {
         this.game = game;
+        setTitle();
         initializeScoreBoard(layout);
         addHeaders(layout);
 
