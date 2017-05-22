@@ -46,10 +46,11 @@ public class MatchTableView extends FrameLayout {
         scoreboard.setAdapter(adapter);
         scoreboard.setLayoutManager(new GridLayoutManager(getContext(),
                 game.getNumberOfPlayers(), GridLayoutManager.HORIZONTAL, false));
+        adapter.setShowTotalScore(false);
     }
 
     private void addHeaders(View layout) {
-        ViewGroup headerGroup = (ViewGroup) layout.findViewById(R.id.match_statistics_scoreboard_header);
+        ViewGroup headerGroup = (ViewGroup) layout.findViewById(R.id.match_statistics_scoreboard_names);
         headerGroup.removeAllViews();
         for (int i = 0; i < game.getNumberOfPlayers(); i++) {
             PlayerData player = game.getPlayer(i);
