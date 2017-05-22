@@ -20,6 +20,7 @@ public class MatchTableView extends FrameLayout {
 
     private final View layout;
     private GameData game;
+    private MatchStatisticsRecyclerViewAdapter adapter;
 
     public MatchTableView(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -41,7 +42,8 @@ public class MatchTableView extends FrameLayout {
     private void initializeScoreBoard(View layout) {
         RecyclerView scoreboard = (RecyclerView) layout.findViewById(R.id.match_statistics_scoreboard);
 
-        scoreboard.setAdapter(new MatchStatisticsRecyclerViewAdapter(game));
+        adapter = new MatchStatisticsRecyclerViewAdapter(game);
+        scoreboard.setAdapter(adapter);
         scoreboard.setLayoutManager(new GridLayoutManager(getContext(),
                 game.getNumberOfPlayers(), GridLayoutManager.HORIZONTAL, false));
     }

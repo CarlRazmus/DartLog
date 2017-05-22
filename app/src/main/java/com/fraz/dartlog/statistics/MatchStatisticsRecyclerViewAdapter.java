@@ -19,9 +19,11 @@ public class MatchStatisticsRecyclerViewAdapter extends RecyclerView.Adapter<
 
     private GameData game;
     private Context context;
+    private boolean showTotal;
 
     public MatchStatisticsRecyclerViewAdapter(GameData game) {
         this.game = game;
+        this.showTotal = true;
     }
 
     @Override
@@ -37,13 +39,16 @@ public class MatchStatisticsRecyclerViewAdapter extends RecyclerView.Adapter<
         int row = position % game.getNumberOfPlayers();
         int column = position / game.getNumberOfPlayers();
         String text;
-        text = getScore(row, column);
+        PlayerData player = game.getPlayer(row);
+        if (showTotal)
+            text = getTotalScore(player, column);
+        else
+            text = getTurnScore(player, column);
         holder.scoreView.setTypeface(Typeface.DEFAULT);
         holder.scoreView.setText(text);
     }
 
-    private String getScore(int row, int column) {
-        PlayerData player = game.getPlayer(row);
+    private String getTotalScore(PlayerData player, int column) {
         LinkedList<Integer> scores = player.getTotalScoreHistory();
         if (column < scores.size())
             return Integer.toString(scores.get(column));
@@ -53,10 +58,25 @@ public class MatchStatisticsRecyclerViewAdapter extends RecyclerView.Adapter<
             return "-";
     }
 
+    private String getTurnScore(PlayerData player, int column) {
+        LinkedList<Integer> scores = player.getScoreHistory();
+        if (column < scores.size())
+            return Integer.toString(scores.get(column));
+        else
+            return "-";
+    }
+
     @Override
     public int getItemCount() {
-        int turns = game.getWinner().getTotalScoreHistory().size() + 1;
+        int turns = game.getWinner().getTotalScoreHistory().size();
+        if (showTotal)
+            turns += 1;
         return turns * game.getNumberOfPlayers();
+    }
+
+    public void setShowTotalScore(boolean showTotal) {
+        this.showTotal = showTotal;
+        notifyDataSetChanged();
     }
 
     class ViewHolder extends RecyclerView.ViewHolder {
