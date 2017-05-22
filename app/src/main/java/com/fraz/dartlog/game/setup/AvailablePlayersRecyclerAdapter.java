@@ -10,6 +10,7 @@ import android.widget.TextView;
 import com.fraz.dartlog.R;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 
 public class AvailablePlayersRecyclerAdapter extends RecyclerView.Adapter<AvailablePlayersRecyclerAdapter.ViewHolder> {
@@ -47,6 +48,7 @@ public class AvailablePlayersRecyclerAdapter extends RecyclerView.Adapter<Availa
 
     public ArrayList<String> getSelectedPlayers() {
         ArrayList<String> selectedPlayers = new ArrayList<>();
+        Collections.sort(selectedIndexes);
 
         for(Integer idx : selectedIndexes){
             selectedPlayers.add(availablePlayers.get(idx));
