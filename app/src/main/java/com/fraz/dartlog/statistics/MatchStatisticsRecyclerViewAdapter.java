@@ -1,6 +1,7 @@
 package com.fraz.dartlog.statistics;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.graphics.Typeface;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -13,6 +14,7 @@ import com.fraz.dartlog.game.GameData;
 import com.fraz.dartlog.game.PlayerData;
 
 import java.util.LinkedList;
+import java.util.Locale;
 
 public class MatchStatisticsRecyclerViewAdapter extends RecyclerView.Adapter<
         MatchStatisticsRecyclerViewAdapter.ViewHolder> {
@@ -36,47 +38,59 @@ public class MatchStatisticsRecyclerViewAdapter extends RecyclerView.Adapter<
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        int row = position % game.getNumberOfPlayers();
-        int column = position / game.getNumberOfPlayers();
+        int rows = getRows();
+        int row_idx = position % rows;
+        int col_idx = position / rows;
         String text;
-        PlayerData player = game.getPlayer(row);
-        if (showTotal)
-            text = getTotalScore(player, column);
-        else
-            text = getTurnScore(player, column);
+        PlayerData player = game.getPlayer(col_idx);
+
+        if (row_idx == 0) {
+            text = player.getPlayerName();
+            holder.scoreView.setTextColor(Color.BLACK);
+        }
+        else {
+            text = getScoreText(player, row_idx - 1);
+            holder.scoreView.setTextColor(context.getResources().getColor(R.color.main_grey));
+        }
+
         holder.scoreView.setTypeface(Typeface.DEFAULT);
         holder.scoreView.setText(text);
     }
 
-    private String getTotalScore(PlayerData player, int column) {
+    private String getScoreText(PlayerData player, int index) {
         LinkedList<Integer> scores = player.getTotalScoreHistory();
-        if (column < scores.size())
-            return Integer.toString(scores.get(column));
-        else if (column == scores.size())
+        if (index < scores.size())
+            return String.format(
+                    Locale.getDefault(),
+                    "%s (%s)",
+                    Integer.toString(scores.get(index)),
+                    getTurnScore(player, index));
+        else if (index == scores.size())
             return Integer.toString(player.getScore());
         else
             return "-";
     }
 
-    private String getTurnScore(PlayerData player, int column) {
+    private String getTurnScore(PlayerData player, int index) {
         LinkedList<Integer> scores = player.getScoreHistory();
-        if (column < scores.size())
-            return Integer.toString(scores.get(column));
+        if (index < scores.size())
+            return Integer.toString(scores.get(index));
         else
             return "-";
     }
 
     @Override
     public int getItemCount() {
-        int turns = game.getWinner().getTotalScoreHistory().size();
-        if (showTotal)
-            turns += 1;
-        return turns * game.getNumberOfPlayers();
+        return getRows() * game.getNumberOfPlayers();
     }
 
     public void setShowTotalScore(boolean showTotal) {
         this.showTotal = showTotal;
         notifyDataSetChanged();
+    }
+
+    private int getRows() {
+        return showTotal ? game.getTurns() + 2 : game.getTurns() + 1;
     }
 
     class ViewHolder extends RecyclerView.ViewHolder {
