@@ -16,15 +16,21 @@
         android:layout_marginBottom="8dp"
         tools:text="Title"/>
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/match_statistics_scoreboard"
-        android:layout_width="wrap_content"
+    <HorizontalScrollView
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_below="@id/player_match_statistics_title"
-        android:nestedScrollingEnabled="false"
-        android:background="@color/main_white"
-        tools:listitem="@layout/match_statistics_scoreboard_list_item"
-        android:fadingEdgeLength="24dp"
-        android:requiresFadingEdge="horizontal"/>
+        android:nestedScrollingEnabled="true"
+        android:layout_below="@id/player_match_statistics_title">
+
+        <GridLayout
+            android:id="@+id/match_statistics_scoreboard"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:background="@color/main_white"
+            tools:listitem="@layout/match_statistics_scoreboard_score"
+            android:fadingEdgeLength="24dp"
+            android:requiresFadingEdge="horizontal"
+            android:alignmentMode="alignBounds"/>
+    </HorizontalScrollView>
 </RelativeLayout>
