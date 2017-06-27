@@ -3,14 +3,17 @@ package com.fraz.dartlog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-
 import com.fraz.dartlog.game.setup.SetupActivity;
 import com.fraz.dartlog.statistics.ProfileListActivity;
 
+
+
 public class MainActivity extends MenuBackground implements View.OnClickListener {
 
+    DbFileHandler dbFileHandler;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -18,6 +21,11 @@ public class MainActivity extends MenuBackground implements View.OnClickListener
         Button playButton = (Button) findViewById(R.id.play_x01_button);
         Button profilesButton = (Button) findViewById(R.id.profiles_button);
         Button randomButton = (Button) findViewById(R.id.play_random_button);
+
+        dbFileHandler = new DbFileHandler(this);
+
+        /* Example of how to open UI to create a new db copy */
+        //dbFileHandler.createFile("application/x-sqlite3");
 
         assert playButton != null;
         assert profilesButton != null;
@@ -42,6 +50,17 @@ public class MainActivity extends MenuBackground implements View.OnClickListener
             case R.id.play_random_button:
                 startPlayersActivity("random");
                 break;
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if(requestCode == DbFileHandler.WRITE_REQUEST_CODE && resultCode == RESULT_OK) {
+            Log.d("dbFileHandler", "URI = " + data.getData());
+            Log.d("dbFileHandler", "getPath = " + data.getData().getPath());
+            dbFileHandler.onFileCreated(data.getData());
         }
     }
 
