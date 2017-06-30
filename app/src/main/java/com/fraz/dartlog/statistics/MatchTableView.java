@@ -1,11 +1,13 @@
 package com.fraz.dartlog.statistics;
 
 import android.content.Context;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.FrameLayout;
-import android.widget.GridLayout;
 import android.widget.TextView;
 
 import com.fraz.dartlog.R;
@@ -37,112 +39,123 @@ public class MatchTableView extends FrameLayout {
         setGame(game);
     }
 
-    private void setTitle() {
-        TextView titleView = (TextView) findViewById(R.id.player_match_statistics_title);
-        titleView.setText(R.string.match_table_3_dart_score_title);
-    }
-
     private void initializeScoreBoard(View layout) {
-        GridLayout scoreboard = (GridLayout) layout.findViewById(R.id.match_statistics_scoreboard);
-        scoreboard.setRowCount(getRows());
-        scoreboard.setColumnCount(game.getNumberOfPlayers());
-        fillScoreBoard(scoreboard);
-    }
-
-    private void fillScoreBoard(GridLayout scoreboard) {
-        int rows = getRows();
-        for (int i = 0; i < getItemCount(); i++) {
-            int row_idx = i % rows;
-            int col_idx = i / rows;
-            PlayerData player = game.getPlayer(col_idx);
-
-            View scoreView;
-
-            if (row_idx == 0){
-                scoreView = createPlayerNameView(scoreboard, player);
-            } else {
-                scoreView = createScoreView(scoreboard, row_idx - 1, player);
-            }
-
-            GridLayout.LayoutParams layoutParams =
-                    (GridLayout.LayoutParams) scoreView.getLayoutParams();
-            layoutParams.columnSpec = GridLayout.spec(col_idx, 1);
-            layoutParams.rowSpec = GridLayout.spec(row_idx);
-            if (row_idx == 0)
-                layoutParams.setMargins(
-                        layoutParams.leftMargin, 0,
-                        layoutParams.rightMargin, layoutParams.bottomMargin);
-            if (row_idx == (rows - 1))
-                layoutParams.setMargins(
-                        layoutParams.leftMargin, layoutParams.topMargin,
-                        layoutParams.rightMargin, 0);
-            if (col_idx == 0)
-                layoutParams.setMargins(
-                        0, layoutParams.topMargin,
-                        layoutParams.rightMargin, layoutParams.bottomMargin);
-            if (col_idx == (game.getNumberOfPlayers() -1))
-                layoutParams.setMargins(
-                        layoutParams.leftMargin, layoutParams.topMargin,
-                        0, layoutParams.bottomMargin);
-
-            scoreView.setLayoutParams(layoutParams);
-
-            scoreboard.addView(scoreView, i);
-        }
-    }
-
-    public View createPlayerNameView(GridLayout scoreboard, PlayerData player) {
-        TextView playerNameView = (TextView) LayoutInflater.from(getContext())
-                .inflate(R.layout.match_statistics_scoreboard_player_name, scoreboard, false);
-
-        playerNameView.setText(player.getPlayerName());
-        return playerNameView;
-    }
-
-    public View createScoreView(GridLayout scoreboard, int score_idx, PlayerData player) {
-        View scoreView = LayoutInflater.from(getContext())
-                .inflate(R.layout.match_statistics_scoreboard_score, scoreboard, false);
-
-        TextView totalScoreView = (TextView) scoreView.findViewById(R.id.total_score);
-        TextView turnScoreView = (TextView) scoreView.findViewById(R.id.turn_score);
-
-        totalScoreView.setText(getScoreText(player, score_idx));
-        turnScoreView.setText(getTurnScore(player, score_idx));
-        return scoreView;
+        RecyclerView scoreboard = (RecyclerView) layout.findViewById(R.id.match_statistics_scoreboard);
+        RecyclerView.LayoutManager layoutManager = new GridLayoutManager(
+                getContext(), getRows(), GridLayoutManager.HORIZONTAL, false);
+        scoreboard.setLayoutManager(layoutManager);
+        MatchTableAdapter adapter = new MatchTableAdapter();
+        scoreboard.setAdapter(adapter);
+        adapter.notifyDataSetChanged();
     }
 
     public void setGame(GameData game) {
         this.game = game;
-        setTitle();
         initializeScoreBoard(layout);
-
-        invalidate();
-        requestLayout();
-    }
-
-    private String getScoreText(PlayerData player, int index) {
-        LinkedList<Integer> scores = player.getTotalScoreHistory();
-        if (index < scores.size())
-            return Integer.toString(scores.get(index));
-        else if (index == scores.size())
-            return Integer.toString(player.getScore());
-        else
-            return "";
-    }
-
-    private String getTurnScore(PlayerData player, int index) {
-        LinkedList<Integer> scores = player.getScoreHistory();
-        if (index < scores.size())
-            return Integer.toString(scores.get(index));
-        else
-            return "";
-    }
-
-    private int getItemCount() {
-        return getRows() * game.getNumberOfPlayers();
     }
 
     private int getRows() {
         return game.getTurns() + 2;
+    }
+
+    private int getRow(int position) { return position % getRows(); }
+
+    private int getColumn(int position) {
+        return  position / (getRows());
+    }
+
+    private class MatchTableAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
+
+        private static final int NAME_VIEW_TYPE = 0;
+        private static final int SCORE_VIEW_TYPE = 1;
+
+        @Override
+        public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+            if (viewType == NAME_VIEW_TYPE){
+                View nameView = LayoutInflater.from(getContext())
+                        .inflate(R.layout.match_statistics_scoreboard_player_name, parent, false);
+                return new NameViewHolder(nameView);
+            } else {
+                View scoreView = LayoutInflater.from(getContext())
+                        .inflate(R.layout.match_statistics_scoreboard_score, parent, false);
+                return new ScoreViewHolder(scoreView);
+            }
+        }
+
+        @Override
+        public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+            if (getItemViewType(position) == NAME_VIEW_TYPE)
+                onBindNameViewHolder((NameViewHolder) holder, getPlayer(position));
+            else
+                onBindScoreViewHolder(
+                        (ScoreViewHolder) holder,
+                        getPlayer(position),
+                        getTurn(position));
+        }
+
+        private void onBindNameViewHolder(NameViewHolder holder, PlayerData player) {
+            ((TextView)holder.itemView).setText(player.getPlayerName());
+        }
+
+        private void onBindScoreViewHolder(ScoreViewHolder holder, PlayerData player, int turnIdx) {
+            holder.turnScoreView.setText(getTurnScore(player, turnIdx));
+            holder.totalScoreView.setText(getTotalScoreText(player, turnIdx));
+        }
+
+        @Override
+        public int getItemViewType(int position) {
+            if (getRow(position) == 0)
+                return NAME_VIEW_TYPE;
+            else
+                return SCORE_VIEW_TYPE;
+        }
+
+        @Override
+        public int getItemCount() {
+            return  getRows() * game.getNumberOfPlayers();
+        }
+
+        private String getTurnScore(PlayerData player, int index) {
+            LinkedList<Integer> scores = player.getScoreHistory();
+            if (index < scores.size())
+                return Integer.toString(scores.get(index));
+            else
+                return "";
+        }
+
+        private String getTotalScoreText(PlayerData player, int index) {
+            LinkedList<Integer> scores = player.getTotalScoreHistory();
+            if (index < scores.size())
+                return Integer.toString(scores.get(index));
+            else if (index == scores.size())
+                return Integer.toString(player.getScore());
+            else
+                return "";
+        }
+
+        private PlayerData getPlayer(int position) {
+            return game.getPlayer(getColumn(position));
+        }
+
+        private int getTurn(int position) {
+            return getRow(position) - 1;
+        }
+
+        class NameViewHolder extends RecyclerView.ViewHolder{
+            NameViewHolder(View itemView) {
+                super(itemView);
+            }
+        }
+
+        class ScoreViewHolder extends RecyclerView.ViewHolder{
+            final TextView totalScoreView;
+            final TextView turnScoreView;
+
+            ScoreViewHolder(View itemView) {
+                super(itemView);
+                totalScoreView = (TextView) itemView.findViewById(R.id.total_score);
+                turnScoreView = (TextView) itemView.findViewById(R.id.turn_score);
+            }
+        }
     }
 }

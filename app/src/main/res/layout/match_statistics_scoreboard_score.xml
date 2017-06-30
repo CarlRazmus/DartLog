@@ -27,6 +27,6 @@
         android:background="@color/main_white"
         android:textSize="15sp"
         android:textStyle="italic"
-        android:textColor="@color/main_grey"/>
+        android:textColor="@color/light_grey"/>
 
 </LinearLayout>

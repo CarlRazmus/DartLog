@@ -83,6 +83,7 @@
             android:layout_height="wrap_content"
             app:layoutManager="LinearLayoutManager"
             android:nestedScrollingEnabled="false"
+            android:background="@color/main_white"
             tools:listitem="@layout/match_statistics"/>
 
         <android.support.v7.widget.RecyclerView
@@ -91,6 +92,7 @@
             android:layout_height="wrap_content"
             app:layoutManager="LinearLayoutManager"
             android:nestedScrollingEnabled="false"
+            android:background="@color/main_white"
             tools:listitem="@layout/match_statistics">
         </android.support.v7.widget.RecyclerView>
 
