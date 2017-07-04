@@ -6,6 +6,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.fraz.dartlog.R;
@@ -14,6 +15,7 @@ import com.fraz.dartlog.game.GameData;
 import com.fraz.dartlog.game.PlayerData;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Locale;
 
 /**
@@ -64,8 +66,13 @@ public class ProfileDetailFragment extends Fragment {
             toolbar.setTitle(profileName);
         }
 
+
+        LinearLayout linearLayout =
+                (LinearLayout) rootView.findViewById(R.id.profile_detail_linear_layout);
+
         initSummary(rootView);
-        initBestGame(rootView);
+        initBestGames(linearLayout);
+        initHighestOutGame(linearLayout);
         return rootView;
     }
 
@@ -90,45 +97,81 @@ public class ProfileDetailFragment extends Fragment {
 
     }
 
-    private void initBestGame(View rootView) {
+    private void initBestGames(LinearLayout linearLayout) {
         TextView bestGameHeader =
-                (TextView) rootView.findViewById(R.id.profile_detail_best_game_label);
+                (TextView) linearLayout.findViewById(R.id.profile_detail_best_game_label);
+        int index = linearLayout.indexOfChild(bestGameHeader) + 1;
         bestGameHeader.setText(R.string.best_game);
-
-        final GameData bestGame = getBestGame(playerGameData);
-        MatchItemView bestGameView =
-                (MatchItemView) rootView.findViewById(R.id.profile_detail_best_game);
-        if (bestGame != null) {
-            bestGameView.setVisibility(View.VISIBLE);
-            bestGameView.setGame(bestGame, profileName);
-            bestGameView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    MatchFragment.newInstance(bestGame).show(getFragmentManager(), "bestGame");
-                }
-            });
-        } else {
-            bestGameView.setVisibility(View.GONE);
+        final HashMap<String, GameData> bestGames = getBestGame(playerGameData);
+        for (GameData gameData : bestGames.values()) {
+            addGameView(gameData, linearLayout, index);
         }
     }
 
-    private GameData getBestGame(ArrayList<GameData> playerGameData) {
-        if (playerGameData.isEmpty())
-            return null;
+    private void initHighestOutGame(LinearLayout linearLayout) {
+        TextView highestOutHeader =
+                (TextView) linearLayout.findViewById(R.id.profile_detail_highest_out_label);
+        int index = linearLayout.indexOfChild(highestOutHeader) + 1;
+        highestOutHeader.setText(R.string.highest_out);
+        final GameData highestOutGame = getHighestOut(playerGameData);
+        if (highestOutGame != null)
+            addGameView(highestOutGame, linearLayout, index);
+    }
 
-        GameData currentBestGame = null;
-        int least_turns = Integer.MAX_VALUE;
-        for (GameData gameData : playerGameData) {
-            if(gameData.getGameType().equals("x01") &&
-               gameData.getWinner().getPlayerName().equals(profileName))
+    private HashMap<String, GameData> getBestGame(ArrayList<GameData> playerGameData) {
+        HashMap<String, Integer> leastTurns = new HashMap<>();
+        HashMap<String, GameData> bestGames = new HashMap<>();
+        for (GameData game : playerGameData) {
+            if(game.getGameType().equals("x01") &&
+               game.getWinner().getPlayerName().equals(profileName))
             {
-                int turns = gameData.getTurns();
-                if (turns < least_turns) {
-                    currentBestGame = gameData;
-                    least_turns = turns;
+                String detailedGameType = game.getDetailedGameType();
+                int turns = game.getTurns();
+                if (bestGames.containsKey(detailedGameType))
+                {
+                    if (turns < leastTurns.get(detailedGameType)) {
+                        bestGames.put(detailedGameType, game);
+                        leastTurns.put(detailedGameType, turns);
+                    }
+                } else {
+                    bestGames.put(detailedGameType, game);
+                    leastTurns.put(detailedGameType, turns);
                 }
             }
         }
-        return currentBestGame;
+        return bestGames;
+    }
+
+    private GameData getHighestOut(ArrayList<GameData> playerGameData) {
+        int highestOut = Integer.MIN_VALUE;
+        GameData highestOutGame = null;
+        for (GameData game : playerGameData) {
+            if(game.getGameType().equals("x01") &&
+                    game.getWinner().getPlayerName().equals(profileName))
+            {
+                int out = game.getWinner().getScoreHistory().getLast();
+                if (out > highestOut)
+                {
+                    highestOutGame = game;
+                    highestOut = out;
+                }
+            }
+        }
+        return highestOutGame;
+    }
+
+    private void addGameView(final GameData game, LinearLayout linearLayout, final int index) {
+        MatchItemView matchItemView = new MatchItemView(getContext());
+        matchItemView.setVisibility(View.VISIBLE);
+        matchItemView.setGame(game, profileName);
+        matchItemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                MatchFragment.newInstance(game).show(getFragmentManager(),
+                        "overview_game_" + Integer.toString(index));
+            }
+        });
+
+        linearLayout.addView(matchItemView, index);
     }
 }
