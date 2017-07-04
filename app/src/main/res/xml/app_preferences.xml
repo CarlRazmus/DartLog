@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <EditTextPreference
+        android:title="Export Database"
+        android:summary="Export data to external memory.">
+    </EditTextPreference>
+
+    <EditTextPreference
+        android:title="Import Database"
+        android:summary="Import from external memory.\nWARNING! this will overwrite current database.">
+    </EditTextPreference>
+</PreferenceScreen>

@@ -78,4 +78,6 @@
     <string name="random">Random</string>
     <string name="games">Games</string>
     <string name="add_profile">Add profile</string>
+    <string name="settings">Settings</string>
+    <string name="app_settings_activity">App Settings Activity</string>
 </resources>

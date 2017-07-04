@@ -70,6 +70,7 @@ public class MenuBackground extends AppCompatActivity {
         PrimaryDrawerItem gameRandomItem = new PrimaryDrawerItem().withIdentifier(2).withName(R.string.random).withIcon(R.drawable.ic_home_white_24dp);
         PrimaryDrawerItem profilesItem = new PrimaryDrawerItem().withIdentifier(2).withName(R.string.drawer_item_profiles).withIcon(R.drawable.ic_group_white_24dp);
         PrimaryDrawerItem addProfileItem = new PrimaryDrawerItem().withIdentifier(2).withName(R.string.add_profile).withIcon(R.drawable.ic_person_add);
+        PrimaryDrawerItem settingsItem = new PrimaryDrawerItem().withIdentifier(2).withName(R.string.settings).withIcon(R.drawable.ic_settings_white_24dp);
 
         // Create an empty AccountHeader
         AccountHeader headerResult = new AccountHeaderBuilder()
@@ -92,7 +93,9 @@ public class MenuBackground extends AppCompatActivity {
                         gameRandomItem,
                         new DividerDrawerItem(),
                         profilesItem,
-                        addProfileItem
+                        addProfileItem,
+                        new DividerDrawerItem(),
+                        settingsItem
                 )
                 .withFooterDivider(true)
                 .withOnDrawerItemClickListener(new Drawer.OnDrawerItemClickListener() {
@@ -112,6 +115,7 @@ public class MenuBackground extends AppCompatActivity {
     private final int RANDOM = 5;
     private final int PROFILES = 7;
     private final int ADD_PROFILE = 8;
+    private final int SETTINGS = 10;
 
     private void itemClickedEvent(int position) {
         switch (position){
@@ -130,9 +134,17 @@ public class MenuBackground extends AppCompatActivity {
             case(ADD_PROFILE):
                 openAddPlayerDialog();
                 break;
+            case(SETTINGS):
+                openSettingsActivity();
+                break;
             default:
                 throw new Error("Non defined item clicked");
         }
+    }
+
+    private void openSettingsActivity() {
+        Intent intent = new Intent(this, AppSettingsActivity.class);
+        startActivity(intent);
     }
 
     private void openAddPlayerDialog() {
