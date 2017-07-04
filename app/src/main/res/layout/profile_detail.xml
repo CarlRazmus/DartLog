@@ -13,10 +13,6 @@
         android:id="@+id/profile_detail_linear_layout"
         android:orientation="vertical">
 
-        <include layout="@layout/match_statistics_header"
-            android:layout_height="wrap_content"
-            android:layout_width="match_parent"
-            android:id="@+id/profile_detail_summary_label"/>
 
         <RelativeLayout
             android:layout_width="match_parent"

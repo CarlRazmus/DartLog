@@ -77,10 +77,6 @@ public class ProfileDetailFragment extends Fragment {
     }
 
     private void initSummary(View rootView) {
-        TextView summaryHeader =
-                (TextView) rootView.findViewById(R.id.profile_detail_summary_label);
-        summaryHeader.setText(R.string.summary);
-
         int playerWins = 0;
         for(GameData game : playerGameData)
         {
