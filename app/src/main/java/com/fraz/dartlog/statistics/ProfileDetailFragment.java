@@ -2,7 +2,6 @@ package com.fraz.dartlog.statistics;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,7 +14,6 @@ import com.fraz.dartlog.game.GameData;
 import com.fraz.dartlog.game.PlayerData;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Locale;
 
 /**
@@ -66,6 +64,12 @@ public class ProfileDetailFragment extends Fragment {
             toolbar.setTitle(profileName);
         }
 
+        initSummary(rootView);
+        initBestGame(rootView);
+        return rootView;
+    }
+
+    private void initSummary(View rootView) {
         TextView summaryHeader =
                 (TextView) rootView.findViewById(R.id.profile_detail_summary_label);
         summaryHeader.setText(R.string.summary);
@@ -84,16 +88,28 @@ public class ProfileDetailFragment extends Fragment {
         ((TextView) rootView.findViewById(R.id.profile_detail_games_won))
                 .setText(String.format(Locale.getDefault(), "%d", playerWins));
 
+    }
 
-        RecyclerView recyclerView =
-                (RecyclerView) rootView.findViewById(R.id.recent_games_list);
-        assert recyclerView != null;
-        RecentGamesRecyclerViewAdapter recyclerViewAdapter =
-                new ProfileDetailFragment.RecentGamesRecyclerViewAdapter(playerGameData,
-                        getBestGame(playerGameData));
-        recyclerView.setAdapter(recyclerViewAdapter);
+    private void initBestGame(View rootView) {
+        TextView bestGameHeader =
+                (TextView) rootView.findViewById(R.id.profile_detail_best_game_label);
+        bestGameHeader.setText(R.string.best_game);
 
-        return rootView;
+        final GameData bestGame = getBestGame(playerGameData);
+        MatchItemView bestGameView =
+                (MatchItemView) rootView.findViewById(R.id.profile_detail_best_game);
+        if (bestGame != null) {
+            bestGameView.setVisibility(View.VISIBLE);
+            bestGameView.setGame(bestGame, profileName);
+            bestGameView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    MatchFragment.newInstance(bestGame).show(getFragmentManager(), "bestGame");
+                }
+            });
+        } else {
+            bestGameView.setVisibility(View.GONE);
+        }
     }
 
     private GameData getBestGame(ArrayList<GameData> playerGameData) {
@@ -101,118 +117,18 @@ public class ProfileDetailFragment extends Fragment {
             return null;
 
         GameData currentBestGame = null;
-        int scores = Integer.MAX_VALUE;
+        int least_turns = Integer.MAX_VALUE;
         for (GameData gameData : playerGameData) {
-            if(gameData.getGameType().equals("x01"))
-                if (gameData.getWinner().getPlayerName().equals(profileName) &&
-                    gameData.getPlayer(profileName).getScoreHistory().size() < scores) {
-                        currentBestGame = gameData;
+            if(gameData.getGameType().equals("x01") &&
+               gameData.getWinner().getPlayerName().equals(profileName))
+            {
+                int turns = gameData.getTurns();
+                if (turns < least_turns) {
+                    currentBestGame = gameData;
+                    least_turns = turns;
                 }
+            }
         }
         return currentBestGame;
-    }
-
-    public class RecentGamesRecyclerViewAdapter
-            extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
-
-        private static final int NUMBER_OF_GAMES = 5;
-        private static final int TYPE_HEADER = 0;
-        private static final int TYPE_ITEM = 1;
-        private final ArrayList<GameData> gameData;
-        private GameData bestGame;
-
-        RecentGamesRecyclerViewAdapter(ArrayList<GameData> gameData, GameData bestGame) {
-            this.gameData = gameData;
-            this.bestGame = bestGame;
-            Collections.reverse(this.gameData);
-        }
-
-        @Override
-        public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            View view;
-            if (viewType == TYPE_HEADER) {
-                view = LayoutInflater.from(parent.getContext())
-                        .inflate(R.layout.match_statistics_header, parent, false);
-                return new HeaderViewHolder(view);
-            } else {
-                view = new MatchTableView(getContext());
-                return new GameViewHolder(view);
-            }
-        }
-
-        @Override
-        public void onBindViewHolder(final RecyclerView.ViewHolder holder, int position) {
-            if (holder.getItemViewType() == TYPE_HEADER) {
-                bindHeaderViewHolder((HeaderViewHolder) holder, position);
-            } else {
-                bindGameViewHolder((GameViewHolder) holder, position);
-            }
-        }
-
-        private void bindHeaderViewHolder(HeaderViewHolder holder, int position) {
-            if(isBestGameHeader(position))
-                holder.header.setText(R.string.best_game);
-            else
-                holder.header.setText(R.string.recent_games);
-        }
-
-        private void bindGameViewHolder(GameViewHolder holder, int position) {
-            GameData game;
-            if (position == 1)
-                game = bestGame;
-            else if (bestGame == null)
-                game = gameData.get(position - 2);
-            else
-                game = gameData.get(position - 3);
-
-            holder.matchTable.setGame(game);
-        }
-
-        @Override
-        public int getItemCount() {
-            int extraItems = 2;
-            if (bestGame != null)
-                extraItems++;
-            return Math.min(gameData.size(), NUMBER_OF_GAMES) + extraItems;
-        }
-
-        @Override
-        public int getItemViewType(int position) {
-            if (isHeader(position))
-                return TYPE_HEADER;
-
-            return TYPE_ITEM;
-        }
-
-        private boolean isHeader(int position) {
-            return isBestGameHeader(position) || isRecentGameHeader(position);
-        }
-
-        private boolean isRecentGameHeader(int position) {
-            if (bestGame != null)
-                return position == 2;
-            else
-                return position == 1;
-        }
-
-        private boolean isBestGameHeader(int position) {
-            return position == 0;
-        }
-
-        class HeaderViewHolder extends RecyclerView.ViewHolder {
-            TextView header;
-            HeaderViewHolder(View view) {
-                super(view);
-                header = (TextView) view.findViewById(R.id.player_match_statistics_header);
-            }
-        }
-
-        class GameViewHolder extends RecyclerView.ViewHolder {
-            MatchTableView matchTable;
-            GameViewHolder(View view) {
-                super(view);
-                matchTable = (MatchTableView) view;
-            }
-        }
     }
 }

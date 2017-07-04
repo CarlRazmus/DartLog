@@ -1,10 +1,10 @@
 package com.fraz.dartlog.statistics;
 
 import android.content.Context;
-import android.support.v7.widget.CardView;
 import android.text.format.DateUtils;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
+import android.widget.FrameLayout;
 import android.widget.TextView;
 
 import com.fraz.dartlog.R;
@@ -15,7 +15,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 
-public class MatchItemView extends CardView {
+public class MatchItemView extends FrameLayout {
 
     private TextView dateView;
     private TextView gameType;

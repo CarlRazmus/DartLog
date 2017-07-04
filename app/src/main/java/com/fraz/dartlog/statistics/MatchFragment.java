@@ -2,7 +2,7 @@ package com.fraz.dartlog.statistics;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
+import android.support.v4.app.DialogFragment;
 import android.support.v4.widget.NestedScrollView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,7 +15,7 @@ import com.fraz.dartlog.game.GameData;
 import java.text.SimpleDateFormat;
 import java.util.Locale;
 
-public class MatchFragment extends Fragment {
+public class MatchFragment extends DialogFragment {
     public static final String ARG_GAME_DATA = "game_data";
     private GameData gameData;
 
