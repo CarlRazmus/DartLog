@@ -31,6 +31,10 @@ public class DbFileHandler {
         return dbFile;
     }
 
+    public void createCopyOfLocalDb(){
+        createFile("application/x-sqlite3");
+    }
+
     public void createFile(String mimeType) {
         Intent intent = new Intent(Intent.ACTION_CREATE_DOCUMENT);
 

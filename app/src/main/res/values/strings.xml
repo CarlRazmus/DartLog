@@ -80,4 +80,6 @@
     <string name="add_profile">Add profile</string>
     <string name="settings">Settings</string>
     <string name="app_settings_activity">App Settings Activity</string>
+    <string name="export_database">export_database</string>
+    <string name="import_database">import_database</string>
 </resources>
