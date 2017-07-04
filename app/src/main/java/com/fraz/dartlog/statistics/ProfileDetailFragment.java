@@ -71,7 +71,7 @@ public class ProfileDetailFragment extends Fragment {
                 (LinearLayout) rootView.findViewById(R.id.profile_detail_linear_layout);
 
         initSummary(rootView);
-        initBestGames(linearLayout);
+        initFewestTurnsGames(linearLayout);
         initHighestOutGame(linearLayout);
         return rootView;
     }
@@ -97,13 +97,13 @@ public class ProfileDetailFragment extends Fragment {
 
     }
 
-    private void initBestGames(LinearLayout linearLayout) {
-        TextView bestGameHeader =
-                (TextView) linearLayout.findViewById(R.id.profile_detail_best_game_label);
-        int index = linearLayout.indexOfChild(bestGameHeader) + 1;
-        bestGameHeader.setText(R.string.best_game);
-        final HashMap<String, GameData> bestGames = getBestGame(playerGameData);
-        for (GameData gameData : bestGames.values()) {
+    private void initFewestTurnsGames(LinearLayout linearLayout) {
+        TextView fewestTurnsHeader =
+                (TextView) linearLayout.findViewById(R.id.profile_detail_fewest_turns_label);
+        int index = linearLayout.indexOfChild(fewestTurnsHeader) + 1;
+        fewestTurnsHeader.setText(R.string.fewest_turns);
+        final HashMap<String, GameData> fewestTurnsGames = getFewestTurnsGames(playerGameData);
+        for (GameData gameData : fewestTurnsGames.values()) {
             addGameView(gameData, linearLayout, index);
         }
     }
@@ -118,28 +118,28 @@ public class ProfileDetailFragment extends Fragment {
             addGameView(highestOutGame, linearLayout, index);
     }
 
-    private HashMap<String, GameData> getBestGame(ArrayList<GameData> playerGameData) {
-        HashMap<String, Integer> leastTurns = new HashMap<>();
-        HashMap<String, GameData> bestGames = new HashMap<>();
+    private HashMap<String, GameData> getFewestTurnsGames(ArrayList<GameData> playerGameData) {
+        HashMap<String, Integer> fewestTurns = new HashMap<>();
+        HashMap<String, GameData> fewestTurnsGames = new HashMap<>();
         for (GameData game : playerGameData) {
             if(game.getGameType().equals("x01") &&
                game.getWinner().getPlayerName().equals(profileName))
             {
                 String detailedGameType = game.getDetailedGameType();
                 int turns = game.getTurns();
-                if (bestGames.containsKey(detailedGameType))
+                if (fewestTurnsGames.containsKey(detailedGameType))
                 {
-                    if (turns < leastTurns.get(detailedGameType)) {
-                        bestGames.put(detailedGameType, game);
-                        leastTurns.put(detailedGameType, turns);
+                    if (turns < fewestTurns.get(detailedGameType)) {
+                        fewestTurnsGames.put(detailedGameType, game);
+                        fewestTurns.put(detailedGameType, turns);
                     }
                 } else {
-                    bestGames.put(detailedGameType, game);
-                    leastTurns.put(detailedGameType, turns);
+                    fewestTurnsGames.put(detailedGameType, game);
+                    fewestTurns.put(detailedGameType, turns);
                 }
             }
         }
-        return bestGames;
+        return fewestTurnsGames;
     }
 
     private GameData getHighestOut(ArrayList<GameData> playerGameData) {

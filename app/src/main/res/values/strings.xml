@@ -55,7 +55,7 @@
     <string name="players_colon">Players:</string>
     <string name="summary">SUMMARY</string>
     <string name="next">next</string>
-    <string name="best_game">BEST GAMES</string>
+    <string name="fewest_turns">FEWEST TURNS</string>
     <string name="highest_out">HIGHEST OUT</string>
     <string name="no_score">No score</string>
     <string name="turn">Turn</string>
