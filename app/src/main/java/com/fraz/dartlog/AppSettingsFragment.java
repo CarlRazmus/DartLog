@@ -2,6 +2,7 @@ package com.fraz.dartlog;
 
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
@@ -29,5 +30,9 @@ public class AppSettingsFragment extends PreferenceFragment {
                 return true;
             }
         });
+    }
+
+    public void onSuccessfulCreateDb(Intent data) {
+        dbFileHandler.onFileCreated(data.getData());
     }
 }
