@@ -36,13 +36,5 @@
             tools:text="Player Name"
             android:textColor="@color/main_white"/>
 
-        <View
-            android:id="@+id/list_item_divider"
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_marginTop="26dp"
-            android:layout_below="@id/available_player_name"
-            android:background="@color/md_grey_800"/>
-
     </RelativeLayout>
 </FrameLayout>
