@@ -56,7 +56,7 @@ public class MatchFragment extends DialogFragment {
 
     private void initHeader(View layout) {
         TextView gameTypeTextView = (TextView) layout.findViewById(R.id.match_game_type);
-        gameTypeTextView.setText(gameData.getGameType().toUpperCase());
+        gameTypeTextView.setText(gameData.getDetailedGameType().toUpperCase());
 
         TextView winnerTextView = (TextView) layout.findViewById(R.id.match_winner);
         winnerTextView.setText(gameData.getWinner().getPlayerName());

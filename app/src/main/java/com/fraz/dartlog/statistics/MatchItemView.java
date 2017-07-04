@@ -51,7 +51,7 @@ public class MatchItemView extends FrameLayout {
     }
 
     private void initGame() {
-        gameType.setText(game.getGameType().toUpperCase());
+        gameType.setText(game.getDetailedGameType().toUpperCase());
         initPlayers();
         initResult();
         initDate();
