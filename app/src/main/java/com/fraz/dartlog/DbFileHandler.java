@@ -113,7 +113,6 @@ public class DbFileHandler {
                 inStream.close();
                 outStream.close();
             } catch (Exception e) {
-                Log.d("DbFileHandler Error", "Shit happened!: " + e.getMessage());
             }
         }
     }
