@@ -36,13 +36,13 @@ public class DbFileHandler {
 
     private String getDateAsString() {
         Calendar c = Calendar.getInstance();
-        String date = String.valueOf(c.get(Calendar.YEAR));
+        String date = String.valueOf(c.get(Calendar.YEAR)) + "_";
         if(c.get(Calendar.MONTH) < 10)
-            date.concat("0");
-        date.concat(String.valueOf(c.get(Calendar.MONTH)));
+            date = date.concat("0");
+        date = date.concat(String.valueOf(c.get(Calendar.MONTH)) + "_");
         if(c.get(Calendar.DAY_OF_MONTH) < 10)
-            date.concat("0");
-        date.concat(String.valueOf(c.get(Calendar.DAY_OF_MONTH)));
+            date = date.concat("0");
+        date = date.concat(String.valueOf(c.get(Calendar.DAY_OF_MONTH)));
 
         return date;
     }
