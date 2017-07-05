@@ -100,7 +100,7 @@ public class ProfileDetailFragment extends Fragment {
         fewestTurnsHeader.setText(R.string.fewest_turns);
         final HashMap<String, GameData> fewestTurnsGames = getFewestTurnsGames(playerGameData);
         for (GameData gameData : fewestTurnsGames.values()) {
-            addGameView(gameData, linearLayout, index);
+            addFewestTurnsView(gameData, linearLayout, index);
         }
     }
 
@@ -111,7 +111,7 @@ public class ProfileDetailFragment extends Fragment {
         highestOutHeader.setText(R.string.highest_out);
         final GameData highestOutGame = getHighestOut(playerGameData);
         if (highestOutGame != null)
-            addGameView(highestOutGame, linearLayout, index);
+            addCheckoutView(highestOutGame, linearLayout, index);
     }
 
     private HashMap<String, GameData> getFewestTurnsGames(ArrayList<GameData> playerGameData) {
@@ -156,8 +156,19 @@ public class ProfileDetailFragment extends Fragment {
         return highestOutGame;
     }
 
-    private void addGameView(final GameData game, LinearLayout linearLayout, final int index) {
+    private void addCheckoutView(final GameData game, LinearLayout linearLayout, final int index) {
         MatchItemView matchItemView = new MatchItemView(getContext());
+        matchItemView.setStatToShow(MatchItemView.Stat.CHECKOUT);
+        addGameView(matchItemView, game, linearLayout, index);
+    }
+
+    private void addFewestTurnsView(final GameData game, LinearLayout linearLayout, final int index) {
+        MatchItemView matchItemView = new MatchItemView(getContext());
+        matchItemView.setStatToShow(MatchItemView.Stat.TURNS);
+        addGameView(matchItemView, game, linearLayout, index);
+    }
+
+    private void addGameView(MatchItemView matchItemView, final GameData game, LinearLayout linearLayout, final int index) {
         matchItemView.setVisibility(View.VISIBLE);
         matchItemView.setGame(game, profileName);
         matchItemView.setOnClickListener(new View.OnClickListener() {

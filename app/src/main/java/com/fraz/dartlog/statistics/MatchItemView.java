@@ -15,15 +15,30 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 
+import static com.fraz.dartlog.statistics.MatchItemView.Stat.CHECKOUT;
+import static com.fraz.dartlog.statistics.MatchItemView.Stat.NONE;
+import static com.fraz.dartlog.statistics.MatchItemView.Stat.TURNS;
+
 public class MatchItemView extends FrameLayout {
+
+    enum Stat {
+        NONE,
+        TURNS,
+        CHECKOUT
+    }
 
     private TextView dateView;
     private TextView gameType;
-    private TextView result;
     private TextView players;
+    private Stat statToShow;
+
     private GameData game;
     private String playerName;
     private Context context;
+    private TextView stat_1_label;
+    private TextView stat_1;
+    private TextView stat_2_label;
+    private TextView stat_2;
 
     public MatchItemView(Context context) {
         super(context);
@@ -35,13 +50,8 @@ public class MatchItemView extends FrameLayout {
         initView(context);
     }
 
-    private void initView(Context context) {
-        this.context = context;
-        LayoutInflater.from(context).inflate(R.layout.match_history_item, this);
-        gameType = (TextView) findViewById(R.id.match_history_game_type);
-        players = (TextView) findViewById(R.id.match_history_players);
-        result = (TextView) findViewById(R.id.match_history_result);
-        dateView = (TextView) findViewById(R.id.match_history_date);
+    public void setStatToShow(Stat stat) {
+        statToShow = stat;
     }
 
     public void setGame(GameData game, String playerName) {
@@ -50,10 +60,25 @@ public class MatchItemView extends FrameLayout {
         initGame();
     }
 
+    private void initView(Context context) {
+        this.context = context;
+        LayoutInflater.from(context).inflate(R.layout.match_history_item, this);
+        gameType = (TextView) findViewById(R.id.match_history_game_type);
+        players = (TextView) findViewById(R.id.match_history_players);
+        stat_1_label = (TextView) findViewById(R.id.match_item_stat_1_label);
+        stat_1 = (TextView) findViewById(R.id.match_item_stat_1);
+        stat_2_label = (TextView) findViewById(R.id.match_item_stat_2_label);
+        stat_2 = (TextView) findViewById(R.id.match_item_stat_2);
+        dateView = (TextView) findViewById(R.id.match_history_date);
+
+        statToShow = TURNS;
+    }
+
     private void initGame() {
         gameType.setText(game.getDetailedGameType().toUpperCase());
         initPlayers();
-        initResult();
+        initFirstStatView();
+        initSecondStatView();
         initDate();
         invalidate();
     }
@@ -69,14 +94,33 @@ public class MatchItemView extends FrameLayout {
         players.setText(text);
     }
 
-    private void initResult() {
+    private void initSecondStatView() {
+        stat_2_label.setText(R.string.result);
         if (game.getPlayer(playerName).equals(game.getWinner())) {
-            result.setText(R.string.win);
-            result.setTextColor(context.getResources().getColor(R.color.green_win));
+            stat_2.setText(R.string.win);
+            stat_2.setTextColor(context.getResources().getColor(R.color.green_win));
         }
         else {
-            result.setText(R.string.loss);
-            result.setTextColor(context.getResources().getColor(R.color.red_loss));
+            stat_2.setText(R.string.loss);
+            stat_2.setTextColor(context.getResources().getColor(R.color.red_loss));
+        }
+    }
+
+    private void initFirstStatView() {
+        if (statToShow == NONE) {
+            stat_1_label.setVisibility(GONE);
+            stat_1.setVisibility(GONE);
+        } else {
+            stat_1_label.setVisibility(VISIBLE);
+            stat_1.setVisibility(VISIBLE);
+
+            if(statToShow == TURNS) {
+                stat_1_label.setText(R.string.turns);
+                stat_1.setText(String.format(Locale.getDefault(), "%d", game.getTurns()));
+            } else if(statToShow == CHECKOUT) {
+                stat_1_label.setText(R.string.checkout);
+                stat_1.setText(String.format(Locale.getDefault(), "%d", game.getCheckout()));
+            }
         }
     }
 

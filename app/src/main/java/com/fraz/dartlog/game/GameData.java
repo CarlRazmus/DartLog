@@ -68,4 +68,8 @@ public class GameData implements Serializable {
     public int getTurns() {
         return getWinner().getTotalScoreHistory().size();
     }
+
+    public int getCheckout() {
+        return getWinner().getScoreHistory().getLast();
+    }
 }

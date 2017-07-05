@@ -34,16 +34,46 @@
             android:gravity="center"
             tools:text="X01"/>
 
-        <TextView
-            android:id="@+id/match_history_result"
-            android:layout_width="match_parent"
+        <GridLayout
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:gravity="center"
-            android:textStyle="bold"
-            android:layout_alignBottom="@id/match_history_players"
-            android:layout_alignTop="@id/match_history_game_type"
-            tools:textColor="@color/accent"
-            tools:text="WIN"/>
+            android:layout_centerInParent="true"
+            android:columnCount="2"
+            android:rowCount="2">
+
+            <TextView
+                android:id="@+id/match_item_stat_1_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/main_grey"
+                tools:text="Turns: "/>
+
+            <TextView
+                android:id="@+id/match_item_stat_1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="4dp"
+                android:textStyle="bold"
+                android:textColor="@color/main_grey"
+                tools:text="12"/>
+
+            <TextView
+                android:id="@+id/match_item_stat_2_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/main_grey"
+                tools:text="Result: "/>
+
+            <TextView
+                android:id="@+id/match_item_stat_2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textStyle="bold"
+                android:layout_marginStart="4dp"
+                tools:textColor="@color/accent"
+                tools:text="Win"/>
+
+        </GridLayout>
 
         <TextView
             android:id="@+id/match_history_date"

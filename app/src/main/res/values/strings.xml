@@ -50,8 +50,8 @@
     <string name="x01">X01</string>
     <string name="field_to_hit">Field</string>
     <string name="result_win">Winner!</string>
-    <string name="win">WIN</string>
-    <string name="loss">LOSS</string>
+    <string name="win">Win</string>
+    <string name="loss">Loss</string>
     <string name="players_colon">Players:</string>
     <string name="next">next</string>
     <string name="fewest_turns">Fewest turns</string>
@@ -79,4 +79,8 @@
     <string name="games">Games</string>
     <string name="add_profile">Add profile</string>
     <string name="match_table_3_dart_score_title">Scores per turn</string>
+    <string name="result">Result:</string>
+    <string name="turns">Turns:</string>
+    <string name="checkout">Checkout:</string>
+    <string name="avg">Average:</string>
 </resources>
