@@ -15,6 +15,7 @@ import java.util.Calendar;
  */
 
 public class DbFileHandler {
+
     /* These numbers are randomly selected */
     public static final int WRITE_REQUEST_CODE = 43;
     public static final int OPEN_REQUEST_CODE = 44;
@@ -29,38 +30,35 @@ public class DbFileHandler {
     public File getDbFile() {
         File dbDir = new File("/data/data/com.fraz.dartlog/databases");
         File dbFile = new File(dbDir, "DartLog.db");
+
         return dbFile;
+    }
+
+    private String getDateAsString() {
+        Calendar c = Calendar.getInstance();
+        String date = String.valueOf(c.get(Calendar.YEAR));
+        if(c.get(Calendar.MONTH) < 10)
+            date.concat("0");
+        date.concat(String.valueOf(c.get(Calendar.MONTH)));
+        if(c.get(Calendar.DAY_OF_MONTH) < 10)
+            date.concat("0");
+        date.concat(String.valueOf(c.get(Calendar.DAY_OF_MONTH)));
+
+        return date;
     }
 
     public void createCopyOfLocalDb() {
         Intent intent = new Intent(Intent.ACTION_CREATE_DOCUMENT);
-
-        // Filter to only show results that can be "opened", such as
-        // a file (as opposed to a list of contacts or timezones).
         intent.addCategory(Intent.CATEGORY_OPENABLE);
-
-        Calendar c = Calendar.getInstance();
-        int year = c.get(Calendar.YEAR);
-        int month = c.get(Calendar.MONTH);
-        int day = c.get(Calendar.DAY_OF_MONTH);
-
-        String date = String.valueOf(year + "_"  + month + "_" + day );
-
-        // Create a file with the requested MIME type.
         intent.setType("application/x-sqlite3");
-        intent.putExtra(Intent.EXTRA_TITLE, "db_copy_" + date + ".db");
+        intent.putExtra(Intent.EXTRA_TITLE, "db_copy_" + getDateAsString() + ".db");
 
         parent.startActivityForResult(intent, WRITE_REQUEST_CODE);
     }
 
     public void selectExternalDbFile() {
         Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
-
-        // Filter to only show results that can be "opened", such as
-        // a file (as opposed to a list of contacts or timezones).
         intent.addCategory(Intent.CATEGORY_OPENABLE);
-
-        // Create a file with the requested MIME type.
         intent.setType("application/x-sqlite3");
 
         parent.startActivityForResult(intent, OPEN_REQUEST_CODE);
@@ -77,7 +75,6 @@ public class DbFileHandler {
     private void copyDataFromFileToDb(Uri externalDbUri){
         File appDb = getDbFile();
         Uri appDbUri = Uri.fromFile(appDb);
-        File externalDb = new File(externalDbUri.getPath());
 
         if (appDb.exists()) {
             try {
@@ -93,13 +90,7 @@ public class DbFileHandler {
                 inStream.close();
                 outStream.close();
             } catch (Exception e) {
-                Log.d("DbFileHandler Error", "Shit happened!: " + e.getMessage());
-
             }
-        }
-        else
-        {
-            Log.d("DbFileHandler", "appDb did not exist");
         }
     }
 
@@ -112,7 +103,7 @@ public class DbFileHandler {
                 InputStream inStream = parent.getContentResolver().openInputStream(dbUri);
                 OutputStream outStream = parent.getContentResolver().openOutputStream(emptyFileUri);
 
-                byte[] buffer = new byte[1024]; // Adjust if you want
+                byte[] buffer = new byte[1024];
                 int bytesRead;
                 while ((bytesRead = inStream.read(buffer)) != -1)
                 {

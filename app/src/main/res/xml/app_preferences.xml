@@ -2,13 +2,12 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
     <Preference
         android:key="@string/export_database"
-        android:title="Export Database"
-        android:summary="Export data to external memory.">
+        android:title="Export Database">
     </Preference>
 
     <Preference
         android:key="@string/import_database"
         android:title="Import Database"
-        android:summary="Import from external memory.\nWARNING! this will overwrite current database.">
+        android:summary="WARNING! this will overwrite current database.">
     </Preference>
 </PreferenceScreen>

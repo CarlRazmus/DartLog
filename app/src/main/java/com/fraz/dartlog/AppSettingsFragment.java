@@ -1,6 +1,5 @@
 package com.fraz.dartlog;
 
-
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -19,7 +18,6 @@ public class AppSettingsFragment extends PreferenceFragment {
         parent = getActivity();
         dbFileHandler = new DbFileHandler(parent);
 
-        // Load the preferences from an XML resource
         addPreferencesFromResource(R.xml.app_preferences);
 
         Preference export_db_preference = findPreference(getString(R.string.export_database));

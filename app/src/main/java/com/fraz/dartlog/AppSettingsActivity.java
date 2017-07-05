@@ -3,7 +3,6 @@ package com.fraz.dartlog;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 
 public class AppSettingsActivity extends Activity {
 
@@ -14,8 +13,6 @@ public class AppSettingsActivity extends Activity {
         super.onCreate(savedInstanceState);
 
         fragment = new AppSettingsFragment();
-
-        // Display the fragment as the main content.
         getFragmentManager().beginTransaction()
                 .replace(android.R.id.content, fragment)
                 .commit();
@@ -24,18 +21,12 @@ public class AppSettingsActivity extends Activity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if(resultCode == RESULT_OK) {
 
-            if (requestCode == DbFileHandler.WRITE_REQUEST_CODE) {
-                Log.d("dbFileHandler", "URI = " + data.getData());
-                Log.d("dbFileHandler", "getPath = " + data.getData().getPath());
+        if(resultCode == RESULT_OK) {
+            if (requestCode == DbFileHandler.WRITE_REQUEST_CODE)
                 fragment.onSuccessfulCreateDb(data);
-            }
-            if (requestCode == DbFileHandler.OPEN_REQUEST_CODE) {
-                Log.d("dbFileHandler", "URI = " + data.getData());
-                Log.d("dbFileHandler", "getPath = " + data.getData().getPath());
+            if (requestCode == DbFileHandler.OPEN_REQUEST_CODE)
                 fragment.onSuccessfulOpenDb(data);
-            }
         }
     }
 }
