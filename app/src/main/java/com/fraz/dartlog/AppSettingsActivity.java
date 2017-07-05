@@ -1,20 +1,19 @@
 package com.fraz.dartlog;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 
-public class AppSettingsActivity extends Activity {
+public class AppSettingsActivity extends MenuBackground {
 
     AppSettingsFragment fragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+        super.onCreate(savedInstanceState, this, R.layout.activity_app_settings);
 
         fragment = new AppSettingsFragment();
         getFragmentManager().beginTransaction()
-                .replace(android.R.id.content, fragment)
+                .replace(R.id.app_preferences, fragment)
                 .commit();
     }
 
