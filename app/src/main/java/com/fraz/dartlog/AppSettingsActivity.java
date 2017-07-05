@@ -24,11 +24,18 @@ public class AppSettingsActivity extends Activity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        if(resultCode == RESULT_OK) {
 
-        if(requestCode == DbFileHandler.WRITE_REQUEST_CODE && resultCode == RESULT_OK) {
-            Log.d("dbFileHandler", "URI = " + data.getData());
-            Log.d("dbFileHandler", "getPath = " + data.getData().getPath());
-            fragment.onSuccessfulCreateDb(data);
+            if (requestCode == DbFileHandler.WRITE_REQUEST_CODE) {
+                Log.d("dbFileHandler", "URI = " + data.getData());
+                Log.d("dbFileHandler", "getPath = " + data.getData().getPath());
+                fragment.onSuccessfulCreateDb(data);
+            }
+            if (requestCode == DbFileHandler.OPEN_REQUEST_CODE) {
+                Log.d("dbFileHandler", "URI = " + data.getData());
+                Log.d("dbFileHandler", "getPath = " + data.getData().getPath());
+                fragment.onSuccessfulOpenDb(data);
+            }
         }
     }
 }
