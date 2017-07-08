@@ -15,6 +15,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 
+import static com.fraz.dartlog.statistics.MatchItemView.Stat.AVG;
 import static com.fraz.dartlog.statistics.MatchItemView.Stat.CHECKOUT;
 import static com.fraz.dartlog.statistics.MatchItemView.Stat.NONE;
 import static com.fraz.dartlog.statistics.MatchItemView.Stat.TURNS;
@@ -25,6 +26,7 @@ public class MatchItemView extends FrameLayout {
         NONE,
         TURNS,
         CHECKOUT,
+        AVG
     }
 
     private TextView dateView;
@@ -116,6 +118,10 @@ public class MatchItemView extends FrameLayout {
             } else if(stat == CHECKOUT) {
                 labelView.setText(R.string.checkout);
                 statView.setText(String.format(Locale.getDefault(), "%d", game.getCheckout()));
+            } else if(stat == AVG) {
+                labelView.setText(R.string.avg);
+                statView.setText(String.format(Locale.getDefault(), "%.1f",
+                        game.getPlayer(playerName).getAvgScore()));
             }
         }
     }

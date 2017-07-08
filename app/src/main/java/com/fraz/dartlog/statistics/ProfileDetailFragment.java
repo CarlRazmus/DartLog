@@ -18,6 +18,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Locale;
 
+import static com.fraz.dartlog.statistics.MatchItemView.Stat.AVG;
 import static com.fraz.dartlog.statistics.MatchItemView.Stat.CHECKOUT;
 import static com.fraz.dartlog.statistics.MatchItemView.Stat.TURNS;
 
@@ -167,7 +168,7 @@ public class ProfileDetailFragment extends Fragment {
 
     private void addFewestTurnsView(final GameData game, LinearLayout linearLayout, final int index) {
         MatchItemView matchItemView = new MatchItemView(getContext());
-        matchItemView.setStatsToShow(TURNS, CHECKOUT);
+        matchItemView.setStatsToShow(TURNS, AVG);
         addGameView(matchItemView, game, linearLayout, index);
     }
 

@@ -11,8 +11,7 @@ import com.fraz.dartlog.game.GameData;
 import java.util.ArrayList;
 import java.util.Collections;
 
-import static com.fraz.dartlog.statistics.MatchItemView.Stat.CHECKOUT;
-import static com.fraz.dartlog.statistics.MatchItemView.Stat.NONE;
+import static com.fraz.dartlog.statistics.MatchItemView.Stat.AVG;
 import static com.fraz.dartlog.statistics.MatchItemView.Stat.TURNS;
 
 public class MatchRecyclerViewAdapter extends RecyclerView.Adapter<MatchRecyclerViewAdapter.ViewHolder> {
@@ -41,9 +40,9 @@ public class MatchRecyclerViewAdapter extends RecyclerView.Adapter<MatchRecycler
         MatchItemView matchItemView = ((MatchItemView) holder.itemView);
 
         if(game.getGameType().equals("x01"))
-            matchItemView.setStatsToShow(TURNS, CHECKOUT);
+            matchItemView.setStatsToShow(TURNS, AVG);
         else
-            matchItemView.setStatsToShow(TURNS, NONE);
+            matchItemView.setStatsToShow(TURNS, AVG);
 
         matchItemView.setGame(game, playerName);
 
