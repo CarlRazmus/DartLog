@@ -5,12 +5,11 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.view.View;
 import android.widget.Button;
-
 import com.fraz.dartlog.game.setup.SetupActivity;
 import com.fraz.dartlog.statistics.ProfileListActivity;
 
-public class MainActivity extends MenuBackground implements View.OnClickListener {
 
+public class MainActivity extends MenuBackground implements View.OnClickListener {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

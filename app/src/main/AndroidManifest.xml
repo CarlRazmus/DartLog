@@ -3,6 +3,7 @@
     package="com.fraz.dartlog">
 
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <application
         android:allowBackup="true"
         android:icon="@mipmap/custom_start_icon"
@@ -51,6 +52,10 @@
             android:label="@string/title_match_activity"
             android:screenOrientation="portrait">
         </activity>
+        <activity
+            android:name=".AppSettingsActivity"
+            android:label="@string/app_settings_activity"
+            android:screenOrientation="portrait">
+        </activity>
     </application>
-
 </manifest>
