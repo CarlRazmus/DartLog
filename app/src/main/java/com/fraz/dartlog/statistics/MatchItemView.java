@@ -24,21 +24,23 @@ public class MatchItemView extends FrameLayout {
     enum Stat {
         NONE,
         TURNS,
-        CHECKOUT
+        CHECKOUT,
     }
 
     private TextView dateView;
     private TextView gameType;
     private TextView players;
-    private Stat statToShow;
+    private Stat stat1ToShow;
+    private Stat stat2ToShow;
 
     private GameData game;
     private String playerName;
     private Context context;
-    private TextView stat_1_label;
-    private TextView stat_1;
-    private TextView stat_2_label;
-    private TextView stat_2;
+    private TextView stat1Label;
+    private TextView stat1;
+    private TextView stat2Label;
+    private TextView stat2;
+    private TextView result;
 
     public MatchItemView(Context context) {
         super(context);
@@ -50,8 +52,11 @@ public class MatchItemView extends FrameLayout {
         initView(context);
     }
 
-    public void setStatToShow(Stat stat) {
-        statToShow = stat;
+    public void setStatsToShow(Stat stat1, Stat stat2) {
+        stat1ToShow = stat1;
+        stat2ToShow = stat2;
+        invalidate();
+        requestLayout();
     }
 
     public void setGame(GameData game, String playerName) {
@@ -65,62 +70,64 @@ public class MatchItemView extends FrameLayout {
         LayoutInflater.from(context).inflate(R.layout.match_history_item, this);
         gameType = (TextView) findViewById(R.id.match_history_game_type);
         players = (TextView) findViewById(R.id.match_history_players);
-        stat_1_label = (TextView) findViewById(R.id.match_item_stat_1_label);
-        stat_1 = (TextView) findViewById(R.id.match_item_stat_1);
-        stat_2_label = (TextView) findViewById(R.id.match_item_stat_2_label);
-        stat_2 = (TextView) findViewById(R.id.match_item_stat_2);
+        stat1Label = (TextView) findViewById(R.id.match_item_stat_1_label);
+        stat1 = (TextView) findViewById(R.id.match_item_stat_1);
+        stat2Label = (TextView) findViewById(R.id.match_item_stat_2_label);
+        stat2 = (TextView) findViewById(R.id.match_item_stat_2);
+        result = (TextView) findViewById(R.id.match_item_result);
         dateView = (TextView) findViewById(R.id.match_history_date);
 
-        statToShow = TURNS;
+        stat1ToShow = TURNS;
+        stat2ToShow = NONE;
     }
 
     private void initGame() {
         gameType.setText(game.getDetailedGameType().toUpperCase());
         initPlayers();
-        initFirstStatView();
-        initSecondStatView();
+        initStatView(stat1Label, stat1, stat1ToShow);
+        initStatView(stat2Label, stat2, stat2ToShow);
+        initResultView();
         initDate();
         invalidate();
+        requestLayout();
     }
-
 
     private void initPlayers() {
         int numberOfPlayers = game.getNumberOfPlayers();
         String text;
         if (numberOfPlayers == 1)
-            text = String.format(Locale.getDefault(), "%d playerName", numberOfPlayers);
+            text = String.format(Locale.getDefault(), "%d player", numberOfPlayers);
         else
             text = String.format(Locale.getDefault(), "%d players", numberOfPlayers);
         players.setText(text);
     }
 
-    private void initSecondStatView() {
-        stat_2_label.setText(R.string.result);
-        if (game.getPlayer(playerName).equals(game.getWinner())) {
-            stat_2.setText(R.string.win);
-            stat_2.setTextColor(context.getResources().getColor(R.color.green_win));
-        }
-        else {
-            stat_2.setText(R.string.loss);
-            stat_2.setTextColor(context.getResources().getColor(R.color.red_loss));
+    private void initStatView(TextView labelView, TextView statView, Stat stat) {
+        if (stat == NONE) {
+            labelView.setVisibility(GONE);
+            statView.setVisibility(GONE);
+        } else {
+            labelView.setVisibility(VISIBLE);
+            statView.setVisibility(VISIBLE);
+
+            if(stat == TURNS) {
+                labelView.setText(R.string.turns);
+                statView.setText(String.format(Locale.getDefault(), "%d", game.getTurns()));
+            } else if(stat == CHECKOUT) {
+                labelView.setText(R.string.checkout);
+                statView.setText(String.format(Locale.getDefault(), "%d", game.getCheckout()));
+            }
         }
     }
 
-    private void initFirstStatView() {
-        if (statToShow == NONE) {
-            stat_1_label.setVisibility(GONE);
-            stat_1.setVisibility(GONE);
-        } else {
-            stat_1_label.setVisibility(VISIBLE);
-            stat_1.setVisibility(VISIBLE);
-
-            if(statToShow == TURNS) {
-                stat_1_label.setText(R.string.turns);
-                stat_1.setText(String.format(Locale.getDefault(), "%d", game.getTurns()));
-            } else if(statToShow == CHECKOUT) {
-                stat_1_label.setText(R.string.checkout);
-                stat_1.setText(String.format(Locale.getDefault(), "%d", game.getCheckout()));
-            }
+    private void initResultView() {
+        if (game.getPlayer(playerName).equals(game.getWinner())) {
+            result.setText(R.string.win);
+            result.setTextColor(context.getResources().getColor(R.color.green_win));
+        }
+        else {
+            result.setText(R.string.loss);
+            result.setTextColor(context.getResources().getColor(R.color.red_loss));
         }
     }
 
@@ -132,7 +139,7 @@ public class MatchItemView extends FrameLayout {
                     DateUtils.SECOND_IN_MILLIS,
                     DateUtils.FORMAT_ABBREV_ALL));
         else
-            dateView.setText(new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).
+            dateView.setText(new SimpleDateFormat("dd MMM yyyy", Locale.getDefault()).
                     format(date));
     }
 }

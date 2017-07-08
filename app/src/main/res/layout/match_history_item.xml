@@ -19,26 +19,51 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/match_history_players"
-            android:textSize="12sp"
-            android:textColor="@color/light_grey"
-            android:layout_below="@+id/match_history_game_type"
-            tools:text="5 players"/>
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@id/match_history_game_type"
+            android:id="@+id/match_history_game_type"
             android:textSize="20sp"
             android:textColor="@color/main_grey"
             android:gravity="center"
             tools:text="X01"/>
 
+        <TextView
+            android:id="@+id/match_item_result"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textStyle="bold"
+            android:textSize="16sp"
+            android:layout_marginStart="20dp"
+            android:layout_gravity="center"
+            tools:textColor="@color/accent"
+            android:layout_centerHorizontal="true"
+            tools:text="Win"/>
+
+        <TextView
+            android:id="@+id/match_history_date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="12sp"
+            android:layout_below="@id/match_history_game_type"
+            android:layout_centerHorizontal="true"
+            android:textStyle="italic"
+            android:gravity="center"
+            tools:text="10 Oct 2017"
+            android:textColor="@color/main_grey" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/match_history_players"
+            android:layout_below="@id/match_history_game_type"
+            android:textSize="12sp"
+            android:textColor="@color/light_grey"
+            tools:text="5 players"/>
+
         <GridLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
+            android:layout_alignParentEnd="true"
             android:columnCount="2"
+            android:layout_centerVertical="true"
             android:rowCount="2">
 
             <TextView
@@ -46,45 +71,44 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@color/main_grey"
-                tools:text="Turns: "/>
+                android:layout_column="0"
+                android:layout_marginBottom="4dp"
+                android:layout_gravity="end"
+                tools:text="Turns:"/>
 
             <TextView
                 android:id="@+id/match_item_stat_1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="4dp"
                 android:textStyle="bold"
                 android:textColor="@color/main_grey"
-                tools:text="12"/>
+                android:layout_column="1"
+                android:layout_gravity="end"
+                android:textAlignment="viewEnd"
+                android:minEms="2"
+                tools:text="2"/>
 
             <TextView
                 android:id="@+id/match_item_stat_2_label"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@color/main_grey"
-                tools:text="Result: "/>
+                android:layout_column="0"
+                android:layout_gravity="end"
+                tools:text="Checkout:"/>
 
             <TextView
                 android:id="@+id/match_item_stat_2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textStyle="bold"
-                android:layout_marginStart="4dp"
-                tools:textColor="@color/accent"
-                tools:text="Win"/>
+                android:textColor="@color/main_grey"
+                android:layout_column="1"
+                android:layout_gravity="end"
+                android:textAlignment="viewEnd"
+                android:minEms="2"
+                tools:text="16"/>
 
         </GridLayout>
-
-        <TextView
-            android:id="@+id/match_history_date"
-            android:layout_width="wrap_content"
-            android:layout_height="0dp"
-            android:textSize="16sp"
-            android:layout_alignParentEnd="true"
-            android:layout_alignBottom="@id/match_history_players"
-            android:layout_alignTop="@id/match_history_game_type"
-            android:gravity="center"
-            android:textColor="@color/main_grey"
-            tools:text="2016-10-24"/>
     </RelativeLayout>
 </FrameLayout>

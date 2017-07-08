@@ -11,6 +11,10 @@ import com.fraz.dartlog.game.GameData;
 import java.util.ArrayList;
 import java.util.Collections;
 
+import static com.fraz.dartlog.statistics.MatchItemView.Stat.CHECKOUT;
+import static com.fraz.dartlog.statistics.MatchItemView.Stat.NONE;
+import static com.fraz.dartlog.statistics.MatchItemView.Stat.TURNS;
+
 public class MatchRecyclerViewAdapter extends RecyclerView.Adapter<MatchRecyclerViewAdapter.ViewHolder> {
 
     private Context context;
@@ -34,7 +38,14 @@ public class MatchRecyclerViewAdapter extends RecyclerView.Adapter<MatchRecycler
     public void onBindViewHolder(final ViewHolder holder, final int position) {
         GameData game = gameData.get(position);
 
-        ((MatchItemView) holder.itemView).setGame(game, playerName);
+        MatchItemView matchItemView = ((MatchItemView) holder.itemView);
+
+        if(game.getGameType().equals("x01"))
+            matchItemView.setStatsToShow(TURNS, CHECKOUT);
+        else
+            matchItemView.setStatsToShow(TURNS, NONE);
+
+        matchItemView.setGame(game, playerName);
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -18,6 +18,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Locale;
 
+import static com.fraz.dartlog.statistics.MatchItemView.Stat.CHECKOUT;
+import static com.fraz.dartlog.statistics.MatchItemView.Stat.TURNS;
+
 /**
  * A fragment representing a single Profile detail screen.
  * This fragment is either contained in a {@link ProfileListActivity}
@@ -158,13 +161,13 @@ public class ProfileDetailFragment extends Fragment {
 
     private void addCheckoutView(final GameData game, LinearLayout linearLayout, final int index) {
         MatchItemView matchItemView = new MatchItemView(getContext());
-        matchItemView.setStatToShow(MatchItemView.Stat.CHECKOUT);
+        matchItemView.setStatsToShow(TURNS, CHECKOUT);
         addGameView(matchItemView, game, linearLayout, index);
     }
 
     private void addFewestTurnsView(final GameData game, LinearLayout linearLayout, final int index) {
         MatchItemView matchItemView = new MatchItemView(getContext());
-        matchItemView.setStatToShow(MatchItemView.Stat.TURNS);
+        matchItemView.setStatsToShow(TURNS, CHECKOUT);
         addGameView(matchItemView, game, linearLayout, index);
     }
 
