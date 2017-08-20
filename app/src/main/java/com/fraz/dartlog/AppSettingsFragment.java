@@ -47,8 +47,12 @@ public class AppSettingsFragment extends PreferenceFragment {
         dbFileHandler.copyDataFromExternalFileToLocalDb(intent.getData());
     }
 
-    public void onUnsuccessfulExternalDbFileVerification(Intent intent) {
+    public void onUnsuccessfulExternalDbCreation(Intent intent){
         /* TODO: Should add missing .db extension or remove the file */
+    }
+
+    public void onUnsuccessfulExternalDbFileVerification(Intent intent) {
+        /* TODO: Should add missing .db extension or remove the file? */
     }
 
 }

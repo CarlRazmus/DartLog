@@ -10,12 +10,17 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.provider.DocumentsContract;
 import android.provider.MediaStore;
+import android.provider.OpenableColumns;
 import android.util.Log;
+import android.webkit.MimeTypeMap;
 
 import java.io.File;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.Calendar;
+
+import static android.content.ContentValues.TAG;
+import static android.webkit.ConsoleMessage.MessageLevel.LOG;
 
 /**
  * Created by CarlR on 17/06/2017.
@@ -72,10 +77,23 @@ public class DbFileHandler {
         parent.startActivityForResult(intent, OPEN_REQUEST_CODE);
     }
 
-    public static boolean isDbExtension(Uri uri){
+    public static boolean isDbExtension(Uri uri, Activity parent){
         String path = uri.getPath();
-        if(path.contains("."))
-            if (dbExtension.equals(path.split(".")[1]))
+
+        String fileName = "";
+        Cursor returnCursor = parent.getContentResolver().query(uri, null, null, null, null);
+        try {
+            int nameIndex = returnCursor.getColumnIndex(OpenableColumns.DISPLAY_NAME);
+            returnCursor.moveToFirst();
+            fileName = returnCursor.getString(nameIndex);
+        }catch (Exception e){
+            Log.d(TAG, "error: ", e);
+            return false;
+        } finally {
+            returnCursor.close();
+        }
+
+        if(fileName.contains(".db"))
                 return true;
         return false;
     }
@@ -162,4 +180,11 @@ public class DbFileHandler {
         }
     }
 
+    private static boolean hasLatestContractVersion(Uri data) {
+        return true;
+    }
+
+    public static boolean verifyImportedDb(Uri data, Activity parent) {
+        return isDbExtension(data, parent) && hasLatestContractVersion(data);
+    }
 }
