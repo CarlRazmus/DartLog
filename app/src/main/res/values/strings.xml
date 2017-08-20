@@ -87,4 +87,6 @@
     <string name="turns">Turns:</string>
     <string name="checkout">Checkout:</string>
     <string name="avg">Average:</string>
+    <string name="dialog_message_database_not_created">The specified name did not contain a \".db\" extension! \n\nDid not create copy of application database. .</string>
+    <string name="dialog_title_database_not_created">Error: Missing Extension.</string>
 </resources>
