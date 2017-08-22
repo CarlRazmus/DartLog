@@ -3,9 +3,9 @@ package com.fraz.dartlog;
 import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
-import android.util.Log;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.Calendar;
@@ -27,7 +27,7 @@ public class DbFileHandler {
         this.parent = parent;
     }
 
-    public File getDbFile() {
+    private File getDbFile() {
         File dbDir = new File("/data/data/com.fraz.dartlog/databases");
         File dbFile = new File(dbDir, "DartLog.db");
 
@@ -65,21 +65,29 @@ public class DbFileHandler {
     }
 
     public void onFileCreated(Uri fileUri) {
-        copyDbDataToNewFile(fileUri);
+        copyLocalDbDataToExternalFile(fileUri);
     }
 
     public void onFileSelected(Uri fileUri){
-        copyDataFromFileToDb(fileUri);
+        copyDataFromExternalFileToLocalDb(fileUri);
     }
 
-    private void copyDataFromFileToDb(Uri externalDbUri){
+    private InputStream getInputStream(Uri uri) throws FileNotFoundException {
+        return parent.getContentResolver().openInputStream(uri);
+    }
+
+    private OutputStream getOutputStream(Uri uri) throws FileNotFoundException {
+        return parent.getContentResolver().openOutputStream(uri);
+    }
+
+    private void copyDataFromExternalFileToLocalDb(Uri externalDbUri){
         File appDb = getDbFile();
         Uri appDbUri = Uri.fromFile(appDb);
 
         if (appDb.exists()) {
             try {
-                InputStream inStream = parent.getContentResolver().openInputStream(externalDbUri);
-                OutputStream outStream = parent.getContentResolver().openOutputStream(appDbUri);
+                InputStream inStream = getInputStream(externalDbUri);
+                OutputStream outStream = getOutputStream(appDbUri);
 
                 byte[] buffer = new byte[1024];
                 int bytesRead;
@@ -94,14 +102,14 @@ public class DbFileHandler {
         }
     }
 
-    private void copyDbDataToNewFile(Uri emptyFileUri) {
+    private void copyLocalDbDataToExternalFile(Uri emptyFileUri) {
         File db = getDbFile();
         Uri dbUri = Uri.fromFile(db);
 
         if (db.exists()) {
             try {
-                InputStream inStream = parent.getContentResolver().openInputStream(dbUri);
-                OutputStream outStream = parent.getContentResolver().openOutputStream(emptyFileUri);
+                InputStream inStream = getInputStream(dbUri);
+                OutputStream outStream = getOutputStream(emptyFileUri);
 
                 byte[] buffer = new byte[1024];
                 int bytesRead;
