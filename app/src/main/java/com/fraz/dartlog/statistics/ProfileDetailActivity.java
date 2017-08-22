@@ -7,6 +7,7 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
 import android.view.MenuItem;
 
 import com.fraz.dartlog.MenuBackground;
@@ -27,6 +28,12 @@ public class ProfileDetailActivity extends MenuBackground {
         ViewPager viewPager = (ViewPager) findViewById(R.id.profile_detail_view_pager);
         viewPager.setAdapter(new ProfileDetailFragmentPagerAdapter(getSupportFragmentManager(),
                 getIntent().getStringExtra(ProfileDetailFragment.ARG_ITEM_NAME)));
+    }    @Override
+
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_profile, menu);
+        return true;
     }
 
     @Override
