@@ -2,11 +2,11 @@ package com.fraz.dartlog.statistics;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.fraz.dartlog.R;
@@ -15,7 +15,7 @@ import com.fraz.dartlog.game.GameData;
 import com.fraz.dartlog.game.PlayerData;
 
 import java.util.ArrayList;
-import java.util.Collections;
+import java.util.HashMap;
 import java.util.Locale;
 
 /**
@@ -66,10 +66,17 @@ public class ProfileDetailFragment extends Fragment {
             toolbar.setTitle(profileName);
         }
 
-        TextView summaryHeader =
-                (TextView) rootView.findViewById(R.id.profile_detail_summary_label);
-        summaryHeader.setText(R.string.summary);
 
+        LinearLayout linearLayout =
+                (LinearLayout) rootView.findViewById(R.id.profile_detail_linear_layout);
+
+        initSummary(rootView);
+        initFewestTurnsGames(linearLayout);
+        initHighestOutGame(linearLayout);
+        return rootView;
+    }
+
+    private void initSummary(View rootView) {
         int playerWins = 0;
         for(GameData game : playerGameData)
         {
@@ -84,135 +91,94 @@ public class ProfileDetailFragment extends Fragment {
         ((TextView) rootView.findViewById(R.id.profile_detail_games_won))
                 .setText(String.format(Locale.getDefault(), "%d", playerWins));
 
-
-        RecyclerView recyclerView =
-                (RecyclerView) rootView.findViewById(R.id.recent_games_list);
-        assert recyclerView != null;
-        RecentGamesRecyclerViewAdapter recyclerViewAdapter =
-                new ProfileDetailFragment.RecentGamesRecyclerViewAdapter(playerGameData,
-                        getBestGame(playerGameData));
-        recyclerView.setAdapter(recyclerViewAdapter);
-
-        return rootView;
     }
 
-    private GameData getBestGame(ArrayList<GameData> playerGameData) {
-        if (playerGameData.isEmpty())
-            return null;
+    private void initFewestTurnsGames(LinearLayout linearLayout) {
+        TextView fewestTurnsHeader =
+                (TextView) linearLayout.findViewById(R.id.profile_detail_fewest_turns_label);
+        int index = linearLayout.indexOfChild(fewestTurnsHeader) + 1;
+        fewestTurnsHeader.setText(R.string.fewest_turns);
+        final HashMap<String, GameData> fewestTurnsGames = getFewestTurnsGames(playerGameData);
+        for (GameData gameData : fewestTurnsGames.values()) {
+            addFewestTurnsView(gameData, linearLayout, index);
+        }
+    }
 
-        GameData currentBestGame = null;
-        int scores = Integer.MAX_VALUE;
-        for (GameData gameData : playerGameData) {
-            if(gameData.getGameType().equals("x01"))
-                if (gameData.getWinner().getPlayerName().equals(profileName) &&
-                    gameData.getPlayer(profileName).getScoreHistory().size() < scores) {
-                        currentBestGame = gameData;
+    private void initHighestOutGame(LinearLayout linearLayout) {
+        TextView highestOutHeader =
+                (TextView) linearLayout.findViewById(R.id.profile_detail_highest_out_label);
+        int index = linearLayout.indexOfChild(highestOutHeader) + 1;
+        highestOutHeader.setText(R.string.highest_out);
+        final GameData highestOutGame = getHighestOut(playerGameData);
+        if (highestOutGame != null)
+            addCheckoutView(highestOutGame, linearLayout, index);
+    }
+
+    private HashMap<String, GameData> getFewestTurnsGames(ArrayList<GameData> playerGameData) {
+        HashMap<String, Integer> fewestTurns = new HashMap<>();
+        HashMap<String, GameData> fewestTurnsGames = new HashMap<>();
+        for (GameData game : playerGameData) {
+            if(game.getGameType().equals("x01") &&
+               game.getWinner().getPlayerName().equals(profileName))
+            {
+                String detailedGameType = game.getDetailedGameType();
+                int turns = game.getTurns();
+                if (fewestTurnsGames.containsKey(detailedGameType))
+                {
+                    if (turns < fewestTurns.get(detailedGameType)) {
+                        fewestTurnsGames.put(detailedGameType, game);
+                        fewestTurns.put(detailedGameType, turns);
+                    }
+                } else {
+                    fewestTurnsGames.put(detailedGameType, game);
+                    fewestTurns.put(detailedGameType, turns);
                 }
+            }
         }
-        return currentBestGame;
+        return fewestTurnsGames;
     }
 
-    public class RecentGamesRecyclerViewAdapter
-            extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
-
-        private static final int NUMBER_OF_GAMES = 5;
-        private static final int TYPE_HEADER = 0;
-        private static final int TYPE_ITEM = 1;
-        private final ArrayList<GameData> gameData;
-        private GameData bestGame;
-
-        RecentGamesRecyclerViewAdapter(ArrayList<GameData> gameData, GameData bestGame) {
-            this.gameData = gameData;
-            this.bestGame = bestGame;
-            Collections.reverse(this.gameData);
-        }
-
-        @Override
-        public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            View view;
-            if (viewType == TYPE_HEADER) {
-                view = LayoutInflater.from(parent.getContext())
-                        .inflate(R.layout.match_statistics_header, parent, false);
-                return new HeaderViewHolder(view);
-            } else {
-                view = new MatchTableView(getContext());
-                return new GameViewHolder(view);
+    private GameData getHighestOut(ArrayList<GameData> playerGameData) {
+        int highestOut = Integer.MIN_VALUE;
+        GameData highestOutGame = null;
+        for (GameData game : playerGameData) {
+            if(game.getGameType().equals("x01") &&
+                    game.getWinner().getPlayerName().equals(profileName))
+            {
+                int out = game.getWinner().getScoreHistory().getLast();
+                if (out > highestOut)
+                {
+                    highestOutGame = game;
+                    highestOut = out;
+                }
             }
         }
+        return highestOutGame;
+    }
 
-        @Override
-        public void onBindViewHolder(final RecyclerView.ViewHolder holder, int position) {
-            if (holder.getItemViewType() == TYPE_HEADER) {
-                bindHeaderViewHolder((HeaderViewHolder) holder, position);
-            } else {
-                bindGameViewHolder((GameViewHolder) holder, position);
+    private void addCheckoutView(final GameData game, LinearLayout linearLayout, final int index) {
+        MatchItemView matchItemView = new MatchItemView(getContext());
+        matchItemView.setStatToShow(MatchItemView.Stat.CHECKOUT);
+        addGameView(matchItemView, game, linearLayout, index);
+    }
+
+    private void addFewestTurnsView(final GameData game, LinearLayout linearLayout, final int index) {
+        MatchItemView matchItemView = new MatchItemView(getContext());
+        matchItemView.setStatToShow(MatchItemView.Stat.TURNS);
+        addGameView(matchItemView, game, linearLayout, index);
+    }
+
+    private void addGameView(MatchItemView matchItemView, final GameData game, LinearLayout linearLayout, final int index) {
+        matchItemView.setVisibility(View.VISIBLE);
+        matchItemView.setGame(game, profileName);
+        matchItemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                MatchFragment.newInstance(game).show(getFragmentManager(),
+                        "overview_game_" + Integer.toString(index));
             }
-        }
+        });
 
-        private void bindHeaderViewHolder(HeaderViewHolder holder, int position) {
-            if(isBestGameHeader(position))
-                holder.header.setText(R.string.best_game);
-            else
-                holder.header.setText(R.string.recent_games);
-        }
-
-        private void bindGameViewHolder(GameViewHolder holder, int position) {
-            GameData game;
-            if (position == 1)
-                game = bestGame;
-            else if (bestGame == null)
-                game = gameData.get(position - 2);
-            else
-                game = gameData.get(position - 3);
-
-            holder.matchTable.setGame(game);
-        }
-
-        @Override
-        public int getItemCount() {
-            int extraItems = 2;
-            if (bestGame != null)
-                extraItems++;
-            return Math.min(gameData.size(), NUMBER_OF_GAMES) + extraItems;
-        }
-
-        @Override
-        public int getItemViewType(int position) {
-            if (isHeader(position))
-                return TYPE_HEADER;
-
-            return TYPE_ITEM;
-        }
-
-        private boolean isHeader(int position) {
-            return isBestGameHeader(position) || isRecentGameHeader(position);
-        }
-
-        private boolean isRecentGameHeader(int position) {
-            if (bestGame != null)
-                return position == 2;
-            else
-                return position == 1;
-        }
-
-        private boolean isBestGameHeader(int position) {
-            return position == 0;
-        }
-
-        class HeaderViewHolder extends RecyclerView.ViewHolder {
-            TextView header;
-            HeaderViewHolder(View view) {
-                super(view);
-                header = (TextView) view.findViewById(R.id.player_match_statistics_header);
-            }
-        }
-
-        class GameViewHolder extends RecyclerView.ViewHolder {
-            MatchTableView matchTable;
-            GameViewHolder(View view) {
-                super(view);
-                matchTable = (MatchTableView) view;
-            }
-        }
+        linearLayout.addView(matchItemView, index);
     }
 }

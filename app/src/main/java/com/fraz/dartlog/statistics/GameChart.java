@@ -5,8 +5,8 @@ import android.content.res.ColorStateList;
 import android.content.res.TypedArray;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
-import android.view.View;
-import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.GridLayout;
 import android.widget.TextView;
 
@@ -21,7 +21,6 @@ import java.util.ArrayList;
 public abstract class GameChart extends GridLayout {
 
     private GameData gameData;
-    private int showIdx = -1;
     private TextView titleView;
 
     public GameChart(Context context, int layoutId) {
@@ -60,17 +59,17 @@ public abstract class GameChart extends GridLayout {
 
     private void addPlayerButton(ChartView chartView, GridLayout grid, int playerIdx,
                                  String playerName, int color){
-        Button button = (Button) LayoutInflater.from(getContext())
+        CheckBox checkBox = (CheckBox) LayoutInflater.from(getContext())
                 .inflate(R.layout.chart_legend_label, grid, false);
-        GridLayout.LayoutParams layoutParams = (LayoutParams) button.getLayoutParams();
+        GridLayout.LayoutParams layoutParams = (LayoutParams) checkBox.getLayoutParams();
         layoutParams.columnSpec = GridLayout.spec(playerIdx % 3, 1f);
         layoutParams.rowSpec = GridLayout.spec(playerIdx / 3 + 3);
-        button.setLayoutParams(layoutParams);
-        button.setBackgroundTintList(ColorStateList.valueOf(color));
-        button.setText(playerName);
+        checkBox.setLayoutParams(layoutParams);
+        checkBox.setButtonTintList(ColorStateList.valueOf(color));
+        checkBox.setText(playerName);
         setRowCount(playerIdx / 3 + 3);
-        grid.addView(button);
-        button.setOnClickListener(new LegendLabelOnClickListener(chartView, playerIdx));
+        grid.addView(checkBox);
+        checkBox.setOnCheckedChangeListener(new LegendLabelOnClickListener(chartView, playerIdx));
     }
 
     public void setGame(GameData gameData) {
@@ -80,29 +79,21 @@ public abstract class GameChart extends GridLayout {
         requestLayout();
     }
 
-    private class LegendLabelOnClickListener implements OnClickListener
+    private class LegendLabelOnClickListener implements CompoundButton.OnCheckedChangeListener
     {
         private ChartView chartView;
-        private int legendIdx;
+        private int labelIndex;
 
-        LegendLabelOnClickListener(ChartView chartView, int legendIdx) {
+        LegendLabelOnClickListener(ChartView chartView, int labelIndex) {
 
             this.chartView = chartView;
-            this.legendIdx = legendIdx;
+            this.labelIndex = labelIndex;
         }
 
         @Override
-        public void onClick(View view) {
+        public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
             ArrayList<ChartSet> data = chartView.getData();
-            for (int i = 0; i < data.size(); i++) {
-                ChartSet chartSet = data.get(i);
-                if (showIdx != legendIdx && i != legendIdx) {
-                    chartSet.setVisible(false);
-                } else {
-                    chartSet.setVisible(true);
-                }
-            }
-            showIdx = showIdx == legendIdx ? -1 : legendIdx;
+            data.get(labelIndex).setVisible(b);
             chartView.notifyDataUpdate();
         }
     }

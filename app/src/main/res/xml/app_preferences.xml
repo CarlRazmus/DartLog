@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <Preference
+        android:key="@string/export_database"
+        android:title="Export Database">
+    </Preference>
+
+    <Preference
+        android:key="@string/import_database"
+        android:title="Import Database"
+        android:summary="WARNING! this will overwrite current database.">
+    </Preference>
+</PreferenceScreen>

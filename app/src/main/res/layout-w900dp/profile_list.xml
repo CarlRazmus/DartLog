@@ -27,7 +27,7 @@
         android:layout_marginRight="16dp"
         app:layoutManager="LinearLayoutManager"
         tools:context="com.fraz.dartlog.statistics.ProfileListActivity"
-        tools:listitem="@layout/profile_list_content" />
+        tools:listitem="@layout/profile_list_item" />
 
     <FrameLayout
         android:id="@+id/profile_detail_container"
