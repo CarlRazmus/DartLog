@@ -78,31 +78,24 @@ public class DbFileHandler {
         parent.startActivityForResult(intent, OPEN_REQUEST_CODE);
     }
 
-    public static boolean isDbExtension(Uri uri, Activity parent){
-        String path = uri.getPath();
-
+    public static boolean isDbExtension(Uri uri, Activity parent) {
         String fileName = "";
         Cursor returnCursor = parent.getContentResolver().query(uri, null, null, null, null);
+
         try {
             int nameIndex = returnCursor.getColumnIndex(OpenableColumns.DISPLAY_NAME);
             returnCursor.moveToFirst();
             fileName = returnCursor.getString(nameIndex);
-        }catch (Exception e){
+        } catch (Exception e) {
             Log.d(TAG, "error: ", e);
             return false;
         } finally {
             returnCursor.close();
         }
 
-        if(fileName.contains(".db"))
-                return true;
+        if (fileName.contains(".db"))
+            return true;
         return false;
-
-    public void onFileCreated(Uri fileUri) {
-        copyLocalDbDataToExternalFile(fileUri);
-    }
-    public void onFileSelected(Uri fileUri){
-        copyDataFromExternalFileToLocalDb(fileUri);
     }
 
     private InputStream getInputStream(Uri uri) throws FileNotFoundException {
@@ -113,7 +106,7 @@ public class DbFileHandler {
         return parent.getContentResolver().openOutputStream(uri);
     }
 
-    private void copyDataFromExternalFileToLocalDb(Uri externalDbUri){
+    public void copyDataFromExternalFileToLocalDb(Uri externalDbUri){
         File appDb = getDbFile();
         Uri appDbUri = Uri.fromFile(appDb);
 
@@ -135,14 +128,14 @@ public class DbFileHandler {
         }
     }
 
-    private void copyLocalDbDataToExternalFile(Uri newFileUri) {
+    public void copyLocalDbDataToExternalFile(Uri newFileUri) {
         File db = getDbFile();
         Uri dbUri = Uri.fromFile(db);
 
         if (db.exists()) {
             try {
                 InputStream inStream = getInputStream(dbUri);
-                OutputStream outStream = getOutputStream(emptyFileUri);
+                OutputStream outStream = getOutputStream(newFileUri);
 
                 byte[] buffer = new byte[1024];
                 int bytesRead;
@@ -158,11 +151,7 @@ public class DbFileHandler {
         }
     }
 
-    private static boolean hasLatestContractVersion(Uri data) {
-        return true;
-    }
-
     public static boolean verifyImportedDb(Uri data, Activity parent) {
-        return isDbExtension(data, parent) && hasLatestContractVersion(data);
+        return isDbExtension(data, parent);
     }
 }

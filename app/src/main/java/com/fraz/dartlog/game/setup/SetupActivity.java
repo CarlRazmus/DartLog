@@ -1,6 +1,7 @@
 package com.fraz.dartlog.game.setup;
 
 import android.app.Dialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -8,6 +9,7 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.util.ArraySet;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -21,6 +23,7 @@ import android.widget.ViewAnimator;
 
 import com.fraz.dartlog.MenuBackground;
 import com.fraz.dartlog.R;
+import com.fraz.dartlog.Util;
 import com.fraz.dartlog.db.DartLogDatabaseHelper;
 import com.fraz.dartlog.game.random.RandomGameActivity;
 import com.fraz.dartlog.game.random.RandomSettingsFragment;
@@ -28,6 +31,9 @@ import com.fraz.dartlog.game.x01.X01GameActivity;
 import com.fraz.dartlog.game.x01.X01SettingsFragment;
 
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.LinkedHashSet;
+import java.util.Set;
 
 public class SetupActivity extends MenuBackground
         implements ParticipantsListRecyclerAdapter.OnDragStartListener, View.OnClickListener  {
@@ -40,6 +46,7 @@ public class SetupActivity extends MenuBackground
     private ItemTouchHelper itemTouchHelper;
     private ViewAnimator viewAnimator;
     private String gameType;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,6 +74,7 @@ public class SetupActivity extends MenuBackground
         itemTouchHelper.attachToRecyclerView(participantsRecyclerView);
 
         initializeSelectPlayersDialog();
+        populateAvailablePlayers();
     }
 
     private void InitializeRules() {
@@ -158,17 +166,16 @@ public class SetupActivity extends MenuBackground
         });
     }
 
+
     private void openPlayerSelectionDialog() {
-        ArrayList<String> playerNames = fetchPlayerNamesFromDataBase();
-        availablePlayersListAdapter.setAvailablePlayers(playerNames);
         selectPlayerDialog.show();
     }
 
-    private ArrayList<String> fetchPlayerNamesFromDataBase() {
-        ArrayList<String> list = new ArrayList<>();
-        list.addAll(dbHelper.getPlayers());
-        return list;
+    private void populateAvailablePlayers(){
+        ArrayList<String> playerNames = Util.loadProfileNames(this);
+        availablePlayersListAdapter.setAvailablePlayers(playerNames);
     }
+
 
     private void showMustAddPlayersErrorToast() {
         showToast("A game requires 1 or more players to start!");

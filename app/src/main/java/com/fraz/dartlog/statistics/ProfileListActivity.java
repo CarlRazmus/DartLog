@@ -20,6 +20,7 @@ import android.widget.TextView;
 
 import com.fraz.dartlog.MenuBackground;
 import com.fraz.dartlog.R;
+import com.fraz.dartlog.Util;
 import com.fraz.dartlog.db.DartLogDatabaseHelper;
 
 import java.util.ArrayList;
@@ -86,11 +87,12 @@ public class ProfileListActivity extends MenuBackground {
 
         public ProfilesRecyclerViewAdapter(Context context) {
             this.context = context;
-            updateDataSetFromDatabase();
+            updateProfiles();
         }
 
-        public void updateDataSetFromDatabase() {
-            this.profiles = new DartLogDatabaseHelper(context).getPlayers();
+        public void updateProfiles() {
+            //this.profiles = new DartLogDatabaseHelper(context).getPlayers();
+            this.profiles = Util.loadProfileNames(context);
             notifyDataSetChanged();
         }
 
@@ -163,7 +165,8 @@ public class ProfileListActivity extends MenuBackground {
                             String name = profileNameEditText.getText().toString();
                             DartLogDatabaseHelper dbHelper = new DartLogDatabaseHelper(getContext());
                             dbHelper.addPlayer(name);
-                            getProfilesAdapter().updateDataSetFromDatabase();
+                            Util.addPlayer(name, getContext());
+                            getProfilesAdapter().updateProfiles();
                         }
                     })
                     .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {

@@ -5,11 +5,17 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.view.View;
 import android.widget.Button;
+
+import com.fraz.dartlog.db.DartLogDatabaseHelper;
 import com.fraz.dartlog.game.setup.SetupActivity;
 import com.fraz.dartlog.statistics.ProfileListActivity;
 
+import java.util.ArrayList;
+
 
 public class MainActivity extends MenuBackground implements View.OnClickListener {
+
+    private DartLogDatabaseHelper dbHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -17,6 +23,7 @@ public class MainActivity extends MenuBackground implements View.OnClickListener
         Button playButton = (Button) findViewById(R.id.play_x01_button);
         Button profilesButton = (Button) findViewById(R.id.profiles_button);
         Button randomButton = (Button) findViewById(R.id.play_random_button);
+        dbHelper = new DartLogDatabaseHelper(this);
 
         assert playButton != null;
         assert profilesButton != null;
@@ -24,9 +31,21 @@ public class MainActivity extends MenuBackground implements View.OnClickListener
 
         playButton.setOnClickListener(this);
         profilesButton.setOnClickListener(this);
-
         PreferenceManager.setDefaultValues(this, R.xml.x01_preferences, false);
         randomButton.setOnClickListener(this);
+
+        checkIfSharedPlayersPreferencesExists();
+    }
+
+    private void checkIfSharedPlayersPreferencesExists() {
+        ArrayList<String> playerNames = Util.loadProfileNames(this);
+        /* If no preference file exist -> create an empty list, or get the player names from
+         * the database (if the database contains any names) */
+        if(playerNames == null) {
+            if(dbHelper.getPlayers().size() > 0)
+                Util.saveProfileNames(dbHelper.getPlayers(), this);
+            Util.saveProfileNames(new ArrayList<String>(), this);
+        }
     }
 
     @Override
