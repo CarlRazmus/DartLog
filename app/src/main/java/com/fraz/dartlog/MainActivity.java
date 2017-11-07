@@ -41,10 +41,11 @@ public class MainActivity extends MenuBackground implements View.OnClickListener
         ArrayList<String> playerNames = Util.loadProfileNames(this);
         /* If no preference file exist -> create an empty list, or get the player names from
          * the database (if the database contains any names) */
-        if(playerNames == null) {
+        if(playerNames == null || playerNames.isEmpty()) {
             if(dbHelper.getPlayers().size() > 0)
                 Util.saveProfileNames(dbHelper.getPlayers(), this);
-            Util.saveProfileNames(new ArrayList<String>(), this);
+            else
+                Util.saveProfileNames(new ArrayList<String>(), this);
         }
     }
 
