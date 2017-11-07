@@ -6,6 +6,8 @@ import android.os.Bundle;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
 
+import com.fraz.dartlog.db.DartLogDatabaseHelper;
+
 public class AppSettingsFragment extends PreferenceFragment {
 
     DbFileHandler dbFileHandler;
@@ -45,6 +47,8 @@ public class AppSettingsFragment extends PreferenceFragment {
 
     public void onSuccessfulFindExistingExternalDb(Intent intent) {
         dbFileHandler.copyDataFromExternalFileToLocalDb(intent.getData());
+        DartLogDatabaseHelper dbHelper = new DartLogDatabaseHelper(parent);
+        Util.saveProfileNames(dbHelper.getPlayers(), parent);
     }
 
     public void onUnsuccessfulExternalDbCreation(Intent intent){

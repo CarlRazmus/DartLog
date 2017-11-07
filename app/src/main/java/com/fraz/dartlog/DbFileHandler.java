@@ -32,7 +32,6 @@ public class DbFileHandler {
     /* These numbers are randomly selected */
     public static final int WRITE_REQUEST_CODE = 43;
     public static final int OPEN_REQUEST_CODE = 44;
-    private static final String dbExtension = "db";
 
     Activity parent;
 
