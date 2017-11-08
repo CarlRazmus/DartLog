@@ -11,6 +11,7 @@ import android.support.v4.app.DialogFragment;
 import android.support.v4.app.NavUtils;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -164,9 +165,12 @@ public class ProfileListActivity extends MenuBackground {
                                     (EditText) getDialog().findViewById(R.id.add_player_edit_text);
                             String name = profileNameEditText.getText().toString();
                             DartLogDatabaseHelper dbHelper = new DartLogDatabaseHelper(getContext());
-                            dbHelper.addPlayer(name);
-                            Util.addPlayer(name, getContext());
-                            getProfilesAdapter().updateProfiles();
+                            if(!dbHelper.playerExist(name)) {
+                                if (dbHelper.addPlayer(name) != -1) {
+                                    Util.addPlayer(name, getContext());
+                                    getProfilesAdapter().updateProfiles();
+                                }
+                            }
                         }
                     })
                     .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {

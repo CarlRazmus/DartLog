@@ -38,8 +38,9 @@ public class ProfileDetailActivity extends MenuBackground {
         ViewPager viewPager = (ViewPager) findViewById(R.id.profile_detail_view_pager);
         viewPager.setAdapter(new ProfileDetailFragmentPagerAdapter(getSupportFragmentManager(),
                 playerName));
-    }    @Override
+    }
 
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_profile, menu);

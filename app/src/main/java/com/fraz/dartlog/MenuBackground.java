@@ -183,7 +183,11 @@ public class MenuBackground extends AppCompatActivity {
                                     (EditText) getDialog().findViewById(R.id.add_player_edit_text);
                             String name = profileNameEditText.getText().toString();
                             DartLogDatabaseHelper dbHelper = new DartLogDatabaseHelper(getContext());
-                            dbHelper.addPlayer(name);
+                            if(!dbHelper.playerExist(name)) {
+                                if (dbHelper.addPlayer(name) != -1) {
+                                    Util.addPlayer(name, getContext());
+                                }
+                            }
                         }
                     })
                     .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {

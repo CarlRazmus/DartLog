@@ -444,4 +444,20 @@ public class DartLogDatabaseHelper extends SQLiteOpenHelper {
             addPlayer(name, db);
         }
     }
+
+    public boolean playerExist(String playerName) {
+        SQLiteDatabase db = getReadableDatabase();
+
+        try (Cursor cc = db.query(DartLogContract.PlayerEntry.TABLE_NAME,
+                new String[]{DartLogContract.PlayerEntry._ID},
+                String.format("%s = '%s'", DartLogContract.PlayerEntry.COLUMN_NAME_PLAYER_NAME,
+                        playerName), null, null, null, null)) {
+            if (cc.getCount() == 1)
+                return true;
+        }
+        catch(android.database.sqlite.SQLiteException e){
+            return false;
+        }
+        return false;
+    }
 }
