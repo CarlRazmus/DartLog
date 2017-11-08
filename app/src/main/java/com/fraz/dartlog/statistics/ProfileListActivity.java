@@ -171,6 +171,8 @@ public class ProfileListActivity extends MenuBackground {
                                     getProfilesAdapter().updateProfiles();
                                 }
                             }
+                            else if(!Util.loadProfileNames(getContext()).contains(name))
+                                Util.addPlayer(name, getContext());
                         }
                     })
                     .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {

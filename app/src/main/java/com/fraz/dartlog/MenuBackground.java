@@ -188,6 +188,8 @@ public class MenuBackground extends AppCompatActivity {
                                     Util.addPlayer(name, getContext());
                                 }
                             }
+                            else if(!Util.loadProfileNames(getContext()).contains(name))
+                                Util.addPlayer(name, getContext());
                         }
                     })
                     .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
