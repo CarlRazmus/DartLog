@@ -75,6 +75,7 @@ public class ProfileDetailActivity extends MenuBackground {
 
     private void startUpdatedProfileListActivity() {
         Intent intent = new Intent(this, ProfileListActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(intent);
     }
 }
