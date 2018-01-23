@@ -74,7 +74,6 @@ public class SetupActivity extends MenuBackground
         itemTouchHelper.attachToRecyclerView(participantsRecyclerView);
 
         initializeSelectPlayersDialog();
-        populateAvailablePlayers();
     }
 
     private void InitializeRules() {
@@ -145,10 +144,10 @@ public class SetupActivity extends MenuBackground
         selectPlayerDialog.setOnShowListener(new DialogInterface.OnShowListener() {
             @Override
             public void onShow(DialogInterface dialog) {
+                populateAvailablePlayers();
                 availablePlayersListAdapter.setSelectedPlayers(participantNames);
             }
         });
-
 
         final RecyclerView availablePlayersRecyclerView = (RecyclerView) selectPlayerDialog.findViewById(R.id.setup_dialog_available_players);
         assert availablePlayersRecyclerView != null;
