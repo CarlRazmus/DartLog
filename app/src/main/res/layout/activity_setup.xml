@@ -57,7 +57,7 @@
                     android:textSize="15sp"
                     android:layout_margin="@dimen/activity_horizontal_margin"
                     android:textColor="@android:color/white"
-                    android:text="@string/players_colon"/>
+                    android:text="@string/setup_play_order"/>
 
                 <android.support.v7.widget.RecyclerView
                     android:id="@+id/participants_recycler_view"
