@@ -22,6 +22,8 @@ public class MatchHistoryFragment extends Fragment {
     private String profileName;
     private ArrayList<GameData> playerGameData;
 
+    private long lastLoadedMatchId = -1;
+
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
      * fragment (e.g. upon screen orientation changes).
@@ -36,7 +38,8 @@ public class MatchHistoryFragment extends Fragment {
         if (getArguments().containsKey(ARG_ITEM_NAME)) {
             profileName = getArguments().getString(ARG_ITEM_NAME);
             DartLogDatabaseHelper databaseHelper = new DartLogDatabaseHelper(getActivity());
-            playerGameData = databaseHelper.getPlayerMatchData(profileName);
+            playerGameData = databaseHelper.getPlayerMatchData(profileName, lastLoadedMatchId, 10);
+            lastLoadedMatchId = databaseHelper.getLastLoadedMatchId();
         }
     }
 

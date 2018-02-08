@@ -27,7 +27,7 @@ public class MatchRecyclerViewAdapter extends RecyclerView.Adapter<MatchRecycler
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         MatchItemView view = new MatchItemView(context);
-        return new ViewHolder(view);
+        return new ViewHolder(view);    
     }
 
     @Override
@@ -42,6 +42,7 @@ public class MatchRecyclerViewAdapter extends RecyclerView.Adapter<MatchRecycler
                 Intent intent = new Intent(context, MatchPagerActivity.class);
                 intent.putExtra(MatchPagerActivity.ARG_ITEM_NAME, playerName);
                 intent.putExtra(MatchPagerActivity.ARG_ITEM_POSITION, holder.getAdapterPosition());
+                intent.putExtra(MatchPagerActivity.ARG_DATA, gameData);
                 context.startActivity(intent);
             }
         });

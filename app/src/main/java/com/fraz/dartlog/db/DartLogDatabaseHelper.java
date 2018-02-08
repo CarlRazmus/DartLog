@@ -134,7 +134,7 @@ public class DartLogDatabaseHelper extends SQLiteOpenHelper {
         try (SQLiteDatabase db = getReadableDatabase()) {
 
             long playerId = getPlayerId(db, playerName);
-            ArrayList<Long> matchIds = getMatchIds(db, playerId);
+            ArrayList<Long> matchIds = getAllMatchIds(db, playerId);
             HashMap<Long, String> gameTypes = new HashMap<>();
             for(long matchId : matchIds)
                 gameTypes.put(matchId, getGameType(db, matchId));
@@ -151,6 +151,42 @@ public class DartLogDatabaseHelper extends SQLiteOpenHelper {
                         gameData.add(getRandomGameData(db, MatchId));
                         break;
                         
+                }
+            }
+        }
+        return gameData;
+    }
+
+    private long lastLoadedMatchId = -1;
+
+    /**
+     * Get specific match data for the player with the given name.
+     *
+     * @param playerName The name of the player.
+     * @return List of match data for the given player.
+     */
+    public ArrayList<GameData> getPlayerMatchData(String playerName, long startMatchId, int amount) {
+        ArrayList<GameData> gameData;
+        try (SQLiteDatabase db = getReadableDatabase()) {
+
+            long playerId = getPlayerId(db, playerName);
+            ArrayList<Long> matchIds = getMatchIds(db, playerId, startMatchId, amount);
+            lastLoadedMatchId = matchIds.get(matchIds.size() - 1);
+            HashMap<Long, String> gameTypes = new HashMap<>();
+            for(long matchId : matchIds)
+                gameTypes.put(matchId, getGameType(db, matchId));
+
+            gameData = new ArrayList<>();
+            for (long MatchId : matchIds) {
+                String gameType = gameTypes.get(MatchId);
+
+                switch (gameType){
+                    case "x01":
+                        gameData.add(getX01GameData(db, MatchId));
+                        break;
+                    case "random":
+                        gameData.add(getRandomGameData(db, MatchId));
+                        break;
                 }
             }
         }
@@ -214,6 +250,11 @@ public class DartLogDatabaseHelper extends SQLiteOpenHelper {
         Calendar date = Calendar.getInstance();
         date.setTimeInMillis(dateInMillis);
         return date;
+    }
+
+
+    public long getLastLoadedMatchId(){
+        return lastLoadedMatchId;
     }
 
     /**
@@ -297,7 +338,7 @@ public class DartLogDatabaseHelper extends SQLiteOpenHelper {
      * @param playerId The id of the player.
      * @return List of match ids.
      */
-    private ArrayList<Long> getMatchIds(SQLiteDatabase db, long playerId) {
+    private ArrayList<Long> getAllMatchIds(SQLiteDatabase db, long playerId) {
         ArrayList<Long> matchIds = new ArrayList<>();
 
         try (Cursor c = db.query(true, DartLogContract.ScoreEntry.TABLE_NAME,
@@ -313,7 +354,31 @@ public class DartLogDatabaseHelper extends SQLiteOpenHelper {
         }
         return matchIds;
     }
+    /**
+     * Get the ids of the specified matches.
+     *
+     * @param db
+     * @param playerId The id of the player.
+     * @param startIndex
+     * @param amount
+     * @return List of match ids.
+     */
+    private ArrayList<Long> getMatchIds(SQLiteDatabase db, long playerId, long startIndex, int amount) {
+        ArrayList<Long> matchIds = new ArrayList<>();
 
+        try (Cursor c = db.query(true, DartLogContract.ScoreEntry.TABLE_NAME,
+                new String[]{DartLogContract.ScoreEntry.COLUMN_NAME_MATCH_ID},
+                String.format(Locale.getDefault(), "%s = '%d' AND %s > '%d'",
+                        DartLogContract.ScoreEntry.COLUMN_NAME_PLAYER_ID, playerId,
+                        DartLogContract.ScoreEntry.COLUMN_NAME_MATCH_ID, startIndex),
+                null,null, null, null, String.valueOf(amount))) {
+            while (c.moveToNext()) {
+                matchIds.add(c.getLong(c.getColumnIndex(
+                        DartLogContract.ScoreEntry.COLUMN_NAME_MATCH_ID)));
+            }
+        }
+        return matchIds;
+    }
     /**
      * Get the game type of a match
      *
