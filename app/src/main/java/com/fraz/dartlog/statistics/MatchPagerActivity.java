@@ -16,22 +16,20 @@ import java.util.Locale;
 public class MatchPagerActivity extends AppCompatActivity {
 
     public static final String ARG_ITEM_POSITION = "ARG_POSITION";
-    public static final String ARG_DATA = "ARG_DATA";
-    private ArrayList<GameData> playerGameData;
     public static final String ARG_ITEM_NAME = "ARG_NAME";
+    public static final String ARG_MATCHES = "ARG_MATCHES";
+    private ArrayList<GameData> playerGameData;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         int position = getIntent().getIntExtra(ARG_ITEM_POSITION, 0);
+        int nrOfMatches = getIntent().getIntExtra(ARG_MATCHES, 0);
 
-        /*String profileName = getIntent().getStringExtra(ARG_ITEM_NAME);
+        String profileName = getIntent().getStringExtra(ARG_ITEM_NAME);
         DartLogDatabaseHelper databaseHelper = new DartLogDatabaseHelper(this);
-        playerGameData = databaseHelper.getPlayerMatchData(profileName);
-*/
-        playerGameData = (ArrayList<GameData>)getIntent().getSerializableExtra(ARG_DATA);
-        //GameData dat = (GameData)getIntent().getSerializableExtra(ARG_DATA);
+        playerGameData = databaseHelper.getPlayerMatchData(profileName, -1, nrOfMatches);
 
         setContentView(R.layout.activity_match_pager);
 

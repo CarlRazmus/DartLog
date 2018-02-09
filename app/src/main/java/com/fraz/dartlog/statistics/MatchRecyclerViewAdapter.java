@@ -42,7 +42,7 @@ public class MatchRecyclerViewAdapter extends RecyclerView.Adapter<MatchRecycler
                 Intent intent = new Intent(context, MatchPagerActivity.class);
                 intent.putExtra(MatchPagerActivity.ARG_ITEM_NAME, playerName);
                 intent.putExtra(MatchPagerActivity.ARG_ITEM_POSITION, holder.getAdapterPosition());
-                intent.putExtra(MatchPagerActivity.ARG_DATA, gameData);
+                intent.putExtra(MatchPagerActivity.ARG_MATCHES, gameData.size());
                 context.startActivity(intent);
             }
         });

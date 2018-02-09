@@ -171,7 +171,9 @@ public class DartLogDatabaseHelper extends SQLiteOpenHelper {
 
             long playerId = getPlayerId(db, playerName);
             ArrayList<Long> matchIds = getMatchIds(db, playerId, startMatchId, amount);
-            lastLoadedMatchId = matchIds.get(matchIds.size() - 1);
+
+            if (matchIds.size() > 0)
+                lastLoadedMatchId = matchIds.get(matchIds.size() - 1);
             HashMap<Long, String> gameTypes = new HashMap<>();
             for(long matchId : matchIds)
                 gameTypes.put(matchId, getGameType(db, matchId));
