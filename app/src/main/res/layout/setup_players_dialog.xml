@@ -16,6 +16,7 @@
         android:layout_centerHorizontal="true"
         android:textSize="20sp"
         android:layout_marginTop="8dp"/>
+
     <Button
         android:id="@+id/done_button"
         android:layout_width="wrap_content"
@@ -32,10 +33,9 @@
      <RelativeLayout
         android:id="@+id/participants_container"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:layout_below="@id/header"
          android:layout_above="@id/done_button"
-         android:background="@color/main_grey"
         android:layout_margin="16dp">
 
 
@@ -43,7 +43,7 @@
         <android.support.v7.widget.RecyclerView
             android:id="@+id/setup_dialog_available_players"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             tools:listitem="@layout/available_player_list_item"/>
     </RelativeLayout>
 

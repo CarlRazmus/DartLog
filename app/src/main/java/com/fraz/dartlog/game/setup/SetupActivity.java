@@ -1,7 +1,6 @@
 package com.fraz.dartlog.game.setup;
 
 import android.app.Dialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -9,8 +8,7 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
-import android.support.v4.util.ArraySet;
-import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -31,9 +29,6 @@ import com.fraz.dartlog.game.x01.X01GameActivity;
 import com.fraz.dartlog.game.x01.X01SettingsFragment;
 
 import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.LinkedHashSet;
-import java.util.Set;
 
 public class SetupActivity extends MenuBackground
         implements ParticipantsListRecyclerAdapter.OnDragStartListener, View.OnClickListener  {
@@ -44,7 +39,6 @@ public class SetupActivity extends MenuBackground
     private DartLogDatabaseHelper dbHelper;
     private Dialog selectPlayerDialog;
     private ItemTouchHelper itemTouchHelper;
-    private ViewAnimator viewAnimator;
     private String gameType;
 
 
@@ -155,6 +149,10 @@ public class SetupActivity extends MenuBackground
         availablePlayersListAdapter = new AvailablePlayersRecyclerAdapter();
         availablePlayersRecyclerView.setAdapter(availablePlayersListAdapter);
         availablePlayersRecyclerView.setLayoutManager(availablePlayersLayoutManager);
+        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(availablePlayersRecyclerView.getContext(),
+                DividerItemDecoration.VERTICAL);
+        dividerItemDecoration.setDrawable(getResources().getDrawable(R.drawable.element_border_light_grey));
+        availablePlayersRecyclerView.addItemDecoration(dividerItemDecoration);
 
         Button button = (Button) selectPlayerDialog.findViewById(R.id.done_button);
         button.setOnClickListener(new View.OnClickListener() {

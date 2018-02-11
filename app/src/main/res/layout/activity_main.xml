@@ -31,38 +31,6 @@
         android:scaleY="3"
         android:alpha=".1"/>
 
-    <LinearLayout
-        android:layout_marginBottom="200dp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_alignParentBottom="true"
-        android:orientation="vertical">
-
-        <Button
-            android:id="@+id/play_x01_button"
-            android:layout_width="300dp"
-            android:layout_height="wrap_content"
-            android:layout_margin="8dp"
-            android:background="@drawable/button_default"
-            android:text="@string/button_play_x01"/>
-
-        <Button
-            android:id="@+id/play_random_button"
-            android:layout_width="300dp"
-            android:layout_height="wrap_content"
-            android:layout_margin="8dp"
-            android:background="@drawable/button_default"
-            android:text="@string/button_play_random"/>
-
-        <Button
-            android:id="@+id/profiles_button"
-            android:layout_width="300dp"
-            android:layout_height="wrap_content"
-            android:layout_margin="8dp"
-            android:background="@drawable/button_default"
-            android:text="@string/button_profiles"/>
-    </LinearLayout>
 
     <LinearLayout
         android:layout_width="wrap_content"
@@ -89,6 +57,44 @@
             android:textColor="@color/primary"
             android:alpha=".80"/>
     </LinearLayout>
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="fill_parent"
+        android:layout_below="@id/logo_group"
+        android:layout_marginTop="50dp"
+        android:layout_centerHorizontal="true"
+        android:layout_alignParentBottom="true"
+        android:orientation="vertical">
+
+        <Button
+            android:id="@+id/play_x01_button"
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            android:background="@drawable/button_default"
+            android:text="@string/button_play_x01"/>
+
+        <Button
+            android:id="@+id/play_random_button"
+            android:layout_below="@id/play_x01_button"
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            android:background="@drawable/button_default"
+            android:text="@string/button_play_random"/>
+
+
+        <Button
+            android:id="@+id/profiles_button"
+            android:layout_below="@id/play_random_button"
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            android:background="@drawable/button_default"
+            android:text="@string/button_profiles"/>
+    </RelativeLayout>
+
 
 </RelativeLayout>
 
