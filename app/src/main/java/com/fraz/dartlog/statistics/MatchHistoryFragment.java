@@ -5,12 +5,9 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.RecyclerView.OnScrollListener;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import com.fraz.dartlog.R;
 import com.fraz.dartlog.db.DartLogDatabaseHelper;
@@ -26,6 +23,7 @@ public class MatchHistoryFragment extends Fragment {
     private ArrayList<GameData> playerGameData;
     private DartLogDatabaseHelper databaseHelper;
     private long lastLoadedMatchId = -1;
+    private boolean allLoaded = false;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -41,7 +39,7 @@ public class MatchHistoryFragment extends Fragment {
         if (getArguments().containsKey(ARG_ITEM_NAME)) {
             profileName = getArguments().getString(ARG_ITEM_NAME);
             databaseHelper = new DartLogDatabaseHelper(getActivity());
-            playerGameData = databaseHelper.getPlayerMatchData(profileName, lastLoadedMatchId, 2);
+            playerGameData = databaseHelper.getPlayerMatchData(profileName, lastLoadedMatchId, 40);
             lastLoadedMatchId = databaseHelper.getLastLoadedMatchId();
         }
     }
@@ -54,24 +52,34 @@ public class MatchHistoryFragment extends Fragment {
         if (view instanceof RecyclerView) {
             Context context = view.getContext();
             RecyclerView recyclerView = (RecyclerView) view;
-            recyclerView.setLayoutManager(new LinearLayoutManager(context));
+            final LinearLayoutManager layoutManager = new LinearLayoutManager(context);
+            recyclerView.setLayoutManager(layoutManager);
             final MatchRecyclerViewAdapter recyclerViewAdapter = new MatchRecyclerViewAdapter(getContext(),
                     playerGameData, profileName);
             recyclerView.setAdapter(recyclerViewAdapter);
 
             recyclerView.setOnScrollListener(new RecyclerView.OnScrollListener() {
                 @Override
-                public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
-                    super.onScrollStateChanged(recyclerView, newState);
-
-                    if (!recyclerView.canScrollVertically(1)) {
-                        int size = playerGameData.size();
-                        ArrayList<GameData> newData = databaseHelper.getPlayerMatchData(profileName, lastLoadedMatchId, 2);
-                        int sizeNewData = newData.size();
+                public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                    if (allLoaded)
+                        return;
+                    int visibleItemCount = layoutManager.getChildCount();
+                    int totalItemCount = layoutManager.getItemCount();
+                    int pastVisibleItems = layoutManager.findFirstVisibleItemPosition();
+                    if (pastVisibleItems + visibleItemCount >= totalItemCount - 10) {
+                        final int size = playerGameData.size();
+                        ArrayList<GameData> newData = databaseHelper.getPlayerMatchData(profileName, lastLoadedMatchId, 40);
+                        final int sizeNewData = newData.size();
+                        if (sizeNewData < 40)
+                            allLoaded = true;
                         playerGameData.addAll(newData);
-                        recyclerViewAdapter.notifyItemRangeInserted(size, sizeNewData);
+
+                        recyclerView.post(new Runnable() {
+                            public void run() {
+                                recyclerViewAdapter.notifyItemRangeInserted(size, sizeNewData);
+                            }
+                        });
                         lastLoadedMatchId = databaseHelper.getLastLoadedMatchId();
-                        Log.d("lastLoadedMatchId", String.valueOf(lastLoadedMatchId));
                     }
                 }
             });
