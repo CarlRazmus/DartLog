@@ -22,8 +22,9 @@ public class MatchHistoryFragment extends Fragment {
     private String profileName;
     private ArrayList<GameData> playerGameData;
     private DartLogDatabaseHelper databaseHelper;
-    private long lastLoadedMatchId = -1;
+    private long lastLoadedMatchId = Long.MAX_VALUE;
     private boolean allLoaded = false;
+    private int AMOUNT_ITEMS_TO_LOAD = 20;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -39,8 +40,9 @@ public class MatchHistoryFragment extends Fragment {
         if (getArguments().containsKey(ARG_ITEM_NAME)) {
             profileName = getArguments().getString(ARG_ITEM_NAME);
             databaseHelper = new DartLogDatabaseHelper(getActivity());
-            playerGameData = databaseHelper.getPlayerMatchData(profileName, lastLoadedMatchId, 40);
+            playerGameData = databaseHelper.getPlayerMatchData(profileName, lastLoadedMatchId, AMOUNT_ITEMS_TO_LOAD);
             lastLoadedMatchId = databaseHelper.getLastLoadedMatchId();
+            //allLoaded = true;
         }
     }
 
@@ -68,9 +70,9 @@ public class MatchHistoryFragment extends Fragment {
                     int pastVisibleItems = layoutManager.findFirstVisibleItemPosition();
                     if (pastVisibleItems + visibleItemCount >= totalItemCount - 10) {
                         final int size = playerGameData.size();
-                        ArrayList<GameData> newData = databaseHelper.getPlayerMatchData(profileName, lastLoadedMatchId, 40);
+                        ArrayList<GameData> newData = databaseHelper.getPlayerMatchData(profileName, lastLoadedMatchId, AMOUNT_ITEMS_TO_LOAD);
                         final int sizeNewData = newData.size();
-                        if (sizeNewData < 40)
+                        if (sizeNewData < AMOUNT_ITEMS_TO_LOAD)
                             allLoaded = true;
                         playerGameData.addAll(newData);
 

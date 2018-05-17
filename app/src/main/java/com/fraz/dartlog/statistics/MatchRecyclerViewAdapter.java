@@ -21,7 +21,6 @@ public class MatchRecyclerViewAdapter extends RecyclerView.Adapter<MatchRecycler
         this.context = context;
         this.gameData = gameData;
         this.playerName = playerName;
-        Collections.reverse(this.gameData);
     }
 
     @Override

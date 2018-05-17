@@ -157,12 +157,13 @@ public class DartLogDatabaseHelper extends SQLiteOpenHelper {
         return gameData;
     }
 
-    private long lastLoadedMatchId = -1;
+    private long lastLoadedMatchId = Long.MAX_VALUE;
 
     /**
-     * Get specific match data for the player with the given name.
      *
      * @param playerName The name of the player.
+     * @param startMatchId The starting match id in the database - OBS! the data is fetched backwards.
+     * @param amount
      * @return List of match data for the given player.
      */
     public ArrayList<GameData> getPlayerMatchData(String playerName, long startMatchId, int amount) {
@@ -370,17 +371,22 @@ public class DartLogDatabaseHelper extends SQLiteOpenHelper {
 
         try (Cursor c = db.query(true, DartLogContract.ScoreEntry.TABLE_NAME,
                 new String[]{DartLogContract.ScoreEntry.COLUMN_NAME_MATCH_ID},
-                String.format(Locale.getDefault(), "%s = '%d' AND %s > '%d'",
+                String.format(Locale.getDefault(), "%s = '%d' AND %s < '%d'",
                         DartLogContract.ScoreEntry.COLUMN_NAME_PLAYER_ID, playerId,
                         DartLogContract.ScoreEntry.COLUMN_NAME_MATCH_ID, startIndex),
-                null,null, null, null, String.valueOf(amount))) {
+                null,null, null,
+                String.format(Locale.getDefault(), "%s DESC",
+                        DartLogContract.ScoreEntry._ID),
+                "0," + String.valueOf(amount))) {
             while (c.moveToNext()) {
                 matchIds.add(c.getLong(c.getColumnIndex(
                         DartLogContract.ScoreEntry.COLUMN_NAME_MATCH_ID)));
             }
         }
+
         return matchIds;
     }
+
     /**
      * Get the game type of a match
      *
@@ -500,11 +506,8 @@ public class DartLogDatabaseHelper extends SQLiteOpenHelper {
 
         playersNames.add("Razmus");
         playersNames.add("Filip");
-        playersNames.add("Jonathan");
-        playersNames.add("Stefan");
         playersNames.add("Fredrik");
-        playersNames.add("Tommy");
-        playersNames.add("Johnny");
+        playersNames.add("Stefan");
         playersNames.add("Maria");
 
         for (String name : playersNames) {
