@@ -17,7 +17,14 @@
 
     <style name="RedButtonAlertDialog" parent="Theme.AppCompat.Dialog.Alert">
         <item name="colorAccent">@color/light_red</item>
-        <item name="android:background">@color/background</item>
+        <item name="android:background">@color/background_transparent</item>
         <item name="android:textColorPrimary">@android:color/white</item>
     </style>
+
+    <style name="GreenButtonAlertDialog" parent="Theme.AppCompat.Dialog.Alert">
+        <item name="colorAccent">@color/accent</item>
+        <item name="android:windowBackground">@color/background_transparent</item>
+        <item name="android:textColorPrimary">@android:color/white</item>
+    </style>
+
 </resources>

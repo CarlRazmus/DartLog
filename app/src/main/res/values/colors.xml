@@ -5,7 +5,7 @@
     <color name="accent_alpha_26">#42AEEA00</color>
 
     <color name="background">#212121</color>
-    <color name="background_transparent">#EF212121</color>
+    <color name="background_transparent">#DF212121</color>
     <color name="background_blue">#263238</color>
 
     <color name="button_background_transparent">#AF424242</color>
@@ -17,6 +17,7 @@
     <color name="light_red">#D03535</color>
     <color name="green_win">#7AB317</color>
     <color name="red_loss">#B90504</color>
+    <color name="red_divider">#570504</color>
 
     <color name="chart_color1">#375E97</color>
     <color name="chart_color2">#CF3721</color>

@@ -4,18 +4,29 @@ import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.DividerItemDecoration;
+import android.support.v4.app.NavUtils;
+import android.support.v4.util.ArraySet;
+import android.support.v7.app.AlertDialog;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.support.v7.widget.helper.ItemTouchHelper;
+import android.util.DisplayMetrics;
 import android.view.Gravity;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ViewAnimator;
 
@@ -27,6 +38,7 @@ import com.fraz.dartlog.game.random.RandomGameActivity;
 import com.fraz.dartlog.game.random.RandomSettingsFragment;
 import com.fraz.dartlog.game.x01.X01GameActivity;
 import com.fraz.dartlog.game.x01.X01SettingsFragment;
+import com.fraz.dartlog.statistics.ProfileListActivity;
 
 import java.util.ArrayList;
 
@@ -40,6 +52,9 @@ public class SetupActivity extends MenuBackground
     private Dialog selectPlayerDialog;
     private ItemTouchHelper itemTouchHelper;
     private String gameType;
+    private String rulesString;
+    private String rulesTitle;
+
 
 
     @Override
@@ -76,11 +91,15 @@ public class SetupActivity extends MenuBackground
                 getFragmentManager().beginTransaction()
                         .replace(R.id.game_preferences, new X01SettingsFragment())
                         .commit();
+                rulesString = getString(R.string.x01_rules);
+                rulesTitle = "X01";
                 break;
             case ("random"):
                 getFragmentManager().beginTransaction()
                         .replace(R.id.game_preferences, new RandomSettingsFragment())
                         .commit();
+                rulesString = "TODO";
+                rulesTitle = "Random";
                 break;
             default:
                 break;
@@ -111,6 +130,13 @@ public class SetupActivity extends MenuBackground
     }
 
     @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_setup, menu);
+        return true;
+    }
+
+    @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.start_game_button:
@@ -121,11 +147,11 @@ public class SetupActivity extends MenuBackground
 
     private void initializeSelectPlayersDialog(){
         final RecyclerView.LayoutManager availablePlayersLayoutManager = new LinearLayoutManager(this);
-        selectPlayerDialog = new Dialog(this);
+        selectPlayerDialog = new Dialog(this, R.style.GreenButtonAlertDialog);
         selectPlayerDialog.setTitle("Select players");
         selectPlayerDialog.setContentView(R.layout.setup_players_dialog);
         selectPlayerDialog.setCancelable(true);
-
+        Util.setDialogSize(this, selectPlayerDialog, 0.7f, 0.9f);
         selectPlayerDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
             @Override
             public void onDismiss(DialogInterface dialog) {
@@ -163,6 +189,33 @@ public class SetupActivity extends MenuBackground
         });
     }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        if (id == android.R.id.home) {
+            NavUtils.navigateUpTo(this, new Intent(this, ProfileListActivity.class));
+            return true;
+        }
+
+        if(id ==  R.id.action_rules)
+            showRulesDialog(rulesTitle, rulesString);
+        return super.onOptionsItemSelected(item);
+    }
+
+    private void showRulesDialog(String title, String rules) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this,
+                R.style.GreenButtonAlertDialog)
+                .setTitle("Rules of " + title)
+                .setMessage(rules)
+                .setIcon(R.drawable.ic_info_outline_white_18dp)
+                .setPositiveButton(android.R.string.yes, null);
+        AlertDialog dialog = builder.show();
+
+        Util.setDialogSize(this, dialog, 0.8f, 0.8f);
+
+        dialog.getButton(Dialog.BUTTON_NEGATIVE).setVisibility(View.INVISIBLE);
+        dialog.getButton(Dialog.BUTTON_NEGATIVE).setActivated(false);
+    }
 
     private void openPlayerSelectionDialog() {
         selectPlayerDialog.show();
@@ -199,8 +252,8 @@ public class SetupActivity extends MenuBackground
             case "random":
                 gameIntent = createRandomGameIntent();
                 break;
-            default:
             case "x01":
+            default:
                 gameIntent = createX01GameIntent();
                 break;
         }

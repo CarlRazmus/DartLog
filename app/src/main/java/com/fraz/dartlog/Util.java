@@ -1,9 +1,13 @@
 package com.fraz.dartlog;
 
+import android.app.Activity;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
+import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.WindowManager;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -77,5 +81,18 @@ public class Util {
         JSONArray jsonArray = new JSONArray(profiles);
         mEdit1.putString(PROFILE_NAMES, jsonArray.toString());
         mEdit1.commit();
+    }
+
+    public static void setDialogSize(Activity activity, Dialog dialog, float width, float height) {
+        DisplayMetrics displayMetrics = new DisplayMetrics();
+        activity.getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+
+        WindowManager.LayoutParams layoutParams = new WindowManager.LayoutParams();
+        layoutParams.copyFrom(dialog.getWindow().getAttributes());
+
+        layoutParams.width = (int) (displayMetrics.widthPixels * width);
+        layoutParams.height = (int) (displayMetrics.heightPixels * height);
+
+        dialog.getWindow().setAttributes(layoutParams);
     }
 }

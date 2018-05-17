@@ -5,7 +5,7 @@
     android:id="@+id/num_pad"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/background_blue"
+    android:background="@color/background"
     tools:showIn="@layout/activity_x01_game">
 
     <TextView
@@ -19,14 +19,14 @@
         android:layout_centerHorizontal="true"
         android:textSize="48sp"
         android:textColor="@color/main_white"
-        android:background="@drawable/numpad_score_field"
+        android:background="@color/background"
         android:visibility="gone"/>
 
     <GridLayout
         android:id="@+id/num_pad_input_group"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/background_blue"
+        android:background="@color/background"
         android:layout_below="@id/score_view"
         android:columnCount="4">
 
@@ -139,7 +139,6 @@
         android:id="@+id/submit_button"
         android:background="@color/accent"
         android:textColor="@color/main_white"
-        android:elevation="8dp"
         android:layout_gravity="fill"
         android:layout_columnWeight="1"
         android:text="@string/no_score" />

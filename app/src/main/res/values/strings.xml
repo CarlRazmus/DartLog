@@ -89,4 +89,16 @@
     <string name="avg">Average:</string>
     <string name="dialog_message_missing_file_extension">The specified filename did not contain a \".db\" extension!</string>
     <string name="dialog_title_missing_file_extension">Error: Missing Extension.</string>
+    <string name="button_rules">Rules</string>
+    <string name="title_info">Info</string>
+    <string name="x01_rules">All players starts with X01 points (e.g 301, 401 or 501 etc).\n\n
+
+        The goal is to have 0 points left. \n\n
+
+        Players take turn to throw 3 arrows, the sum of the 3 arrows is subtracted from the player\'s current score.
+        If the new score is 1 or less than 0 then the player does not receive any points that round.\n\n
+
+        To win (reach 0) the player must hit a double score field with the last arrow, i.e a player cannot go out on an uneven number.
+        You can customize how many rounds a player must try to go out on a double, see the \"Double-out attempts\" setting. When you have reached 50 points or lower, the counter will tick down after each round. When the counter hits 0 you can go out on any score field.
+     </string>
 </resources>
