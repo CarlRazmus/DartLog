@@ -42,7 +42,6 @@ public class MatchHistoryFragment extends Fragment {
             databaseHelper = new DartLogDatabaseHelper(getActivity());
             playerGameData = databaseHelper.getPlayerMatchData(profileName, lastLoadedMatchId, AMOUNT_ITEMS_TO_LOAD);
             lastLoadedMatchId = databaseHelper.getLastLoadedMatchId();
-            //allLoaded = true;
         }
     }
 
