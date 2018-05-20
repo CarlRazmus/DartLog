@@ -20,7 +20,6 @@ public class MatchPagerAdapter extends FragmentStatePagerAdapter {
     public MatchPagerAdapter(FragmentManager fm, ArrayList<GameData> games) {
         super(fm);
         this.games = games;
-        Collections.reverse(this.games);
     }
 
     @Override

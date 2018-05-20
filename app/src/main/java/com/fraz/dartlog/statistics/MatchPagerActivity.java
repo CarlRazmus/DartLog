@@ -29,7 +29,7 @@ public class MatchPagerActivity extends AppCompatActivity {
 
         String profileName = getIntent().getStringExtra(ARG_ITEM_NAME);
         DartLogDatabaseHelper databaseHelper = new DartLogDatabaseHelper(this);
-        playerGameData = databaseHelper.getPlayerMatchData(profileName, -1, nrOfMatches);
+        playerGameData = databaseHelper.getPlayerMatchData(profileName, Long.MAX_VALUE, nrOfMatches);
 
         setContentView(R.layout.activity_match_pager);
 
