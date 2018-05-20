@@ -33,7 +33,7 @@ public class OnBackPressedDialogFragment extends DialogFragment {
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity(),
-                R.style.RedButtonAlertDialog);
+                R.style.GreenButtonAlertDialog);
         builder.setMessage("Do you really want to end game? Current game will be lost.")
                 .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {

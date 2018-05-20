@@ -156,7 +156,7 @@ public class ProfileListActivity extends MenuBackground {
         public Dialog onCreateDialog(Bundle savedInstanceState) {
             // Use the Builder class for convenient dialog construction
             AlertDialog.Builder builder = new AlertDialog.Builder(getActivity(),
-                    R.style.RedButtonAlertDialog);
+                    R.style.GreenButtonAlertDialog);
 
             builder.setTitle("Add new profile").setView(R.layout.dialog_add_player)
                     .setPositiveButton("Add", new DialogInterface.OnClickListener() {
