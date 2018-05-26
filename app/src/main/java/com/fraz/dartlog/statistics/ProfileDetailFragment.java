@@ -28,10 +28,11 @@ public class ProfileDetailFragment extends Fragment {
 
     public static final String ARG_ITEM_NAME = "item_name";
 
-    /**
-     * The content this fragment is presenting.
-     */
-    private ArrayList<GameData> playerGameData;
+    private GameData highestCheckoutGame;
+    private GameData fewestTurns301Game;
+    private GameData fewestTurns501Game;
+    private int gamesWon;
+    private int gamesPlayed;
 
     /**
      * Name of the profile this fragment is presenting.
@@ -51,7 +52,18 @@ public class ProfileDetailFragment extends Fragment {
         if (getArguments().containsKey(ARG_ITEM_NAME)) {
             profileName = getArguments().getString(ARG_ITEM_NAME);
             DartLogDatabaseHelper databaseHelper = new DartLogDatabaseHelper(getActivity());
-            playerGameData = databaseHelper.getPlayerMatchData(profileName);
+            gamesWon = databaseHelper.getNumberOfGamesWon(profileName);
+            gamesPlayed = databaseHelper.getNumberOfGamesPlayed(profileName);
+            highestCheckoutGame = databaseHelper.getHighestCheckoutGame(profileName);
+            fewestTurns301Game = databaseHelper.getFewestTurns301Game(profileName);
+            fewestTurns501Game = databaseHelper.getFewestTurns501Game(profileName);
+            if (highestCheckoutGame == null && fewestTurns301Game  == null && fewestTurns501Game  == null) {
+                databaseHelper.refreshStatistics(profileName);
+                highestCheckoutGame = databaseHelper.getHighestCheckoutGame(profileName);
+                fewestTurns301Game = databaseHelper.getFewestTurns301Game(profileName);
+                fewestTurns501Game = databaseHelper.getFewestTurns501Game(profileName);
+            }
+
         }
     }
 
@@ -77,20 +89,11 @@ public class ProfileDetailFragment extends Fragment {
     }
 
     private void initSummary(View rootView) {
-        int playerWins = 0;
-        for(GameData game : playerGameData)
-        {
-            PlayerData player = game.getPlayer(profileName);
-            if(player == game.getWinner())
-                playerWins++;
-        }
-
         ((TextView) rootView.findViewById(R.id.profile_detail_games_played))
-                .setText(String.format(Locale.getDefault(), "%d", playerGameData.size()));
+                .setText(String.format(Locale.getDefault(), "%d", gamesPlayed));
 
         ((TextView) rootView.findViewById(R.id.profile_detail_games_won))
-                .setText(String.format(Locale.getDefault(), "%d", playerWins));
-
+                .setText(String.format(Locale.getDefault(), "%d", gamesWon));
     }
 
     private void initFewestTurnsGames(LinearLayout linearLayout) {
@@ -98,10 +101,10 @@ public class ProfileDetailFragment extends Fragment {
                 (TextView) linearLayout.findViewById(R.id.profile_detail_fewest_turns_label);
         int index = linearLayout.indexOfChild(fewestTurnsHeader) + 1;
         fewestTurnsHeader.setText(R.string.fewest_turns);
-        final HashMap<String, GameData> fewestTurnsGames = getFewestTurnsGames(playerGameData);
-        for (GameData gameData : fewestTurnsGames.values()) {
-            addFewestTurnsView(gameData, linearLayout, index);
-        }
+        if (fewestTurns301Game != null)
+            addFewestTurnsView(fewestTurns301Game, linearLayout, index);
+        if (fewestTurns501Game != null)
+            addFewestTurnsView(fewestTurns501Game, linearLayout, index);
     }
 
     private void initHighestOutGame(LinearLayout linearLayout) {
@@ -109,51 +112,8 @@ public class ProfileDetailFragment extends Fragment {
                 (TextView) linearLayout.findViewById(R.id.profile_detail_highest_out_label);
         int index = linearLayout.indexOfChild(highestOutHeader) + 1;
         highestOutHeader.setText(R.string.highest_out);
-        final GameData highestOutGame = getHighestOut(playerGameData);
-        if (highestOutGame != null)
-            addCheckoutView(highestOutGame, linearLayout, index);
-    }
-
-    private HashMap<String, GameData> getFewestTurnsGames(ArrayList<GameData> playerGameData) {
-        HashMap<String, Integer> fewestTurns = new HashMap<>();
-        HashMap<String, GameData> fewestTurnsGames = new HashMap<>();
-        for (GameData game : playerGameData) {
-            if(game.getGameType().equals("x01") &&
-               game.getWinner().getPlayerName().equals(profileName))
-            {
-                String detailedGameType = game.getDetailedGameType();
-                int turns = game.getTurns();
-                if (fewestTurnsGames.containsKey(detailedGameType))
-                {
-                    if (turns < fewestTurns.get(detailedGameType)) {
-                        fewestTurnsGames.put(detailedGameType, game);
-                        fewestTurns.put(detailedGameType, turns);
-                    }
-                } else {
-                    fewestTurnsGames.put(detailedGameType, game);
-                    fewestTurns.put(detailedGameType, turns);
-                }
-            }
-        }
-        return fewestTurnsGames;
-    }
-
-    private GameData getHighestOut(ArrayList<GameData> playerGameData) {
-        int highestOut = Integer.MIN_VALUE;
-        GameData highestOutGame = null;
-        for (GameData game : playerGameData) {
-            if(game.getGameType().equals("x01") &&
-                    game.getWinner().getPlayerName().equals(profileName))
-            {
-                int out = game.getWinner().getScoreHistory().getLast();
-                if (out > highestOut)
-                {
-                    highestOutGame = game;
-                    highestOut = out;
-                }
-            }
-        }
-        return highestOutGame;
+        if (highestCheckoutGame != null)
+            addCheckoutView(highestCheckoutGame, linearLayout, index);
     }
 
     private void addCheckoutView(final GameData game, LinearLayout linearLayout, final int index) {
