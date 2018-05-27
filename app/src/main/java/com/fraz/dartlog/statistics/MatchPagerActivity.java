@@ -4,7 +4,6 @@ import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 
 import com.fraz.dartlog.R;
 import com.fraz.dartlog.db.DartLogDatabaseHelper;
@@ -28,7 +27,7 @@ public class MatchPagerActivity extends AppCompatActivity {
         int nrOfMatches = getIntent().getIntExtra(ARG_MATCHES, 0);
 
         String profileName = getIntent().getStringExtra(ARG_ITEM_NAME);
-        DartLogDatabaseHelper databaseHelper = new DartLogDatabaseHelper(this);
+        DartLogDatabaseHelper databaseHelper = DartLogDatabaseHelper.getInstance(this);
         playerGameData = databaseHelper.getPlayerMatchData(profileName, Long.MAX_VALUE, nrOfMatches);
 
         setContentView(R.layout.activity_match_pager);

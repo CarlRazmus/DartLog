@@ -182,7 +182,7 @@ public class MenuBackground extends AppCompatActivity {
                             EditText profileNameEditText =
                                     (EditText) getDialog().findViewById(R.id.add_player_edit_text);
                             String name = profileNameEditText.getText().toString();
-                            DartLogDatabaseHelper dbHelper = new DartLogDatabaseHelper(getContext());
+                            DartLogDatabaseHelper dbHelper = DartLogDatabaseHelper.getInstance(getContext());
                             if(!dbHelper.playerExist(name)) {
                                 if (dbHelper.addPlayer(name) != -1) {
                                     Util.addPlayer(name, getContext());

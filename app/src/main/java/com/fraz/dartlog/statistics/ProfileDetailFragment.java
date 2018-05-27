@@ -12,10 +12,7 @@ import android.widget.TextView;
 import com.fraz.dartlog.R;
 import com.fraz.dartlog.db.DartLogDatabaseHelper;
 import com.fraz.dartlog.game.GameData;
-import com.fraz.dartlog.game.PlayerData;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Locale;
 
 /**
@@ -51,7 +48,7 @@ public class ProfileDetailFragment extends Fragment {
         super.onCreate(savedInstanceState);
         if (getArguments().containsKey(ARG_ITEM_NAME)) {
             profileName = getArguments().getString(ARG_ITEM_NAME);
-            DartLogDatabaseHelper databaseHelper = new DartLogDatabaseHelper(getActivity());
+            DartLogDatabaseHelper databaseHelper = DartLogDatabaseHelper.getInstance(getActivity());
             gamesWon = databaseHelper.getNumberOfGamesWon(profileName);
             gamesPlayed = databaseHelper.getNumberOfGamesPlayed(profileName);
             highestCheckoutGame = databaseHelper.getHighestCheckoutGame(profileName);

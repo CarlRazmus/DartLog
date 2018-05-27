@@ -41,7 +41,7 @@ public class X01GameActivity extends AppCompatActivity implements View.OnClickLi
 
         setSupportActionBar((Toolbar) findViewById(R.id.game_toolbar));
         viewAnimator = (ViewAnimator) findViewById(R.id.game_input);
-        dbHelper = new DartLogDatabaseHelper(this);
+        dbHelper = DartLogDatabaseHelper.getInstance(this);
         roundTextView = (TextView) findViewById(R.id.game_header_round);
 
         game = GetX01GameInstance(savedInstanceState);

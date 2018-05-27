@@ -11,7 +11,6 @@ import android.support.v4.app.DialogFragment;
 import android.support.v4.app.NavUtils;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -92,7 +91,7 @@ public class ProfileListActivity extends MenuBackground {
         }
 
         public void updateProfiles() {
-            //this.profiles = new DartLogDatabaseHelper(context).getPlayers();
+            //this.profiles = DartLogDatabaseHelper.getInstance(context).getPlayers();
             this.profiles = Util.loadProfileNames(context);
             notifyDataSetChanged();
         }
@@ -164,7 +163,7 @@ public class ProfileListActivity extends MenuBackground {
                             EditText profileNameEditText =
                                     (EditText) getDialog().findViewById(R.id.add_player_edit_text);
                             String name = profileNameEditText.getText().toString();
-                            DartLogDatabaseHelper dbHelper = new DartLogDatabaseHelper(getContext());
+                            DartLogDatabaseHelper dbHelper = DartLogDatabaseHelper.getInstance(getContext());
                             if(!dbHelper.playerExist(name)) {
                                 if (dbHelper.addPlayer(name) != -1) {
                                     Util.addPlayer(name, getContext());

@@ -36,6 +36,15 @@ public class DartLogDatabaseHelper extends SQLiteOpenHelper {
     private static final String DATABASE_NAME = "DartLog.db";
     private Context context;
 
+    private static DartLogDatabaseHelper dbHelperInstance = null;
+
+    public static DartLogDatabaseHelper getInstance(Context context) {
+        if (dbHelperInstance == null) {
+           dbHelperInstance = new DartLogDatabaseHelper(context.getApplicationContext());
+        }
+        return dbHelperInstance;
+    }
+
     public DartLogDatabaseHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
         this.context = context;
@@ -215,14 +224,13 @@ public class DartLogDatabaseHelper extends SQLiteOpenHelper {
     public int getNumberOfGamesPlayed(String playerName) {
         try (SQLiteDatabase db = getReadableDatabase()) {
             long playerId = getPlayerId(db, playerName);
-            Cursor c = db.query(true, DartLogContract.ScoreEntry.TABLE_NAME,
+            try (Cursor c = db.query(true, DartLogContract.ScoreEntry.TABLE_NAME,
                     new String[]{DartLogContract.ScoreEntry.COLUMN_NAME_MATCH_ID},
                     String.format(Locale.getDefault(), "%s = '%d'",
                             DartLogContract.ScoreEntry.COLUMN_NAME_PLAYER_ID, playerId),
-                    null, null, null, null, null);
-            int count = c.getCount();
-            c.close();
-            return count;
+                    null, null, null, null, null)) {
+                return c.getCount();
+            }
         }
     }
 
@@ -236,8 +244,9 @@ public class DartLogDatabaseHelper extends SQLiteOpenHelper {
                           "               on p._ID = m.winner_id" +
                           "     WHERE m.winner_id = ?;";
 
-            Cursor c = db.rawQuery(query, new String[]{String.valueOf(playerId)});
-            return c.getCount();
+            try (Cursor c = db.rawQuery(query, new String[]{String.valueOf(playerId)})) {
+                return c.getCount();
+            }
         }
     }
 

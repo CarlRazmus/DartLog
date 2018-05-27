@@ -40,7 +40,7 @@ public class RandomGameActivity extends AppCompatActivity implements View.OnClic
 
         setSupportActionBar((Toolbar) findViewById(R.id.game_toolbar));
         viewAnimator = (ViewAnimator) findViewById(R.id.game_input);
-        dbHelper = new DartLogDatabaseHelper(this);
+        dbHelper = DartLogDatabaseHelper.getInstance(this);
 
         game = GetRandomGameInstance(savedInstanceState);
         gameListAdapter = new RandomGameListAdapter(this, game);

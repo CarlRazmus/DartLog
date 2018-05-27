@@ -47,7 +47,7 @@ public class AppSettingsFragment extends PreferenceFragment {
 
     public void onSuccessfulFindExistingExternalDb(Intent intent) {
         dbFileHandler.copyDataFromExternalFileToLocalDb(intent.getData());
-        DartLogDatabaseHelper dbHelper = new DartLogDatabaseHelper(parent);
+        DartLogDatabaseHelper dbHelper = DartLogDatabaseHelper.getInstance(parent);
         Util.saveProfileNames(dbHelper.getPlayers(), parent);
     }
 
