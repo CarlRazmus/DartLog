@@ -58,19 +58,14 @@
                 tools:text="12"/>
 
             <TextView
-                android:id="@+id/match_item_stat_2_label"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textColor="@color/main_grey"
-                tools:text="Result: "/>
-
-            <TextView
                 android:id="@+id/match_item_stat_2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textStyle="bold"
                 android:layout_marginStart="4dp"
+                android:layout_columnSpan="2"
                 tools:textColor="@color/accent"
+                android:layout_gravity="center"
                 tools:text="Win"/>
 
         </GridLayout>

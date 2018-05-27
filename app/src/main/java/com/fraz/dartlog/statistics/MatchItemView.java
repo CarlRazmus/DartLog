@@ -37,7 +37,6 @@ public class MatchItemView extends FrameLayout {
     private Context context;
     private TextView stat_1_label;
     private TextView stat_1;
-    private TextView stat_2_label;
     private TextView stat_2;
 
     public MatchItemView(Context context) {
@@ -67,7 +66,6 @@ public class MatchItemView extends FrameLayout {
         players = (TextView) findViewById(R.id.match_history_players);
         stat_1_label = (TextView) findViewById(R.id.match_item_stat_1_label);
         stat_1 = (TextView) findViewById(R.id.match_item_stat_1);
-        stat_2_label = (TextView) findViewById(R.id.match_item_stat_2_label);
         stat_2 = (TextView) findViewById(R.id.match_item_stat_2);
         dateView = (TextView) findViewById(R.id.match_history_date);
 
@@ -95,7 +93,6 @@ public class MatchItemView extends FrameLayout {
     }
 
     private void initSecondStatView() {
-        stat_2_label.setText(R.string.result);
         if (game.getPlayer(playerName).equals(game.getWinner())) {
             stat_2.setText(R.string.win);
             stat_2.setTextColor(context.getResources().getColor(R.color.green_win));
