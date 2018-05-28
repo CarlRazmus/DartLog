@@ -4,31 +4,23 @@ import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
-import android.support.v7.widget.DividerItemDecoration;
 import android.support.v4.app.NavUtils;
-import android.support.v4.util.ArraySet;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.support.v7.widget.helper.ItemTouchHelper;
-import android.util.DisplayMetrics;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.WindowManager;
 import android.widget.Button;
-import android.widget.TextView;
 import android.widget.Toast;
-import android.widget.ViewAnimator;
 
 import com.fraz.dartlog.MenuBackground;
 import com.fraz.dartlog.R;
@@ -62,7 +54,7 @@ public class SetupActivity extends MenuBackground
         super.onCreate(savedInstanceState, this, R.layout.activity_setup);
 
         RecyclerView.LayoutManager participantsLayoutManager = new LinearLayoutManager(this);
-        dbHelper = new DartLogDatabaseHelper(this);
+        dbHelper = DartLogDatabaseHelper.getInstance(this);
         participantNames = new ArrayList<>();
         participantsRecyclerAdapter = new ParticipantsListRecyclerAdapter(this, participantNames);
 

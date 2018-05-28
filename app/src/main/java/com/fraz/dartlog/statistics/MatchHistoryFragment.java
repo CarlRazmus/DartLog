@@ -39,7 +39,7 @@ public class MatchHistoryFragment extends Fragment {
 
         if (getArguments().containsKey(ARG_ITEM_NAME)) {
             profileName = getArguments().getString(ARG_ITEM_NAME);
-            databaseHelper = new DartLogDatabaseHelper(getActivity());
+            databaseHelper = DartLogDatabaseHelper.getInstance(getActivity());
             playerGameData = databaseHelper.getPlayerMatchData(profileName, lastLoadedMatchId, AMOUNT_ITEMS_TO_LOAD);
             lastLoadedMatchId = databaseHelper.getLastLoadedMatchId();
         }

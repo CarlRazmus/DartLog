@@ -6,6 +6,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.util.Log;
 import android.util.SparseArray;
 import android.util.SparseLongArray;
@@ -31,9 +32,18 @@ import java.util.Map;
 public class DartLogDatabaseHelper extends SQLiteOpenHelper {
 
     // If you change the database schema, you must increment the database version.
-    private static final int DATABASE_VERSION = 1;
+    private static final int DATABASE_VERSION = 2;
     private static final String DATABASE_NAME = "DartLog.db";
     private Context context;
+
+    private static DartLogDatabaseHelper dbHelperInstance = null;
+
+    public static DartLogDatabaseHelper getInstance(Context context) {
+        if (dbHelperInstance == null) {
+           dbHelperInstance = new DartLogDatabaseHelper(context.getApplicationContext());
+        }
+        return dbHelperInstance;
+    }
 
     public DartLogDatabaseHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -51,14 +61,25 @@ public class DartLogDatabaseHelper extends SQLiteOpenHelper {
         for (String createSql : DartLogContract.SQL_CREATE_ENTRIES) {
             db.execSQL(createSql);
         }
-
+        db.execSQL(DartLogContract.SQL_CREATE_STATISTIC_ENTRIES );
         initializePlayers(db);
+    }
+
+    @Override
+    public void onDowngrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+        switch (newVersion) {
+            case 1:
+                db.execSQL("DROP TABLE IF EXISTS " + DartLogContract.StatisticEntry.TABLE_NAME);
+        }
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         //resetDatabase();
-
+        switch (oldVersion) {
+            case 1:
+                db.execSQL(DartLogContract.SQL_CREATE_STATISTIC_ENTRIES);
+        }
     }
 
     private void resetDatabase() {
@@ -123,14 +144,8 @@ public class DartLogDatabaseHelper extends SQLiteOpenHelper {
         return names;
     }
 
-    /**
-     * Get all match data for the player with the given name.
-     *
-     * @param playerName The name of the player.
-     * @return List of match data for the given player.
-     */
-    public ArrayList<GameData> getPlayerMatchData(String playerName) {
-        ArrayList<GameData> gameData;
+    public HashMap<Long, GameData> getPlayerMatchDataById(String playerName) {
+        HashMap<Long, GameData> gameDataById;
         try (SQLiteDatabase db = getReadableDatabase()) {
 
             long playerId = getPlayerId(db, playerName);
@@ -139,22 +154,32 @@ public class DartLogDatabaseHelper extends SQLiteOpenHelper {
             for(long matchId : matchIds)
                 gameTypes.put(matchId, getGameType(db, matchId));
 
-            gameData = new ArrayList<>();
-            for (long MatchId : matchIds) {
-                String gameType = gameTypes.get(MatchId);
-                
+            gameDataById = new HashMap<>();
+            for (long matchId : matchIds) {
+                String gameType = gameTypes.get(matchId);
+
                 switch (gameType){
                     case "x01":
-                        gameData.add(getX01GameData(db, MatchId));
+                        gameDataById.put(matchId, getX01GameData(db, matchId));
                         break;
                     case "random":
-                        gameData.add(getRandomGameData(db, MatchId));
+                        gameDataById.put(matchId, getRandomGameData(db, matchId));
                         break;
-                        
+
                 }
             }
         }
-        return gameData;
+        return gameDataById;
+    }
+
+    /**
+     * Get all match data for the player with the given name.
+     *
+     * @param playerName The name of the player.
+     * @return List of match data for the given player.
+     */
+    public ArrayList<GameData> getPlayerMatchData(String playerName) {
+        return new ArrayList<>(getPlayerMatchDataById(playerName).values());
     }
 
     private long lastLoadedMatchId = Long.MAX_VALUE;
@@ -194,6 +219,35 @@ public class DartLogDatabaseHelper extends SQLiteOpenHelper {
             }
         }
         return gameData;
+    }
+
+    public int getNumberOfGamesPlayed(String playerName) {
+        try (SQLiteDatabase db = getReadableDatabase()) {
+            long playerId = getPlayerId(db, playerName);
+            try (Cursor c = db.query(true, DartLogContract.ScoreEntry.TABLE_NAME,
+                    new String[]{DartLogContract.ScoreEntry.COLUMN_NAME_MATCH_ID},
+                    String.format(Locale.getDefault(), "%s = '%d'",
+                            DartLogContract.ScoreEntry.COLUMN_NAME_PLAYER_ID, playerId),
+                    null, null, null, null, null)) {
+                return c.getCount();
+            }
+        }
+    }
+
+    public int getNumberOfGamesWon(String playerName) {
+        try (SQLiteDatabase db = getReadableDatabase()) {
+
+            long playerId = getPlayerId(db, playerName);
+            String query = "SELECT m._ID" +
+                          "     FROM \"match\" m" +
+                          "          join player p" +
+                          "               on p._ID = m.winner_id" +
+                          "     WHERE m.winner_id = ?;";
+
+            try (Cursor c = db.rawQuery(query, new String[]{String.valueOf(playerId)})) {
+                return c.getCount();
+            }
+        }
     }
 
     private GameData getRandomGameData(SQLiteDatabase db, long matchId) {
@@ -247,6 +301,152 @@ public class DartLogDatabaseHelper extends SQLiteOpenHelper {
         }
     }
 
+    public GameData getHighestCheckoutGame(String playerName) {
+        GameData highestCheckoutMatch = null;
+        try (SQLiteDatabase db = getWritableDatabase()) {
+            Long matchId = getStatisticsEntry(db, playerName, DartLogContract.StatisticEntry.COLUMN_NAME_HIGHEST_CHECKOUT_MATCH_ID);
+            if (matchId != null) {
+                highestCheckoutMatch = getX01GameData(db, matchId);
+            }
+        }
+        return highestCheckoutMatch;
+    }
+
+    public GameData getFewestTurns301Game(String playerName) {
+        GameData highestCheckoutMatch = null;
+        try (SQLiteDatabase db = getWritableDatabase()) {
+            Long matchId = getStatisticsEntry(db, playerName, DartLogContract.StatisticEntry.COLUMN_NAME_301_FEWEST_TURNS_MATCH_ID);
+            if (matchId != null) {
+                highestCheckoutMatch = getX01GameData(db, matchId);
+            }
+        }
+        return highestCheckoutMatch;
+    }
+
+    public GameData getFewestTurns501Game(String playerName) {
+        GameData highestCheckoutMatch = null;
+        try (SQLiteDatabase db = getWritableDatabase()) {
+            Long matchId = getStatisticsEntry(db, playerName, DartLogContract.StatisticEntry.COLUMN_NAME_501_FEWEST_TURNS_MATCH_ID);
+            if (matchId != null) {
+                highestCheckoutMatch = getX01GameData(db, matchId);
+            }
+        }
+        return highestCheckoutMatch;
+    }
+
+    private Long getStatisticsEntry(SQLiteDatabase db, String playerName, String columnId) {
+        Long matchId = null;
+        long playerId = getPlayerId(db, playerName);
+        Cursor c = db.query(DartLogContract.StatisticEntry.TABLE_NAME,
+                new String[]{columnId},
+                String.format("%s = %s", DartLogContract.StatisticEntry.COLUMN_NAME_PLAYER_ID,
+                        playerId), null, null, null, null);
+        c.moveToFirst();
+        int columnIndex = c.getColumnIndex(columnId);
+        if (c.getCount() > 0 && !c.isNull(columnIndex)) {
+            matchId = c.getLong(columnIndex);
+        }
+        c.close();
+        return matchId;
+    }
+
+    public void refreshStatistics(String playerName) {
+        HashMap<Long, GameData> playerGameData = getPlayerMatchDataById(playerName);
+
+        Long highestOutMatchId = getHighestCheckoutMatchId(playerName, playerGameData);
+        HashMap<String, Long> fewestTurnsMatchIds =
+                getFewestTurnsMatchIds(playerName, playerGameData);
+
+        Long fewestTurns301MatchId = fewestTurnsMatchIds.get("301");
+        Long fewestTurns501MatchId = fewestTurnsMatchIds.get("501");
+        try (SQLiteDatabase db = getWritableDatabase()) {
+            long playerId = getPlayerId(db, playerName);
+            if (fewestTurns301MatchId != null) {
+                updateStatisticsEntry(
+                        db,
+                        playerId,
+                        DartLogContract.StatisticEntry.COLUMN_NAME_301_FEWEST_TURNS_MATCH_ID,
+                        fewestTurns301MatchId);
+            }
+            if (fewestTurns501MatchId != null) {
+                updateStatisticsEntry(
+                        db,
+                        playerId,
+                        DartLogContract.StatisticEntry.COLUMN_NAME_501_FEWEST_TURNS_MATCH_ID,
+                        fewestTurns501MatchId);
+            }
+            if (highestOutMatchId != null) {
+                updateStatisticsEntry(
+                        db,
+                        playerId,
+                        DartLogContract.StatisticEntry.COLUMN_NAME_HIGHEST_CHECKOUT_MATCH_ID,
+                        highestOutMatchId);
+            }
+        }
+    }
+
+    @Nullable
+    private Long getHighestCheckoutMatchId(String playerName, HashMap<Long, GameData> playerGameData) {
+        int highestOut = Integer.MIN_VALUE;
+        Long highestOutMatchId = null;
+        for (Map.Entry<Long, GameData> entry : playerGameData.entrySet()) {
+            long matchId = entry.getKey();
+            GameData game = entry.getValue();
+            if(game.getGameType().equals("x01") &&
+                    game.getWinner().getPlayerName().equals(playerName))
+            {
+                int out = game.getWinner().getScoreHistory().getLast();
+                if (out > highestOut)
+                {
+                    highestOutMatchId = matchId;
+                    highestOut = out;
+                }
+            }
+        }
+        return highestOutMatchId;
+    }
+
+    private HashMap<String, Long> getFewestTurnsMatchIds(String playerName, HashMap<Long, GameData> playerGameData) {
+        HashMap<String, Integer> fewestTurns = new HashMap<>();
+        HashMap<String, Long> fewestTurnsMatchIds = new HashMap<>();
+        for (Map.Entry<Long, GameData> entry : playerGameData.entrySet()) {
+            long matchId = entry.getKey();
+            GameData game = entry.getValue();
+            if(game.getGameType().equals("x01") &&
+               game.getWinner().getPlayerName().equals(playerName))
+            {
+                String detailedGameType = game.getDetailedGameType();
+                int turns = game.getTurns();
+                if (fewestTurnsMatchIds.containsKey(detailedGameType))
+                {
+                    if (turns < fewestTurns.get(detailedGameType)) {
+                        fewestTurnsMatchIds.put(detailedGameType, matchId);
+                        fewestTurns.put(detailedGameType, turns);
+                    }
+                } else {
+                    fewestTurnsMatchIds.put(detailedGameType, matchId);
+                    fewestTurns.put(detailedGameType, turns);
+                }
+            }
+        }
+        return fewestTurnsMatchIds;
+    }
+
+    private void updateStatisticsEntry(SQLiteDatabase db, long playerId, String columnId, long matchId) {
+        ContentValues newValues = new ContentValues();
+        newValues.put(columnId, matchId);
+        int rowsUpdated = db.update(DartLogContract.StatisticEntry.TABLE_NAME,
+                newValues,
+                String.format("%s = %s", DartLogContract.StatisticEntry.COLUMN_NAME_PLAYER_ID,
+                    playerId),
+                null);
+        if (rowsUpdated == 0){
+            newValues.put(DartLogContract.StatisticEntry.COLUMN_NAME_PLAYER_ID, playerId);
+            db.insert(DartLogContract.StatisticEntry.TABLE_NAME, null,
+                    newValues);
+        }
+    }
+
     @NonNull
     private Calendar getDate(Cursor c) {
         long dateInMillis = c.getLong(c.getColumnIndex(DartLogContract.Match.COLUMN_NAME_DATE));
@@ -254,7 +454,6 @@ public class DartLogDatabaseHelper extends SQLiteOpenHelper {
         date.setTimeInMillis(dateInMillis);
         return date;
     }
-
 
     public long getLastLoadedMatchId(){
         return lastLoadedMatchId;
@@ -271,6 +470,39 @@ public class DartLogDatabaseHelper extends SQLiteOpenHelper {
             long matchId = insertMatchEntry(db, game, "x01");
             insertX01Entry(db, game, matchId);
             insertScores(db, game, matchId);
+
+            // Add new statistics for player.
+            String playerName = game.getWinner().getPlayerName();
+            int checkout = game.getWinner().getScoreHistory().getLast();
+            long playerId = getPlayerId(db, playerName);
+            Long currentCheckoutMatchId = getStatisticsEntry(db, playerName,
+                    DartLogContract.StatisticEntry.COLUMN_NAME_HIGHEST_CHECKOUT_MATCH_ID);
+            if (currentCheckoutMatchId  == null || checkout > getX01GameData(db, currentCheckoutMatchId).getCheckout()) {
+                updateStatisticsEntry(db,
+                        playerId,
+                        DartLogContract.StatisticEntry.COLUMN_NAME_HIGHEST_CHECKOUT_MATCH_ID,
+                        matchId);
+            }
+            int turns = game.getTurn();
+            if (game.getX() == 3) {
+                Long current301TurnsMatchId = getStatisticsEntry(db, playerName,
+                        DartLogContract.StatisticEntry.COLUMN_NAME_301_FEWEST_TURNS_MATCH_ID);
+                if (current301TurnsMatchId  == null || turns < getX01GameData(db, current301TurnsMatchId).getTurns()) {
+                    updateStatisticsEntry(db,
+                            playerId,
+                            DartLogContract.StatisticEntry.COLUMN_NAME_301_FEWEST_TURNS_MATCH_ID,
+                            matchId);
+                }
+            } else if(game.getX() == 5) {
+                Long fewestTurns501MatchId = getStatisticsEntry(db, playerName,
+                        DartLogContract.StatisticEntry.COLUMN_NAME_501_FEWEST_TURNS_MATCH_ID);
+                if (fewestTurns501MatchId == null || turns < getX01GameData(db, fewestTurns501MatchId).getTurns()) {
+                    updateStatisticsEntry(db,
+                        playerId,
+                        DartLogContract.StatisticEntry.COLUMN_NAME_501_FEWEST_TURNS_MATCH_ID,
+                        matchId);
+                }
+            }
         }
     }
 
@@ -479,7 +711,7 @@ public class DartLogDatabaseHelper extends SQLiteOpenHelper {
     private Cursor getX01MatchEntry(SQLiteDatabase db, long matchId) {
         String sql = "SELECT x.double_out, x.x, m.date, p.name as winner" +
                 "     FROM x01 x" +
-                "          join match m" +
+                "          join \"match\" m" +
                 "               on m._ID = x.match_id" +
                 "          join player p" +
                 "               on p._ID = m.winner_id" +
@@ -492,7 +724,7 @@ public class DartLogDatabaseHelper extends SQLiteOpenHelper {
     private Cursor getRandomMatchEntry(SQLiteDatabase db, long matchId) {
         String sql = "SELECT r.turns, m.date, p.name as winner" +
                 "     FROM random r" +
-                "          join match m" +
+                "          join \"match\" m" +
                 "               on m._ID = r.match_id" +
                 "          join player p" +
                 "               on p._ID = m.winner_id" +
