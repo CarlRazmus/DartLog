@@ -40,6 +40,7 @@ public class ProfileListActivity extends MenuBackground {
      * device.
      */
     private boolean twoPaneMode;
+    RecyclerView recyclerView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,13 +57,19 @@ public class ProfileListActivity extends MenuBackground {
             }
         });
 
-        View recyclerView = findViewById(R.id.profile_list);
+        recyclerView = (RecyclerView)findViewById(R.id.profile_list);
         assert recyclerView != null;
-        setupRecyclerView((RecyclerView) recyclerView);
+        setupRecyclerView(recyclerView);
 
         if (findViewById(R.id.profile_detail_container) != null) {
             twoPaneMode = true;
         }
+    }
+
+    public void updateProfileList()
+    {
+        ProfilesRecyclerViewAdapter adapter = (ProfilesRecyclerViewAdapter) recyclerView.getAdapter();
+        adapter.updateProfiles();
     }
 
     @Override

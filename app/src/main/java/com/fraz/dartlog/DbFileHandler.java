@@ -52,7 +52,7 @@ public class DbFileHandler {
         String date = String.valueOf(c.get(Calendar.YEAR)) + "_";
         if(c.get(Calendar.MONTH) < 10)
             date = date.concat("0");
-        date = date.concat(String.valueOf(c.get(Calendar.MONTH)) + "_");
+        date = date.concat(String.valueOf(c.get(Calendar.MONTH) + 1) + "_");
         if(c.get(Calendar.DAY_OF_MONTH) < 10)
             date = date.concat("0");
         date = date.concat(String.valueOf(c.get(Calendar.DAY_OF_MONTH)));

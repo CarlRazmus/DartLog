@@ -101,4 +101,8 @@
         To win (reach 0) the player must hit a double score field with the last arrow, i.e a player cannot go out on an uneven number.
         You can customize how many rounds a player must try to go out on a double, see the \"Double-out attempts\" setting. When you have reached 50 points or lower, the counter will tick down after each round. When the counter hits 0 you can go out on any score field.
      </string>
+    <string name="successful_export">successfully exported database</string>
+    <string name="successful_import">successfully imported database</string>
+    <string name="unsuccessful_import">unsuccessful import of database</string>
+    <string name="unsuccessful_export">unsuccessful export of database</string>
 </resources>

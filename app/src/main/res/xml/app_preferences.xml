@@ -7,7 +7,6 @@
 
     <Preference
         android:key="@string/import_database"
-        android:title="Import Database"
-        android:summary="WARNING! this will overwrite current database.">
+        android:title="Import Database">
     </Preference>
 </PreferenceScreen>
