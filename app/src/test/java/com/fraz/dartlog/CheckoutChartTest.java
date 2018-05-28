@@ -37,10 +37,10 @@ public class CheckoutChartTest {
     @Test
     @Ignore
     public void testGetCheckoutText() throws Exception {
-        CheckoutChart checkoutChart = new CheckoutChart(mockContext, R.raw.double_checkout_chart);
-        assertThat(checkoutChart.getCheckoutText(90), equalTo("T18 D18"));
-        assertThat(checkoutChart.getCheckoutText(120), equalTo("T20 20 D20"));
-        assertThat(checkoutChart.getCheckoutText(121), equalTo("N/A"));
-        assertThat(checkoutChart.getCheckoutText(161), equalTo("N/A"));
+        CheckoutChart checkoutChart = new CheckoutChart(mockContext);
+        assertThat(checkoutChart.getDoubleOutCheckoutText(90), equalTo("T18 D18"));
+        assertThat(checkoutChart.getDoubleOutCheckoutText(120), equalTo("T20 20 D20"));
+        assertThat(checkoutChart.getDoubleOutCheckoutText(121), equalTo("N/A"));
+        assertThat(checkoutChart.getDoubleOutCheckoutText(161), equalTo("N/A"));
     }
 }

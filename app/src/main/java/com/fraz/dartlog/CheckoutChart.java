@@ -11,17 +11,30 @@ import java.util.HashMap;
 
 public class CheckoutChart implements Serializable {
 
-    private HashMap<Integer, String> checkouts = new HashMap<>();
+    private static HashMap<Integer, String> doubleCheckouts = new HashMap<>();
+    private static HashMap<Integer, String> singleCheckouts = new HashMap<>();
 
-    public CheckoutChart(Context context, int checkoutChartRawResourceId) {
-        initCheckoutMap(context, checkoutChartRawResourceId);
+    public CheckoutChart(Context context) {
+        if (doubleCheckouts.isEmpty())
+            initCheckoutMap(context);
     }
 
-    public boolean checkoutAvailable(int score) {
-        return checkouts.get(score) != null;
+    public String getSingleOutCheckoutText(int score) {
+        return getCheckoutText(score, singleCheckouts);
     }
 
-    public String getCheckoutText(int score) {
+    public String getDoubleOutCheckoutText(int score) {
+        return getCheckoutText(score, doubleCheckouts);
+    }
+
+    public static void initCheckoutMap(Context context) {
+        initCheckoutMap(singleCheckouts,
+                context.getResources().openRawResource(R.raw.single_checkout_chart));
+        initCheckoutMap(doubleCheckouts,
+                context.getResources().openRawResource(R.raw.double_checkout_chart));
+    }
+
+    private String getCheckoutText(int score, HashMap<Integer, String> checkouts) {
         String checkoutText = checkouts.get(score);
         if (checkoutText == null)
             return "No checkout";
@@ -29,8 +42,7 @@ public class CheckoutChart implements Serializable {
             return checkoutText;
     }
 
-    private void initCheckoutMap(Context context, int checkoutChartRawResourceId) {
-        InputStream inputStream = context.getResources().openRawResource(checkoutChartRawResourceId);
+    private static void initCheckoutMap(HashMap<Integer, String> checkouts, InputStream inputStream) {
         BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
         try {
             String line = reader.readLine();

@@ -35,6 +35,9 @@ public class MainActivity extends MenuBackground implements View.OnClickListener
         randomButton.setOnClickListener(this);
 
         checkIfSharedPlayersPreferencesExists();
+
+        //Initialize checkout chart now since it is expensive to load.
+        CheckoutChart.initCheckoutMap(getApplicationContext());
     }
 
     private void checkIfSharedPlayersPreferencesExists() {
