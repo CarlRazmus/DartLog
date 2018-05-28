@@ -1,5 +1,6 @@
 package com.fraz.dartlog.game.setup;
 
+import android.app.ActionBar;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -78,8 +79,10 @@ public class SetupActivity extends MenuBackground
     }
 
     private void InitializeRules() {
+        android.support.v7.app.ActionBar ab = getSupportActionBar();
         switch (gameType) {
             case ("x01"):
+                ab.setTitle("X01 game Setup");
                 getFragmentManager().beginTransaction()
                         .replace(R.id.game_preferences, new X01SettingsFragment())
                         .commit();
@@ -87,6 +90,7 @@ public class SetupActivity extends MenuBackground
                 rulesTitle = "X01";
                 break;
             case ("random"):
+                ab.setTitle("Random game Setup");
                 getFragmentManager().beginTransaction()
                         .replace(R.id.game_preferences, new RandomSettingsFragment())
                         .commit();

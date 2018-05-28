@@ -26,7 +26,6 @@
                   android:screenOrientation="portrait"/>
         <activity
             android:name=".game.setup.SetupActivity"
-            android:label="@string/game_setup"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden" />
         <activity
