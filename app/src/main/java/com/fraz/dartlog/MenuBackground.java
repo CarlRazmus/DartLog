@@ -143,9 +143,16 @@ public class MenuBackground extends AppCompatActivity {
         }
     }
 
+
+    private void openActivity(String className, Intent intent)
+    {
+        if(!parentActivity.getClass().getName().equals(className))
+            startActivity(intent);
+    }
+
     private void openSettingsActivity() {
         Intent intent = new Intent(this, AppSettingsActivity.class);
-        startActivity(intent);
+        openActivity(AppSettingsActivity.class.getName(), intent);
     }
 
     private void openAddPlayerDialog() {
@@ -156,17 +163,18 @@ public class MenuBackground extends AppCompatActivity {
     private void startGameActivity(String gameType) {
         Intent intent = new Intent(this, SetupActivity.class);
         intent.putExtra("gameType", gameType);
-        startActivity(intent);
+        openActivity(SetupActivity.class.getName(), intent);
     }
 
     private void openHomeActivity() {
         Intent intent = new Intent(this, MainActivity.class);
-        startActivity(intent);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        openActivity(MainActivity.class.getName(), intent);
     }
 
     private void openFriendsActivity() {
         Intent intent = new Intent(this, ProfileListActivity.class);
-        startActivity(intent);
+        openActivity(ProfileListActivity.class.getName(), intent);
     }
 
     public static class AddPlayerDialogFragment extends DialogFragment {
