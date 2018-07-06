@@ -66,9 +66,9 @@ public class MenuBackground extends AppCompatActivity {
 
     private void initializeAndPopulateNavigationDrawer(){
         PrimaryDrawerItem homeItem = new PrimaryDrawerItem().withIdentifier(2).withName(R.string.drawer_item_home).withIcon(R.drawable.ic_home_white_24dp);
-        PrimaryDrawerItem gameX01Item = new PrimaryDrawerItem().withIdentifier(2).withName(R.string.x01).withIcon(R.drawable.ic_home_white_24dp);
+        PrimaryDrawerItem gameX01Item = new PrimaryDrawerItem().withIdentifier(2).withName(R.string.x01).withIcon(R.drawable.dart_board_400px);
         SecondaryDrawerItem gamesHeader = new SecondaryDrawerItem().withIdentifier(2).withName(R.string.games);
-        PrimaryDrawerItem gameRandomItem = new PrimaryDrawerItem().withIdentifier(2).withName(R.string.random).withIcon(R.drawable.ic_home_white_24dp);
+        PrimaryDrawerItem gameRandomItem = new PrimaryDrawerItem().withIdentifier(2).withName(R.string.random).withIcon(R.drawable.dart_board_400px);
         PrimaryDrawerItem profilesItem = new PrimaryDrawerItem().withIdentifier(2).withName(R.string.drawer_item_profiles).withIcon(R.drawable.ic_group_white_24dp);
         PrimaryDrawerItem addProfileItem = new PrimaryDrawerItem().withIdentifier(2).withName(R.string.add_profile).withIcon(R.drawable.ic_person_add);
         PrimaryDrawerItem settingsItem = new PrimaryDrawerItem().withIdentifier(2).withName(R.string.settings).withIcon(R.drawable.ic_settings_white_24dp);
