@@ -1,8 +1,10 @@
 package com.fraz.dartlog.statistics;
 
 import android.content.Context;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.view.ViewPager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -86,5 +88,35 @@ public class MatchHistoryFragment extends Fragment {
             });
         }
         return view;
+    }
+
+    private class AsyncTaskRunner extends AsyncTask<Void, Void, Void> {
+
+        RecyclerView recyclerView = (RecyclerView) view;
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+            while(!allLoaded) {
+                    final int size = playerGameData.size();
+                    ArrayList<GameData> newData = databaseHelper.getPlayerMatchData(profileName, lastLoadedMatchId, AMOUNT_ITEMS_TO_LOAD);
+                    final int sizeNewData = newData.size();
+                    if (sizeNewData < AMOUNT_ITEMS_TO_LOAD)
+                        allLoaded = true;
+                    playerGameData.addAll(newData);
+
+                    recyclerView.post(new Runnable() {
+                        public void run() {
+                            recyclerViewAdapter.notifyItemRangeInserted(size, sizeNewData);
+                        }
+                    });
+                    lastLoadedMatchId = databaseHelper.getLastLoadedMatchId();
+
+            }
+            return null;
+        }
+
+        protected void onPostExecute(Void result) {
+
+        }
     }
 }
