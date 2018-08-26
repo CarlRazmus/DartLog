@@ -100,9 +100,5 @@ public class MatchHistoryFragment extends Fragment {
                 }
             });
         }
-
-        protected void onPostExecute(Void result) {
-
-        }
     }
 }
