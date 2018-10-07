@@ -21,12 +21,16 @@ import static com.fraz.dartlog.statistics.ProfileDetailFragment.ARG_ITEM_NAME;
 
 public class MatchHistoryFragment extends Fragment {
 
+    private long lastLoadedMatchId = Long.MAX_VALUE;
+
+    private boolean allLoaded = false;
+    private int AMOUNT_ITEMS_TO_LOAD = 20;
+
     private String profileName;
     private ArrayList<GameData> playerGameData;
     private DartLogDatabaseHelper databaseHelper;
-    private long lastLoadedMatchId = Long.MAX_VALUE;
-    private boolean allLoaded = false;
-    private int AMOUNT_ITEMS_TO_LOAD = 20;
+    private MatchRecyclerViewAdapter recyclerViewAdapter;
+    private RecyclerView recyclerView;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -44,6 +48,10 @@ public class MatchHistoryFragment extends Fragment {
             databaseHelper = DartLogDatabaseHelper.getInstance(getActivity());
             playerGameData = databaseHelper.getPlayerMatchData(profileName, lastLoadedMatchId, AMOUNT_ITEMS_TO_LOAD);
             lastLoadedMatchId = databaseHelper.getLastLoadedMatchId();
+
+            AsyncTaskRunner fetchDataFromDatabasetaskRunner = new AsyncTaskRunner();
+            fetchDataFromDatabasetaskRunner.execute();
+
         }
     }
 
@@ -54,65 +62,43 @@ public class MatchHistoryFragment extends Fragment {
 
         if (view instanceof RecyclerView) {
             Context context = view.getContext();
-            RecyclerView recyclerView = (RecyclerView) view;
+            recyclerView = (RecyclerView) view;
             final LinearLayoutManager layoutManager = new LinearLayoutManager(context);
             recyclerView.setLayoutManager(layoutManager);
-            final MatchRecyclerViewAdapter recyclerViewAdapter = new MatchRecyclerViewAdapter(getContext(),
+            recyclerViewAdapter = new MatchRecyclerViewAdapter(getContext(),
                     playerGameData, profileName);
             recyclerView.setAdapter(recyclerViewAdapter);
-
-            recyclerView.setOnScrollListener(new RecyclerView.OnScrollListener() {
-                @Override
-                public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-                    if (allLoaded)
-                        return;
-                    int visibleItemCount = layoutManager.getChildCount();
-                    int totalItemCount = layoutManager.getItemCount();
-                    int pastVisibleItems = layoutManager.findFirstVisibleItemPosition();
-                    if (pastVisibleItems + visibleItemCount >= totalItemCount - 10) {
-                        final int size = playerGameData.size();
-                        ArrayList<GameData> newData = databaseHelper.getPlayerMatchData(profileName, lastLoadedMatchId, AMOUNT_ITEMS_TO_LOAD);
-                        final int sizeNewData = newData.size();
-                        if (sizeNewData < AMOUNT_ITEMS_TO_LOAD)
-                            allLoaded = true;
-                        playerGameData.addAll(newData);
-
-                        recyclerView.post(new Runnable() {
-                            public void run() {
-                                recyclerViewAdapter.notifyItemRangeInserted(size, sizeNewData);
-                            }
-                        });
-                        lastLoadedMatchId = databaseHelper.getLastLoadedMatchId();
-                    }
-                }
-            });
         }
         return view;
     }
 
-    private class AsyncTaskRunner extends AsyncTask<Void, Void, Void> {
-
-        RecyclerView recyclerView = (RecyclerView) view;
+    private class AsyncTaskRunner extends AsyncTask<Void, Integer, Void> {
 
         @Override
         protected Void doInBackground(Void... voids) {
             while(!allLoaded) {
-                    final int size = playerGameData.size();
+                    Integer size = playerGameData.size();
                     ArrayList<GameData> newData = databaseHelper.getPlayerMatchData(profileName, lastLoadedMatchId, AMOUNT_ITEMS_TO_LOAD);
-                    final int sizeNewData = newData.size();
+                    Integer sizeNewData = newData.size();
                     if (sizeNewData < AMOUNT_ITEMS_TO_LOAD)
                         allLoaded = true;
                     playerGameData.addAll(newData);
 
-                    recyclerView.post(new Runnable() {
-                        public void run() {
-                            recyclerViewAdapter.notifyItemRangeInserted(size, sizeNewData);
-                        }
-                    });
-                    lastLoadedMatchId = databaseHelper.getLastLoadedMatchId();
+                    publishProgress(size, sizeNewData);
 
+                    lastLoadedMatchId = databaseHelper.getLastLoadedMatchId();
             }
             return null;
+        }
+
+        @Override
+        protected void onProgressUpdate(final Integer... params) {
+
+            recyclerView.post(new Runnable() {
+                public void run() {
+                    recyclerViewAdapter.notifyItemRangeInserted(params[0], params[1]);
+                }
+            });
         }
 
         protected void onPostExecute(Void result) {
