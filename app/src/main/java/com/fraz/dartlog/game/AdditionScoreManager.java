@@ -26,13 +26,8 @@ public class AdditionScoreManager extends ScoreManager {
     @Override
     public void undoScore() {
         if (!totalScoreHistory.isEmpty()) {
-            totalScoreHistory.removeLast();
             scoreHistory.removeLast();
-
-            if (totalScoreHistory.isEmpty())
-                score = 0;
-            else
-                score = totalScoreHistory.getLast();
+            score = totalScoreHistory.removeLast();
         }
     }
 
