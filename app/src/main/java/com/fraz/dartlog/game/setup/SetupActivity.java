@@ -82,7 +82,7 @@ public class SetupActivity extends MenuBackground
         android.support.v7.app.ActionBar ab = getSupportActionBar();
         switch (gameType) {
             case ("x01"):
-                ab.setTitle("X01 game Setup");
+                ab.setTitle("X01 setup");
                 getFragmentManager().beginTransaction()
                         .replace(R.id.game_preferences, new X01SettingsFragment())
                         .commit();
@@ -90,7 +90,7 @@ public class SetupActivity extends MenuBackground
                 rulesTitle = "X01";
                 break;
             case ("random"):
-                ab.setTitle("Random game Setup");
+                ab.setTitle("Random setup");
                 getFragmentManager().beginTransaction()
                         .replace(R.id.game_preferences, new RandomSettingsFragment())
                         .commit();
