@@ -94,7 +94,7 @@ public class SetupActivity extends MenuBackground
                 getFragmentManager().beginTransaction()
                         .replace(R.id.game_preferences, new RandomSettingsFragment())
                         .commit();
-                rulesString = "TODO";
+                rulesString = getString(R.string.random_rules);
                 rulesTitle = "Random";
                 break;
             default:
@@ -201,7 +201,7 @@ public class SetupActivity extends MenuBackground
     private void showRulesDialog(String title, String rules) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this,
                 R.style.GreenButtonAlertDialog)
-                .setTitle("Rules of " + title)
+                .setTitle(title + " rules")
                 .setMessage(rules)
                 .setIcon(R.drawable.ic_info_outline_white_18dp)
                 .setPositiveButton(android.R.string.yes, null);

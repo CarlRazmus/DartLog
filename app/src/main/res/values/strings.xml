@@ -91,16 +91,27 @@
     <string name="dialog_title_missing_file_extension">Error: Missing Extension.</string>
     <string name="button_rules">Rules</string>
     <string name="title_info">Info</string>
-    <string name="x01_rules">All players starts with X01 points (e.g 301, 401 or 501 etc).\n\n
+    <string name="x01_rules">All players starts with X01 points (301, 401, 501 etc).\n\n
 
         The goal is to have 0 points left. \n\n
 
-        Players take turn to throw 3 arrows, the sum of the 3 arrows is subtracted from the player\'s current score.
+        Players take turn to throw 3 darts, the sum of the 3 darts is subtracted from the player\'s current score.
         If the new score is 1 or less than 0 then the player does not receive any points that round.\n\n
 
         To win (reach 0) the player must hit a double score field with the last arrow, i.e a player cannot go out on an uneven number.
         You can customize how many rounds a player must try to go out on a double, see the \"Double-out attempts\" setting. When you have reached 50 points or lower, the counter will tick down after each round. When the counter hits 0 you can go out on any score field.
      </string>
+
+    <string name="random_rules"> The goal is to score as many points as possible. \n\n
+        On each turn all players will score points on a randomly selected field.\n\n
+           1 point for single.\n
+           2 points for double.\n
+           3 points for triple.\n\n
+
+        When the game is over, if two players are tied for equal points then the winner is decided by the play order.
+
+    </string>
+
     <string name="successful_export">successfully exported database</string>
     <string name="successful_import">successfully imported database</string>
     <string name="unsuccessful_import">unsuccessful import of database</string>
