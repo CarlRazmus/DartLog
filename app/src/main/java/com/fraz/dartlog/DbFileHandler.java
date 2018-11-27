@@ -72,7 +72,8 @@ public class DbFileHandler {
     public void selectExternalDbFile() {
         Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
         intent.addCategory(Intent.CATEGORY_OPENABLE);
-        intent.setType("application/x-sqlite3");
+        intent.setType("*/*");
+        intent.setData(Uri.fromParts("content", "*.db", null));
 
         parent.startActivityForResult(intent, OPEN_REQUEST_CODE);
     }
