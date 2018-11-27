@@ -66,9 +66,15 @@ public class AppSettingsFragment extends PreferenceFragment {
         showToast(R.string.unsuccessful_export);
     }
 
-    public void onUnsuccessfulExternalDbFileVerification(Intent intent) {
+    public void onUnsuccessfulImportOfDatabase(Intent intent) {
         /* TODO: Should add missing .db extension or remove the file? */
         showToast(R.string.unsuccessful_import);
     }
+
+    public void onUnsuccessfulExportOfDatabase(Intent intent) {
+        /* TODO: Should add missing .db extension or remove the file? */
+        showToast(R.string.unsuccessful_export);
+    }
+
 
 }

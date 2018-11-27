@@ -30,13 +30,16 @@ public class AppSettingsActivity extends MenuBackground {
                 if(DbFileHandler.isDbExtension(intent.getData(), parentActivity))
                     fragment.onSuccessfullyCreatedExternalDbFile(intent);
                 else {
-                    fragment.onUnsuccessfulExternalDbFileVerification(intent);
+                    fragment.onUnsuccessfulExportOfDatabase(intent);
                     openErrorOccurredDialog(intent);
                 }
             }
             if (requestCode == DbFileHandler.OPEN_REQUEST_CODE)
                 if(DbFileHandler.verifyImportedDb(intent.getData(), parentActivity)){
                     fragment.onSuccessfulFindExistingExternalDb(intent);
+                }
+                else{
+                    fragment.onUnsuccessfulImportOfDatabase(intent);
                 }
         }
     }
