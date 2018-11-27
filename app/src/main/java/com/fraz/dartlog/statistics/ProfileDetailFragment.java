@@ -60,7 +60,6 @@ public class ProfileDetailFragment extends Fragment {
                 fewestTurns301Game = databaseHelper.getFewestTurns301Game(profileName);
                 fewestTurns501Game = databaseHelper.getFewestTurns501Game(profileName);
             }
-
         }
     }
 
