@@ -82,7 +82,7 @@ public class SetupActivity extends MenuBackground
         android.support.v7.app.ActionBar ab = getSupportActionBar();
         switch (gameType) {
             case ("x01"):
-                ab.setTitle("X01 game Setup");
+                ab.setTitle("X01 setup");
                 getFragmentManager().beginTransaction()
                         .replace(R.id.game_preferences, new X01SettingsFragment())
                         .commit();
@@ -90,11 +90,11 @@ public class SetupActivity extends MenuBackground
                 rulesTitle = "X01";
                 break;
             case ("random"):
-                ab.setTitle("Random game Setup");
+                ab.setTitle("Random setup");
                 getFragmentManager().beginTransaction()
                         .replace(R.id.game_preferences, new RandomSettingsFragment())
                         .commit();
-                rulesString = "TODO";
+                rulesString = getString(R.string.random_rules);
                 rulesTitle = "Random";
                 break;
             default:
@@ -201,7 +201,7 @@ public class SetupActivity extends MenuBackground
     private void showRulesDialog(String title, String rules) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this,
                 R.style.GreenButtonAlertDialog)
-                .setTitle("Rules of " + title)
+                .setTitle(title + " rules")
                 .setMessage(rules)
                 .setIcon(R.drawable.ic_info_outline_white_18dp)
                 .setPositiveButton(android.R.string.yes, null);
