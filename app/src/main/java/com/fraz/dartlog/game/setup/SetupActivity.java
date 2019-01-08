@@ -42,6 +42,7 @@ public class SetupActivity extends MenuBackground
     private String gameType;
     private String rulesString;
     private String rulesTitle;
+    private PlayerSelectorDialogFragment dialogFragment;
 
 
     @Override
@@ -56,6 +57,7 @@ public class SetupActivity extends MenuBackground
         super.onCreate(savedInstanceState, this, R.layout.activity_setup);
 
         RecyclerView.LayoutManager participantsLayoutManager = new LinearLayoutManager(this);
+        dialogFragment = new PlayerSelectorDialogFragment();
         participantNames = new ArrayList<>();
         participantsRecyclerAdapter = new ParticipantsListRecyclerAdapter(this, participantNames);
         gameType = getIntent().getStringExtra("gameType");
@@ -102,10 +104,6 @@ public class SetupActivity extends MenuBackground
         FloatingActionButton openPlayerSelectionFab = findViewById(R.id.open_player_selection_fab);
         openPlayerSelectionFab.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                PlayerSelectorDialogFragment dialogFragment = new PlayerSelectorDialogFragment();
-                Bundle bundle = new Bundle();
-                bundle.putStringArrayList("participants", participantNames);
-                dialogFragment.setArguments(bundle);
                 dialogFragment.show(getSupportFragmentManager(), "selectPlayers");
             }
         });

@@ -6,20 +6,22 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AlertDialog;
+import android.util.Log;
 
 import java.util.ArrayList;
 
 public class PlayerSelectorDialogFragment extends DialogFragment{
 
+
     public interface PlayerSelectorDialogListener {
         void onDialogPositiveClick(PlayerSelectorDialogFragment dialog);
     }
+
 
     public PlayerSelectorDialogListener mListener;
 
     private ArrayList<String> playerNames = new ArrayList<>();
     private ArrayList<String> mSelectedItems = new ArrayList<>();
-
 
 
     @Override
@@ -35,7 +37,6 @@ public class PlayerSelectorDialogFragment extends DialogFragment{
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
-        // Use the Builder class for convenient dialog construction
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         builder.setTitle(R.string.header_select_players)
                 .setCancelable(true)
@@ -48,7 +49,6 @@ public class PlayerSelectorDialogFragment extends DialogFragment{
                 });
 
         updatePlayersFromDb();
-        setSelectedItems(getArguments().getStringArrayList("participants"));
 
         String[] namesArr = new String[playerNames.size()];
         for(int i = 0; i < playerNames.size(); i++)
@@ -64,19 +64,12 @@ public class PlayerSelectorDialogFragment extends DialogFragment{
                     public void onClick(DialogInterface dialog, int which,
                                         boolean isChecked) {
                         if (isChecked) {
-                            // If the user checked the item, add it to the selected items
                             mSelectedItems.add(playerNames.get(which));
                         } else if (mSelectedItems.contains(playerNames.get(which))) {
-                            // Else, if the item is already in the array, remove it
                             mSelectedItems.remove(playerNames.get(which));
                         }
                     }});
         return builder.create();
-    }
-
-    public void setSelectedItems(ArrayList<String> items){
-        mSelectedItems.clear();
-        mSelectedItems.addAll(items);
     }
 
     public void updatePlayersFromDb(){
