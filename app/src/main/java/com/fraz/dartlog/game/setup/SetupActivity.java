@@ -1,8 +1,6 @@
 package com.fraz.dartlog.game.setup;
 
-import android.app.ActionBar;
 import android.app.Dialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -11,7 +9,6 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.NavUtils;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -24,9 +21,9 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import com.fraz.dartlog.MenuBackground;
+import com.fraz.dartlog.PlayerSelectorDialogFragment;
 import com.fraz.dartlog.R;
 import com.fraz.dartlog.Util;
-import com.fraz.dartlog.db.DartLogDatabaseHelper;
 import com.fraz.dartlog.game.random.RandomGameActivity;
 import com.fraz.dartlog.game.random.RandomSettingsFragment;
 import com.fraz.dartlog.game.x01.X01GameActivity;
@@ -36,29 +33,31 @@ import com.fraz.dartlog.statistics.ProfileListActivity;
 import java.util.ArrayList;
 
 public class SetupActivity extends MenuBackground
-        implements ParticipantsListRecyclerAdapter.OnDragStartListener, View.OnClickListener  {
+        implements ParticipantsListRecyclerAdapter.OnDragStartListener, View.OnClickListener,
+                    PlayerSelectorDialogFragment.PlayerSelectorDialogListener {
 
-    private AvailablePlayersRecyclerAdapter availablePlayersListAdapter;
     private ParticipantsListRecyclerAdapter participantsRecyclerAdapter;
     private ArrayList<String> participantNames;
-    private DartLogDatabaseHelper dbHelper;
-    private Dialog selectPlayerDialog;
     private ItemTouchHelper itemTouchHelper;
     private String gameType;
     private String rulesString;
     private String rulesTitle;
 
 
+    @Override
+    public void onDialogPositiveClick(PlayerSelectorDialogFragment dialog) {
+        participantNames.clear();
+        participantNames.addAll(dialog.getSelectedPlayers());
+        participantsRecyclerAdapter.notifyDataSetChanged();
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState, this, R.layout.activity_setup);
 
         RecyclerView.LayoutManager participantsLayoutManager = new LinearLayoutManager(this);
-        dbHelper = DartLogDatabaseHelper.getInstance(this);
         participantNames = new ArrayList<>();
         participantsRecyclerAdapter = new ParticipantsListRecyclerAdapter(this, participantNames);
-
         gameType = getIntent().getStringExtra("gameType");
 
         InitializeToolbar();
@@ -66,16 +65,13 @@ public class SetupActivity extends MenuBackground
         InitializeFAB();
         InitializeRules();
 
-        RecyclerView participantsRecyclerView =
-                (RecyclerView) findViewById(R.id.participants_recycler_view);
+        RecyclerView participantsRecyclerView = findViewById(R.id.participants_recycler_view);
         assert participantsRecyclerView != null;
         participantsRecyclerView.setLayoutManager(participantsLayoutManager);
         participantsRecyclerView.setAdapter(participantsRecyclerAdapter);
 
         itemTouchHelper = new ItemTouchHelper(new ParticipantSwipeCallback(ItemTouchHelper.UP | ItemTouchHelper.DOWN, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT, participantNames, participantsRecyclerAdapter));
         itemTouchHelper.attachToRecyclerView(participantsRecyclerView);
-
-        initializeSelectPlayersDialog();
     }
 
     private void InitializeRules() {
@@ -103,11 +99,12 @@ public class SetupActivity extends MenuBackground
     }
 
     private void InitializeFAB() {
-        FloatingActionButton openPlayerSelectionFab = (FloatingActionButton) findViewById(R.id.open_player_selection_fab);
+        FloatingActionButton openPlayerSelectionFab = findViewById(R.id.open_player_selection_fab);
         assert openPlayerSelectionFab != null;
         openPlayerSelectionFab.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                openPlayerSelectionDialog();
+                PlayerSelectorDialogFragment dialogFragment = new PlayerSelectorDialogFragment();
+                dialogFragment.show(getSupportFragmentManager(), "selectPlayers");
             }
         });
     }
@@ -141,50 +138,6 @@ public class SetupActivity extends MenuBackground
         }
     }
 
-    private void initializeSelectPlayersDialog(){
-        final RecyclerView.LayoutManager availablePlayersLayoutManager = new LinearLayoutManager(this);
-        selectPlayerDialog = new Dialog(this, R.style.GreenButtonAlertDialog);
-        selectPlayerDialog.setTitle("Select players");
-        selectPlayerDialog.setContentView(R.layout.setup_players_dialog);
-        selectPlayerDialog.setCancelable(true);
-        Util.setDialogSize(this, selectPlayerDialog, 0.7f, 0.9f);
-        selectPlayerDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
-            @Override
-            public void onDismiss(DialogInterface dialog) {
-                participantNames.clear();
-                participantNames.addAll(availablePlayersListAdapter.getSelectedPlayers());
-                participantsRecyclerAdapter.notifyDataSetChanged();
-            }
-        });
-
-        selectPlayerDialog.setOnShowListener(new DialogInterface.OnShowListener() {
-            @Override
-            public void onShow(DialogInterface dialog) {
-                populateAvailablePlayers();
-                availablePlayersListAdapter.setSelectedPlayers(participantNames);
-            }
-        });
-
-        final RecyclerView availablePlayersRecyclerView = (RecyclerView) selectPlayerDialog.findViewById(R.id.setup_dialog_available_players);
-        assert availablePlayersRecyclerView != null;
-
-        availablePlayersListAdapter = new AvailablePlayersRecyclerAdapter();
-        availablePlayersRecyclerView.setAdapter(availablePlayersListAdapter);
-        availablePlayersRecyclerView.setLayoutManager(availablePlayersLayoutManager);
-        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(availablePlayersRecyclerView.getContext(),
-                DividerItemDecoration.VERTICAL);
-        dividerItemDecoration.setDrawable(getResources().getDrawable(R.drawable.element_border_light_grey));
-        availablePlayersRecyclerView.addItemDecoration(dividerItemDecoration);
-
-        Button button = (Button) selectPlayerDialog.findViewById(R.id.done_button);
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                selectPlayerDialog.dismiss();
-            }
-        });
-    }
-
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
@@ -212,16 +165,6 @@ public class SetupActivity extends MenuBackground
         dialog.getButton(Dialog.BUTTON_NEGATIVE).setVisibility(View.INVISIBLE);
         dialog.getButton(Dialog.BUTTON_NEGATIVE).setActivated(false);
     }
-
-    private void openPlayerSelectionDialog() {
-        selectPlayerDialog.show();
-    }
-
-    private void populateAvailablePlayers(){
-        ArrayList<String> playerNames = Util.loadProfileNames(this);
-        availablePlayersListAdapter.setAvailablePlayers(playerNames);
-    }
-
 
     private void showMustAddPlayersErrorToast() {
         showToast("A game requires 1 or more players to start!");
@@ -282,6 +225,7 @@ public class SetupActivity extends MenuBackground
         return Integer.parseInt(sharedPref.getString(
                 getResources().getString(R.string.pref_key_random_nr_of_rounds), "10"));
     }
+
     private boolean isDoubleOutEnabled() {
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
         return sharedPref.getBoolean(
