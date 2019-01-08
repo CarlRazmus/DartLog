@@ -18,7 +18,8 @@ public class PlayerSelectorDialogFragment extends DialogFragment{
     public PlayerSelectorDialogListener mListener;
 
     private ArrayList<String> playerNames = new ArrayList<>();
-    private ArrayList<String> mSelectedItems;
+    private ArrayList<String> mSelectedItems = new ArrayList<>();
+
 
 
     @Override
@@ -47,13 +48,17 @@ public class PlayerSelectorDialogFragment extends DialogFragment{
                 });
 
         updatePlayersFromDb();
+        setSelectedItems(getArguments().getStringArrayList("participants"));
 
-        mSelectedItems = new ArrayList<>();
-        String[] names = new String[playerNames.size()];
+        String[] namesArr = new String[playerNames.size()];
         for(int i = 0; i < playerNames.size(); i++)
-            names[i] = playerNames.get(i);
+            namesArr[i] = playerNames.get(i);
 
-        builder.setMultiChoiceItems(names, null,
+        boolean[] selectedItemsArr = new boolean[playerNames.size()];
+        for(int i = 0; i < playerNames.size(); i++)
+            selectedItemsArr[i] = mSelectedItems.contains(namesArr[i]);
+
+        builder.setMultiChoiceItems(namesArr, selectedItemsArr,
                 new DialogInterface.OnMultiChoiceClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which,
@@ -67,6 +72,11 @@ public class PlayerSelectorDialogFragment extends DialogFragment{
                         }
                     }});
         return builder.create();
+    }
+
+    public void setSelectedItems(ArrayList<String> items){
+        mSelectedItems.clear();
+        mSelectedItems.addAll(items);
     }
 
     public void updatePlayersFromDb(){
