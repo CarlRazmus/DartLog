@@ -117,8 +117,6 @@ public class SetupActivity extends MenuBackground
 
     private void InitializeToolbar() {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        assert toolbar != null;
-        setSupportActionBar(toolbar);
         toolbar.setTitle(getTitle());
     }
 
