@@ -23,6 +23,7 @@ import com.fraz.dartlog.R;
 import com.fraz.dartlog.db.DartLogDatabaseHelper;
 import com.fraz.dartlog.game.InputEventListener;
 import com.fraz.dartlog.game.NumPadHandler;
+import com.fraz.dartlog.statistics.MatchPagerActivity;
 
 import java.util.ArrayList;
 
@@ -34,6 +35,7 @@ public class X01GameActivity extends AppCompatActivity implements View.OnClickLi
     private ViewAnimator viewAnimator;
     private DartLogDatabaseHelper dbHelper;
     private TextView roundTextView;
+    private int gamesPlayed;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,6 +50,7 @@ public class X01GameActivity extends AppCompatActivity implements View.OnClickLi
         game = GetX01GameInstance(savedInstanceState);
         gameListAdapter = new X01GameListAdapter(game);
 
+        gamesPlayed = 1;
         initListView();
         initNumPadView();
         initGameDoneView();
@@ -81,6 +84,7 @@ public class X01GameActivity extends AppCompatActivity implements View.OnClickLi
         switch (v.getId()) {
             case R.id.new_leg:
                 dbHelper.addX01Match(game);
+                gamesPlayed += 1;
                 game.newLeg();
                 updateView();
                 break;
@@ -184,9 +188,12 @@ public class X01GameActivity extends AppCompatActivity implements View.OnClickLi
     }
 
     private void completeMatch() {
-        Intent i = new Intent(this, MainActivity.class);
-        i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        startActivity(i);
+        Intent intent = new Intent(this, MatchPagerActivity.class);
+        intent.putExtra(MatchPagerActivity.ARG_ITEM_NAME, game.getPlayers().get(0).getPlayerName());
+        intent.putExtra(MatchPagerActivity.ARG_ITEM_POSITION, 0);
+        intent.putExtra(MatchPagerActivity.ARG_MATCHES, gamesPlayed);
+        intent.putExtra(MatchPagerActivity.ARG_IS_MATCH_SUMMARY, true);
+        startActivity(intent);
     }
 
     @Override
