@@ -1,7 +1,5 @@
 package com.fraz.dartlog.game.x01;
 
-import android.content.Context;
-
 import com.fraz.dartlog.CheckoutChart;
 import com.fraz.dartlog.game.PlayerData;
 
@@ -12,10 +10,10 @@ public class X01PlayerData extends PlayerData {
     private CheckoutChart checkoutChart;
     private X01ScoreManager scoreManager;
 
-    public X01PlayerData(Context context, String playerName, X01ScoreManager scoreManager) {
+    public X01PlayerData(CheckoutChart checkoutChart, String playerName, X01ScoreManager scoreManager) {
         super(playerName, scoreManager);
-        checkoutChart = new CheckoutChart(context);
         this.scoreManager = scoreManager;
+        this.checkoutChart = checkoutChart;
     }
 
     public LinkedList<Integer> getTotalScoreHistory() {
