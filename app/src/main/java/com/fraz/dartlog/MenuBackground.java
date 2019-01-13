@@ -10,7 +10,6 @@ import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -196,7 +195,7 @@ public class MenuBackground extends AppCompatActivity {
                                 if (dbHelper.addPlayer(name) != -1) {
                                     Util.addPlayer(name, getContext());
 
-                                    if(getActivity().getLocalClassName().equals(ProfileListActivity.class.getName()))
+                                    if(getActivity().getClass().getName().equals(ProfileListActivity.class.getName()))
                                     {
                                         ((ProfileListActivity)getActivity()).updateProfileList();
                                     }
