@@ -7,7 +7,7 @@
     android:textSize="14sp"
     android:textStyle="bold"
     android:textColor="@color/main_grey"
-    android:background="@color/main_white"
+    android:background="@color/background_statistics_header"
     android:padding="8dp"
     android:gravity="center_horizontal"
     tools:text="Header" />

@@ -8,6 +8,8 @@
     <color name="background_transparent">#E5212121</color>
     <color name="background_blue">#263238</color>
 
+    <color name="background_statistics_header">#E1E1E1</color>
+
     <color name="button_background_transparent">#AF424242</color>
 
     <color name="main_white">#FFFFFF</color>

@@ -112,8 +112,8 @@
 
     </string>
 
-    <string name="successful_export">successfully exported database</string>
-    <string name="successful_import">successfully imported database</string>
-    <string name="unsuccessful_import">unsuccessful import of database</string>
-    <string name="unsuccessful_export">unsuccessful export of database</string>
+    <string name="successful_export">Successfully exported database</string>
+    <string name="successful_import">Successfully imported database</string>
+    <string name="unsuccessful_import">Unsuccessful import of database</string>
+    <string name="unsuccessful_export">Unsuccessful export of database</string>
 </resources>
