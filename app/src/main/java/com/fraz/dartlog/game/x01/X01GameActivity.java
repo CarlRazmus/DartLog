@@ -36,6 +36,8 @@ public class X01GameActivity extends AppCompatActivity implements View.OnClickLi
     private DartLogDatabaseHelper dbHelper;
     private TextView roundTextView;
     private int gamesPlayed;
+    private boolean currentMatchAdded = false;
+    private boolean undoPossible = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,16 +85,34 @@ public class X01GameActivity extends AppCompatActivity implements View.OnClickLi
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.new_leg:
-                dbHelper.addX01Match(game);
+                if(!currentMatchAdded) {
+                    dbHelper.addX01Match(game);
+                }
                 gamesPlayed += 1;
                 game.newLeg();
+                setCurrentMatchAdded(false);
                 updateView();
                 break;
+            case R.id.match_summary:
+                if(!currentMatchAdded)
+                {
+                    dbHelper.addX01Match(game);
+                    setCurrentMatchAdded(true);
+                }
+                showSummary();
+                break;
             case R.id.complete_match:
-                dbHelper.addX01Match(game);
+                if(!currentMatchAdded)
+                    dbHelper.addX01Match(game);
                 completeMatch();
                 break;
         }
+    }
+
+    private void setCurrentMatchAdded(boolean added) {
+        currentMatchAdded = added;
+        undoPossible = !added;
+        invalidateOptionsMenu();
     }
 
     @Override
@@ -111,6 +131,15 @@ public class X01GameActivity extends AppCompatActivity implements View.OnClickLi
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.game_menu, menu);
+        MenuItem undo_action = menu.findItem(R.id.action_undo);
+        if (undoPossible) {
+            undo_action.setEnabled(true);
+        }
+        else
+        {
+            undo_action.setEnabled(false);
+        }
+
         return true;
     }
 
@@ -123,6 +152,11 @@ public class X01GameActivity extends AppCompatActivity implements View.OnClickLi
     private void updateView() {
         gameListAdapter.notifyDataSetChanged();
         scrollToPlayerInList();
+        if (!currentMatchAdded && undoPossible != game.isUndoPossible())
+        {
+            undoPossible = !undoPossible;
+            invalidateOptionsMenu();
+        }
         if (game.isGameOver()) {
             setGameDoneView();
         } else {
@@ -170,13 +204,16 @@ public class X01GameActivity extends AppCompatActivity implements View.OnClickLi
     }
 
     private void initGameDoneView() {
-        Button newLegButton = (Button) findViewById(R.id.new_leg);
-        Button completeMatchButton = (Button) findViewById(R.id.complete_match);
+        Button newLegButton = findViewById(R.id.new_leg);
+        Button completeMatchButton = findViewById(R.id.complete_match);
+        Button matchSummaryButton = findViewById(R.id.match_summary);
 
         assert newLegButton != null;
         newLegButton.setOnClickListener(this);
         assert completeMatchButton != null;
         completeMatchButton.setOnClickListener(this);
+        assert matchSummaryButton != null;
+        matchSummaryButton.setOnClickListener(this);
     }
 
     private void setGameDoneView() {
@@ -188,6 +225,12 @@ public class X01GameActivity extends AppCompatActivity implements View.OnClickLi
     }
 
     private void completeMatch() {
+        Intent i = new Intent(this, MainActivity.class);
+        i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivity(i);
+    }
+
+    private void showSummary() {
         Intent intent = new Intent(this, MatchPagerActivity.class);
         intent.putExtra(MatchPagerActivity.ARG_ITEM_NAME, game.getPlayers().get(0).getPlayerName());
         intent.putExtra(MatchPagerActivity.ARG_ITEM_POSITION, 0);

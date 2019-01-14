@@ -19,6 +19,14 @@
             android:text="@string/button_new_leg" />
 
         <Button
+            android:id="@+id/match_summary"
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            android:background="@drawable/button_default"
+            android:text="@string/button_match_summary" />
+
+        <Button
             android:id="@+id/complete_match"
             android:layout_width="300dp"
             android:layout_height="wrap_content"

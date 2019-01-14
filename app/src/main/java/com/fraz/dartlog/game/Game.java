@@ -38,12 +38,16 @@ public abstract class Game {
     }
 
     public void undo() {
-        if (!playOrder.isEmpty()) {
+        if (isUndoPossible()) {
             int lastPlayerIdx = playOrder.removeLast();
             getPlayer(lastPlayerIdx).undoScore();
             currentPlayerIdx = lastPlayerIdx;
             setWinner(null);
         }
+    }
+
+    public boolean isUndoPossible(){
+        return !playOrder.isEmpty();
     }
 
     public boolean isGameOver() {
