@@ -2,23 +2,17 @@ package com.fraz.dartlog.statistics;
 
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
 import android.support.v4.view.ViewPager;
-import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.Toast;
 
-import com.fraz.dartlog.MainActivity;
 import com.fraz.dartlog.MenuBackground;
 import com.fraz.dartlog.R;
 import com.fraz.dartlog.Util;
-import com.fraz.dartlog.game.setup.SetupActivity;
 
 /**
  * An activity representing a single Profile detail screen. This
@@ -35,9 +29,10 @@ public class ProfileDetailActivity extends MenuBackground {
         super.onCreate(savedInstanceState, this, R.layout.activity_profile_detail);
 
         playerName = getIntent().getStringExtra(ProfileDetailFragment.ARG_ITEM_NAME);
-        AsyncTaskRunner runner = new AsyncTaskRunner();
-        runner.execute();
-
+        Log.d("playerName", playerName);
+        ViewPager viewPager = findViewById(R.id.profile_detail_view_pager);
+        viewPager.setAdapter(new ProfileDetailFragmentPagerAdapter(getSupportFragmentManager(),
+                playerName));
     }
 
     @Override
@@ -78,23 +73,5 @@ public class ProfileDetailActivity extends MenuBackground {
         Intent intent = new Intent(this, ProfileListActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(intent);
-    }
-
-
-    private class AsyncTaskRunner extends AsyncTask<Void, Void, Void> {
-
-        private ProfileDetailFragmentPagerAdapter profileAdapter;
-
-        @Override
-        protected Void doInBackground(Void... voids) {
-            profileAdapter = new ProfileDetailFragmentPagerAdapter(getSupportFragmentManager(),
-                    playerName);
-            return null;
-        }
-
-        protected void onPostExecute(Void result) {
-            ViewPager viewPager = (ViewPager) findViewById(R.id.profile_detail_view_pager);
-            viewPager.setAdapter(profileAdapter);
-        }
     }
 }
