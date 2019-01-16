@@ -2,7 +2,8 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_height="wrap_content"
-    android:layout_width="match_parent">
+    android:layout_width="match_parent"
+    android:orientation="vertical">
     <TextView
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
@@ -13,7 +14,7 @@
         android:textColor="@color/main_grey"
         android:background="@color/background_statistics_header"
         android:padding="8dp"
+        android:id="@+id/header"
         android:gravity="center_horizontal"
-    tools:text="Header" />
-
+        tools:text="Header" />
 </LinearLayout>
