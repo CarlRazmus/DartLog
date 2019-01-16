@@ -24,14 +24,12 @@
             android:layout_height="wrap_content"
             android:layout_width="match_parent"
             android:layout_marginTop="8dp"
-            android:layout_marginBottom="1dp"
             android:id="@+id/profile_detail_fewest_turns_container"/>
 
         <include layout="@layout/match_statistics_container"
             android:layout_height="wrap_content"
             android:layout_width="match_parent"
             android:layout_marginTop="8dp"
-            android:layout_marginBottom="1dp"
             android:id="@+id/profile_detail_highest_out_container"/>
     </LinearLayout>
 </android.support.v4.widget.NestedScrollView>
