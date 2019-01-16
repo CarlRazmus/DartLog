@@ -1,11 +1,14 @@
 package com.fraz.dartlog.statistics;
 
+import android.app.VoiceInteractor;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.Toolbar;
+import android.text.Layout;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,6 +22,8 @@ import com.fraz.dartlog.db.DartLogDatabaseHelper;
 import com.fraz.dartlog.game.GameData;
 
 import java.util.Locale;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
 
 /**
  * A fragment representing a single Profile detail screen.
@@ -43,87 +48,7 @@ public class ProfileDetailFragment extends Fragment {
     private long startTime;
     private boolean finishedLoadingSummary;
     private boolean finishedLoadingHighscores;
-
-
-    private class AsyncTaskFetchSummaryData extends AsyncTask<Void, Void, Void> {
-
-        @Override
-        protected Void doInBackground(Void... voids) {
-            DartLogDatabaseHelper databaseHelper = DartLogDatabaseHelper.getInstance(getContext());
-            gamesWon = databaseHelper.getNumberOfGamesWon(profileName);
-            gamesPlayed = databaseHelper.getNumberOfGamesPlayed(profileName);
-            finishedLoadingSummary = true;
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(Void result) {
-            RelativeLayout layout = rootView.findViewById(R.id.summary_container);
-            ProgressBar progressBar = layout.findViewById(R.id.progress_bar);
-            if(progressBar != null){
-                layout.removeView(progressBar);
-            }
-            addSummaryData();
-        }
-    }
-
-    private class AsyncTaskFetchHighScores extends AsyncTask<Void, Void, Void> {
-
-        @Override
-        protected Void doInBackground(Void... voids) {
-            DartLogDatabaseHelper databaseHelper = DartLogDatabaseHelper.getInstance(getContext());
-            highestCheckoutGame = databaseHelper.getHighestCheckoutGame(profileName);
-            fewestTurns301Game = databaseHelper.getFewestTurns301Game(profileName);
-            fewestTurns501Game = databaseHelper.getFewestTurns501Game(profileName);
-
-            if (highestCheckoutGame == null && fewestTurns301Game  == null && fewestTurns501Game  == null) {
-                databaseHelper.refreshStatistics(profileName);
-                highestCheckoutGame = databaseHelper.getHighestCheckoutGame(profileName);
-                fewestTurns301Game = databaseHelper.getFewestTurns301Game(profileName);
-                fewestTurns501Game = databaseHelper.getFewestTurns501Game(profileName);
-            }
-
-            finishedLoadingHighscores = true;
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(Void result) {
-            //LinearLayout linearLayout = rootView.findViewById(R.id.profile_detail_linear_layout);
-            //initFewestTurnsGames(linearLayout);
-            //initHighestOutGame(linearLayout);
-        }
-    }
-
-    private class AsyncTaskProgressBarHandler extends AsyncTask<Void, Void, Void>{
-
-        @Override
-        protected Void doInBackground(Void... voids) {
-            while(!finishedLoadingSummary || !finishedLoadingHighscores){
-                if (SystemClock.uptimeMillis() - startTime > 1000){
-                    publishProgress();
-                    break;
-                }
-            }
-            return null;
-        }
-
-        @Override
-        protected void onProgressUpdate(Void... values) {
-            super.onProgressUpdate(values);
-
-            if(!finishedLoadingSummary){
-                RelativeLayout summaryLayout = rootView.findViewById(R.id.summary_container);
-                ProgressBar progressBar =  new ProgressBar(getContext());
-                setLayoutParams(progressBar, 40, 40);
-                summaryLayout.addView(progressBar);
-            }
-
-            //if(finishedLoadingHighscores){
-            //    addSummaryProgressBar();
-            //}
-        }
-    }
+    private int unique_id = 0;
 
 
     /**
@@ -146,26 +71,64 @@ public class ProfileDetailFragment extends Fragment {
         rootView = inflater.inflate(R.layout.profile_detail, container, false);
 
         Toolbar toolbar = getActivity().findViewById(R.id.toolbar);
-        if (toolbar != null) {
+        if (toolbar != null)
             toolbar.setTitle(profileName);
-        }
 
-        startTime = SystemClock.uptimeMillis();
-        AsyncTaskFetchSummaryData runnerSummary = new AsyncTaskFetchSummaryData();
-        AsyncTaskFetchHighScores runnerHighScores = new AsyncTaskFetchHighScores();
-        AsyncTaskProgressBarHandler runnerProgressBar = new AsyncTaskProgressBarHandler();
-        runnerHighScores.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, null);
-        runnerSummary.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, null);
-        runnerProgressBar.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, null);
+        LinearLayout fewestTurnsLayout = rootView.findViewById(R.id.profile_detail_fewest_turns_container);
+        TextView fewestTurnHeader = fewestTurnsLayout.findViewById(R.id.header);
+        fewestTurnHeader.setText(R.string.fewest_turns);
+
+        LinearLayout highestCheckoutLayout = rootView.findViewById(R.id.profile_detail_highest_out_container);
+        TextView highestCheckoutHeader = highestCheckoutLayout.findViewById(R.id.header);
+        highestCheckoutHeader.setText(R.string.highest_out);
         return rootView;
     }
 
+    @Override
+    public void onViewCreated(View view, Bundle savedInstanceState){
+        AsyncTaskFetchSummaryData runnerSummary = new AsyncTaskFetchSummaryData();
+        AsyncTaskFetchHighScores runnerHighScores = new AsyncTaskFetchHighScores();
+        AsyncTaskProgressBarHandler runnerProgressBar = new AsyncTaskProgressBarHandler();
 
-    private void setLayoutParams(View view, int height_dp, int width_dp){
+        startTime = SystemClock.uptimeMillis();
+
+        Executor exec = Executors.newFixedThreadPool(5);
+        runnerSummary.executeOnExecutor(exec, null);
+        runnerHighScores.executeOnExecutor(exec, null);
+        runnerProgressBar.executeOnExecutor(exec, null);
+    }
+
+    private void removeProgressBar(int id_){
+        View layout = rootView.findViewById(id_);
+        ProgressBar progressBar = layout.findViewById(R.id.progress_bar);
+
+        if(layout.getClass().equals(RelativeLayout.class)){
+            if(progressBar != null){
+                ((RelativeLayout)layout).removeView(progressBar);
+            }
+        }
+        if(layout.getClass().equals(LinearLayout.class)){
+            if(progressBar != null){
+                ((LinearLayout)layout).removeView(progressBar);
+            }
+        }
+    }
+
+    private void setRelativeLayoutParams(View view, int height_dp, int width_dp){
         int width =  (int)(width_dp * getContext().getResources().getDisplayMetrics().density);
         int height =   (int)(height_dp * getContext().getResources().getDisplayMetrics().density);
+
         RelativeLayout.LayoutParams relativeParams = new RelativeLayout.LayoutParams(width, height);
         relativeParams.addRule(RelativeLayout.CENTER_IN_PARENT);
+        view.setLayoutParams(relativeParams);
+    }
+
+    private void setLinearLayoutParams(View view, int height_dp, int width_dp){
+        int width =  (int)(width_dp * getContext().getResources().getDisplayMetrics().density);
+        int height =   (int)(height_dp * getContext().getResources().getDisplayMetrics().density);
+
+        LinearLayout.LayoutParams relativeParams = new LinearLayout.LayoutParams(width, height);
+        relativeParams.gravity = Gravity.CENTER;
         view.setLayoutParams(relativeParams);
     }
 
@@ -179,53 +142,123 @@ public class ProfileDetailFragment extends Fragment {
         ((TextView) summaryView.findViewById(R.id.profile_detail_games_won))
                 .setText(String.format(Locale.getDefault(), "%d", gamesWon));
         profileLayout.addView(summaryView, 0);
-}
+    }
 
-    private void initFewestTurnsGames(LinearLayout linearLayout) {
-        TextView fewestTurnsHeader =
-                (TextView) linearLayout.findViewById(R.id.profile_detail_fewest_turns_container);
-        fewestTurnsHeader.setText(R.string.fewest_turns);
-
-        int index = linearLayout.indexOfChild(fewestTurnsHeader) + 1;
+    private void addFewestTurnsGames() {
+        LinearLayout fewestTurnsLayout = rootView.findViewById(R.id.profile_detail_fewest_turns_container);
         if (fewestTurns301Game != null)
-            addFewestTurnsView(fewestTurns301Game, linearLayout, index);
+            addFewestTurnsView(fewestTurns301Game, fewestTurnsLayout);
         if (fewestTurns501Game != null)
-            addFewestTurnsView(fewestTurns501Game, linearLayout, index);
+            addFewestTurnsView(fewestTurns501Game, fewestTurnsLayout);
     }
 
-    private void initHighestOutGame(LinearLayout linearLayout) {
-        TextView highestOutHeader =
-                (TextView) linearLayout.findViewById(R.id.profile_detail_highest_out_container);
-        int index = linearLayout.indexOfChild(highestOutHeader) + 1;
-        highestOutHeader.setText(R.string.highest_out);
-
-        if (highestCheckoutGame != null)
-            addCheckoutView(highestCheckoutGame, linearLayout, index);
+    private void addHighestOutGame( ) {
+        LinearLayout linearLayout= rootView.findViewById(R.id.profile_detail_highest_out_container);
+        if (highestCheckoutGame != null){
+            MatchItemView matchItemView = new MatchItemView(getContext());
+            matchItemView.setStatToShow(MatchItemView.Stat.CHECKOUT);
+            addGameView(matchItemView, highestCheckoutGame, linearLayout);
+        }
     }
 
-    private void addCheckoutView(final GameData game, LinearLayout linearLayout, final int index) {
-        MatchItemView matchItemView = new MatchItemView(getContext());
-        matchItemView.setStatToShow(MatchItemView.Stat.CHECKOUT);
-        addGameView(matchItemView, game, linearLayout, index);
-    }
-
-    private void addFewestTurnsView(final GameData game, LinearLayout linearLayout, final int index) {
+    private void addFewestTurnsView(final GameData game, LinearLayout linearLayout) {
         MatchItemView matchItemView = new MatchItemView(getContext());
         matchItemView.setStatToShow(MatchItemView.Stat.TURNS);
-        addGameView(matchItemView, game, linearLayout, index);
+        addGameView(matchItemView, game, linearLayout);
     }
 
-    private void addGameView(MatchItemView matchItemView, final GameData game, LinearLayout linearLayout, final int index) {
+    private void addGameView(MatchItemView matchItemView, final GameData game, LinearLayout linearLayout) {
         matchItemView.setVisibility(View.VISIBLE);
         matchItemView.setGame(game, profileName);
         matchItemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 MatchFragment.newInstance(game).show(getFragmentManager(),
-                        "overview_game_" + Integer.toString(index));
+                        "game_overview_" + String.valueOf(unique_id));
+                unique_id += 1;
             }
         });
+        linearLayout.addView(matchItemView);
+    }
 
-        linearLayout.addView(matchItemView, index);
+
+    private class AsyncTaskFetchSummaryData extends AsyncTask<Void, Void, Void> {
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+            DartLogDatabaseHelper databaseHelper = DartLogDatabaseHelper.getInstance(getContext());
+            gamesWon = databaseHelper.getNumberOfGamesWon(profileName);
+            gamesPlayed = databaseHelper.getNumberOfGamesPlayed(profileName);
+            SystemClock.sleep(4000);
+            finishedLoadingSummary = true;
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void result) {
+            removeProgressBar(R.id.summary_container);
+            addSummaryData();
+        }
+    }
+
+    private class AsyncTaskFetchHighScores extends AsyncTask<Void, Void, Void> {
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+            DartLogDatabaseHelper databaseHelper = DartLogDatabaseHelper.getInstance(getContext());
+            highestCheckoutGame = databaseHelper.getHighestCheckoutGame(profileName);
+            fewestTurns301Game = databaseHelper.getFewestTurns301Game(profileName);
+            fewestTurns501Game = databaseHelper.getFewestTurns501Game(profileName);
+
+            if (highestCheckoutGame == null && fewestTurns301Game  == null && fewestTurns501Game  == null) {
+                databaseHelper.refreshStatistics(profileName);
+                highestCheckoutGame = databaseHelper.getHighestCheckoutGame(profileName);
+                fewestTurns301Game = databaseHelper.getFewestTurns301Game(profileName);
+                fewestTurns501Game = databaseHelper.getFewestTurns501Game(profileName);
+            }
+
+            SystemClock.sleep(3000);
+            finishedLoadingHighscores = true;
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void result) {
+            removeProgressBar(R.id.profile_detail_fewest_turns_container);
+            removeProgressBar(R.id.profile_detail_highest_out_container);
+            addFewestTurnsGames();
+            addHighestOutGame();
+        }
+    }
+
+    private class AsyncTaskProgressBarHandler extends AsyncTask<Void, Void, Void>{
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+            while(!finishedLoadingSummary || !finishedLoadingHighscores)
+                if (SystemClock.uptimeMillis() - startTime > 1000)
+                    break;
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void result) {
+            if(!finishedLoadingSummary){
+                RelativeLayout summaryLayout = rootView.findViewById(R.id.summary_container);
+                ProgressBar progressBar =  (ProgressBar)getLayoutInflater().inflate(R.layout.generic_progress_bar, null);
+                setRelativeLayoutParams(progressBar, 40, 40);
+                summaryLayout.addView(progressBar);
+            }
+            if(!finishedLoadingHighscores){
+                LinearLayout fewestTurnLayout = rootView.findViewById(R.id.profile_detail_fewest_turns_container);
+                LinearLayout highestOutLayout = rootView.findViewById(R.id.profile_detail_highest_out_container);
+                ProgressBar progressBar1 =  (ProgressBar)getLayoutInflater().inflate(R.layout.generic_progress_bar, null);
+                ProgressBar progressBar2 =  (ProgressBar)getLayoutInflater().inflate(R.layout.generic_progress_bar, null);
+                setLinearLayoutParams(progressBar1, 30, 30);
+                setLinearLayoutParams(progressBar2, 30, 30);
+                fewestTurnLayout.addView(progressBar1);
+                highestOutLayout.addView(progressBar2);
+            }
+        }
     }
 }
