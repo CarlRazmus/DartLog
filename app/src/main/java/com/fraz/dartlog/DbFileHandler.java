@@ -1,18 +1,11 @@
 package com.fraz.dartlog;
 
 import android.app.Activity;
-import android.content.ContentResolver;
-import android.content.ContentUris;
-import android.content.ContentValues;
-import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
-import android.provider.DocumentsContract;
-import android.provider.MediaStore;
 import android.provider.OpenableColumns;
 import android.util.Log;
-import android.webkit.MimeTypeMap;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -21,7 +14,6 @@ import java.io.OutputStream;
 import java.util.Calendar;
 
 import static android.content.ContentValues.TAG;
-import static android.webkit.ConsoleMessage.MessageLevel.LOG;
 
 /**
  * Created by CarlR on 17/06/2017.
@@ -72,8 +64,7 @@ public class DbFileHandler {
     public void selectExternalDbFile() {
         Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
         intent.addCategory(Intent.CATEGORY_OPENABLE);
-        intent.setType("*/*");
-        intent.setData(Uri.fromParts("content", "*.db", null));
+        intent.setDataAndType(Uri.fromParts("content", "*.db", null), "*/*");
 
         parent.startActivityForResult(intent, OPEN_REQUEST_CODE);
     }
