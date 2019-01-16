@@ -89,7 +89,7 @@ public class ProfileDetailFragment extends Fragment {
 
         startTime = SystemClock.uptimeMillis();
 
-        Executor exec = Executors.newFixedThreadPool(5);
+        Executor exec = Executors.newFixedThreadPool(3);
         runnerSummary.executeOnExecutor(exec, null);
         runnerHighScores.executeOnExecutor(exec, null);
         runnerProgressBar.executeOnExecutor(exec, null);
@@ -109,24 +109,6 @@ public class ProfileDetailFragment extends Fragment {
                 ((LinearLayout)layout).removeView(progressBar);
             }
         }
-    }
-
-    private void setRelativeLayoutParams(View view, int height_dp, int width_dp){
-        int width =  (int)(width_dp * getContext().getResources().getDisplayMetrics().density);
-        int height =   (int)(height_dp * getContext().getResources().getDisplayMetrics().density);
-
-        RelativeLayout.LayoutParams relativeParams = new RelativeLayout.LayoutParams(width, height);
-        relativeParams.addRule(RelativeLayout.CENTER_IN_PARENT);
-        view.setLayoutParams(relativeParams);
-    }
-
-    private void setLinearLayoutParams(View view, int height_dp, int width_dp){
-        int width =  (int)(width_dp * getContext().getResources().getDisplayMetrics().density);
-        int height =   (int)(height_dp * getContext().getResources().getDisplayMetrics().density);
-
-        LinearLayout.LayoutParams relativeParams = new LinearLayout.LayoutParams(width, height);
-        relativeParams.gravity = Gravity.CENTER;
-        view.setLayoutParams(relativeParams);
     }
 
     private void addSummaryData() {
@@ -186,7 +168,6 @@ public class ProfileDetailFragment extends Fragment {
             DartLogDatabaseHelper databaseHelper = DartLogDatabaseHelper.getInstance(getContext());
             gamesWon = databaseHelper.getNumberOfGamesWon(profileName);
             gamesPlayed = databaseHelper.getNumberOfGamesPlayed(profileName);
-            SystemClock.sleep(4000);
             finishedLoadingSummary = true;
             return null;
         }
@@ -213,8 +194,6 @@ public class ProfileDetailFragment extends Fragment {
                 fewestTurns301Game = databaseHelper.getFewestTurns301Game(profileName);
                 fewestTurns501Game = databaseHelper.getFewestTurns501Game(profileName);
             }
-
-            SystemClock.sleep(3000);
             finishedLoadingHighscores = true;
             return null;
         }
@@ -242,19 +221,13 @@ public class ProfileDetailFragment extends Fragment {
         protected void onPostExecute(Void result) {
             if(!finishedLoadingSummary){
                 RelativeLayout summaryLayout = rootView.findViewById(R.id.summary_container);
-                ProgressBar progressBar =  (ProgressBar)getLayoutInflater().inflate(R.layout.generic_progress_bar, null);
-                setRelativeLayoutParams(progressBar, 40, 40);
-                summaryLayout.addView(progressBar);
+                getLayoutInflater().inflate(R.layout.circular_progress_bar, summaryLayout);
             }
             if(!finishedLoadingHighscores){
                 LinearLayout fewestTurnLayout = rootView.findViewById(R.id.profile_detail_fewest_turns_container);
                 LinearLayout highestOutLayout = rootView.findViewById(R.id.profile_detail_highest_out_container);
-                ProgressBar progressBar1 =  (ProgressBar)getLayoutInflater().inflate(R.layout.generic_progress_bar, null);
-                ProgressBar progressBar2 =  (ProgressBar)getLayoutInflater().inflate(R.layout.generic_progress_bar, null);
-                setLinearLayoutParams(progressBar1, 30, 30);
-                setLinearLayoutParams(progressBar2, 30, 30);
-                fewestTurnLayout.addView(progressBar1);
-                highestOutLayout.addView(progressBar2);
+                getLayoutInflater().inflate(R.layout.linear_progress_bar, fewestTurnLayout);
+                getLayoutInflater().inflate(R.layout.linear_progress_bar, highestOutLayout);
             }
         }
     }
