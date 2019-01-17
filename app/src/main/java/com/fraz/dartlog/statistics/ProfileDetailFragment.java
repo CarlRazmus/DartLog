@@ -46,7 +46,9 @@ public class ProfileDetailFragment extends Fragment {
     private boolean finishedLoadingSummary;
     private boolean finishedLoadingHighscores;
     private int unique_id = 0;
-
+    private AsyncTaskFetchSummaryData runnerSummary;
+    private AsyncTaskFetchHighScores runnerHighScores;
+    private AsyncTaskProgressBarHandler runnerProgressBar;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -60,6 +62,21 @@ public class ProfileDetailFragment extends Fragment {
         super.onCreate(savedInstanceState);
 
         profileName = getArguments().getString(ARG_ITEM_NAME);
+    }
+
+    @Override
+    public void onDestroyView()
+    {
+        if (runnerSummary != null)
+        runnerSummary.cancel(true);
+
+        if (runnerHighScores != null)
+            runnerHighScores.cancel(true);
+
+        if (runnerProgressBar != null)
+            runnerProgressBar.cancel(true);
+
+        super.onDestroyView();
     }
 
     @Override
@@ -83,9 +100,9 @@ public class ProfileDetailFragment extends Fragment {
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState){
-        AsyncTaskFetchSummaryData runnerSummary = new AsyncTaskFetchSummaryData();
-        AsyncTaskFetchHighScores runnerHighScores = new AsyncTaskFetchHighScores();
-        AsyncTaskProgressBarHandler runnerProgressBar = new AsyncTaskProgressBarHandler();
+        runnerSummary = new AsyncTaskFetchSummaryData();
+        runnerHighScores = new AsyncTaskFetchHighScores();
+        runnerProgressBar = new AsyncTaskProgressBarHandler();
 
         startTime = SystemClock.uptimeMillis();
 
@@ -188,8 +205,15 @@ public class ProfileDetailFragment extends Fragment {
             fewestTurns301Game = databaseHelper.getFewestTurns301Game(profileName);
             fewestTurns501Game = databaseHelper.getFewestTurns501Game(profileName);
 
+            if(this.isCancelled())
+                return null;
+
             if (highestCheckoutGame == null && fewestTurns301Game  == null && fewestTurns501Game  == null) {
                 databaseHelper.refreshStatistics(profileName);
+
+                if(this.isCancelled())
+                    return null;
+
                 highestCheckoutGame = databaseHelper.getHighestCheckoutGame(profileName);
                 fewestTurns301Game = databaseHelper.getFewestTurns301Game(profileName);
                 fewestTurns501Game = databaseHelper.getFewestTurns501Game(profileName);
