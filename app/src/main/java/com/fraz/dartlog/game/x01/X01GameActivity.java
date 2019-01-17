@@ -16,6 +16,7 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.ViewAnimator;
 
+import com.fraz.dartlog.CheckoutChart;
 import com.fraz.dartlog.MainActivity;
 import com.fraz.dartlog.OnBackPressedDialogFragment;
 import com.fraz.dartlog.R;
@@ -148,7 +149,7 @@ public class X01GameActivity extends AppCompatActivity implements View.OnClickLi
         for (String playerName : playerNames) {
             X01ScoreManager scoreManager = new X01ScoreManager(x);
             scoreManager.setDoubleOutAttempts(doubleOutAttempts);
-            playerDataList.add(new X01PlayerData(this, playerName, scoreManager));
+            playerDataList.add(new X01PlayerData(new CheckoutChart(this), playerName, scoreManager));
         }
         return playerDataList;
     }
