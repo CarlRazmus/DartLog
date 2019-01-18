@@ -12,13 +12,13 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:elevation="4dp"
-        android:theme="@style/AppBarOverlay">
+        android:theme="@style/AppBarOverlayStyle">
 
         <android.support.v7.widget.Toolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            app:popupTheme="@style/PopupOverlay" />
+            app:popupTheme="@style/PopupOverlayStyle" />
     </android.support.design.widget.AppBarLayout>
 
     <android.support.v4.view.ViewPager

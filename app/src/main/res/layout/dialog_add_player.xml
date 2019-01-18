@@ -4,14 +4,14 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <EditText
+    <android.support.v7.widget.AppCompatEditText
         android:id="@+id/add_player_edit_text"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        style="@style/GreenEditTextStyle"
         android:layout_marginEnd="16dp"
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"
         android:layout_marginStart="16dp"
         android:inputType="textNoSuggestions|textCapWords" />
-
 </LinearLayout>

@@ -150,8 +150,7 @@ public class SetupActivity extends MenuBackground
     }
 
     private void showRulesDialog(String title, String rules) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this,
-                R.style.GreenButtonAlertDialog)
+        AlertDialog.Builder builder = new AlertDialog.Builder(this)
                 .setTitle(title + " rules")
                 .setMessage(rules)
                 .setIcon(R.drawable.ic_info_outline_white_18dp)
