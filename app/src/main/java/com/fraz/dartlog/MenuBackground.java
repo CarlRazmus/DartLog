@@ -196,17 +196,16 @@ public class MenuBackground extends AppCompatActivity {
                             if (dbHelper.addPlayer(name) != -1) {
                                 Util.addPlayer(name, getContext());
 
-                                if(getActivity().getLocalClassName().equals(ProfileListActivity.class.getName()))
-                                {
-                                    ((ProfileListActivity)getActivity()).updateProfileList();
+                                    if(getActivity().getClass().getName().equals(ProfileListActivity.class.getName()))
+                                    {
+                                        ((ProfileListActivity)getActivity()).updateProfileList();
+                                    }
                                 }
                             }
+                            else if(!Util.loadProfileNames(getContext()).contains(name))
+                                Util.addPlayer(name, getContext());
                         }
-                        else if(!Util.loadProfileNames(getContext()).contains(name))
-                            Util.addPlayer(name, getContext());
-                    }
-                });
-
+                    });
             return builder.create();
         }
     }
