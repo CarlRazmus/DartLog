@@ -8,7 +8,6 @@
         <item name="colorPrimary">@color/primary</item>
         <item name="colorAccent">@color/accent</item>
         <item name="alertDialogTheme">@style/GreenAlertDialogStyle</item>
-        <item name="dialogTheme">@style/GreenAlertDialogStyle</item>
         <item name="android:alertDialogTheme">@style/GreenAlertDialogStyle</item>
     </style>
 
@@ -18,9 +17,8 @@
 
     <style name="PopupOverlayStyle" parent="ThemeOverlay.AppCompat" />
 
-    <style name="GreenAlertDialogStyle" parent="Theme.AppCompat.Dialog">
-        <item name="android:background">@color/background_transparent</item>
-        <item name="background">@color/background_transparent</item>
+    <style name="GreenAlertDialogStyle" parent="Theme.AppCompat.Dialog.Alert">
         <item name="colorAccent">@color/accent</item>
+        <item name="android:windowBackground">@color/background_transparent</item>
     </style>
 </resources>
