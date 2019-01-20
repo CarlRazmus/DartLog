@@ -1,12 +1,15 @@
 package com.fraz.dartlog.game.x01;
 
 import android.app.DialogFragment;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.v7.app.AppCompatActivity;
+import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -24,10 +27,11 @@ import com.fraz.dartlog.db.DartLogDatabaseHelper;
 import com.fraz.dartlog.game.InputEventListener;
 import com.fraz.dartlog.game.NumPadHandler;
 import com.fraz.dartlog.statistics.MatchPagerActivity;
+import com.fraz.dartlog.statistics.MatchRecyclerViewAdapter;
 
 import java.util.ArrayList;
 
-public class X01GameActivity extends AppCompatActivity implements View.OnClickListener,
+public class X01GameActivity extends Fragment implements View.OnClickListener,
         InputEventListener, OnBackPressedDialogFragment.OnBackPressedDialogListener {
 
     private X01 game;
@@ -40,9 +44,8 @@ public class X01GameActivity extends AppCompatActivity implements View.OnClickLi
     private boolean undoPossible = false;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_x01_game);
 
         setSupportActionBar((Toolbar) findViewById(R.id.game_toolbar));
         viewAnimator = (ViewAnimator) findViewById(R.id.game_input);
@@ -53,10 +56,18 @@ public class X01GameActivity extends AppCompatActivity implements View.OnClickLi
         gameListAdapter = new X01GameListAdapter(game);
 
         gamesPlayed = 1;
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.activity_x01_game, container, false);
+
         initListView();
         initNumPadView();
         initGameDoneView();
         updateView();
+        return view;
     }
 
     @Override
