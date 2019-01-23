@@ -20,7 +20,11 @@ import com.fraz.dartlog.game.random.Random;
 import com.fraz.dartlog.game.x01.X01;
 import com.fraz.dartlog.game.x01.X01PlayerData;
 import com.fraz.dartlog.game.x01.X01ScoreManager;
+import com.fraz.dartlog.db.DartLogContract.ScoreEntry;
 
+import java.io.FileNotFoundException;
+import java.io.PrintWriter;
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
@@ -139,6 +143,29 @@ public class DartLogDatabaseHelper extends SQLiteOpenHelper {
             }
         }
         return names;
+    }
+
+    /**
+     * Get the player ids of all the players.
+     *
+     * @return the player names of all the players in the database.
+     */
+    public ArrayList<Integer> getPlayerIds() {
+        ArrayList<Integer> ids;
+        SQLiteDatabase db = getReadableDatabase();
+        String[] projection = {
+                DartLogContract.PlayerEntry.COLUMN_NAME_ID
+        };
+
+        ids = new ArrayList<>();
+        try (Cursor c = db.query(DartLogContract.PlayerEntry.TABLE_NAME, projection,
+                null, null, null, null, null)) {
+            Integer columnIndex = c.getColumnIndex(DartLogContract.PlayerEntry.COLUMN_NAME_ID);
+            while (c.moveToNext()) {
+                ids.add(c.getInt(columnIndex));
+            }
+        }
+        return ids;
     }
 
     public HashMap<Long, GameData> getPlayerMatchDataById(String playerName) {
@@ -337,6 +364,79 @@ public class DartLogDatabaseHelper extends SQLiteOpenHelper {
         }
         c.close();
         return matchId;
+    }
+
+    public void checkIfStatisticsNeedsUpdate() {
+        //1. Check if any players need to update their statistics
+        //2. Update the statistics for all players that was found in step 1.
+        SQLiteDatabase db = getWritableDatabase();
+        ArrayList<Integer> playerIds = getPlayerIds();
+
+        String sql = "SELECT s.player_id, s.fewest_turns_301, s.fewest_turns_501, s.highest_checkout" +
+                "     FROM statistic_type s;";
+
+        try (Cursor c = db.rawQuery(sql, null)) {
+            Integer checkoutHigh;
+            Integer fewestTurns301;
+            Integer fewestTurn501;
+            Integer currentPlayer;
+
+            while (c.moveToNext()) {
+                currentPlayer = c.getInt(c.getColumnIndex(DartLogContract.StatisticEntry.COLUMN_NAME_PLAYER_ID));
+                checkoutHigh = c.getInt(c.getColumnIndex(DartLogContract.StatisticEntry.COLUMN_NAME_HIGHEST_CHECKOUT_MATCH_ID));
+                fewestTurns301 = c.getInt(c.getColumnIndex(DartLogContract.StatisticEntry.COLUMN_NAME_301_FEWEST_TURNS_MATCH_ID));
+                fewestTurn501 = c.getInt(c.getColumnIndex(DartLogContract.StatisticEntry.COLUMN_NAME_501_FEWEST_TURNS_MATCH_ID));
+
+                if (checkoutHigh != null || fewestTurn501 != null || fewestTurns301 != null)
+                    playerIds.remove(currentPlayer);
+            }
+
+            /* playerIds now contains all the players that does not have any statistical data at all */
+            updateStatistics(db, playerIds);
+        }
+    }
+
+    private String convertArrayToSqlArrayString(ArrayList<?> arrayList){
+        String convertedString = "(";
+        if (arrayList.size() > 0)
+            convertedString += arrayList.get(0);
+        for(int i = 1; i < arrayList.size(); i++)
+            convertedString += "," + arrayList.get(i).toString();
+
+        return convertedString + ")";
+    }
+
+    public void updateStatistics(SQLiteDatabase db, ArrayList<Integer> playerIds){
+
+        String playerIdsArrayString = convertArrayToSqlArrayString(playerIds);
+        String sql = "SELECT m._id, m.winner_id, m.game_type, ms.player_id" +//" , sum(ms.score), count()" +
+                "     FROM match m" +
+                "     JOIN match_score ms" +
+                "     WHERE m._id == ms.match_id AND ms.player_id in " + playerIdsArrayString +
+                "     ORDER BY  ms.player_id;";
+
+        Cursor c = db.rawQuery(sql, null);
+
+        ArrayList<String> headers = new ArrayList<>();
+        String headerFormatString = new String();
+        String baseFormatString = new String();
+
+        for (int i=0; i< c.getColumnCount(); i++){
+            headers.add(c.getColumnName(i)); //Get the value from the column from the current record.
+            headerFormatString += "%10s  |";
+            baseFormatString += "%10d  |";
+        }
+        Log.d("hej", String.valueOf(headerFormatString));
+        Log.d("hej", String.format(headerFormatString, headers.toArray()));
+
+        while (c.moveToNext()) { //Loop through all the records
+            ArrayList<Integer> values = new ArrayList<>();
+            for (int i=0; i< c.getColumnCount(); i++){
+                values.add(c.getInt(i));
+            }
+            Log.d("hej", String.format(baseFormatString, values.toArray()));
+        }
+
     }
 
     public void refreshStatistics(String playerName) {

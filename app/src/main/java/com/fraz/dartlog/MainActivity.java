@@ -1,6 +1,8 @@
 package com.fraz.dartlog;
 
+import android.content.Context;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.view.View;
@@ -20,6 +22,10 @@ public class MainActivity extends MenuBackground implements View.OnClickListener
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState, this, R.layout.activity_main);
+
+        UpdateStatisticsAsyncTask asyncTask = new UpdateStatisticsAsyncTask(this);
+        asyncTask.executeOnExecutor(Util.getExecutorInstance());
+
         Button playButton = (Button) findViewById(R.id.play_x01_button);
         Button profilesButton = (Button) findViewById(R.id.profiles_button);
         Button randomButton = (Button) findViewById(R.id.play_random_button);
@@ -76,5 +82,19 @@ public class MainActivity extends MenuBackground implements View.OnClickListener
     private void startProfileActivity() {
         Intent intent = new Intent(this, ProfileListActivity.class);
         startActivity(intent);
+    }
+
+    private class UpdateStatisticsAsyncTask extends AsyncTask<Void, Void, Void>{
+
+        private Context context;
+        public UpdateStatisticsAsyncTask(Context context){
+            this.context = context;
+        }
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+            DartLogDatabaseHelper.getInstance(context).checkIfStatisticsNeedsUpdate();
+            return null;
+        }
     }
 }
