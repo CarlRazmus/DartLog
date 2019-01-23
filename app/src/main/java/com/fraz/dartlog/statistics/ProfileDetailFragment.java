@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.os.SystemClock;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,6 +16,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.fraz.dartlog.R;
+import com.fraz.dartlog.Util;
 import com.fraz.dartlog.db.DartLogDatabaseHelper;
 import com.fraz.dartlog.game.GameData;
 
@@ -99,6 +101,12 @@ public class ProfileDetailFragment extends Fragment {
     }
 
     @Override
+    public void onDestroy(){
+        Log.d("hej", "destroying activity!");
+        super.onDestroy();
+    }
+
+    @Override
     public void onViewCreated(View view, Bundle savedInstanceState){
         runnerSummary = new AsyncTaskFetchSummaryData();
         runnerHighScores = new AsyncTaskFetchHighScores();
@@ -106,10 +114,11 @@ public class ProfileDetailFragment extends Fragment {
 
         startTime = SystemClock.uptimeMillis();
 
-        Executor exec = Executors.newFixedThreadPool(3);
-        runnerSummary.executeOnExecutor(exec, null);
-        runnerHighScores.executeOnExecutor(exec, null);
-        runnerProgressBar.executeOnExecutor(exec, null);
+        //Executor exec = Executors.newFixedThreadPool(3);
+
+        runnerSummary.executeOnExecutor(Util.getExecutorInstance(), null);
+        runnerHighScores.executeOnExecutor(Util.getExecutorInstance(), null);
+        runnerProgressBar.executeOnExecutor(Util.getExecutorInstance(), null);
     }
 
     private void removeProgressBar(int id_){
@@ -182,6 +191,7 @@ public class ProfileDetailFragment extends Fragment {
 
         @Override
         protected Void doInBackground(Void... voids) {
+            Thread.currentThread().setName(profileName + "Summary");
             DartLogDatabaseHelper databaseHelper = DartLogDatabaseHelper.getInstance(getContext());
             gamesWon = databaseHelper.getNumberOfGamesWon(profileName);
             gamesPlayed = databaseHelper.getNumberOfGamesPlayed(profileName);
@@ -200,6 +210,7 @@ public class ProfileDetailFragment extends Fragment {
 
         @Override
         protected Void doInBackground(Void... voids) {
+            Thread.currentThread().setName(profileName + "_Highscore");
             DartLogDatabaseHelper databaseHelper = DartLogDatabaseHelper.getInstance(getContext());
             highestCheckoutGame = databaseHelper.getHighestCheckoutGame(profileName);
             fewestTurns301Game = databaseHelper.getFewestTurns301Game(profileName);
@@ -235,6 +246,7 @@ public class ProfileDetailFragment extends Fragment {
 
         @Override
         protected Void doInBackground(Void... voids) {
+            Thread.currentThread().setName(profileName + "_Progressbar");
             while(!finishedLoadingSummary || !finishedLoadingHighscores)
                 if (SystemClock.uptimeMillis() - startTime > 1000)
                     break;

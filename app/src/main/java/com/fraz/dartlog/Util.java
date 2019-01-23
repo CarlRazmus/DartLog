@@ -15,10 +15,19 @@ import org.json.JSONException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Set;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
 
 public class Util {
 
     private static String PROFILE_NAMES = "PROFILE_NAMES_STRING";
+    private static Executor executorInstance;
+
+    public static Executor getExecutorInstance(){
+        if(executorInstance == null)
+            executorInstance = Executors.newFixedThreadPool(8);
+        return executorInstance;
+    }
 
     public static float dpFromPx(final Context context, final float px) {
         return px / context.getResources().getDisplayMetrics().density;

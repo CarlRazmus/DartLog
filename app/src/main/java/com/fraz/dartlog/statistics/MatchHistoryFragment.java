@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.fraz.dartlog.R;
+import com.fraz.dartlog.Util;
 import com.fraz.dartlog.db.DartLogDatabaseHelper;
 import com.fraz.dartlog.game.GameData;
 
@@ -49,8 +50,8 @@ public class MatchHistoryFragment extends Fragment {
             playerGameData = databaseHelper.getPlayerMatchData(profileName, lastLoadedMatchId, AMOUNT_ITEMS_TO_LOAD);
             lastLoadedMatchId = databaseHelper.getLastLoadedMatchId();
 
-            AsyncTaskRunner fetchDataFromDatabasetaskRunner = new AsyncTaskRunner();
-            fetchDataFromDatabasetaskRunner.execute();
+            AsyncTaskRunner fetchHistoryAsyncTask = new AsyncTaskRunner();
+            fetchHistoryAsyncTask.executeOnExecutor(Util.getExecutorInstance(), null);
 
         }
     }
