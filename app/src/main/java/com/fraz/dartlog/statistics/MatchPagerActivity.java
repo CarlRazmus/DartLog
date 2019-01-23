@@ -66,7 +66,7 @@ public class MatchPagerActivity extends AppCompatActivity {
         }
 
         protected void onPostExecute(Void result) {
-            ViewPager matchPager = (ViewPager) findViewById(R.id.match_pager);
+            ViewPager matchPager = findViewById(R.id.match_pager);
             matchPager.setAdapter(adapter);
             matchPager.setCurrentItem(position);
         }

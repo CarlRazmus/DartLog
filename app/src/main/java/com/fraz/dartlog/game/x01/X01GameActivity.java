@@ -1,12 +1,12 @@
 package com.fraz.dartlog.game.x01;
 
 import android.app.DialogFragment;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
@@ -27,53 +27,62 @@ import com.fraz.dartlog.db.DartLogDatabaseHelper;
 import com.fraz.dartlog.game.InputEventListener;
 import com.fraz.dartlog.game.NumPadHandler;
 import com.fraz.dartlog.statistics.MatchPagerActivity;
-import com.fraz.dartlog.statistics.MatchRecyclerViewAdapter;
 
 import java.util.ArrayList;
 
 public class X01GameActivity extends Fragment implements View.OnClickListener,
-        InputEventListener, OnBackPressedDialogFragment.OnBackPressedDialogListener {
+        InputEventListener {
 
     private X01 game;
     private X01GameListAdapter gameListAdapter;
     private ViewAnimator viewAnimator;
     private DartLogDatabaseHelper dbHelper;
-    private TextView roundTextView;
     private int gamesPlayed;
     private boolean currentMatchAdded = false;
     private boolean undoPossible = false;
+
+    public static X01GameActivity newInstance(int x, boolean doubleOutEnabled, int doubleOutAttempts, ArrayList<String> participantNames) {
+        X01GameActivity x01GameFragment = new X01GameActivity();
+        Bundle args = new Bundle();
+        args.putInt("x", x);
+        if (doubleOutEnabled) {
+            args.putInt("double_out", doubleOutAttempts);
+        }
+        args.putStringArrayList("playerNames", participantNames);
+        x01GameFragment.setArguments(args);
+        return x01GameFragment;
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setSupportActionBar((Toolbar) findViewById(R.id.game_toolbar));
-        viewAnimator = (ViewAnimator) findViewById(R.id.game_input);
-        dbHelper = DartLogDatabaseHelper.getInstance(this);
-        roundTextView = (TextView) findViewById(R.id.game_header_round);
-
+        dbHelper = DartLogDatabaseHelper.getInstance(getActivity());
         game = GetX01GameInstance(savedInstanceState);
         gameListAdapter = new X01GameListAdapter(game);
 
         gamesPlayed = 1;
     }
 
+    @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.activity_x01_game, container, false);
+        viewAnimator = view.findViewById(R.id.game_input);
 
-        initListView();
-        initNumPadView();
-        initGameDoneView();
-        updateView();
+        initListView(view);
+        initNumPadView(view);
+        initGameDoneView(view);
         return view;
     }
 
     @Override
-    public void onBackPressed() {
-        DialogFragment onBackPressedDialogFragment = new OnBackPressedDialogFragment();
-        onBackPressedDialogFragment.show(getFragmentManager(), "OnBackPressedDialogFragment");
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        Toolbar toolbar = getActivity().findViewById(R.id.toolbar);
+        toolbar.setTitle("X01 Game");
+        ((AppCompatActivity) getActivity()).setSupportActionBar(toolbar);
+        updateView();
     }
 
     @NonNull
@@ -83,11 +92,11 @@ public class X01GameActivity extends Fragment implements View.OnClickListener,
             if (game != null)
                 return game;
         }
-        return new X01(this, createPlayerDataList());
+        return new X01(getActivity(), createPlayerDataList());
     }
 
     @Override
-    protected void onSaveInstanceState(Bundle outState) {
+    public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putSerializable("game", game);
     }
@@ -123,7 +132,7 @@ public class X01GameActivity extends Fragment implements View.OnClickListener,
     private void setCurrentMatchAdded(boolean added) {
         currentMatchAdded = added;
         undoPossible = !added;
-        invalidateOptionsMenu();
+        getActivity().invalidateOptionsMenu();
     }
 
     @Override
@@ -139,8 +148,7 @@ public class X01GameActivity extends Fragment implements View.OnClickListener,
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = getMenuInflater();
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.game_menu, menu);
         MenuItem undo_action = menu.findItem(R.id.action_undo);
         if (undoPossible) {
@@ -150,8 +158,6 @@ public class X01GameActivity extends Fragment implements View.OnClickListener,
         {
             undo_action.setEnabled(false);
         }
-
-        return true;
     }
 
     @Override
@@ -166,7 +172,7 @@ public class X01GameActivity extends Fragment implements View.OnClickListener,
         if (!currentMatchAdded && undoPossible != game.isUndoPossible())
         {
             undoPossible = !undoPossible;
-            invalidateOptionsMenu();
+            getActivity().invalidateOptionsMenu();
         }
         if (game.isGameOver()) {
             setGameDoneView();
@@ -177,11 +183,11 @@ public class X01GameActivity extends Fragment implements View.OnClickListener,
     }
 
     private void updateGameRound() {
-        ((TextView) findViewById(R.id.game_header_round)).setText(String.valueOf(game.getTurn()));
+        ((TextView) getView().findViewById(R.id.game_header_round)).setText(String.valueOf(game.getTurn()));
     }
 
-    private void initListView() {
-        RecyclerView myListView = (RecyclerView) findViewById(R.id.play_players_listView);
+    private void initListView(View container) {
+        RecyclerView myListView = container.findViewById(R.id.play_players_listView);
         assert myListView != null;
         myListView.setAdapter(gameListAdapter);
     }
@@ -190,34 +196,34 @@ public class X01GameActivity extends Fragment implements View.OnClickListener,
      * Create and return a list of player data from a list of player names.
      */
     private ArrayList<X01PlayerData> createPlayerDataList() {
-        Intent intent = getIntent();
-        ArrayList<String> playerNames = intent.getStringArrayListExtra("playerNames");
-        int x = intent.getIntExtra("x", 3);
-        int doubleOutAttempts = intent.getIntExtra("double_out", 0);
+        Bundle args = getArguments();
+        ArrayList<String> playerNames = args.getStringArrayList("playerNames");
+        int x = args.getInt("x", 3);
+        int doubleOutAttempts = args.getInt("double_out", 0);
         ArrayList<X01PlayerData> playerDataList = new ArrayList<>();
         for (String playerName : playerNames) {
             X01ScoreManager scoreManager = new X01ScoreManager(x);
             scoreManager.setDoubleOutAttempts(doubleOutAttempts);
-            playerDataList.add(new X01PlayerData(new CheckoutChart(this), playerName, scoreManager));
+            playerDataList.add(new X01PlayerData(new CheckoutChart(getContext()), playerName, scoreManager));
         }
         return playerDataList;
     }
 
     private void scrollToPlayerInList() {
-        RecyclerView playersListView = (RecyclerView) findViewById(R.id.play_players_listView);
+        RecyclerView playersListView = getView().findViewById(R.id.play_players_listView);
         assert playersListView != null;
         playersListView.smoothScrollToPosition(game.getCurrentPlayerIdx());
     }
 
-    private void initNumPadView() {
-        NumPadHandler numPadHandler = new NumPadHandler((ViewGroup) findViewById(R.id.num_pad), 180);
+    private void initNumPadView(View container) {
+        NumPadHandler numPadHandler = new NumPadHandler((ViewGroup) container.findViewById(R.id.num_pad), 180);
         numPadHandler.setListener(this);
     }
 
-    private void initGameDoneView() {
-        Button newLegButton = findViewById(R.id.new_leg);
-        Button completeMatchButton = findViewById(R.id.complete_match);
-        Button matchSummaryButton = findViewById(R.id.match_summary);
+    private void initGameDoneView(View container) {
+        Button newLegButton = container.findViewById(R.id.new_leg);
+        Button completeMatchButton = container.findViewById(R.id.complete_match);
+        Button matchSummaryButton = container.findViewById(R.id.match_summary);
 
         assert newLegButton != null;
         newLegButton.setOnClickListener(this);
@@ -236,13 +242,13 @@ public class X01GameActivity extends Fragment implements View.OnClickListener,
     }
 
     private void completeMatch() {
-        Intent i = new Intent(this, MainActivity.class);
+        Intent i = new Intent(getActivity(), MainActivity.class);
         i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(i);
     }
 
     private void showSummary() {
-        Intent intent = new Intent(this, MatchPagerActivity.class);
+        Intent intent = new Intent(getActivity(), MatchPagerActivity.class);
         intent.putExtra(MatchPagerActivity.ARG_ITEM_NAME, game.getPlayers().get(0).getPlayerName());
         intent.putExtra(MatchPagerActivity.ARG_ITEM_POSITION, 0);
         intent.putExtra(MatchPagerActivity.ARG_MATCHES, gamesPlayed);
@@ -250,13 +256,4 @@ public class X01GameActivity extends Fragment implements View.OnClickListener,
         startActivity(intent);
     }
 
-    @Override
-    public void onDialogPositiveClick(DialogFragment dialog) {
-        finish();
-    }
-
-    @Override
-    public void onDialogNegativeClick(DialogFragment dialog) {
-        // Do nothing.
-    }
 }

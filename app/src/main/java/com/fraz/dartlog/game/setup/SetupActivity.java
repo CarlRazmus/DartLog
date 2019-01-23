@@ -24,6 +24,7 @@ import com.fraz.dartlog.MenuBackground;
 import com.fraz.dartlog.PlayerSelectorDialogFragment;
 import com.fraz.dartlog.R;
 import com.fraz.dartlog.Util;
+import com.fraz.dartlog.game.GameActivity;
 import com.fraz.dartlog.game.random.RandomGameActivity;
 import com.fraz.dartlog.game.random.RandomSettingsFragment;
 import com.fraz.dartlog.game.x01.X01GameActivity;
@@ -200,12 +201,14 @@ public class SetupActivity extends MenuBackground
 
     private Intent createRandomGameIntent() {
         Intent intent = new Intent(this, RandomGameActivity.class);
+        intent.putExtra("gameType", "random");
         intent.putExtra("turns", getSelectedNrTurns());
         return intent;
     }
 
     private Intent createX01GameIntent() {
-        Intent intent = new Intent(this, X01GameActivity.class);
+        Intent intent = new Intent(this, GameActivity.class);
+        intent.putExtra("gameType", "x01");
         intent.putExtra("x", getSelectedX());
         if (isDoubleOutEnabled())
             intent.putExtra("double_out", getDoubleOutAttemptsSetting());

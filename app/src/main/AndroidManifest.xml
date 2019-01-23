@@ -21,7 +21,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".game.x01.X01GameActivity"
+        <activity android:name=".game.GameActivity"
                   android:screenOrientation="portrait"/>
         <activity android:name=".game.random.RandomGameActivity"
                   android:screenOrientation="portrait"/>
