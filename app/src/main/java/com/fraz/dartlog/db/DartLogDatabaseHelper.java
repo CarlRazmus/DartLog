@@ -34,6 +34,10 @@ import java.util.LinkedList;
 import java.util.Locale;
 import java.util.Map;
 
+import static android.database.Cursor.FIELD_TYPE_INTEGER;
+import static android.database.Cursor.FIELD_TYPE_NULL;
+import static android.database.Cursor.FIELD_TYPE_STRING;
+
 public class DartLogDatabaseHelper extends SQLiteOpenHelper {
 
     // If you change the database schema, you must increment the database version.
@@ -409,13 +413,22 @@ public class DartLogDatabaseHelper extends SQLiteOpenHelper {
     public void updateStatistics(SQLiteDatabase db, ArrayList<Integer> playerIds){
 
         String playerIdsArrayString = convertArrayToSqlArrayString(playerIds);
-        String sql = "SELECT m._id, m.winner_id, m.game_type, ms.player_id" +//" , sum(ms.score), count()" +
-                "     FROM match m" +
-                "     JOIN match_score ms" +
-                "     WHERE m._id == ms.match_id AND ms.player_id in " + playerIdsArrayString +
-                "     ORDER BY  ms.player_id;";
+        String x01Sql =
 
-        Cursor c = db.rawQuery(sql, null);
+                "SELECT  m_id, game_type, x, winner_id, max(ms_count), ms_id, min(ms_count) " +
+                "FROM ( " +
+                    "SELECT m._id as m_id, m.game_type, x.x, m.winner_id, ms.score, ms._id as ms_id, count(ms.score) as ms_count, max(ms._id) as ms_max_id " +
+                    "     FROM x01 x " +
+                    "     INNER JOIN match m ON x.match_id == m_id " +
+                    "     INNER JOIN match_score ms ON x.match_id == ms.match_id " +
+                    "     WHERE m.winner_id == ms.player_id " +
+                    "       AND ms.player_id in " + playerIdsArrayString +
+                    "     GROUP BY m.winner_id, x.x, m_id " +
+                ") " +
+                "GROUP BY x, winner_id " +
+                "ORDER BY winner_id; ";
+
+        Cursor c = db.rawQuery(x01Sql, null);
 
         ArrayList<String> headers = new ArrayList<>();
         String headerFormatString = new String();
@@ -424,19 +437,23 @@ public class DartLogDatabaseHelper extends SQLiteOpenHelper {
         for (int i=0; i< c.getColumnCount(); i++){
             headers.add(c.getColumnName(i)); //Get the value from the column from the current record.
             headerFormatString += "%10s  |";
-            baseFormatString += "%10d  |";
+            baseFormatString += "%10s  |";
         }
         Log.d("hej", String.valueOf(headerFormatString));
         Log.d("hej", String.format(headerFormatString, headers.toArray()));
 
         while (c.moveToNext()) { //Loop through all the records
-            ArrayList<Integer> values = new ArrayList<>();
+            ArrayList<String> values = new ArrayList<>();
             for (int i=0; i< c.getColumnCount(); i++){
-                values.add(c.getInt(i));
+                if(c.getType(i) == FIELD_TYPE_INTEGER)
+                    values.add(String.valueOf(c.getInt(i)));
+                if(c.getType(i) == FIELD_TYPE_STRING)
+                    values.add(c.getString(i));
+                if(c.getType(i) == FIELD_TYPE_NULL)
+                    values.add("null");
             }
             Log.d("hej", String.format(baseFormatString, values.toArray()));
         }
-
     }
 
     public void refreshStatistics(String playerName) {
