@@ -563,17 +563,21 @@ public class DartLogDatabaseHelper extends SQLiteOpenHelper {
         long startTime = System.currentTimeMillis();
         String playerIdsArrayString = convertArrayToSqlArrayString(playerIds);
 
-        String sqlGetX01StatisticsQuery =
-                "SELECT  ms_max_id, winner_id, x, max(ms_score) as max_checkout, min(ms_count) as fewest_turns " +
-                "FROM ( " +
-                    "SELECT m._id as m_id, m.game_type, x.x, m.winner_id, ms.score as ms_score, ms._id as ms_id, count(ms.score) as ms_count, max(ms._id) as ms_max_id " +
-                    "     FROM x01 x " +
-                    "     INNER JOIN match m ON x.match_id == m_id " +
-                    "     INNER JOIN match_score ms ON x.match_id == ms.match_id " +
-                    "     WHERE m.winner_id == ms.player_id " +
-                    "       AND ms.player_id in " + playerIdsArrayString +
-                    "     GROUP BY m.winner_id, x.x, m_id " +
-                ") " +
+        String sqlGetX01StatisticsQueryStart =
+                "SELECT  x, winner_id, max(ms_score) as max_checkout, min(ms_count) as fewest_turns " +
+                "FROM ( ";
+        String sqlGetX01dataQuery =
+                "SELECT m._id as m_id, m.game_type, " +
+                "x.x, m.winner_id, ms.score as ms_score, ms._id as ms_id, " +
+                "count(ms.score) as ms_count, max(ms._id) as ms_max_id " +
+                "     FROM x01 x " +
+                "     INNER JOIN match m ON x.match_id == m_id " +
+                "     INNER JOIN match_score ms ON x.match_id == ms.match_id " +
+                "     WHERE m.winner_id == ms.player_id " +
+                "       AND ms.player_id in " + playerIdsArrayString +
+                "     GROUP BY m.winner_id, x.x, m_id ";
+                //") " +
+        String sqlGetX01StatisticsQueryEnd =
                 "GROUP BY x, winner_id " +
                 "ORDER BY winner_id; ";
 
@@ -586,7 +590,11 @@ public class DartLogDatabaseHelper extends SQLiteOpenHelper {
         long executionTime = System.currentTimeMillis() - startTime;
         Log.d("hej", "execution time for query: " + executionTime + "ms");
 
-        runQueryAndLogStatistics(db, sqlGetX01StatisticsQuery);
+        runQueryAndLogStatistics(db, sqlGetX01StatisticsQueryStart +
+                                              sqlGetX01dataQuery + ") " +
+                                              sqlGetX01StatisticsQueryEnd);
+
+        runQueryAndLogStatistics(db, sqlGetX01dataQuery + ";");
     }
 
     private void insertStatisticsInDb(SQLiteDatabase db, Cursor c){
