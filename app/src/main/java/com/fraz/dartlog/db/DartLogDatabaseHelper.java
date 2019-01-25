@@ -27,6 +27,7 @@ import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -35,6 +36,7 @@ import java.util.LinkedList;
 import java.util.Locale;
 import java.util.Map;
 
+import static android.database.Cursor.FIELD_TYPE_FLOAT;
 import static android.database.Cursor.FIELD_TYPE_INTEGER;
 import static android.database.Cursor.FIELD_TYPE_NULL;
 import static android.database.Cursor.FIELD_TYPE_STRING;
@@ -321,7 +323,7 @@ public class DartLogDatabaseHelper extends SQLiteOpenHelper {
 
                 return new GameData(new ArrayList<>(playerData.values()),
                         date, playerData.get(winnerName), "x01");
-            } else throw new IllegalArgumentException("Match not found");
+            } else throw new IllegalArgumentException("Match   "+ matchId + "   not found");
         }
     }
 
@@ -393,12 +395,37 @@ public class DartLogDatabaseHelper extends SQLiteOpenHelper {
                     playerIds.remove(currentPlayer);
             }
 
+            int nrEntries = 1000;
+            long startTime = System.currentTimeMillis();
+            //generateDatabaseX01MatchEntries(nrEntries);
+            long executionTime = System.currentTimeMillis() - startTime;
+            Log.d("hej", "generating " + nrEntries + " x01 entries took " + executionTime + "ms\n");
 
-            generateDatabaseX01MatchEntries(1);
+            String sqlShowAllX01Games = "SELECT ms._id, x.x, ms.match_id, m.winner_id, ms.player_id, ms.score  FROM x01 x " +
+                    "INNER JOIN match m ON x.match_id = m._id " +
+                    "INNER JOIN match_score ms ON x.match_id = ms.match_id " +
+                    "WHERE m._id > 654 " +
+                    "GROUP BY m._id " +
+                    "ORDER BY ms._id; ";
+            runQueryAndLogStatistics(db, sqlShowAllX01Games);
 
+            clearStatistics(db);
             /* playerIds now contains all the players that does not have any statistical data at all */
-            //updateStatistics(db, playerIds);
+            updateStatistics(db, playerIds);
         }
+    }
+
+    private void clearStatistics(SQLiteDatabase db){
+        //Log.d("hej", "before clearing the statistics");
+        //String sqlShowStatisticsQuery = "SELECT * FROM statistic_type";
+        //runQueryAndLogStatistics(db, sqlShowStatisticsQuery);
+
+        String sqlClearQuery = "delete FROM statistic_type";
+        db.execSQL(sqlClearQuery);
+        db.execSQL("vacuum");
+
+        //Log.d("hej", "\nafter");
+        //runQueryAndLogStatistics(db, sqlShowStatisticsQuery);
     }
 
     private String convertArrayToSqlArrayString(ArrayList<?> arrayList){
@@ -411,13 +438,13 @@ public class DartLogDatabaseHelper extends SQLiteOpenHelper {
         return convertedString + ")";
     }
 
-    private int[] x01GameTypes = {301, 401, 501, 601, 701, 801, 901};
+    private int[] x01GameTypes = {301, 401, 501, 601, 701, 801};
     private String generateX01MatchString(int winnerId, int gameType){
         String matchDataString = "(";
         matchDataString += Calendar.getInstance().getTimeInMillis();
         matchDataString += ", " + winnerId;
-        matchDataString += ", " + gameType;
-        return matchDataString + ")";
+        matchDataString += ", 'x01')";
+        return matchDataString;
     }
 
     private String generateX01MatchScoresString(int matchId, int winnerId, int gameType, ArrayList<Integer> playerIds, java.util.Random rand) {
@@ -437,8 +464,6 @@ public class DartLogDatabaseHelper extends SQLiteOpenHelper {
         int newVal = playerToPointsLeftMap.get(currentPlayer) - score;
         playerToPointsLeftMap.put(currentPlayer, newVal);
         currentPlayerIdx += 1;
-
-        Log.d("hej", "winner: " + winnerId);
 
         while (playerToPointsLeftMap.get(winnerId) > 0){
             currentPlayer = playerIds.get(currentPlayerIdx);
@@ -476,8 +501,6 @@ public class DartLogDatabaseHelper extends SQLiteOpenHelper {
         java.util.Random rand = new java.util.Random();
         int matchId = getLatestMatchId() + 1;
 
-        Log.d("hej", "latestMatchID: " + matchId);
-
         int winnerId = playerIds.get(rand.nextInt(playerIds.size()));
         int gameType = x01GameTypes[rand.nextInt(x01GameTypes.length)];
 
@@ -492,12 +515,12 @@ public class DartLogDatabaseHelper extends SQLiteOpenHelper {
 
             matchValues += ", " + generateX01MatchString(winnerId, gameType);
             matchScoreValues += ", " + generateX01MatchScoresString(matchId, winnerId, gameType, playerIds, rand);
-            x01String = generateX01String(gameType, matchId);
+            x01String += ", " + generateX01String(gameType, matchId);
         }
 
-        Log.d("hej", matchValues);
-        Log.d("hej", matchScoreValues);
-        Log.d("hej", x01String);
+        Log.d("hej", "matchValues: " + matchValues);
+        Log.d("hej", "matchScoreValues: " + matchScoreValues);
+        Log.d("hej", "x01String: " + x01String);
 
         String sqlMatchQuery =
                 "INSERT INTO match (date, winner_id, game_type) " +
@@ -516,23 +539,9 @@ public class DartLogDatabaseHelper extends SQLiteOpenHelper {
 
         SQLiteDatabase db = getWritableDatabase();
 
-        Cursor c;
-        c = db.rawQuery(sqlMatchQuery, null);
-        c.moveToFirst();
-        c.close();
-        c = db.rawQuery(sqlMatchScoreQuery, null);
-        c.moveToFirst();
-        c.close();
-        c = db.rawQuery(sqlX01Query, null);
-        c.moveToFirst();
-        c.close();
-
-        String sqlShowAll = "SELECT * FROM x01 x " +
-                "INNER JOIN match m ON x.match_id = m._id " +
-                "INNER JOIN match_score ms ON x.match_id = ms.match_id " +
-                "WHERE m._id > 653 " +
-                "ORDER BY ms._id; ";
-        runQueryAndLogStatistics(db, sqlShowAll);
+        db.execSQL(sqlMatchQuery);
+        db.execSQL(sqlMatchScoreQuery);
+        db.execSQL(sqlX01Query);
     }
 
     private int getLatestMatchId() {
@@ -551,12 +560,13 @@ public class DartLogDatabaseHelper extends SQLiteOpenHelper {
 
     public void updateStatistics(SQLiteDatabase db, ArrayList<Integer> playerIds){
 
+        long startTime = System.currentTimeMillis();
         String playerIdsArrayString = convertArrayToSqlArrayString(playerIds);
 
-        String x01Sql =
-                "SELECT  m_id, game_type, x, winner_id, max(ms_count), ms_id, min(ms_count) " +
+        String sqlGetX01StatisticsQuery =
+                "SELECT  ms_max_id, winner_id, x, max(ms_score) as max_checkout, min(ms_count) as fewest_turns " +
                 "FROM ( " +
-                    "SELECT m._id as m_id, m.game_type, x.x, m.winner_id, ms.score, ms._id as ms_id, count(ms.score) as ms_count, max(ms._id) as ms_max_id " +
+                    "SELECT m._id as m_id, m.game_type, x.x, m.winner_id, ms.score as ms_score, ms._id as ms_id, count(ms.score) as ms_count, max(ms._id) as ms_max_id " +
                     "     FROM x01 x " +
                     "     INNER JOIN match m ON x.match_id == m_id " +
                     "     INNER JOIN match_score ms ON x.match_id == ms.match_id " +
@@ -567,35 +577,56 @@ public class DartLogDatabaseHelper extends SQLiteOpenHelper {
                 "GROUP BY x, winner_id " +
                 "ORDER BY winner_id; ";
 
-        runQueryAndLogStatistics(db, x01Sql);
+        String sqlInsertStatisticsQuery =
+                "INSERT INTO statistic_type "+
+                "(player_id, fewest_turn_301, fewest_turn_501, highest_checkout) " +
+                        "%s " +
+                        "VALUES %s;";
+
+        long executionTime = System.currentTimeMillis() - startTime;
+        Log.d("hej", "execution time for query: " + executionTime + "ms");
+
+        runQueryAndLogStatistics(db, sqlGetX01StatisticsQuery);
+    }
+
+    private void insertStatisticsInDb(SQLiteDatabase db, Cursor c){
+        String valuesString;
+        String columnsString = Arrays.toString(c.getColumnNames());
+        columnsString.replace("[", "(");
+        columnsString.replace("]", ")");
+
+
     }
 
     private void runQueryAndLogStatistics(SQLiteDatabase db, String sqlQuery){
-        long startTime = System.currentTimeMillis();
-        Cursor c = db.rawQuery(sqlQuery, null);
-        long executionTime = System.currentTimeMillis() - startTime;
-        Log.d("hej", "execution time for x01 statistics query: " + executionTime + "ms");
-
         ArrayList<String> headers = new ArrayList<>();
-        String headerFormatString = new String();
         String baseFormatString = new String();
+        int maxHeaderLen = 5;
 
-        for (int i=0; i< c.getColumnCount(); i++){
-            headers.add(c.getColumnName(i)); //Get the value from the column from the current record.
-            headerFormatString += "%10s  |";
-            baseFormatString += "%10s  |";
+        Cursor c = db.rawQuery(sqlQuery, null);
+        for (int i=0; i< c.getColumnCount(); i++)
+            maxHeaderLen = Math.max(maxHeaderLen, c.getColumnName(i).length());
+
+
+        for (int i=0; i< c.getColumnCount(); i++) {
+            headers.add(c.getColumnName(i));
+            baseFormatString += "%" + maxHeaderLen + "s  |";
         }
 
-        Log.d("hej", String.format(headerFormatString, headers.toArray()));
-        while (c.moveToNext()) { //Loop through all the records
+        Log.d("hej", String.format(baseFormatString, headers.toArray()));
+        while (c.moveToNext()) {
             ArrayList<String> values = new ArrayList<>();
             for (int i=0; i< c.getColumnCount(); i++){
-                if(c.getType(i) == FIELD_TYPE_INTEGER)
+                /*if(c.getType(i) == FIELD_TYPE_INTEGER)
                     values.add(String.valueOf(c.getInt(i)));
                 if(c.getType(i) == FIELD_TYPE_STRING)
                     values.add(c.getString(i));
+                if(c.getType(i) == FIELD_TYPE_FLOAT)
+                    values.add(String.valueOf(c.getFloat(i)));
+                */
                 if(c.getType(i) == FIELD_TYPE_NULL)
                     values.add("null");
+                values.add(c.getString(i));
             }
             Log.d("hej", String.format(baseFormatString, values.toArray()));
         }
