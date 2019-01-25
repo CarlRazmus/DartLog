@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -21,9 +22,10 @@ import android.widget.ViewAnimator;
 
 import com.fraz.dartlog.CheckoutChart;
 import com.fraz.dartlog.MainActivity;
-import com.fraz.dartlog.OnBackPressedDialogFragment;
 import com.fraz.dartlog.R;
 import com.fraz.dartlog.db.DartLogDatabaseHelper;
+import com.fraz.dartlog.game.GameActivity;
+import com.fraz.dartlog.game.GameData;
 import com.fraz.dartlog.game.InputEventListener;
 import com.fraz.dartlog.game.NumPadHandler;
 import com.fraz.dartlog.statistics.MatchPagerActivity;
@@ -79,9 +81,6 @@ public class X01GameActivity extends Fragment implements View.OnClickListener,
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        Toolbar toolbar = getActivity().findViewById(R.id.toolbar);
-        toolbar.setTitle("X01 Game");
-        ((AppCompatActivity) getActivity()).setSupportActionBar(toolbar);
         updateView();
     }
 
@@ -109,6 +108,7 @@ public class X01GameActivity extends Fragment implements View.OnClickListener,
                     dbHelper.addX01Match(game);
                 }
                 gamesPlayed += 1;
+                addLegSummary(game.getPlayers().get(0).getPlayerName());
                 game.newLeg();
                 setCurrentMatchAdded(false);
                 updateView();
@@ -147,18 +147,6 @@ public class X01GameActivity extends Fragment implements View.OnClickListener,
         }
     }
 
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.game_menu, menu);
-        MenuItem undo_action = menu.findItem(R.id.action_undo);
-        if (undoPossible) {
-            undo_action.setEnabled(true);
-        }
-        else
-        {
-            undo_action.setEnabled(false);
-        }
-    }
 
     @Override
     public void enter(int score) {
@@ -245,6 +233,13 @@ public class X01GameActivity extends Fragment implements View.OnClickListener,
         Intent i = new Intent(getActivity(), MainActivity.class);
         i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(i);
+    }
+
+    private void addLegSummary(String profileName) {
+        GameActivity activity = (GameActivity) getActivity();
+        DartLogDatabaseHelper databaseHelper = DartLogDatabaseHelper.getInstance(activity);
+        ArrayList<GameData> gameData = databaseHelper.getPlayerMatchData(profileName, Long.MAX_VALUE, 1);
+        activity.addGame(gameData.get(0));
     }
 
     private void showSummary() {

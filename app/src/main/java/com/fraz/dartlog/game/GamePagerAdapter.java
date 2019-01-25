@@ -14,23 +14,19 @@ import java.util.Locale;
 
 class GamePagerAdapter extends FragmentStatePagerAdapter {
 
-    private final ArrayList<GameData> games = new ArrayList<>();
+    private final ArrayList<GameData> games;
     private Bundle extras;
 
-    public GamePagerAdapter(FragmentManager fm, Bundle extras) {
+    public GamePagerAdapter(FragmentManager fm, Bundle extras, ArrayList<GameData> games) {
         super(fm);
         this.extras = extras;
-    }
-
-    public void addGame(GameData game)
-    {
-        games.add(game);
+        this.games = games;
     }
 
     @Override
     public Fragment getItem(int position) {
         if (position > 0)
-            return MatchFragment.newInstance(games.get(position));
+            return MatchFragment.newInstance(games.get(games.size() - position));
         else
         {
             X01GameActivity x01GameActivity = new X01GameActivity();
@@ -47,6 +43,6 @@ class GamePagerAdapter extends FragmentStatePagerAdapter {
     @Nullable
     @Override
     public CharSequence getPageTitle(int position) {
-        return String.format(Locale.getDefault(), "Leg %d", games.size() + 1);
+        return String.format(Locale.getDefault(), "Leg %d", games.size() + 1 - position);
     }
 }
