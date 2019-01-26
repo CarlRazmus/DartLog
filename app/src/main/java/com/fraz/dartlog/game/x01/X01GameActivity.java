@@ -64,6 +64,8 @@ public class X01GameActivity extends Fragment implements View.OnClickListener,
         gameListAdapter = new X01GameListAdapter(game);
 
         gamesPlayed = 1;
+
+        setHasOptionsMenu(true);
     }
 
     @Nullable
@@ -133,6 +135,20 @@ public class X01GameActivity extends Fragment implements View.OnClickListener,
         currentMatchAdded = added;
         undoPossible = !added;
         getActivity().invalidateOptionsMenu();
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.game_menu, menu);
+        MenuItem undo_action = menu.findItem(R.id.action_undo);
+        if (undoPossible) {
+            undo_action.setEnabled(true);
+
+        }
+        else
+        {
+            undo_action.setEnabled(false);
+        }
     }
 
     @Override
