@@ -72,8 +72,14 @@ public class GameActivity extends AppCompatActivity implements OnBackPressedDial
             {
                 checkoutText = "Single out";
             }
+            String numPlayerText;
+            if (numPlayers > 1)
+                numPlayerText = "Players";
+            else
+                numPlayerText = "Player";
+
             getSupportActionBar().setSubtitle(
-                    String.format(Locale.getDefault(), "%d Players | %s", numPlayers, checkoutText));
+                    String.format(Locale.getDefault(), "%d %s | %s", numPlayers, numPlayerText, checkoutText));
         }
     }
 
