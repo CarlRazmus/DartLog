@@ -9,6 +9,8 @@ import android.widget.TextView;
 import com.fraz.dartlog.R;
 import com.fraz.dartlog.game.GameListAdapter;
 
+import java.util.Locale;
+
 public class X01GameListAdapter extends GameListAdapter<X01GameListAdapter.X01ViewHolder> {
 
 
@@ -33,6 +35,7 @@ public class X01GameListAdapter extends GameListAdapter<X01GameListAdapter.X01Vi
     class X01ViewHolder extends GameListAdapter.ViewHolder {
         TextView checkout;
         TextView checkoutLabel;
+        TextView winnerText;
         ViewGroup checkout_view;
 
         X01ViewHolder(View itemView) {
@@ -40,6 +43,7 @@ public class X01GameListAdapter extends GameListAdapter<X01GameListAdapter.X01Vi
             checkout = (TextView) itemView.findViewById(R.id.checkout);
             checkoutLabel = (TextView) itemView.findViewById(R.id.checkout_label);
             checkout_view = (ViewGroup) itemView.findViewById(R.id.checkout_view);
+            winnerText = itemView.findViewById(R.id.match_winner_text);
         }
     }
 
@@ -47,10 +51,12 @@ public class X01GameListAdapter extends GameListAdapter<X01GameListAdapter.X01Vi
         if (player.getScore() == 0) {
             holder.checkout_view.setVisibility(View.VISIBLE);
             holder.checkout.setText("");
-            holder.checkoutLabel.setText(R.string.result_win);
+            holder.checkoutLabel.setText("");
+            holder.winnerText.setVisibility(View.VISIBLE);
         }
         else {
             holder.checkout.setText(player.getCheckoutText());
+            holder.winnerText.setVisibility(View.GONE);
             switch (player.getCurrentCheckoutType()) {
                 case DOUBLE:
                     holder.checkoutLabel.setText(R.string.double_out);

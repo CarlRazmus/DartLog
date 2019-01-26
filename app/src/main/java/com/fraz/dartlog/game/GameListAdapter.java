@@ -49,15 +49,30 @@ public abstract class GameListAdapter<T extends GameListAdapter.ViewHolder> exte
     }
 
     private void setBackgroundColor(PlayerData player, ViewHolder holder) {
-        if (game.isGameOver() && game.getWinner() == player) {
-            holder.background_group.setBackgroundResource(R.color.accent);
-            holder.itemView.setAlpha(1f);
-            holder.playerName.setAlpha(1f);
-            holder.current_player_indicator.setAlpha(0.0f);
-            holder.playerName.setTypeface(null, Typeface.NORMAL);
+        if (game.isGameOver()) {
+            if (game.getWinner() == player) {
+                holder.itemView.setElevation(16);
+                holder.itemView.setBackgroundResource(R.color.main_white);
+                holder.background_group.setAlpha(1f);
+                holder.itemView.setAlpha(1f);
+                holder.playerName.setAlpha(1f);
+                holder.current_player_indicator.setAlpha(0.0f);
+                holder.playerName.setTypeface(null, Typeface.NORMAL);
+            }
+            else
+            {
+                holder.itemView.setElevation(4);
+                holder.itemView.setBackgroundResource(R.color.light_grey);
+                holder.background_group.setAlpha(0.8f);
+                holder.itemView.setAlpha(1f);
+                holder.playerName.setAlpha(1f);
+                holder.current_player_indicator.setAlpha(0.0f);
+                holder.playerName.setTypeface(null, Typeface.NORMAL);
+            }
         } else if (game.getCurrentPlayerIdx() == holder.getAdapterPosition()) {
             holder.itemView.setElevation(8);
             holder.itemView.setBackgroundResource(R.color.main_white);
+            holder.background_group.setAlpha(1f);
             holder.itemView.setAlpha(1f);
             holder.playerName.setAlpha(1f);
             holder.background_group.setBackgroundResource(R.drawable.list_item);
@@ -66,6 +81,7 @@ public abstract class GameListAdapter<T extends GameListAdapter.ViewHolder> exte
         } else {
             holder.itemView.setElevation(4);
             holder.itemView.setBackgroundResource(R.color.main_white);
+            holder.background_group.setAlpha(1f);
             holder.itemView.setAlpha(.85f);
             holder.playerName.setAlpha(.75f);
             holder.background_group.setBackgroundResource(R.drawable.list_item);

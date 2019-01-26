@@ -56,7 +56,6 @@ public class Random extends Game implements Serializable{
         nextPlayer();
         if (getTurn() == nrOfTurns + 1) {
             setWinner();
-            showWinnerToast();
         }
     }
 

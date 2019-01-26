@@ -76,12 +76,6 @@ public abstract class Game {
         }
     }
 
-    protected void showWinnerToast() {
-        CharSequence text = String.format("Winner: %s!",
-                getWinner().getPlayerName());
-        showToast(text);
-    }
-
     protected void showToast(CharSequence text) {
         Toast toast = Toast.makeText(context, text, Toast.LENGTH_SHORT);
         toast.setGravity(Gravity.CENTER, 0, 0);

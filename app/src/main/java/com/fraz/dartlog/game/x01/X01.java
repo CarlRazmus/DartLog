@@ -32,7 +32,6 @@ public class X01 extends Game implements Serializable{
         PlayerData currentPlayer = getPlayer(currentPlayerIdx);
         if (currentPlayer.getScore() == 0) {
             setWinner(currentPlayer);
-            showWinnerToast();
         }
         else {
             nextPlayer();

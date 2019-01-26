@@ -63,7 +63,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
-            android:layout_below="@id/game_player_list_item_name"
+            android:layout_below="@id/match_winner_text"
             tools:text="32"
             android:textSize="20sp"
             android:textColor="@color/background"/>
@@ -73,7 +73,7 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:layout_alignParentEnd="true"
-            android:layout_above="@id/game_player_list_item_score"
+            android:layout_above="@id/match_winner_text"
             android:alpha=".8"
             android:id="@+id/checkout_view">
 
@@ -97,6 +97,17 @@
                 android:typeface="monospace" />
 
         </LinearLayout>
+
+        <TextView
+            android:id="@+id/match_winner_text"
+            android:textSize="16sp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/background"
+            android:layout_below="@id/game_player_list_item_name"
+            android:layout_centerHorizontal="true"
+            android:text="Winner!"
+            android:visibility="gone"/>
     </RelativeLayout>
 
 </android.support.v7.widget.CardView>
