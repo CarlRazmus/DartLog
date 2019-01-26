@@ -3,6 +3,7 @@ package com.fraz.dartlog.game;
 import android.app.DialogFragment;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.PersistableBundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
@@ -65,7 +66,7 @@ public class GameActivity extends AppCompatActivity implements OnBackPressedDial
                 }
                 else
                 {
-                    checkoutText = String.format(Locale.getDefault(), "Single out after %d attempts", double_out);
+                    checkoutText = String.format(Locale.getDefault(), "Double out | %d attempts", double_out);
                 }
             }
             else
