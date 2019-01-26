@@ -28,7 +28,6 @@ import com.fraz.dartlog.game.GameActivity;
 import com.fraz.dartlog.game.GameData;
 import com.fraz.dartlog.game.InputEventListener;
 import com.fraz.dartlog.game.NumPadHandler;
-import com.fraz.dartlog.statistics.MatchPagerActivity;
 
 import java.util.ArrayList;
 
@@ -39,7 +38,6 @@ public class X01GameActivity extends Fragment implements View.OnClickListener,
     private X01GameListAdapter gameListAdapter;
     private ViewAnimator viewAnimator;
     private DartLogDatabaseHelper dbHelper;
-    private int gamesPlayed;
     private boolean currentMatchAdded = false;
     private boolean undoPossible = false;
 
@@ -59,11 +57,13 @@ public class X01GameActivity extends Fragment implements View.OnClickListener,
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        if (savedInstanceState != null) {
+            undoPossible = savedInstanceState.getBoolean("undoPossible");
+            currentMatchAdded = savedInstanceState.getBoolean("currentMatchAdded");
+        }
         dbHelper = DartLogDatabaseHelper.getInstance(getActivity());
         game = GetX01GameInstance(savedInstanceState);
         gameListAdapter = new X01GameListAdapter(game);
-
-        gamesPlayed = 1;
 
         setHasOptionsMenu(true);
     }
@@ -100,32 +100,25 @@ public class X01GameActivity extends Fragment implements View.OnClickListener,
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putSerializable("game", game);
+        outState.putBoolean("currentMatchAdded", currentMatchAdded);
+        outState.putBoolean("undoPossible", undoPossible);
     }
 
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.new_leg:
-                if(!currentMatchAdded) {
-                    dbHelper.addX01Match(game);
-                }
-                gamesPlayed += 1;
-                addLegSummary(game.getPlayers().get(0).getPlayerName());
+                addCurrentLeg(game.getPlayers().get(0).getPlayerName());
                 game.newLeg();
                 setCurrentMatchAdded(false);
                 updateView();
                 break;
             case R.id.match_summary:
-                if(!currentMatchAdded)
-                {
-                    dbHelper.addX01Match(game);
-                    setCurrentMatchAdded(true);
-                }
-                showSummary();
+                addCurrentLeg(game.getPlayers().get(0).getPlayerName());
+                showLastGameSummary();
                 break;
             case R.id.complete_match:
-                if(!currentMatchAdded)
-                    dbHelper.addX01Match(game);
+                addCurrentLeg(game.getPlayers().get(0).getPlayerName());
                 completeMatch();
                 break;
         }
@@ -251,20 +244,19 @@ public class X01GameActivity extends Fragment implements View.OnClickListener,
         startActivity(i);
     }
 
-    private void addLegSummary(String profileName) {
-        GameActivity activity = (GameActivity) getActivity();
-        DartLogDatabaseHelper databaseHelper = DartLogDatabaseHelper.getInstance(activity);
-        ArrayList<GameData> gameData = databaseHelper.getPlayerMatchData(profileName, Long.MAX_VALUE, 1);
-        activity.addGame(gameData.get(0));
+    private void addCurrentLeg(String profileName) {
+        if(!currentMatchAdded) {
+            GameActivity activity = (GameActivity) getActivity();
+            DartLogDatabaseHelper databaseHelper = DartLogDatabaseHelper.getInstance(activity);
+            ArrayList<GameData> gameData = databaseHelper.getPlayerMatchData(profileName, Long.MAX_VALUE, 1);
+            dbHelper.addX01Match(game);
+            activity.addGame(gameData.get(0));
+            setCurrentMatchAdded(true);
+        }
     }
 
-    private void showSummary() {
-        Intent intent = new Intent(getActivity(), MatchPagerActivity.class);
-        intent.putExtra(MatchPagerActivity.ARG_ITEM_NAME, game.getPlayers().get(0).getPlayerName());
-        intent.putExtra(MatchPagerActivity.ARG_ITEM_POSITION, 0);
-        intent.putExtra(MatchPagerActivity.ARG_MATCHES, gamesPlayed);
-        intent.putExtra(MatchPagerActivity.ARG_IS_MATCH_SUMMARY, true);
-        startActivity(intent);
+    private void showLastGameSummary() {
+        ((GameActivity) getActivity()).setPagerItem(1);
     }
 
 }

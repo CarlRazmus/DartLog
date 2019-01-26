@@ -23,18 +23,29 @@ import java.util.Locale;
 public class GameActivity extends AppCompatActivity implements OnBackPressedDialogFragment.OnBackPressedDialogListener{
 
     private GamePagerAdapter adapter;
-    private final ArrayList<GameData> games = new ArrayList<>();
+    private ArrayList<GameData> games = new ArrayList<>();
+    private ViewPager matchPager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game);
+        if (savedInstanceState != null && savedInstanceState.containsKey("games"))
+        {
+            games = (ArrayList<GameData>) savedInstanceState.getSerializable("games");
+        }
         adapter = new GamePagerAdapter(getSupportFragmentManager(), getIntent().getExtras(), games);
-        ViewPager matchPager = findViewById(R.id.game_pager);
+        matchPager = findViewById(R.id.game_pager);
         matchPager.setAdapter(adapter);
         matchPager.setCurrentItem(0);
         Toolbar myToolbar = findViewById(R.id.toolbar);
         setSupportActionBar(myToolbar);
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putSerializable("games", games);
     }
 
     @Override
@@ -72,6 +83,10 @@ public class GameActivity extends AppCompatActivity implements OnBackPressedDial
         adapter.notifyDataSetChanged();
     }
 
+    public void setPagerItem(int item)
+    {
+        matchPager.setCurrentItem(item, true);
+    }
 
     @Override
     public void onBackPressed() {
@@ -88,5 +103,4 @@ public class GameActivity extends AppCompatActivity implements OnBackPressedDial
     public void onDialogNegativeClick(DialogFragment dialog) {
         // Do nothing.
     }
-
 }

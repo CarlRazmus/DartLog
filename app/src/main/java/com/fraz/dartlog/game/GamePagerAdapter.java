@@ -43,6 +43,12 @@ class GamePagerAdapter extends FragmentStatePagerAdapter {
     @Nullable
     @Override
     public CharSequence getPageTitle(int position) {
-        return String.format(Locale.getDefault(), "Leg %d", games.size() + 1 - position);
+        if (position > 0) {
+            return String.format(Locale.getDefault(), "Leg %d", games.size() + 1 - position);
+        }
+        else
+        {
+            return "301";
+        }
     }
 }
