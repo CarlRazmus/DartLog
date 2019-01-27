@@ -41,6 +41,8 @@ public class GameActivity extends AppCompatActivity implements OnBackPressedDial
         matchPager.setCurrentItem(0);
         Toolbar myToolbar = findViewById(R.id.toolbar);
         setSupportActionBar(myToolbar);
+        TabLayout tabLayout= findViewById(R.id.tab_layout);
+        tabLayout.setupWithViewPager(matchPager);
     }
 
     @Override
