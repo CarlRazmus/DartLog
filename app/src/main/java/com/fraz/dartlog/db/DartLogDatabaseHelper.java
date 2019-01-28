@@ -378,6 +378,8 @@ public class DartLogDatabaseHelper extends SQLiteOpenHelper {
         //2. Update the statistics for all players that was found in step 1.
         SQLiteDatabase db = getWritableDatabase();
         ArrayList<Integer> playerIds = getPlayerIds();
+        Log.d("hej", "1. ");
+        runQueryAndLogStatistics(db,"SELECT * FROM statistic_type");
 
         String sql = "SELECT s.player_id, s.fewest_turns_301, s.fewest_turns_501, s.highest_checkout" +
                 "     FROM statistic_type s;";
@@ -399,7 +401,7 @@ public class DartLogDatabaseHelper extends SQLiteOpenHelper {
             long startTime = System.currentTimeMillis();
             //generateDatabaseX01MatchEntries(nrEntries);
             long executionTime = System.currentTimeMillis() - startTime;
-            Log.d("hej", "generating " + nrEntries + " x01 entries took " + executionTime + "ms\n");
+            //Log.d("hej", "generating " + nrEntries + " x01 entries took " + executionTime + "ms\n");
 
             String sqlShowAllX01Games = "SELECT ms._id, x.x, ms.match_id, m.winner_id, ms.player_id, ms.score  FROM x01 x " +
                     "INNER JOIN match m ON x.match_id = m._id " +
@@ -407,25 +409,23 @@ public class DartLogDatabaseHelper extends SQLiteOpenHelper {
                     "WHERE m._id > 654 " +
                     "GROUP BY m._id " +
                     "ORDER BY ms._id; ";
-            runQueryAndLogStatistics(db, sqlShowAllX01Games);
+            //runQueryAndLogStatistics(db, sqlShowAllX01Games);
 
+            Log.d("hej", "2. ");
+            runQueryAndLogStatistics(db,"SELECT * FROM statistic_type");
             clearStatistics(db);
+            Log.d("hej", "3. After statistics is cleared ");
+            runQueryAndLogStatistics(db,"SELECT * FROM statistic_type");
             /* playerIds now contains all the players that does not have any statistical data at all */
+            Log.d("hej", "players: " + playerIds);
             updateStatistics(db, playerIds);
         }
     }
 
     private void clearStatistics(SQLiteDatabase db){
-        //Log.d("hej", "before clearing the statistics");
-        //String sqlShowStatisticsQuery = "SELECT * FROM statistic_type";
-        //runQueryAndLogStatistics(db, sqlShowStatisticsQuery);
-
         String sqlClearQuery = "delete FROM statistic_type";
         db.execSQL(sqlClearQuery);
         db.execSQL("vacuum");
-
-        //Log.d("hej", "\nafter");
-        //runQueryAndLogStatistics(db, sqlShowStatisticsQuery);
     }
 
     private String convertArrayToSqlArrayString(ArrayList<?> arrayList){
@@ -563,29 +563,40 @@ public class DartLogDatabaseHelper extends SQLiteOpenHelper {
         long startTime = System.currentTimeMillis();
         String playerIdsArrayString = convertArrayToSqlArrayString(playerIds);
 
+        String sqlGetX01QueryStart =
+                "SELECT  x, m_id, " +
+                        "winner_id, " +
+                        "max(ms_score) as max_checkout,  " +
+                        " min(ms_count) as fewest_turns " +
+                "FROM ( ";
         String sqlGetX01MaxCheckoutQueryStart =
                 "SELECT  x, m_id, winner_id, max(ms_score) as max_checkout  " +
                 "FROM ( ";
         String sqlGetX01FewestTurnsQueryStart =
                 "SELECT  x, m_id, winner_id, min(ms_count) as fewest_turns  " +
-                        "FROM ( ";
+                "FROM ( ";
+
         String sqlGetX01dataQuery =
                 "SELECT m._id as m_id, m.game_type, " +
-                "x.x, m.winner_id, ms.score as ms_score, ms._id as ms_id, " +
-                "count(ms.score) as ms_count, max(ms._id) as ms_max_id " +
-                "     FROM x01 x " +
-                "     INNER JOIN match m ON x.match_id == m_id " +
-                "     INNER JOIN match_score ms ON x.match_id == ms.match_id " +
-                "     WHERE m.winner_id == ms.player_id " +
-                "       AND ms.player_id in " + playerIdsArrayString +
-                "     GROUP BY m.winner_id, x.x, m_id ";
-                //") " +
+                        "x.x, m.winner_id, ms.score as ms_score, ms._id as ms_id, " +
+                        "count(ms.score) as ms_count, max(ms._id) as ms_max_id " +
+                "FROM x01 x " +
+                "INNER JOIN match m ON x.match_id == m_id " +
+                "INNER JOIN match_score ms ON x.match_id == ms.match_id " +
+                "WHERE m.winner_id == ms.player_id " +
+                        "AND x.x IN (3, 5) " +
+                        "AND ms.player_id IN " + playerIdsArrayString +
+                "GROUP BY m.winner_id, x.x, m_id ";
+
         String sqlGetX01CheckoutStatisticsQueryEnd =
                 "GROUP BY winner_id " +
                 "ORDER BY winner_id; ";
         String sqlGetX01FewestTurnsStatisticsQueryEnd =
                 "GROUP BY x, winner_id " +
-                        "ORDER BY winner_id; ";
+                "ORDER BY winner_id; ";
+        String sqlGetX01StatisticsQueryEnd =
+                "GROUP BY x, winner_id " +
+                "ORDER BY winner_id; ";
 
         String sqlInsertStatisticsQuery =
                 "INSERT INTO statistic_type "+
@@ -596,6 +607,11 @@ public class DartLogDatabaseHelper extends SQLiteOpenHelper {
         long executionTime = System.currentTimeMillis() - startTime;
         Log.d("hej", "execution time for query: " + executionTime + "ms");
 
+
+        /*runQueryAndLogStatistics(db, sqlGetX01QueryStart +
+                                              sqlGetX01dataQuery + ") " +
+                                              sqlGetX01StatisticsQueryEnd);
+
         runQueryAndLogStatistics(db, sqlGetX01FewestTurnsQueryStart +
                                               sqlGetX01dataQuery + ") " +
                                               sqlGetX01FewestTurnsStatisticsQueryEnd);
@@ -604,16 +620,75 @@ public class DartLogDatabaseHelper extends SQLiteOpenHelper {
                                               sqlGetX01dataQuery + ") " +
                                               sqlGetX01CheckoutStatisticsQueryEnd);
 
-        runQueryAndLogStatistics(db, sqlGetX01dataQuery + ";");
+        runQueryAndLogStatistics(db, sqlGetX01dataQuery + ";");*/
+
+        Cursor c1 = db.rawQuery(sqlGetX01FewestTurnsQueryStart +
+                sqlGetX01dataQuery + ") " +
+                sqlGetX01FewestTurnsStatisticsQueryEnd, null);
+        Cursor c2 = db.rawQuery(sqlGetX01MaxCheckoutQueryStart +
+                sqlGetX01dataQuery + ") " +
+                sqlGetX01CheckoutStatisticsQueryEnd, null);
+        insertStatisticsInDb(db, c1, c2);
     }
 
-    private void insertStatisticsInDb(SQLiteDatabase db, Cursor c){
-        String valuesString;
-        String columnsString = Arrays.toString(c.getColumnNames());
-        columnsString.replace("[", "(");
-        columnsString.replace("]", ")");
+    private void insertStatisticsInDb(SQLiteDatabase db, Cursor c1, Cursor c2){
 
+        String valuesString = "";
+        String columnsString = " (player_id, fewest_turns_301, fewest_turns_501, highest_checkout) ";
+        Map<String, HashMap<String, String>> playerIdToValuesMap;
 
+        playerIdToValuesMap = new HashMap<>();
+
+        //get all fewest turns statistics elements
+        while(c1.moveToNext()){
+            String playerId = c1.getString(c1.getColumnIndex("winner_id"));
+            String x_val = c1.getString(c1.getColumnIndex("x"));
+            String match_id = c1.getString(c1.getColumnIndex("m_id"));
+
+            if(!playerIdToValuesMap.containsKey(playerId))
+                playerIdToValuesMap.put(playerId, createMap());
+            if (x_val == "3")
+                playerIdToValuesMap.get(playerId).put("few_301", match_id);
+            else if(x_val == "5")
+                playerIdToValuesMap.get(playerId).put("few_501", match_id);
+        }
+
+        //get all fewest turns statistics elements
+        while(c2.moveToNext()){
+            String playerId = c2.getString(c2.getColumnIndex("winner_id"));
+            String match_id = c2.getString(c2.getColumnIndex("m_id"));
+
+            if(!playerIdToValuesMap.containsKey(playerId))
+                playerIdToValuesMap.put(playerId, createMap());
+            playerIdToValuesMap.get(playerId).put("checkout", match_id);
+        }
+
+        for  (String key : playerIdToValuesMap.keySet()){
+            HashMap<String, String> map = playerIdToValuesMap.get(key);
+            if (valuesString.length() != 0)
+                valuesString += ", ";
+            valuesString += String.format("(%s, %s, %s, %s)",
+                    key,
+                    map.get("few_301"),
+                    map.get("few_501"),
+                    map.get("checkout"));
+        }
+
+        Log.d("hej", "4. ");
+        runQueryAndLogStatistics(db,"SELECT * FROM statistic_type");
+        Log.d("hej", "valuesString: " + valuesString);
+        db.execSQL("INSERT INTO statistic_type " + columnsString + " VALUES " + valuesString);
+        Log.d("hej", "5. ");
+        runQueryAndLogStatistics(db,"SELECT * FROM statistic_type");
+
+    }
+
+    private static HashMap<String, String> createMap() {
+        HashMap<String,String> myMap = new HashMap<>();
+        myMap.put("few_301", "NULL");
+        myMap.put("few_501", "NULL");
+        myMap.put("checkout", "NULL");
+        return myMap;
     }
 
     private void runQueryAndLogStatistics(SQLiteDatabase db, String sqlQuery){
