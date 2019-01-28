@@ -563,9 +563,12 @@ public class DartLogDatabaseHelper extends SQLiteOpenHelper {
         long startTime = System.currentTimeMillis();
         String playerIdsArrayString = convertArrayToSqlArrayString(playerIds);
 
-        String sqlGetX01StatisticsQueryStart =
-                "SELECT  x, winner_id, max(ms_score) as max_checkout, min(ms_count) as fewest_turns " +
+        String sqlGetX01MaxCheckoutQueryStart =
+                "SELECT  x, m_id, winner_id, max(ms_score) as max_checkout  " +
                 "FROM ( ";
+        String sqlGetX01FewestTurnsQueryStart =
+                "SELECT  x, m_id, winner_id, min(ms_count) as fewest_turns  " +
+                        "FROM ( ";
         String sqlGetX01dataQuery =
                 "SELECT m._id as m_id, m.game_type, " +
                 "x.x, m.winner_id, ms.score as ms_score, ms._id as ms_id, " +
@@ -577,9 +580,12 @@ public class DartLogDatabaseHelper extends SQLiteOpenHelper {
                 "       AND ms.player_id in " + playerIdsArrayString +
                 "     GROUP BY m.winner_id, x.x, m_id ";
                 //") " +
-        String sqlGetX01StatisticsQueryEnd =
-                "GROUP BY x, winner_id " +
+        String sqlGetX01CheckoutStatisticsQueryEnd =
+                "GROUP BY winner_id " +
                 "ORDER BY winner_id; ";
+        String sqlGetX01FewestTurnsStatisticsQueryEnd =
+                "GROUP BY x, winner_id " +
+                        "ORDER BY winner_id; ";
 
         String sqlInsertStatisticsQuery =
                 "INSERT INTO statistic_type "+
@@ -590,9 +596,13 @@ public class DartLogDatabaseHelper extends SQLiteOpenHelper {
         long executionTime = System.currentTimeMillis() - startTime;
         Log.d("hej", "execution time for query: " + executionTime + "ms");
 
-        runQueryAndLogStatistics(db, sqlGetX01StatisticsQueryStart +
+        runQueryAndLogStatistics(db, sqlGetX01FewestTurnsQueryStart +
                                               sqlGetX01dataQuery + ") " +
-                                              sqlGetX01StatisticsQueryEnd);
+                                              sqlGetX01FewestTurnsStatisticsQueryEnd);
+
+        runQueryAndLogStatistics(db, sqlGetX01MaxCheckoutQueryStart +
+                                              sqlGetX01dataQuery + ") " +
+                                              sqlGetX01CheckoutStatisticsQueryEnd);
 
         runQueryAndLogStatistics(db, sqlGetX01dataQuery + ";");
     }
