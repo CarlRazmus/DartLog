@@ -93,7 +93,7 @@ public class MainActivity extends MenuBackground implements View.OnClickListener
 
         @Override
         protected Void doInBackground(Void... voids) {
-            DartLogDatabaseHelper.getInstance(context).checkIfStatisticsNeedsUpdate();
+            DartLogDatabaseHelper.getInstance(context).createStatisticViews();
             return null;
         }
     }
