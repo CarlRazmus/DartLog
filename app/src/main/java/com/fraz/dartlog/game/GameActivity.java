@@ -1,22 +1,18 @@
 package com.fraz.dartlog.game;
 
 import android.app.DialogFragment;
-import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.PersistableBundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
-import android.view.View;
 
 import com.fraz.dartlog.OnBackPressedDialogFragment;
 import com.fraz.dartlog.R;
-import com.fraz.dartlog.statistics.MatchPagerAdapter;
+import com.fraz.dartlog.game.x01.X01GameActivity;
 
 import java.util.ArrayList;
 import java.util.Locale;
@@ -35,6 +31,14 @@ public class GameActivity extends AppCompatActivity implements OnBackPressedDial
         {
             games = (ArrayList<GameData>) savedInstanceState.getSerializable("games");
         }
+
+        FragmentManager f = getSupportFragmentManager();
+        FragmentTransaction transaction = f.beginTransaction();
+        X01GameActivity x01GameActivity = new X01GameActivity();
+        x01GameActivity.setArguments(getIntent().getExtras());
+        transaction.show(x01GameActivity);
+        transaction.commit();
+
         adapter = new GamePagerAdapter(getSupportFragmentManager(), getIntent().getExtras(), games);
         matchPager = findViewById(R.id.game_pager);
         matchPager.setAdapter(adapter);
@@ -62,14 +66,7 @@ public class GameActivity extends AppCompatActivity implements OnBackPressedDial
             int numPlayers = extras.getStringArrayList("playerNames").size();
             String checkoutText;
             if (extras.containsKey("double_out")) {
-                int double_out = extras.getInt("double_out");
-                if (double_out == -1) {
-                    checkoutText = "Double out";
-                }
-                else
-                {
-                    checkoutText = String.format(Locale.getDefault(), "Double out | %d attempts", double_out);
-                }
+                checkoutText = "Double out";
             }
             else
             {

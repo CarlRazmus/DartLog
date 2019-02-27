@@ -29,16 +29,12 @@
         app:tabMode="scrollable"
         android:paddingStart="8dp"
         android:paddingEnd="8dp"
+        android:overScrollMode="never"
         app:tabIndicatorColor="@color/light_grey"
         android:background="@color/background"/>
 
-    <android.support.v4.view.ViewPager
-        android:id="@+id/game_pager"
-        android:elevation="4dp"
+    <fragment
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-
-    </android.support.v4.view.ViewPager>
-
+        android:layout_height="match_parent"
+        android:id="@+id/game_fragment"/>
 </LinearLayout>

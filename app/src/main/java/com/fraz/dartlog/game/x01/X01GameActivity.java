@@ -5,6 +5,8 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -22,6 +24,7 @@ import com.fraz.dartlog.R;
 import com.fraz.dartlog.db.DartLogDatabaseHelper;
 import com.fraz.dartlog.game.GameActivity;
 import com.fraz.dartlog.game.GameData;
+import com.fraz.dartlog.game.GameStatisticsFragment;
 import com.fraz.dartlog.game.InputEventListener;
 import com.fraz.dartlog.game.NumPadHandler;
 
@@ -147,11 +150,21 @@ public class X01GameActivity extends Fragment implements View.OnClickListener,
                 game.undo();
                 updateView();
                 return true;
+            case R.id.action_stats:
+                showStatistics();
+                return true;
             default:
-                return super.onOptionsItemSelected(item);
+            return super.onOptionsItemSelected(item);
         }
     }
 
+    public void showStatistics() {
+        FragmentManager f = getChildFragmentManager();
+        FragmentTransaction transaction = f.beginTransaction();
+        GameStatisticsFragment gameStatisticsFragment = new GameStatisticsFragment();
+        transaction.show(gameStatisticsFragment);
+        transaction.commit();
+    }
 
     @Override
     public void enter(int score) {
@@ -197,7 +210,7 @@ public class X01GameActivity extends Fragment implements View.OnClickListener,
         for (String playerName : playerNames) {
             X01ScoreManager scoreManager = new X01ScoreManager(x);
             scoreManager.setDoubleOutAttempts(doubleOutAttempts);
-            playerDataList.add(new X01PlayerData(new CheckoutChart(getContext()), playerName, scoreManager));
+            playerDataList.add(new X01PlayerData(new CheckoutChart(getActivity()), playerName, scoreManager));
         }
         return playerDataList;
     }

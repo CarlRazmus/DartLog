@@ -5,5 +5,8 @@
         android:id="@+id/action_undo"
         android:title="@string/button_undo"
         app:showAsAction="always"/>
-
+    <item
+        android:id="@+id/action_stats"
+        android:title="Statistics"
+        app:showAsAction="always"/>
 </menu>
