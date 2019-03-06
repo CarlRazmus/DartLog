@@ -10,7 +10,6 @@ import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -181,22 +180,22 @@ public class MenuBackground extends AppCompatActivity {
         @NonNull
         @Override
         public Dialog onCreateDialog(Bundle savedInstanceState) {
-            // Use the Builder class for convenient dialog construction
-            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity(),
-                    R.style.GreenButtonAlertDialog);
+            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 
             builder.setTitle("Add new profile").setView(R.layout.dialog_add_player)
-                    .setPositiveButton("Add", new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int id) {
-                            EditText profileNameEditText =
-                                    (EditText) getDialog().findViewById(R.id.add_player_edit_text);
-                            String name = profileNameEditText.getText().toString();
-                            DartLogDatabaseHelper dbHelper = DartLogDatabaseHelper.getInstance(getContext());
-                            if(!dbHelper.playerExist(name)) {
-                                if (dbHelper.addPlayer(name) != -1) {
-                                    Util.addPlayer(name, getContext());
+                .setNegativeButton(R.string.cancel, null)
+                .setPositiveButton("Add", new DialogInterface.OnClickListener() {
 
-                                    if(getActivity().getLocalClassName().equals(ProfileListActivity.class.getName()))
+                    public void onClick(DialogInterface dialog, int id) {
+                        EditText profileNameEditText =
+                                (EditText) getDialog().findViewById(R.id.add_player_edit_text);
+                        String name = profileNameEditText.getText().toString();
+                        DartLogDatabaseHelper dbHelper = DartLogDatabaseHelper.getInstance(getContext());
+                        if(!dbHelper.playerExist(name)) {
+                            if (dbHelper.addPlayer(name) != -1) {
+                                Util.addPlayer(name, getContext());
+
+                                    if(getActivity().getClass().getName().equals(ProfileListActivity.class.getName()))
                                     {
                                         ((ProfileListActivity)getActivity()).updateProfileList();
                                     }
@@ -205,12 +204,7 @@ public class MenuBackground extends AppCompatActivity {
                             else if(!Util.loadProfileNames(getContext()).contains(name))
                                 Util.addPlayer(name, getContext());
                         }
-                    })
-                    .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int id) {
-                        }
                     });
-            // Create the AlertDialog object and return it
             return builder.create();
         }
     }
