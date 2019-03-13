@@ -157,8 +157,6 @@ public class SetupActivity extends MenuBackground
                 .setPositiveButton(android.R.string.yes, null);
         AlertDialog dialog = builder.show();
 
-        Util.setDialogSize(this, dialog, 0.8f, 0.8f);
-
         dialog.getButton(Dialog.BUTTON_NEGATIVE).setVisibility(View.INVISIBLE);
         dialog.getButton(Dialog.BUTTON_NEGATIVE).setActivated(false);
     }
