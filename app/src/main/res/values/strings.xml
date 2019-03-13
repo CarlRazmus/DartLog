@@ -103,7 +103,8 @@
      </string>
 
     <string name="random_rules"> The goal is to score as many points as possible. \n\n
-        On each turn all players will score points on a randomly selected field.\n\n
+        On each turn, players shall score points on a randomly selected field.\n\n
+
            1 point for single.\n
            2 points for double.\n
            3 points for triple.\n\n
