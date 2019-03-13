@@ -17,38 +17,24 @@ class GamePagerAdapter extends FragmentStatePagerAdapter {
     private final ArrayList<GameData> games;
     private Bundle extras;
 
-    public GamePagerAdapter(FragmentManager fm, Bundle extras, ArrayList<GameData> games) {
+    public GamePagerAdapter(FragmentManager fm, ArrayList<GameData> games) {
         super(fm);
-        this.extras = extras;
         this.games = games;
     }
 
     @Override
     public Fragment getItem(int position) {
-        if (position > 0)
-            return MatchFragment.newInstance(games.get(games.size() - position));
-        else
-        {
-            X01GameActivity x01GameActivity = new X01GameActivity();
-            x01GameActivity.setArguments(extras);
-            return x01GameActivity;
-        }
+        return MatchFragment.newInstance(games.get(games.size() - 1 - position));
     }
 
     @Override
     public int getCount() {
-        return games.size() + 1;
+        return games.size();
     }
 
     @Nullable
     @Override
     public CharSequence getPageTitle(int position) {
-        if (position > 0) {
-            return String.format(Locale.getDefault(), "Leg %d", games.size() + 1 - position);
-        }
-        else
-        {
-            return "301";
-        }
+        return String.format(Locale.getDefault(), "Leg %d", games.size() - position);
     }
 }

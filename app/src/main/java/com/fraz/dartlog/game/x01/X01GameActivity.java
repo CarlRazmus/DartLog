@@ -114,7 +114,7 @@ public class X01GameActivity extends Fragment implements View.OnClickListener,
                 break;
             case R.id.match_summary:
                 addCurrentLeg(game.getPlayers().get(0).getPlayerName());
-                showLastGameSummary();
+                //showLastGameSummary();
                 break;
             case R.id.complete_match:
                 addCurrentLeg(game.getPlayers().get(0).getPlayerName());
@@ -159,11 +159,7 @@ public class X01GameActivity extends Fragment implements View.OnClickListener,
     }
 
     public void showStatistics() {
-        FragmentManager f = getChildFragmentManager();
-        FragmentTransaction transaction = f.beginTransaction();
-        GameStatisticsFragment gameStatisticsFragment = new GameStatisticsFragment();
-        transaction.show(gameStatisticsFragment);
-        transaction.commit();
+        ((GameActivity) getActivity()).showStatistics();
     }
 
     @Override
@@ -263,9 +259,4 @@ public class X01GameActivity extends Fragment implements View.OnClickListener,
             setCurrentMatchAdded(true);
         }
     }
-
-    private void showLastGameSummary() {
-        ((GameActivity) getActivity()).setPagerItem(1);
-    }
-
 }

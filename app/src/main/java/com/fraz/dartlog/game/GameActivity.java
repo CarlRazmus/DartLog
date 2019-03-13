@@ -22,6 +22,8 @@ public class GameActivity extends AppCompatActivity implements OnBackPressedDial
     private GamePagerAdapter adapter;
     private ArrayList<GameData> games = new ArrayList<>();
     private ViewPager matchPager;
+    private GameStatisticsFragment gameStatisticsFragment;
+    private X01GameActivity x01GameActivity;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,19 +36,13 @@ public class GameActivity extends AppCompatActivity implements OnBackPressedDial
 
         FragmentManager f = getSupportFragmentManager();
         FragmentTransaction transaction = f.beginTransaction();
-        X01GameActivity x01GameActivity = new X01GameActivity();
+        x01GameActivity = new X01GameActivity();
         x01GameActivity.setArguments(getIntent().getExtras());
-        transaction.show(x01GameActivity);
+        transaction.add(R.id.game_fragment, x01GameActivity);
         transaction.commit();
 
-        adapter = new GamePagerAdapter(getSupportFragmentManager(), getIntent().getExtras(), games);
-        matchPager = findViewById(R.id.game_pager);
-        matchPager.setAdapter(adapter);
-        matchPager.setCurrentItem(0);
         Toolbar myToolbar = findViewById(R.id.toolbar);
         setSupportActionBar(myToolbar);
-        TabLayout tabLayout= findViewById(R.id.tab_layout);
-        tabLayout.setupWithViewPager(matchPager);
     }
 
     @Override
@@ -83,21 +79,14 @@ public class GameActivity extends AppCompatActivity implements OnBackPressedDial
         }
     }
 
-    public void addGame(GameData game)
-    {
-        games.add(game);
-        adapter.notifyDataSetChanged();
-    }
-
-    public void setPagerItem(int item)
-    {
-        matchPager.setCurrentItem(item, true);
-    }
-
     @Override
     public void onBackPressed() {
-        DialogFragment onBackPressedDialogFragment = new OnBackPressedDialogFragment();
-        onBackPressedDialogFragment.show(getFragmentManager(), "OnBackPressedDialogFragment");
+        if (getSupportFragmentManager().getBackStackEntryCount() > 0) {
+            getSupportFragmentManager().popBackStack();
+        } else {
+            DialogFragment onBackPressedDialogFragment = new OnBackPressedDialogFragment();
+            onBackPressedDialogFragment.show(getFragmentManager(), "OnBackPressedDialogFragment");
+        }
     }
 
     @Override
@@ -108,5 +97,20 @@ public class GameActivity extends AppCompatActivity implements OnBackPressedDial
     @Override
     public void onDialogNegativeClick(DialogFragment dialog) {
         // Do nothing.
+    }
+
+    public void addGame(GameData game)
+    {
+        games.add(game);
+    }
+
+    public void showStatistics()
+    {
+        FragmentManager f = getSupportFragmentManager();
+        FragmentTransaction transaction = f.beginTransaction();
+        gameStatisticsFragment = GameStatisticsFragment.newInstance(games);
+        transaction.replace(R.id.game_fragment, gameStatisticsFragment);
+        transaction.addToBackStack("statistics");
+        transaction.commit();
     }
 }
