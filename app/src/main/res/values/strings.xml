@@ -117,4 +117,5 @@
     <string name="successful_import">Successfully imported database</string>
     <string name="unsuccessful_import">Unsuccessful import of database</string>
     <string name="unsuccessful_export">Unsuccessful export of database</string>
+    <string name="about">About</string>
 </resources>

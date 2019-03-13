@@ -10,6 +10,7 @@ import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -71,6 +72,7 @@ public class MenuBackground extends AppCompatActivity {
         PrimaryDrawerItem profilesItem = new PrimaryDrawerItem().withIdentifier(2).withName(R.string.drawer_item_profiles).withIcon(R.drawable.ic_group_white_24dp);
         PrimaryDrawerItem addProfileItem = new PrimaryDrawerItem().withIdentifier(2).withName(R.string.add_profile).withIcon(R.drawable.ic_person_add);
         PrimaryDrawerItem settingsItem = new PrimaryDrawerItem().withIdentifier(2).withName(R.string.settings).withIcon(R.drawable.ic_settings_white_24dp);
+        PrimaryDrawerItem aboutItem = new PrimaryDrawerItem().withIdentifier(2).withName(R.string.about).withIcon(R.drawable.ic_help_white_24dp);
 
         // Create an empty AccountHeader
         AccountHeader headerResult = new AccountHeaderBuilder()
@@ -81,10 +83,9 @@ public class MenuBackground extends AppCompatActivity {
         navigationDrawer = new DrawerBuilder()
                 .withActivity(parentActivity)
                 .withToolbar(myToolbar)
-                .withSliderBackgroundColor(getResources().getColor(R.color.background_transparent))
-                .withAccountHeader(
+                /*.withAccountHeader(
                         headerResult
-                )
+                )*/
                 .addDrawerItems(
                         homeItem,
                         new DividerDrawerItem(),
@@ -95,9 +96,9 @@ public class MenuBackground extends AppCompatActivity {
                         profilesItem,
                         addProfileItem,
                         new DividerDrawerItem(),
-                        settingsItem
+                        settingsItem,
+                        aboutItem
                 )
-                .withFooterDivider(true)
                 .withOnDrawerItemClickListener(new Drawer.OnDrawerItemClickListener() {
                     @Override
                     public boolean onItemClick(View view, int position, IDrawerItem drawerItem) {
@@ -110,12 +111,13 @@ public class MenuBackground extends AppCompatActivity {
                 .build();
     }
 
-    private final int HOME = 1;
-    private final int X01 = 4;
-    private final int RANDOM = 5;
-    private final int PROFILES = 7;
-    private final int ADD_PROFILE = 8;
-    private final int SETTINGS = 10;
+    private final int HOME = 0;
+    private final int X01 = 3;
+    private final int RANDOM = 4;
+    private final int PROFILES = 6;
+    private final int ADD_PROFILE = 7;
+    private final int SETTINGS = 9;
+    private final int ABOUT = 11;
 
     private void itemClickedEvent(int position) {
         switch (position){
@@ -137,9 +139,17 @@ public class MenuBackground extends AppCompatActivity {
             case(SETTINGS):
                 openSettingsActivity();
                 break;
+            case(ABOUT):
+                openAboutActivity();
+                break;
             default:
                 throw new Error("Non defined item clicked");
         }
+    }
+
+    private void openAboutActivity() {
+        Intent intent = new Intent(this, AboutActivity.class);
+        openActivity(AppSettingsActivity.class.getName(), intent);
     }
 
 

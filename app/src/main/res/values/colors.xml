@@ -4,8 +4,7 @@
     <color name="accent">#7AB317</color>
     <color name="accent_alpha_26">#42AEEA00</color>
 
-    <color name="background">#212121</color>
-    <color name="background_transparent">#E5212121</color>
+    <color name="background">#242424</color>
     <color name="background_blue">#263238</color>
 
     <color name="background_statistics_header">#E1E1E1</color>
@@ -32,7 +31,7 @@
 
     <!-- OVERWRITE THESE COLORS FOR A LIGHT THEME -->
     <!-- MaterialDrawer DEFAULT colors -->
-    <color name="material_drawer_background">#EF212121</color>
+    <color name="material_drawer_background">#242424</color>
 
     <!-- Material DEFAULT text / items colors -->
     <color name="material_drawer_icons">#FFF</color>
@@ -40,7 +39,7 @@
     <color name="material_drawer_primary_icon">#8A000000</color>
     <color name="material_drawer_secondary_text">#8EFFFFFF</color>
     <color name="material_drawer_hint_text">#42FFFFFF</color>
-    <color name="material_drawer_divider">#3FFFFFFF</color>
+    <color name="material_drawer_divider">#AF000000</color>
     <!-- Material DEFAULT drawer colors -->
     <color name="material_drawer_selected">#EF212121</color>
     <color name="material_drawer_selected_text">#EDFFFFFF</color>
