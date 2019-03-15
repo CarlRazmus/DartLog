@@ -104,6 +104,11 @@ public class GameActivity extends AppCompatActivity implements OnBackPressedDial
         games.add(game);
     }
 
+    public boolean hasStatistics()
+    {
+        return games.size() > 0;
+    }
+
     public void showStatistics()
     {
         FragmentManager f = getSupportFragmentManager();

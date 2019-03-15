@@ -114,7 +114,7 @@ public class X01GameActivity extends Fragment implements View.OnClickListener,
                 break;
             case R.id.match_summary:
                 addCurrentLeg(game.getPlayers().get(0).getPlayerName());
-                //showLastGameSummary();
+                showStatistics();
                 break;
             case R.id.complete_match:
                 addCurrentLeg(game.getPlayers().get(0).getPlayerName());
@@ -133,13 +133,22 @@ public class X01GameActivity extends Fragment implements View.OnClickListener,
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.game_menu, menu);
         MenuItem undo_action = menu.findItem(R.id.action_undo);
+        MenuItem stats_action = menu.findItem(R.id.action_stats);
         if (undoPossible) {
             undo_action.setEnabled(true);
-
         }
         else
         {
             undo_action.setEnabled(false);
+        }
+
+        if (((GameActivity) getActivity()).hasStatistics() || game.isGameOver())
+        {
+            stats_action.setEnabled(true);
+        }
+        else
+        {
+            stats_action.setEnabled(false);
         }
     }
 
@@ -151,6 +160,8 @@ public class X01GameActivity extends Fragment implements View.OnClickListener,
                 updateView();
                 return true;
             case R.id.action_stats:
+                if (game.isGameOver())
+                    addCurrentLeg(game.getPlayers().get(0).getPlayerName());
                 showStatistics();
                 return true;
             default:
@@ -174,7 +185,6 @@ public class X01GameActivity extends Fragment implements View.OnClickListener,
         if (!currentMatchAdded && undoPossible != game.isUndoPossible())
         {
             undoPossible = !undoPossible;
-            getActivity().invalidateOptionsMenu();
         }
         if (game.isGameOver()) {
             setGameDoneView();
@@ -182,6 +192,7 @@ public class X01GameActivity extends Fragment implements View.OnClickListener,
             setNumPadView();
             updateGameRound();
         }
+        getActivity().invalidateOptionsMenu();
     }
 
     private void updateGameRound() {
@@ -253,8 +264,8 @@ public class X01GameActivity extends Fragment implements View.OnClickListener,
         if(!currentMatchAdded) {
             GameActivity activity = (GameActivity) getActivity();
             DartLogDatabaseHelper databaseHelper = DartLogDatabaseHelper.getInstance(activity);
-            ArrayList<GameData> gameData = databaseHelper.getPlayerMatchData(profileName, Long.MAX_VALUE, 1);
             dbHelper.addX01Match(game);
+            ArrayList<GameData> gameData = databaseHelper.getPlayerMatchData(profileName, Long.MAX_VALUE, 1);
             activity.addGame(gameData.get(0));
             setCurrentMatchAdded(true);
         }
