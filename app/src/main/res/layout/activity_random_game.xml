@@ -41,7 +41,9 @@
     <ViewAnimator
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/game_input">
+        android:measureAllChildren="false"
+        android:id="@+id/game_input"
+        android:elevation="4dp">
 
         <include layout="@layout/game_num_pad"/>
         <include layout="@layout/game_over"/>
