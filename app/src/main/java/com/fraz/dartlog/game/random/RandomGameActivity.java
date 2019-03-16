@@ -201,6 +201,9 @@ public class RandomGameActivity extends AppCompatActivity implements View.OnClic
         Button completeMatchButton = (Button) findViewById(R.id.complete_match);
         assert completeMatchButton != null;
         completeMatchButton.setOnClickListener(this);
+
+        Button statisticsButton = (Button) findViewById(R.id.match_summary);
+        statisticsButton.setVisibility(View.GONE);
     }
 
     private void setGameDoneView() {
