@@ -136,19 +136,23 @@ public class X01GameActivity extends Fragment implements View.OnClickListener,
         MenuItem stats_action = menu.findItem(R.id.action_stats);
         if (undoPossible) {
             undo_action.setEnabled(true);
+            undo_action.getIcon().setAlpha(255);
         }
         else
         {
             undo_action.setEnabled(false);
+            undo_action.getIcon().setAlpha(80);
         }
 
         if (((GameActivity) getActivity()).hasStatistics() || game.isGameOver())
         {
             stats_action.setEnabled(true);
+            stats_action.getIcon().setAlpha(255);
         }
         else
         {
             stats_action.setEnabled(false);
+            stats_action.getIcon().setAlpha(80);
         }
     }
 
