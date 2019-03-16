@@ -20,6 +20,7 @@ import com.fraz.dartlog.OnBackPressedDialogFragment;
 import com.fraz.dartlog.R;
 import com.fraz.dartlog.db.DartLogDatabaseHelper;
 import com.fraz.dartlog.game.AdditionScoreManager;
+import com.fraz.dartlog.game.GameActivity;
 import com.fraz.dartlog.game.InputEventListener;
 import com.fraz.dartlog.game.NumPadHandler;
 import com.fraz.dartlog.game.PlayerData;
@@ -103,10 +104,21 @@ public class RandomGameActivity extends AppCompatActivity implements View.OnClic
         }
     }
 
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.game_menu, menu);
+        inflater.inflate(R.menu.random_game_menu, menu);
+        MenuItem undo_action = menu.findItem(R.id.action_undo);
+        if (game.isUndoPossible()) {
+            undo_action.setEnabled(true);
+            undo_action.getIcon().setAlpha(255);
+        }
+        else
+        {
+            undo_action.setEnabled(false);
+            undo_action.getIcon().setAlpha(80);
+        }
         return true;
     }
 
@@ -127,6 +139,7 @@ public class RandomGameActivity extends AppCompatActivity implements View.OnClic
             updateNextFieldTextView(game.getNextField());
             updateGameRound();
         }
+        invalidateOptionsMenu();
     }
 
     public void updateNextFieldTextView(int nextFieldNr){
