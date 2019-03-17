@@ -57,5 +57,11 @@
             android:label="@string/app_settings_activity"
             android:screenOrientation="portrait">
         </activity>
+
+        <activity
+            android:name=".AboutActivity"
+            android:label="@string/about_activity"
+            android:screenOrientation="portrait">
+        </activity>
     </application>
 </manifest>

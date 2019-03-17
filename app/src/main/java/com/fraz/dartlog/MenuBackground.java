@@ -117,7 +117,7 @@ public class MenuBackground extends AppCompatActivity {
     private final int PROFILES = 6;
     private final int ADD_PROFILE = 7;
     private final int SETTINGS = 9;
-    private final int ABOUT = 11;
+    private final int ABOUT = 10;
 
     private void itemClickedEvent(int position) {
         switch (position){

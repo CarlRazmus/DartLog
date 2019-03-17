@@ -1,4 +1,11 @@
 package com.fraz.dartlog;
 
-class AboutActivity {
+import android.os.Bundle;
+
+public class AboutActivity extends MenuBackground {
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState, this, R.layout.activity_app_settings);
+    }
 }
