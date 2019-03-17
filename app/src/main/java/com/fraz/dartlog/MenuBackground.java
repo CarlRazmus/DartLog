@@ -155,8 +155,11 @@ public class MenuBackground extends AppCompatActivity {
     private void openActivity(String className, Intent intent)
     {
         String parentClassName = parentActivity.getClass().getName();
-        if(parentClassName.equals(className))
-            parentActivity.finish();
+        if(className.equals(parentClassName))
+            if(parentClassName.equals(SetupActivity.class.getName()))
+                if(!((SetupActivity)parentActivity).getGameType().equals(intent.getStringExtra("gameType")))
+                   parentActivity.finish();
+        intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
         startActivity(intent);
     }
 

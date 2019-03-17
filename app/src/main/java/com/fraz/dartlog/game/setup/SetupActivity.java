@@ -237,4 +237,8 @@ public class SetupActivity extends MenuBackground
     public void onDragStarted(RecyclerView.ViewHolder viewHolder) {
         itemTouchHelper.startDrag(viewHolder);
     }
+
+    public String getGameType(){
+        return gameType;
+    }
 }
