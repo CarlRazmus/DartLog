@@ -155,8 +155,10 @@ public class MenuBackground extends AppCompatActivity {
 
     private void openActivity(String className, Intent intent)
     {
-        if(!parentActivity.getClass().getName().equals(className))
-            startActivity(intent);
+        String parentClassName = parentActivity.getClass().getName();
+        if(parentClassName.equals(className))
+            parentActivity.finish();
+        startActivity(intent);
     }
 
     private void openSettingsActivity() {
