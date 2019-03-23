@@ -18,9 +18,9 @@ public class NumPadHandler implements View.OnTouchListener {
     private final TextView scoreInput;
 
     public NumPadHandler(ViewGroup numpadView, int maxScore) {
-        submitButton = (Button) numpadView.findViewById(R.id.submit_button);
-        ViewGroup numpad = (ViewGroup) numpadView.findViewById(R.id.num_pad);
-        scoreInput = (TextView) numpadView.findViewById(R.id.score_view);
+        submitButton = numpadView.findViewById(R.id.submit_button);
+        ViewGroup numpad = numpadView.findViewById(R.id.num_pad);
+        scoreInput = numpadView.findViewById(R.id.score_view);
         setOnTouchListenerInView(numpad);
         initInputField(maxScore);
     }

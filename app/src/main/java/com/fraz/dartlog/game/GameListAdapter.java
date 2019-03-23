@@ -83,11 +83,10 @@ public abstract class GameListAdapter<T extends GameListAdapter.ViewHolder> exte
 
         public ViewHolder(View itemView) {
             super(itemView);
-            playerName = (TextView) itemView.findViewById(R.id.game_player_list_item_name);
-            score = (TextView) itemView.findViewById(R.id.game_player_list_item_score);
-            totalScoreHistory = (TextView) itemView.findViewById(R.id.total_score_history);
-            background_group = (ViewGroup)
-                    itemView.findViewById(R.id.game_player_list_item_background);
+            playerName = itemView.findViewById(R.id.game_player_list_item_name);
+            score = itemView.findViewById(R.id.game_player_list_item_score);
+            totalScoreHistory = itemView.findViewById(R.id.total_score_history);
+            background_group = itemView.findViewById(R.id.game_player_list_item_background);
             current_player_indicator =
                     itemView.findViewById(R.id.game_player_list_item_current_player_indicator);
         }

@@ -43,7 +43,7 @@ public class MenuBackground extends AppCompatActivity {
         setContentView(parentView);
 
         this.parentActivity = parentActivity;
-        this.myToolbar = (Toolbar) findViewById(R.id.toolbar);
+        this.myToolbar = findViewById(R.id.toolbar);
 
         setSupportActionBar(myToolbar);
         initializeAndPopulateNavigationDrawer();
@@ -202,7 +202,7 @@ public class MenuBackground extends AppCompatActivity {
 
                     public void onClick(DialogInterface dialog, int id) {
                         EditText profileNameEditText =
-                                (EditText) getDialog().findViewById(R.id.add_player_edit_text);
+                                getDialog().findViewById(R.id.add_player_edit_text);
                         String name = profileNameEditText.getText().toString();
                         DartLogDatabaseHelper dbHelper = DartLogDatabaseHelper.getInstance(getContext());
                         if(!dbHelper.playerExist(name)) {

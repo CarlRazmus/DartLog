@@ -37,9 +37,9 @@ public class X01GameListAdapter extends GameListAdapter<X01GameListAdapter.X01Vi
 
         X01ViewHolder(View itemView) {
             super(itemView);
-            checkout = (TextView) itemView.findViewById(R.id.checkout);
-            checkoutLabel = (TextView) itemView.findViewById(R.id.checkout_label);
-            checkout_view = (ViewGroup) itemView.findViewById(R.id.checkout_view);
+            checkout = itemView.findViewById(R.id.checkout);
+            checkoutLabel = itemView.findViewById(R.id.checkout_label);
+            checkout_view = itemView.findViewById(R.id.checkout_view);
         }
     }
 

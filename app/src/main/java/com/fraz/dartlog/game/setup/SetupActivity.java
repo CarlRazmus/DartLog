@@ -110,13 +110,13 @@ public class SetupActivity extends MenuBackground
     }
 
     private void InitializeButton() {
-        Button readyButton = (Button) findViewById(R.id.start_game_button);
+        Button readyButton = findViewById(R.id.start_game_button);
         assert readyButton != null;
         readyButton.setOnClickListener(this);
     }
 
     private void InitializeToolbar() {
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         toolbar.setTitle(getTitle());
     }
 

@@ -25,7 +25,7 @@ public class X01SettingsFragment extends PreferenceFragment {
 
         if (getView() != null) {
 
-            ListView listView = (ListView) getView().findViewById(android.R.id.list);
+            ListView listView = getView().findViewById(android.R.id.list);
             Adapter adapter = listView.getAdapter();
 
             if (adapter != null) {
@@ -37,7 +37,7 @@ public class X01SettingsFragment extends PreferenceFragment {
                     item.measure(0, 0);
                     height += item.getMeasuredHeight();
                 }
-                FrameLayout frame = (FrameLayout) getActivity().findViewById(R.id.game_preferences);
+                FrameLayout frame = getActivity().findViewById(R.id.game_preferences);
 
                 ViewGroup.LayoutParams param = frame.getLayoutParams();
                 param.height = height + (listView.getDividerHeight() * adapter.getCount());

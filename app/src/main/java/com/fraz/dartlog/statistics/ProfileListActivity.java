@@ -47,7 +47,7 @@ public class ProfileListActivity extends MenuBackground {
         super.onCreate(savedInstanceState, this, R.layout.activity_profile_list);
         myToolbar.setTitle(getTitle());
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        FloatingActionButton fab = findViewById(R.id.fab);
         assert fab != null;
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -57,7 +57,7 @@ public class ProfileListActivity extends MenuBackground {
             }
         });
 
-        recyclerView = (RecyclerView)findViewById(R.id.profile_list);
+        recyclerView = findViewById(R.id.profile_list);
         assert recyclerView != null;
         setupRecyclerView(recyclerView);
 
@@ -114,7 +114,7 @@ public class ProfileListActivity extends MenuBackground {
         public void onBindViewHolder(final ViewHolder holder, int position) {
             holder.mItem = profiles.get(position);
 
-            TextView profileNameView = (TextView) holder.mView.findViewById(R.id.profile_name);
+            TextView profileNameView = holder.mView.findViewById(R.id.profile_name);
             profileNameView.setText(holder.mItem);
 
             // Setup view change on click
@@ -167,7 +167,7 @@ public class ProfileListActivity extends MenuBackground {
                     .setPositiveButton("Add", new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int id) {
                             EditText profileNameEditText =
-                                    (EditText) getDialog().findViewById(R.id.add_player_edit_text);
+                                    getDialog().findViewById(R.id.add_player_edit_text);
                             String name = profileNameEditText.getText().toString();
                             DartLogDatabaseHelper dbHelper = DartLogDatabaseHelper.getInstance(getContext());
                             if(!dbHelper.playerExist(name)) {

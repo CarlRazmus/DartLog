@@ -41,9 +41,9 @@ public class X01GameActivity extends AppCompatActivity implements View.OnClickLi
         setContentView(R.layout.activity_x01_game);
 
         setSupportActionBar((Toolbar) findViewById(R.id.game_toolbar));
-        viewAnimator = (ViewAnimator) findViewById(R.id.game_input);
+        viewAnimator = findViewById(R.id.game_input);
         dbHelper = DartLogDatabaseHelper.getInstance(this);
-        roundTextView = (TextView) findViewById(R.id.game_header_round);
+        roundTextView = findViewById(R.id.game_header_round);
 
         game = GetX01GameInstance(savedInstanceState);
         gameListAdapter = new X01GameListAdapter(game);
@@ -132,7 +132,7 @@ public class X01GameActivity extends AppCompatActivity implements View.OnClickLi
     }
 
     private void initListView() {
-        RecyclerView myListView = (RecyclerView) findViewById(R.id.play_players_listView);
+        RecyclerView myListView = findViewById(R.id.play_players_listView);
         assert myListView != null;
         myListView.setAdapter(gameListAdapter);
     }
@@ -155,7 +155,7 @@ public class X01GameActivity extends AppCompatActivity implements View.OnClickLi
     }
 
     private void scrollToPlayerInList() {
-        RecyclerView playersListView = (RecyclerView) findViewById(R.id.play_players_listView);
+        RecyclerView playersListView = findViewById(R.id.play_players_listView);
         assert playersListView != null;
         playersListView.smoothScrollToPosition(game.getCurrentPlayerIdx());
     }
@@ -166,8 +166,8 @@ public class X01GameActivity extends AppCompatActivity implements View.OnClickLi
     }
 
     private void initGameDoneView() {
-        Button newLegButton = (Button) findViewById(R.id.new_leg);
-        Button completeMatchButton = (Button) findViewById(R.id.complete_match);
+        Button newLegButton = findViewById(R.id.new_leg);
+        Button completeMatchButton = findViewById(R.id.complete_match);
 
         assert newLegButton != null;
         newLegButton.setOnClickListener(this);

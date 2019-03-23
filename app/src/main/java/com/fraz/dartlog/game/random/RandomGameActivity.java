@@ -39,7 +39,7 @@ public class RandomGameActivity extends AppCompatActivity implements View.OnClic
         setContentView(R.layout.activity_random_game);
 
         setSupportActionBar((Toolbar) findViewById(R.id.game_toolbar));
-        viewAnimator = (ViewAnimator) findViewById(R.id.game_input);
+        viewAnimator = findViewById(R.id.game_input);
         dbHelper = DartLogDatabaseHelper.getInstance(this);
 
         game = GetRandomGameInstance(savedInstanceState);
@@ -130,7 +130,7 @@ public class RandomGameActivity extends AppCompatActivity implements View.OnClic
     }
 
     public void updateNextFieldTextView(int nextFieldNr){
-        TextView myListView = (TextView) findViewById(R.id.next_field_textview);
+        TextView myListView = findViewById(R.id.next_field_textview);
         assert myListView != null;
 
         if(nextFieldNr != 0)
@@ -140,13 +140,13 @@ public class RandomGameActivity extends AppCompatActivity implements View.OnClic
     }
 
     public void updateCurrentFieldTextView(int newFieldNr) {
-        TextView myListView = (TextView) findViewById(R.id.current_field_textview);
+        TextView myListView = findViewById(R.id.current_field_textview);
         assert myListView != null;
         myListView.setText(String.valueOf(newFieldNr));
     }
 
     private void initListView() {
-        RecyclerView myListView = (RecyclerView) findViewById(R.id.play_players_listView);
+        RecyclerView myListView = findViewById(R.id.play_players_listView);
         assert myListView != null;
         myListView.setAdapter(gameListAdapter);
     }
@@ -170,7 +170,7 @@ public class RandomGameActivity extends AppCompatActivity implements View.OnClic
     }
 
     private void scrollToPlayerInList() {
-        RecyclerView playersListView = (RecyclerView) findViewById(R.id.play_players_listView);
+        RecyclerView playersListView = findViewById(R.id.play_players_listView);
         assert playersListView != null;
         playersListView.smoothScrollToPosition(game.getCurrentPlayerIdx());
     }
@@ -181,11 +181,11 @@ public class RandomGameActivity extends AppCompatActivity implements View.OnClic
     }
 
     private void initGameDoneView() {
-        Button newLegButton = (Button) findViewById(R.id.new_leg);
+        Button newLegButton = findViewById(R.id.new_leg);
         assert newLegButton != null;
         newLegButton.setOnClickListener(this);
 
-        Button completeMatchButton = (Button) findViewById(R.id.complete_match);
+        Button completeMatchButton = findViewById(R.id.complete_match);
         assert completeMatchButton != null;
         completeMatchButton.setOnClickListener(this);
     }

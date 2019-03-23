@@ -93,7 +93,7 @@ public class ProfileDetailActivity extends MenuBackground {
         }
 
         protected void onPostExecute(Void result) {
-            ViewPager viewPager = (ViewPager) findViewById(R.id.profile_detail_view_pager);
+            ViewPager viewPager = findViewById(R.id.profile_detail_view_pager);
             viewPager.setAdapter(profileAdapter);
         }
     }

@@ -34,7 +34,7 @@ public class MatchPagerActivity extends AppCompatActivity {
 
         MatchPagerAdapter adapter =
                 new MatchPagerAdapter(getSupportFragmentManager(), playerGameData);
-        ViewPager matchPager = (ViewPager) findViewById(R.id.match_pager);
+        ViewPager matchPager = findViewById(R.id.match_pager);
         matchPager.setAdapter(adapter);
         matchPager.setCurrentItem(position);
         matchPager.addOnPageChangeListener(new OnPageChangeListener());
@@ -42,7 +42,7 @@ public class MatchPagerActivity extends AppCompatActivity {
     }
 
     private void UpdateToolbar(int position) {
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle(
                 String.format(Locale.getDefault(), "%s %d",
