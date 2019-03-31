@@ -30,9 +30,15 @@ public class ProfileDetailActivity extends MenuBackground {
 
     private String playerName;
 
+
+    public ProfileDetailActivity(){
+        super(R.layout.activity_profile_detail);
+        setParentActivity(this);
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState, this, R.layout.activity_profile_detail);
+        super.onCreate(savedInstanceState);
 
         playerName = getIntent().getStringExtra(ProfileDetailFragment.ARG_ITEM_NAME);
         AsyncTaskRunner runner = new AsyncTaskRunner();

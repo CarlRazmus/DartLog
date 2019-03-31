@@ -42,9 +42,15 @@ public class ProfileListActivity extends MenuBackground {
     private boolean twoPaneMode;
     RecyclerView recyclerView;
 
+
+    public ProfileListActivity(){
+        super(R.layout.activity_profile_list);
+        setParentActivity(this);
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState, this, R.layout.activity_profile_list);
+        super.onCreate(savedInstanceState);
         myToolbar.setTitle(getTitle());
 
         FloatingActionButton fab = findViewById(R.id.fab);

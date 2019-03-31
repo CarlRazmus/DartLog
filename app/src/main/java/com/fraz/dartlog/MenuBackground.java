@@ -10,6 +10,7 @@ import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -34,15 +35,23 @@ import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
 
 public class MenuBackground extends AppCompatActivity {
 
-    Drawer navigationDrawer;
     protected Toolbar myToolbar;
-    Activity parentActivity;
 
-    protected void onCreate(Bundle savedInstanceState, Activity parentActivity, int parentView) {
+    private Drawer navigationDrawer;
+    private Activity parentActivity;
+    private int parentView;
+
+    public MenuBackground(int parentView){
+        this.parentView = parentView;
+    }
+
+    public void setParentActivity(Activity parentActivity){
+        this.parentActivity = parentActivity;
+    }
+    protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
         setContentView(parentView);
 
-        this.parentActivity = parentActivity;
         this.myToolbar = findViewById(R.id.toolbar);
 
         setSupportActionBar(myToolbar);
@@ -51,16 +60,12 @@ public class MenuBackground extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parentActivity activity in AndroidManifest.xml.
         return super.onOptionsItemSelected(item);
     }
 
@@ -74,7 +79,7 @@ public class MenuBackground extends AppCompatActivity {
         PrimaryDrawerItem settingsItem = new PrimaryDrawerItem().withIdentifier(2).withName(R.string.settings).withIcon(R.drawable.ic_settings_white_24dp);
         PrimaryDrawerItem aboutItem = new PrimaryDrawerItem().withIdentifier(2).withName(R.string.about).withIcon(R.drawable.ic_help_white_24dp);
 
-        // Create an empty AccountHeader
+        /* TODO Create an empty AccountHeader - This will be re-added in version 2.0 */
         AccountHeader headerResult = new AccountHeaderBuilder()
                 .withActivity(parentActivity)
                 .withHeaderBackground(R.drawable.profile_background)

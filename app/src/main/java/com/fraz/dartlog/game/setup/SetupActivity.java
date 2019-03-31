@@ -45,6 +45,11 @@ public class SetupActivity extends MenuBackground
     private PlayerSelectorDialogFragment dialogFragment;
 
 
+    public SetupActivity(){
+        super(R.layout.activity_setup);
+        setParentActivity(this);
+    }
+
     @Override
     public void onDialogPositiveClick(PlayerSelectorDialogFragment dialog) {
         participantNames.clear();
@@ -54,7 +59,7 @@ public class SetupActivity extends MenuBackground
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState, this, R.layout.activity_setup);
+        super.onCreate(savedInstanceState);
 
         RecyclerView.LayoutManager participantsLayoutManager = new LinearLayoutManager(this);
         dialogFragment = new PlayerSelectorDialogFragment();
