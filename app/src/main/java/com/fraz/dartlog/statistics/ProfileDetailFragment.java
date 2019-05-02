@@ -4,9 +4,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.support.v4.app.Fragment;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,15 +12,15 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.support.v7.widget.Toolbar;
 
 import com.fraz.dartlog.R;
 import com.fraz.dartlog.Util;
 import com.fraz.dartlog.db.DartLogDatabaseHelper;
 import com.fraz.dartlog.game.GameData;
 
+import java.util.HashMap;
 import java.util.Locale;
-import java.util.concurrent.Executor;
-import java.util.concurrent.Executors;
 
 /**
  * A fragment representing a single Profile detail screen.
@@ -38,6 +36,7 @@ public class ProfileDetailFragment extends Fragment {
      * Name of the profile this fragment is presenting.
      */
     private String profileName;
+    private long profileId;
     private View rootView;
     private GameData highestCheckoutGame;
     private GameData fewestTurns301Game;
@@ -62,7 +61,6 @@ public class ProfileDetailFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         profileName = getArguments().getString(ARG_ITEM_NAME);
     }
 
@@ -210,25 +208,13 @@ public class ProfileDetailFragment extends Fragment {
 
         @Override
         protected Void doInBackground(Void... voids) {
-            Thread.currentThread().setName(profileName + "_Highscore");
             DartLogDatabaseHelper databaseHelper = DartLogDatabaseHelper.getInstance(getContext());
-            highestCheckoutGame = databaseHelper.getHighestCheckoutGame(profileName);
-            fewestTurns301Game = databaseHelper.getFewestTurns301Game(profileName);
-            fewestTurns501Game = databaseHelper.getFewestTurns501Game(profileName);
+            profileId = databaseHelper.getPlayerId(profileName);
+            Thread.currentThread().setName(profileName + "_Highscore");
 
-            if(this.isCancelled())
-                return null;
-
-            if (highestCheckoutGame == null && fewestTurns301Game  == null && fewestTurns501Game  == null) {
-                databaseHelper.refreshStatistics(profileName);
-
-                if(this.isCancelled())
-                    return null;
-
-                highestCheckoutGame = databaseHelper.getHighestCheckoutGame(profileName);
-                fewestTurns301Game = databaseHelper.getFewestTurns301Game(profileName);
-                fewestTurns501Game = databaseHelper.getFewestTurns501Game(profileName);
-            }
+            HashMap<String, Integer> highestCheckoutGames = databaseHelper.getHighestCheckouts(profileId);
+            //fewestTurns301Game = databaseHelper.getFewestTurns301Game(profileName);
+            //fewestTurns501Game = databaseHelper.getFewestTurns501Game(profileName);
             finishedLoadingHighscores = true;
             return null;
         }
