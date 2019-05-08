@@ -6,6 +6,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.os.SystemClock;
 import android.support.annotation.NonNull;
 import android.util.Log;
 import android.util.SparseArray;
@@ -419,10 +420,11 @@ public class DartLogDatabaseHelper extends SQLiteOpenHelper {
 
     public void createStatisticViews(){
         ArrayList<Integer> playerIds = getPlayerIds();
-
+        long start = SystemClock.currentThreadTimeMillis();
         for (int id : playerIds){
+            String sqlDropStatisticsView = "DROP VIEW IF EXISTS [statistics_view_" + id + "];";
             String sqlCreateStatisticsView =
-                    "CREATE VIEW IF NOT EXISTS statistics_view_" + id + " AS " +
+                    "CREATE VIEW statistics_view_" + id + " AS " +
                             "SELECT m._id as m_id, m.game_type, " +
                             "x.x, m.winner_id, ms.score as ms_score, ms._id as ms_id, " +
                             "count(ms.score) as ms_count, max(ms._id) as ms_max_id " +
@@ -430,10 +432,35 @@ public class DartLogDatabaseHelper extends SQLiteOpenHelper {
                             "INNER JOIN match m ON x.match_id == m_id " +
                             "INNER JOIN match_score ms ON x.match_id == ms.match_id " +
                             "WHERE m.winner_id == " + id + " AND m.winner_id == ms.player_id " +
-                            "AND x.x IN (3, 5) " +
+                            "AND x.x IN (3, 4, 5) " +
                             "GROUP BY m.winner_id, x.x, m_id ";
+            db.execSQL(sqlDropStatisticsView);
             db.execSQL(sqlCreateStatisticsView);
         }
+        long end = SystemClock.currentThreadTimeMillis();
+        Log.d("hej", "it took " + (end - start) + "ms");
+    }
+
+    public void updateStatisticViews(ArrayList<Integer> playerIds){
+        long start = SystemClock.currentThreadTimeMillis();
+        for (int id : playerIds){
+            String sqlDropStatisticsView = "DROP VIEW IF EXISTS [statistics_view_" + id + "];";
+            String sqlCreateStatisticsView =
+                    "CREATE VIEW statistics_view_" + id + " AS " +
+                            "SELECT m._id as m_id, m.game_type, " +
+                            "x.x, m.winner_id, ms.score as ms_score, ms._id as ms_id, " +
+                            "count(ms.score) as ms_count, max(ms._id) as ms_max_id " +
+                            "FROM x01 x " +
+                            "INNER JOIN match m ON x.match_id == m_id " +
+                            "INNER JOIN match_score ms ON x.match_id == ms.match_id " +
+                            "WHERE m.winner_id == " + id + " AND m.winner_id == ms.player_id " +
+                            "AND x.x IN (3, 4, 5) " +
+                            "GROUP BY m.winner_id, x.x, m_id ";
+            db.execSQL(sqlDropStatisticsView);
+            db.execSQL(sqlCreateStatisticsView);
+        }
+        long end = SystemClock.currentThreadTimeMillis();
+        Log.d("hej", "it took " + (end - start) + "ms");
     }
 
     public void test(){
