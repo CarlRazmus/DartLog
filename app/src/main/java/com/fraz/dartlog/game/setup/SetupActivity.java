@@ -45,6 +45,11 @@ public class SetupActivity extends MenuBackground
     private PlayerSelectorDialogFragment dialogFragment;
 
 
+    public SetupActivity(){
+        super(R.layout.activity_setup);
+        setParentActivity(this);
+    }
+
     @Override
     public void onDialogPositiveClick(PlayerSelectorDialogFragment dialog) {
         participantNames.clear();
@@ -54,7 +59,7 @@ public class SetupActivity extends MenuBackground
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState, this, R.layout.activity_setup);
+        super.onCreate(savedInstanceState);
 
         RecyclerView.LayoutManager participantsLayoutManager = new LinearLayoutManager(this);
         dialogFragment = new PlayerSelectorDialogFragment();
@@ -113,13 +118,13 @@ public class SetupActivity extends MenuBackground
     }
 
     private void InitializeButton() {
-        Button readyButton = (Button) findViewById(R.id.start_game_button);
+        Button readyButton = findViewById(R.id.start_game_button);
         assert readyButton != null;
         readyButton.setOnClickListener(this);
     }
 
     private void InitializeToolbar() {
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         toolbar.setTitle(getTitle());
     }
 
@@ -153,15 +158,12 @@ public class SetupActivity extends MenuBackground
     }
 
     private void showRulesDialog(String title, String rules) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this,
-                R.style.GreenButtonAlertDialog)
+        AlertDialog.Builder builder = new AlertDialog.Builder(this)
                 .setTitle(title + " rules")
                 .setMessage(rules)
                 .setIcon(R.drawable.ic_info_outline_white_18dp)
                 .setPositiveButton(android.R.string.yes, null);
         AlertDialog dialog = builder.show();
-
-        Util.setDialogSize(this, dialog, 0.8f, 0.8f);
 
         dialog.getButton(Dialog.BUTTON_NEGATIVE).setVisibility(View.INVISIBLE);
         dialog.getButton(Dialog.BUTTON_NEGATIVE).setActivated(false);
@@ -242,5 +244,9 @@ public class SetupActivity extends MenuBackground
     @Override
     public void onDragStarted(RecyclerView.ViewHolder viewHolder) {
         itemTouchHelper.startDrag(viewHolder);
+    }
+
+    public String getGameType(){
+        return gameType;
     }
 }

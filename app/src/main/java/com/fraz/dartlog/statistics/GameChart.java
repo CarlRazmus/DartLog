@@ -27,14 +27,14 @@ public abstract class GameChart extends GridLayout {
         super(context);
         LayoutInflater inflater = LayoutInflater.from(context);
         inflater.inflate(layoutId, this);
-        titleView = (TextView) findViewById(R.id.chart_title);
+        titleView = findViewById(R.id.chart_title);
     }
 
     public GameChart(Context context, AttributeSet attrs, int layoutId) {
         super(context, attrs);
         LayoutInflater inflater = LayoutInflater.from(context);
         inflater.inflate(layoutId, this);
-        titleView = (TextView) findViewById(R.id.chart_title);
+        titleView = findViewById(R.id.chart_title);
     }
 
     public GameData getGameData() {
@@ -42,7 +42,7 @@ public abstract class GameChart extends GridLayout {
     }
 
     public void addGameData(ChartView chartView) {
-        GridLayout grid = (GridLayout) findViewById(R.id.match_chart_grid);
+        GridLayout grid = findViewById(R.id.match_chart_grid);
         String[] playerNames = gameData.getPlayerNames();
 
         TypedArray colors = getResources().obtainTypedArray(R.array.chart_colors);

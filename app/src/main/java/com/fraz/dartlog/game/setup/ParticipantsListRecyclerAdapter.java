@@ -79,7 +79,7 @@ public class ParticipantsListRecyclerAdapter
     // Replace the contents of a view (invoked by the layout manager)
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
-        TextView participantNameTextView = (TextView)holder.listItemView.findViewById(
+        TextView participantNameTextView = holder.listItemView.findViewById(
                 R.id.participant_name);
         participantNameTextView.setText(participants.get(position));
 

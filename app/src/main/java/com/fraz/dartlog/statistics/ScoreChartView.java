@@ -26,7 +26,7 @@ public class ScoreChartView extends GameChart{
         else {
             setVisibility(VISIBLE);
 
-            BarChartView scoreChart = (BarChartView) findViewById(R.id.bar_chart);
+            BarChartView scoreChart = findViewById(R.id.bar_chart);
 
             addGameData(scoreChart);
 
