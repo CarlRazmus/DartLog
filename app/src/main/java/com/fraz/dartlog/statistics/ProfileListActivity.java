@@ -168,7 +168,7 @@ public class ProfileListActivity extends MenuBackground {
         public Dialog onCreateDialog(Bundle savedInstanceState) {
             AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 
-            builder.setTitle("Add new profile").setView(R.layout.dialog_add_player)
+            builder.setTitle("Create profile").setView(R.layout.dialog_add_player)
                     .setNegativeButton(R.string.cancel, null)
                     .setPositiveButton("Add", new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int id) {
@@ -182,10 +182,14 @@ public class ProfileListActivity extends MenuBackground {
                                     getProfilesAdapter().updateProfiles();
                                 }
                             }
-                            else if(!Util.loadProfileNames(getContext()).contains(name))
-                                Util.addPlayer(name, getContext());
+                            else {
+                                if(!Util.loadProfileNames(getContext()).contains(name))
+                                    Util.addPlayer(name, getContext());
+                                Util.showToast("A player with that name already exists", getContext());
+                            }
                         }
                     });
+
             return builder.create();
         }
 

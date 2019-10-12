@@ -7,7 +7,9 @@ import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.WindowManager;
+import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -94,5 +96,12 @@ public class Util {
         layoutParams.height = (int) (displayMetrics.heightPixels * height);
 
         dialog.getWindow().setAttributes(layoutParams);
+    }
+
+
+    public static void showToast(CharSequence text, Context context) {
+        Toast toast = Toast.makeText(context, text, Toast.LENGTH_SHORT);
+        toast.setGravity(Gravity.CENTER, 0, 0);
+        toast.show();
     }
 }

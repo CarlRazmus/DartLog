@@ -1,6 +1,7 @@
 package com.fraz.dartlog.game.setup;
 
 import android.app.Dialog;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -169,19 +170,9 @@ public class SetupActivity extends MenuBackground
         dialog.getButton(Dialog.BUTTON_NEGATIVE).setActivated(false);
     }
 
-    private void showMustAddPlayersErrorToast() {
-        showToast("A game requires 1 or more players to start!");
-    }
-
-    private void showToast(CharSequence text) {
-        Toast toast = Toast.makeText(this, text, Toast.LENGTH_SHORT);
-        toast.setGravity(Gravity.CENTER, 0, 0);
-        toast.show();
-    }
-
     private void startPlayActivity() {
         if (participantNames.size() == 0) {
-            showMustAddPlayersErrorToast();
+            Util.showToast("A game requires 1 or more players to start!", this);
         } else {
             startActivity(createGameIntent());
         }

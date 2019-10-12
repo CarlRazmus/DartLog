@@ -16,6 +16,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.fraz.dartlog.db.DartLogDatabaseHelper;
 import com.fraz.dartlog.game.setup.SetupActivity;
@@ -201,7 +202,7 @@ public class MenuBackground extends AppCompatActivity {
         public Dialog onCreateDialog(Bundle savedInstanceState) {
             AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 
-            builder.setTitle("Add new profile").setView(R.layout.dialog_add_player)
+            builder.setTitle("Create  profile").setView(R.layout.dialog_add_player)
                 .setNegativeButton(R.string.cancel, null)
                 .setPositiveButton("Add", new DialogInterface.OnClickListener() {
 
@@ -214,16 +215,17 @@ public class MenuBackground extends AppCompatActivity {
                             if (dbHelper.addPlayer(name) != -1) {
                                 Util.addPlayer(name, getContext());
 
-                                    if(getActivity().getClass().getName().equals(ProfileListActivity.class.getName()))
-                                    {
-                                        ((ProfileListActivity)getActivity()).updateProfileList();
-                                    }
-                                }
+                                if(getActivity().getClass().getName().equals(ProfileListActivity.class.getName()))
+                                    ((ProfileListActivity)getActivity()).updateProfileList();
                             }
-                            else if(!Util.loadProfileNames(getContext()).contains(name))
-                                Util.addPlayer(name, getContext());
                         }
-                    });
+                        else {
+                            if(!Util.loadProfileNames(getContext()).contains(name))
+                                Util.addPlayer(name, getContext());
+                            Util.showToast("A player with that name already exists", getContext());
+                        }
+                }
+            });
             return builder.create();
         }
     }
