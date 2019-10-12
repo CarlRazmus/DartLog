@@ -104,6 +104,9 @@ public class SetupActivity extends MenuBackground
         FloatingActionButton openPlayerSelectionFab = findViewById(R.id.open_player_selection_fab);
         openPlayerSelectionFab.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
+                Bundle args = new Bundle();
+                args.putStringArrayList("selectedNames", participantNames);
+                dialogFragment.setArguments(args);
                 dialogFragment.show(getSupportFragmentManager(), "selectPlayers");
             }
         });
