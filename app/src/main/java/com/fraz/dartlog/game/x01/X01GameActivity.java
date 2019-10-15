@@ -3,10 +3,12 @@ package com.fraz.dartlog.game.x01;
 import android.app.DialogFragment;
 import android.content.Intent;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -16,6 +18,13 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.ViewAnimator;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.fraz.dartlog.CheckoutChart;
 import com.fraz.dartlog.MainActivity;
 import com.fraz.dartlog.OnBackPressedDialogFragment;
@@ -23,8 +32,14 @@ import com.fraz.dartlog.R;
 import com.fraz.dartlog.db.DartLogDatabaseHelper;
 import com.fraz.dartlog.game.InputEventListener;
 import com.fraz.dartlog.game.NumPadHandler;
+import com.fraz.dartlog.game.PlayerData;
+
+import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.Map;
 
 public class X01GameActivity extends AppCompatActivity implements View.OnClickListener,
         InputEventListener, OnBackPressedDialogFragment.OnBackPressedDialogListener {
@@ -34,6 +49,7 @@ public class X01GameActivity extends AppCompatActivity implements View.OnClickLi
     private ViewAnimator viewAnimator;
     private DartLogDatabaseHelper dbHelper;
     private TextView roundTextView;
+    private RequestQueue requestQueue;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,6 +63,7 @@ public class X01GameActivity extends AppCompatActivity implements View.OnClickLi
 
         game = GetX01GameInstance(savedInstanceState);
         gameListAdapter = new X01GameListAdapter(game);
+        requestQueue = Volley.newRequestQueue(this);
 
         initListView();
         initNumPadView();
@@ -116,8 +133,68 @@ public class X01GameActivity extends AppCompatActivity implements View.OnClickLi
         updateView();
     }
 
+    private void sendGameDataToServer()
+    {
+        final String url = "http://192.168.28.139:5000/matches";
+        final String android_id = Settings.Secure.getString(getContentResolver(),
+                Settings.Secure.ANDROID_ID);
+        //json={"device_id" : 1,  "match" : {"player1" : {"name" : "pelle", "matchdata" : [301, 281, 200]}, "player2" : {"name" : "hakon", "matchdata" : [301, 181, 0]}}})
+        String winner = "None";
+        if (game.isGameOver())
+            winner = game.getWinner().getPlayerName();
+
+        PlayerData player1 = game.getPlayer(0);
+        PlayerData player2 = game.getPlayer(1);
+        Map player1data = new HashMap();
+        Map player2data = new HashMap();
+        player1data.put("name", player1.getPlayerName());
+        player2data.put("name", player2.getPlayerName());
+        LinkedList player1list = (LinkedList)player1.getTotalScoreHistory().clone();
+        LinkedList player2list = (LinkedList)player2.getTotalScoreHistory().clone();
+
+        Log.d("dartserver", "p1 list " + player1list.toString());
+        Log.d("dartserver", "p2 list " + player2list.toString());
+
+        //if (player1list.size() > 1)
+        player1list.add(player1.getScore());
+        //if (player2list.size() > 1)
+        player2list.add(player2.getScore());
+        player1data.put("matchdata", player1list);
+        player2data.put("matchdata", player2list);
+
+        Map match = new HashMap();
+        match.put("winner", winner);
+        match.put("player1", player1data);
+        match.put("player2", player2data);
+
+        Log.d("dartserver", android_id);
+        Map data = new HashMap();
+        data.put("device_id", android_id);
+        data.put("match", match);
+
+        Log.d("hej", data.toString());
+        JsonObjectRequest jsonobj = new JsonObjectRequest(Request.Method.POST, url,new JSONObject(data),
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        Log.d("dartserver", "Got a response!");
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Log.d("dartserver", "Got an error :(\n" + error.getMessage() );
+                    }
+                }
+        );
+
+        requestQueue.add(jsonobj);
+    }
     private void updateView() {
         gameListAdapter.notifyDataSetChanged();
+
+        sendGameDataToServer();
+
         scrollToPlayerInList();
         if (game.isGameOver()) {
             setGameDoneView();
@@ -125,6 +202,7 @@ public class X01GameActivity extends AppCompatActivity implements View.OnClickLi
             setNumPadView();
             updateGameRound();
         }
+
     }
 
     private void updateGameRound() {
