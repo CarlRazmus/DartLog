@@ -69,14 +69,14 @@ public class ProfileDetailFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.profile_detail, container, false);
 
         Toolbar toolbar =
-                (Toolbar) getActivity().findViewById(R.id.toolbar);
+                getActivity().findViewById(R.id.toolbar);
         if (toolbar != null) {
             toolbar.setTitle(profileName);
         }
 
 
         LinearLayout linearLayout =
-                (LinearLayout) rootView.findViewById(R.id.profile_detail_linear_layout);
+                rootView.findViewById(R.id.profile_detail_linear_layout);
 
         initSummary(rootView);
         initFewestTurnsGames(linearLayout);
@@ -94,7 +94,7 @@ public class ProfileDetailFragment extends Fragment {
 
     private void initFewestTurnsGames(LinearLayout linearLayout) {
         TextView fewestTurnsHeader =
-                (TextView) linearLayout.findViewById(R.id.profile_detail_fewest_turns_label);
+                linearLayout.findViewById(R.id.profile_detail_fewest_turns_label);
         int index = linearLayout.indexOfChild(fewestTurnsHeader) + 1;
         fewestTurnsHeader.setText(R.string.fewest_turns);
         if (fewestTurns301Game != null)
@@ -105,7 +105,7 @@ public class ProfileDetailFragment extends Fragment {
 
     private void initHighestOutGame(LinearLayout linearLayout) {
         TextView highestOutHeader =
-                (TextView) linearLayout.findViewById(R.id.profile_detail_highest_out_label);
+                linearLayout.findViewById(R.id.profile_detail_highest_out_label);
         int index = linearLayout.indexOfChild(highestOutHeader) + 1;
         highestOutHeader.setText(R.string.highest_out);
         if (highestCheckoutGame != null)

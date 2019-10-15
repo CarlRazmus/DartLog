@@ -30,9 +30,15 @@ public class ProfileDetailActivity extends MenuBackground {
 
     private String playerName;
 
+
+    public ProfileDetailActivity(){
+        super(R.layout.activity_profile_detail);
+        setParentActivity(this);
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState, this, R.layout.activity_profile_detail);
+        super.onCreate(savedInstanceState);
 
         playerName = getIntent().getStringExtra(ProfileDetailFragment.ARG_ITEM_NAME);
         AsyncTaskRunner runner = new AsyncTaskRunner();
@@ -93,7 +99,7 @@ public class ProfileDetailActivity extends MenuBackground {
         }
 
         protected void onPostExecute(Void result) {
-            ViewPager viewPager = (ViewPager) findViewById(R.id.profile_detail_view_pager);
+            ViewPager viewPager = findViewById(R.id.profile_detail_view_pager);
             viewPager.setAdapter(profileAdapter);
         }
     }

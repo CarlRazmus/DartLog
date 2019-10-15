@@ -41,9 +41,9 @@ public class MatchFragment extends DialogFragment {
         layout.setDescendantFocusability(ViewGroup.FOCUS_BEFORE_DESCENDANTS);
 
 
-        MatchTableView matchTable = (MatchTableView) layout.findViewById(R.id.match_table);
-        MatchChartView matchChart = (MatchChartView) layout.findViewById(R.id.match_chart);
-        ScoreChartView scoreChart = (ScoreChartView) layout.findViewById(R.id.score_chart);
+        MatchTableView matchTable = layout.findViewById(R.id.match_table);
+        MatchChartView matchChart = layout.findViewById(R.id.match_chart);
+        ScoreChartView scoreChart = layout.findViewById(R.id.score_chart);
 
         Bundle args = getArguments();
         gameData = (GameData) args.getSerializable(ARG_GAME_DATA);
@@ -55,13 +55,13 @@ public class MatchFragment extends DialogFragment {
     }
 
     private void initHeader(View layout) {
-        TextView gameTypeTextView = (TextView) layout.findViewById(R.id.match_game_type);
+        TextView gameTypeTextView = layout.findViewById(R.id.match_game_type);
         gameTypeTextView.setText(gameData.getDetailedGameType().toUpperCase());
 
-        TextView winnerTextView = (TextView) layout.findViewById(R.id.match_winner);
+        TextView winnerTextView = layout.findViewById(R.id.match_winner);
         winnerTextView.setText(gameData.getWinner().getPlayerName());
 
-        TextView dateTextView = (TextView) layout.findViewById(R.id.match_date);
+        TextView dateTextView = layout.findViewById(R.id.match_date);
         dateTextView.setText(new SimpleDateFormat("EEEE kk:mm, dd MMM yyyy", Locale.getDefault()).
                 format(gameData.getDate().getTime()));
     }

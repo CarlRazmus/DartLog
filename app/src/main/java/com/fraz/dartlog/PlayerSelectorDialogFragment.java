@@ -8,6 +8,7 @@ import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 public class PlayerSelectorDialogFragment extends DialogFragment{
@@ -21,7 +22,7 @@ public class PlayerSelectorDialogFragment extends DialogFragment{
     public PlayerSelectorDialogListener mListener;
 
     private ArrayList<String> playerNames = new ArrayList<>();
-    private ArrayList<String> mSelectedItems = new ArrayList<>();
+    private ArrayList<String> selectedPlayerNames = new ArrayList<>();
 
 
     @Override
@@ -37,6 +38,15 @@ public class PlayerSelectorDialogFragment extends DialogFragment{
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
+        updatePlayersFromDb();
+
+        boolean[] selectedItemsArr = new boolean[playerNames.size()];
+        selectedPlayerNames.clear();
+        selectedPlayerNames.addAll(getArguments().getStringArrayList("selectedNames"));
+        for (String name : selectedPlayerNames){
+            selectedItemsArr[playerNames.indexOf(name)] = true;
+        }
+
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         builder.setTitle(R.string.header_select_players)
                 .setCancelable(true)
@@ -48,25 +58,15 @@ public class PlayerSelectorDialogFragment extends DialogFragment{
                     }
                 });
 
-        updatePlayersFromDb();
-
-        String[] namesArr = new String[playerNames.size()];
-        for(int i = 0; i < playerNames.size(); i++)
-            namesArr[i] = playerNames.get(i);
-
-        boolean[] selectedItemsArr = new boolean[playerNames.size()];
-        for(int i = 0; i < playerNames.size(); i++)
-            selectedItemsArr[i] = mSelectedItems.contains(namesArr[i]);
-
-        builder.setMultiChoiceItems(namesArr, selectedItemsArr,
+        builder.setMultiChoiceItems(convertArrayListToArray(playerNames), selectedItemsArr,
                 new DialogInterface.OnMultiChoiceClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which,
                                         boolean isChecked) {
                         if (isChecked) {
-                            mSelectedItems.add(playerNames.get(which));
-                        } else if (mSelectedItems.contains(playerNames.get(which))) {
-                            mSelectedItems.remove(playerNames.get(which));
+                            selectedPlayerNames.add(playerNames.get(which));
+                        } else if (selectedPlayerNames.contains(playerNames.get(which))) {
+                            selectedPlayerNames.remove(playerNames.get(which));
                         }
                     }});
         return builder.create();
@@ -78,7 +78,14 @@ public class PlayerSelectorDialogFragment extends DialogFragment{
     }
 
     public ArrayList<String> getSelectedPlayers() {
-        return mSelectedItems;
+        return selectedPlayerNames;
     }
 
+    private String[] convertArrayListToArray(ArrayList<String> arrayList){
+        String[] convertedArray = new String[arrayList.size()];
+        for(int i = 0; i < arrayList.size(); i++){
+            convertedArray[i] = arrayList.get(i);
+        }
+        return convertedArray;
+    }
 }

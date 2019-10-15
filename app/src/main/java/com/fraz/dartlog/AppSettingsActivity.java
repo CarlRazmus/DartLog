@@ -11,9 +11,15 @@ public class AppSettingsActivity extends MenuBackground {
 
     private OnBackPressedDialogFragment.OnBackPressedDialogListener onBackPressedDialogListener;
 
+
+    public AppSettingsActivity(){
+        super(R.layout.activity_app_settings);
+        setParentActivity(this);
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState, this, R.layout.activity_app_settings);
+        super.onCreate(savedInstanceState);
 
         fragment = new AppSettingsFragment();
         getFragmentManager().beginTransaction()
@@ -27,7 +33,7 @@ public class AppSettingsActivity extends MenuBackground {
 
         if(resultCode == RESULT_OK) {
             if (requestCode == DbFileHandler.WRITE_REQUEST_CODE) {
-                if(DbFileHandler.isDbExtension(intent.getData(), parentActivity))
+                if(DbFileHandler.isDbExtension(intent.getData(), this))
                     fragment.onSuccessfullyCreatedExternalDbFile(intent);
                 else {
                     fragment.onUnsuccessfulExportOfDatabase(intent);
@@ -35,7 +41,7 @@ public class AppSettingsActivity extends MenuBackground {
                 }
             }
             if (requestCode == DbFileHandler.OPEN_REQUEST_CODE)
-                if(DbFileHandler.verifyImportedDb(intent.getData(), parentActivity)){
+                if(DbFileHandler.verifyImportedDb(intent.getData(), this)){
                     fragment.onSuccessfulFindExistingExternalDb(intent);
                 }
                 else{

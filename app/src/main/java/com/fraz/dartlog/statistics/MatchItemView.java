@@ -62,12 +62,12 @@ public class MatchItemView extends FrameLayout {
     private void initView(Context context) {
         this.context = context;
         LayoutInflater.from(context).inflate(R.layout.match_history_item, this);
-        gameType = (TextView) findViewById(R.id.match_history_game_type);
-        players = (TextView) findViewById(R.id.match_history_players);
-        stat_1_label = (TextView) findViewById(R.id.match_item_stat_1_label);
-        stat_1 = (TextView) findViewById(R.id.match_item_stat_1);
-        stat_2 = (TextView) findViewById(R.id.match_item_stat_2);
-        dateView = (TextView) findViewById(R.id.match_history_date);
+        gameType = findViewById(R.id.match_history_game_type);
+        players = findViewById(R.id.match_history_players);
+        stat_1_label = findViewById(R.id.match_item_stat_1_label);
+        stat_1 = findViewById(R.id.match_item_stat_1);
+        stat_2 = findViewById(R.id.match_item_stat_2);
+        dateView = findViewById(R.id.match_history_date);
 
         statToShow = TURNS;
     }

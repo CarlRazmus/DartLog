@@ -40,7 +40,7 @@ public class MatchTableView extends FrameLayout {
     }
 
     private void initializeScoreBoard(View layout) {
-        RecyclerView scoreboard = (RecyclerView) layout.findViewById(R.id.match_statistics_scoreboard);
+        RecyclerView scoreboard = layout.findViewById(R.id.match_statistics_scoreboard);
         RecyclerView.LayoutManager layoutManager = new GridLayoutManager(
                 getContext(), getRows(), GridLayoutManager.HORIZONTAL, false);
         scoreboard.setLayoutManager(layoutManager);
@@ -153,8 +153,8 @@ public class MatchTableView extends FrameLayout {
 
             ScoreViewHolder(View itemView) {
                 super(itemView);
-                totalScoreView = (TextView) itemView.findViewById(R.id.total_score);
-                turnScoreView = (TextView) itemView.findViewById(R.id.turn_score);
+                totalScoreView = itemView.findViewById(R.id.total_score);
+                turnScoreView = itemView.findViewById(R.id.turn_score);
             }
         }
     }
