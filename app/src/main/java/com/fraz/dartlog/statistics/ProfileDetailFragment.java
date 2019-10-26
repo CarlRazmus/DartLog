@@ -48,7 +48,7 @@ public class ProfileDetailFragment extends Fragment {
         super.onCreate(savedInstanceState);
         if (getArguments().containsKey(ARG_ITEM_NAME)) {
             profileName = getArguments().getString(ARG_ITEM_NAME);
-            DartLogDatabaseHelper databaseHelper = DartLogDatabaseHelper.getInstance(getActivity());
+            DartLogDatabaseHelper databaseHelper = DartLogDatabaseHelper.getInstance();
             gamesWon = databaseHelper.getNumberOfGamesWon(profileName);
             gamesPlayed = databaseHelper.getNumberOfGamesPlayed(profileName);
             highestCheckoutGame = databaseHelper.getHighestCheckoutGame(profileName);

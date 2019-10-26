@@ -2,6 +2,7 @@ package com.fraz.dartlog;
 
 import android.app.Activity;
 import android.app.Dialog;
+import android.arch.lifecycle.ViewModelProviders;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -10,16 +11,14 @@ import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
-import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 
-import com.fraz.dartlog.db.DartLogDatabaseHelper;
 import com.fraz.dartlog.game.setup.SetupActivity;
 import com.fraz.dartlog.statistics.ProfileListActivity;
+import com.fraz.dartlog.viewmodel.ProfileListViewModel;
 import com.mikepenz.materialdrawer.AccountHeader;
 import com.mikepenz.materialdrawer.AccountHeaderBuilder;
 import com.mikepenz.materialdrawer.Drawer;
@@ -209,19 +208,8 @@ public class MenuBackground extends AppCompatActivity {
                         EditText profileNameEditText =
                                 getDialog().findViewById(R.id.add_player_edit_text);
                         String name = profileNameEditText.getText().toString();
-                        DartLogDatabaseHelper dbHelper = DartLogDatabaseHelper.getInstance(getContext());
-                        if(!dbHelper.playerExist(name)) {
-                            if (dbHelper.addPlayer(name) != -1) {
-                                Util.addPlayer(name, getContext());
-
-                                    if(getActivity().getClass().getName().equals(ProfileListActivity.class.getName()))
-                                    {
-                                        ((ProfileListActivity)getActivity()).updateProfileList();
-                                    }
-                                }
-                            }
-                            else if(!Util.loadProfileNames(getContext()).contains(name))
-                                Util.addPlayer(name, getContext());
+                        ProfileListViewModel profileListViewModel = ViewModelProviders.of(getActivity()).get(ProfileListViewModel.class);
+                        profileListViewModel.AddProfile(name);
                         }
                     });
             return builder.create();

@@ -40,10 +40,10 @@ public class RandomGameActivity extends AppCompatActivity implements View.OnClic
 
         setSupportActionBar((Toolbar) findViewById(R.id.game_toolbar));
         viewAnimator = findViewById(R.id.game_input);
-        dbHelper = DartLogDatabaseHelper.getInstance(this);
+        dbHelper = DartLogDatabaseHelper.getInstance();
 
         game = GetRandomGameInstance(savedInstanceState);
-        gameListAdapter = new RandomGameListAdapter(this, game);
+        gameListAdapter = new RandomGameListAdapter(game);
 
         initListView();
         initNumPadView();
@@ -67,7 +67,7 @@ public class RandomGameActivity extends AppCompatActivity implements View.OnClic
                 return game;
         }
         int nrOfTurns = getIntent().getIntExtra("turns", 10);
-        return new Random(this, createPlayerDataList(), nrOfTurns);
+        return new Random(createPlayerDataList(), nrOfTurns);
     }
 
     @Override

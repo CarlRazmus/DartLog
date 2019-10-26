@@ -37,7 +37,7 @@ public class CheckoutChartTest {
     @Test
     @Ignore
     public void testGetCheckoutText() throws Exception {
-        CheckoutChart checkoutChart = new CheckoutChart(mockContext);
+        CheckoutChart checkoutChart = new CheckoutChart();
         assertThat(checkoutChart.getDoubleOutCheckoutText(90), equalTo("T18 D18"));
         assertThat(checkoutChart.getDoubleOutCheckoutText(120), equalTo("T20 20 D20"));
         assertThat(checkoutChart.getDoubleOutCheckoutText(121), equalTo("N/A"));

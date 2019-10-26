@@ -2,6 +2,7 @@ package com.fraz.dartlog.statistics;
 
 import android.content.Context;
 import android.content.Intent;
+import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,7 +10,6 @@ import android.view.ViewGroup;
 import com.fraz.dartlog.game.GameData;
 
 import java.util.ArrayList;
-import java.util.Collections;
 
 public class MatchRecyclerViewAdapter extends RecyclerView.Adapter<MatchRecyclerViewAdapter.ViewHolder> {
 
@@ -23,14 +23,15 @@ public class MatchRecyclerViewAdapter extends RecyclerView.Adapter<MatchRecycler
         this.playerName = playerName;
     }
 
+    @NonNull
     @Override
-    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        MatchItemView view = new MatchItemView(context);
+    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        MatchItemView view = new MatchItemView(parent.getContext());
         return new ViewHolder(view);    
     }
 
     @Override
-    public void onBindViewHolder(final ViewHolder holder, final int position) {
+    public void onBindViewHolder(@NonNull final ViewHolder holder, final int position) {
         GameData game = gameData.get(position);
 
         ((MatchItemView) holder.itemView).setGame(game, playerName);

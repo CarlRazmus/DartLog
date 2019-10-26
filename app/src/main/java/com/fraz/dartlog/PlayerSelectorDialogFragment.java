@@ -6,9 +6,7 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AlertDialog;
-import android.util.Log;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 public class PlayerSelectorDialogFragment extends DialogFragment{
@@ -74,7 +72,7 @@ public class PlayerSelectorDialogFragment extends DialogFragment{
 
     public void updatePlayersFromDb(){
         playerNames.clear();
-        playerNames.addAll(Util.loadProfileNames(getContext()));
+        playerNames.addAll(Util.loadProfileNames());
     }
 
     public ArrayList<String> getSelectedPlayers() {

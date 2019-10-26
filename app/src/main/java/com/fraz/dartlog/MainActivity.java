@@ -29,7 +29,7 @@ public class MainActivity extends MenuBackground implements View.OnClickListener
         Button playButton = findViewById(R.id.play_x01_button);
         Button profilesButton = findViewById(R.id.profiles_button);
         Button randomButton = findViewById(R.id.play_random_button);
-        dbHelper = DartLogDatabaseHelper.getInstance(this);
+        dbHelper = DartLogDatabaseHelper.getInstance();
 
         assert playButton != null;
         assert profilesButton != null;
@@ -43,18 +43,18 @@ public class MainActivity extends MenuBackground implements View.OnClickListener
         checkIfSharedPlayersPreferencesExists();
 
         //Initialize checkout chart now since it is expensive to load.
-        CheckoutChart.initCheckoutMap(getApplicationContext());
+        CheckoutChart.initCheckoutMap();
     }
 
     private void checkIfSharedPlayersPreferencesExists() {
-        ArrayList<String> playerNames = Util.loadProfileNames(this);
+        ArrayList<String> playerNames = Util.loadProfileNames();
         /* If no preference file exist -> create an empty list, or get the player names from
          * the database (if the database contains any names) */
         if(playerNames == null || playerNames.isEmpty()) {
             if(dbHelper.getPlayers().size() > 0)
-                Util.saveProfileNames(dbHelper.getPlayers(), this);
+                Util.saveProfileNames(dbHelper.getPlayers());
             else
-                Util.saveProfileNames(new ArrayList<String>(), this);
+                Util.saveProfileNames(new ArrayList<String>());
         }
     }
 

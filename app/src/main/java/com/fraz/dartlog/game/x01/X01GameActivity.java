@@ -42,7 +42,7 @@ public class X01GameActivity extends AppCompatActivity implements View.OnClickLi
 
         setSupportActionBar((Toolbar) findViewById(R.id.game_toolbar));
         viewAnimator = findViewById(R.id.game_input);
-        dbHelper = DartLogDatabaseHelper.getInstance(this);
+        dbHelper = DartLogDatabaseHelper.getInstance();
         roundTextView = findViewById(R.id.game_header_round);
 
         game = GetX01GameInstance(savedInstanceState);
@@ -67,7 +67,7 @@ public class X01GameActivity extends AppCompatActivity implements View.OnClickLi
             if (game != null)
                 return game;
         }
-        return new X01(this, createPlayerDataList());
+        return new X01(createPlayerDataList());
     }
 
     @Override
@@ -149,7 +149,7 @@ public class X01GameActivity extends AppCompatActivity implements View.OnClickLi
         for (String playerName : playerNames) {
             X01ScoreManager scoreManager = new X01ScoreManager(x);
             scoreManager.setDoubleOutAttempts(doubleOutAttempts);
-            playerDataList.add(new X01PlayerData(new CheckoutChart(this), playerName, scoreManager));
+            playerDataList.add(new X01PlayerData(new CheckoutChart(), playerName, scoreManager));
         }
         return playerDataList;
     }

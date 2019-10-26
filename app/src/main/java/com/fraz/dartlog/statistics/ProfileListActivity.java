@@ -1,11 +1,14 @@
 package com.fraz.dartlog.statistics;
 
 import android.app.Dialog;
+import android.arch.lifecycle.Observer;
+import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.NavUtils;
@@ -20,8 +23,7 @@ import android.widget.TextView;
 
 import com.fraz.dartlog.MenuBackground;
 import com.fraz.dartlog.R;
-import com.fraz.dartlog.Util;
-import com.fraz.dartlog.db.DartLogDatabaseHelper;
+import com.fraz.dartlog.viewmodel.ProfileListViewModel;
 
 import java.util.ArrayList;
 
@@ -41,7 +43,7 @@ public class ProfileListActivity extends MenuBackground {
      */
     private boolean twoPaneMode;
     RecyclerView recyclerView;
-
+    ProfileListViewModel profileListViewModel;
 
     public ProfileListActivity(){
         super(R.layout.activity_profile_list);
@@ -70,12 +72,26 @@ public class ProfileListActivity extends MenuBackground {
         if (findViewById(R.id.profile_detail_container) != null) {
             twoPaneMode = true;
         }
+
+        profileListViewModel = ViewModelProviders.of(this).get(ProfileListViewModel.class);
+        observeViewModel(profileListViewModel);
     }
 
-    public void updateProfileList()
+    public void observeViewModel(ProfileListViewModel viewModel)
     {
-        ProfilesRecyclerViewAdapter adapter = (ProfilesRecyclerViewAdapter) recyclerView.getAdapter();
-        adapter.updateProfiles();
+        viewModel.getProfilesObservable().observe(this, new Observer<ArrayList<String>>() {
+            @Override
+            public void onChanged(@Nullable ArrayList<String> profiles) {
+                if (profiles != null)
+                {
+                    ProfilesRecyclerViewAdapter adapter = (ProfilesRecyclerViewAdapter) recyclerView.getAdapter();
+                    if(adapter != null)
+                    {
+                        adapter.updateProfiles(profiles);
+                    }
+                }
+            }
+        });
     }
 
     @Override
@@ -89,35 +105,29 @@ public class ProfileListActivity extends MenuBackground {
     }
 
     private void setupRecyclerView(@NonNull RecyclerView recyclerView) {
-        recyclerView.setAdapter(new ProfilesRecyclerViewAdapter(this));
+        recyclerView.setAdapter(new ProfilesRecyclerViewAdapter());
     }
 
     public class ProfilesRecyclerViewAdapter
             extends RecyclerView.Adapter<ProfilesRecyclerViewAdapter.ViewHolder> {
 
-        private Context context;
         private ArrayList<String> profiles;
 
-        public ProfilesRecyclerViewAdapter(Context context) {
-            this.context = context;
-            updateProfiles();
-        }
-
-        public void updateProfiles() {
-            //this.profiles = DartLogDatabaseHelper.getInstance(context).getPlayers();
-            this.profiles = Util.loadProfileNames(context);
+        void updateProfiles(ArrayList<String> profiles) {
+            this.profiles = profiles;
             notifyDataSetChanged();
         }
 
         @Override
-        public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        @NonNull
+        public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
             View view = LayoutInflater.from(parent.getContext())
                     .inflate(R.layout.profile_list_item, parent, false);
             return new ViewHolder(view);
         }
 
         @Override
-        public void onBindViewHolder(final ViewHolder holder, int position) {
+        public void onBindViewHolder(@NonNull final ViewHolder holder, int position) {
             holder.mItem = profiles.get(position);
 
             TextView profileNameView = holder.mView.findViewById(R.id.profile_name);
@@ -139,7 +149,6 @@ public class ProfileListActivity extends MenuBackground {
                         Context context = v.getContext();
                         Intent intent = new Intent(context, ProfileDetailActivity.class);
                         intent.putExtra(ProfileDetailFragment.ARG_ITEM_NAME, holder.mItem);
-
                         context.startActivity(intent);
                     }
                 }
@@ -152,8 +161,8 @@ public class ProfileListActivity extends MenuBackground {
         }
 
         public class ViewHolder extends RecyclerView.ViewHolder {
-            public final View mView;
-            public String mItem;
+            final View mView;
+            String mItem;
 
             public ViewHolder(View view) {
                 super(view);
@@ -163,6 +172,7 @@ public class ProfileListActivity extends MenuBackground {
     }
 
     public static class AddPlayerDialogFragment extends DialogFragment {
+
         @NonNull
         @Override
         public Dialog onCreateDialog(Bundle savedInstanceState) {
@@ -175,24 +185,11 @@ public class ProfileListActivity extends MenuBackground {
                             EditText profileNameEditText =
                                     getDialog().findViewById(R.id.add_player_edit_text);
                             String name = profileNameEditText.getText().toString();
-                            DartLogDatabaseHelper dbHelper = DartLogDatabaseHelper.getInstance(getContext());
-                            if(!dbHelper.playerExist(name)) {
-                                if (dbHelper.addPlayer(name) != -1) {
-                                    Util.addPlayer(name, getContext());
-                                    getProfilesAdapter().updateProfiles();
-                                }
-                            }
-                            else if(!Util.loadProfileNames(getContext()).contains(name))
-                                Util.addPlayer(name, getContext());
+                            ProfileListViewModel profileListViewModel = ViewModelProviders.of(getActivity()).get(ProfileListViewModel.class);
+                            profileListViewModel.AddProfile(name);
                         }
                     });
             return builder.create();
-        }
-
-        private ProfilesRecyclerViewAdapter getProfilesAdapter()
-        {
-            return ((ProfilesRecyclerViewAdapter) ((RecyclerView) getActivity()
-                        .findViewById(R.id.profile_list)).getAdapter());
         }
     }
 }

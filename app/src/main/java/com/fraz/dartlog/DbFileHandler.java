@@ -1,18 +1,11 @@
 package com.fraz.dartlog;
 
 import android.app.Activity;
-import android.content.ContentResolver;
-import android.content.ContentUris;
-import android.content.ContentValues;
-import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
-import android.provider.DocumentsContract;
-import android.provider.MediaStore;
 import android.provider.OpenableColumns;
 import android.util.Log;
-import android.webkit.MimeTypeMap;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -21,7 +14,6 @@ import java.io.OutputStream;
 import java.util.Calendar;
 
 import static android.content.ContentValues.TAG;
-import static android.webkit.ConsoleMessage.MessageLevel.LOG;
 
 /**
  * Created by CarlR on 17/06/2017.
@@ -32,13 +24,6 @@ public class DbFileHandler {
     /* These numbers are randomly selected */
     public static final int WRITE_REQUEST_CODE = 43;
     public static final int OPEN_REQUEST_CODE = 44;
-
-    Activity parent;
-
-
-    public DbFileHandler(Activity parent){
-        this.parent = parent;
-    }
 
     private File getDbFile() {
         File dbDir = new File("/data/data/com.fraz.dartlog/databases");
@@ -60,21 +45,21 @@ public class DbFileHandler {
         return date;
     }
 
-    public void createCopyOfLocalDb() {
+    public void createCopyOfLocalDb(Activity activity) {
         Intent intent = new Intent(Intent.ACTION_CREATE_DOCUMENT);
         intent.addCategory(Intent.CATEGORY_OPENABLE);
         intent.setType("application/x-sqlite3");
         intent.putExtra(Intent.EXTRA_TITLE, "db_copy_" + getDateAsString() + ".db");
 
-        parent.startActivityForResult(intent, WRITE_REQUEST_CODE);
+        activity.startActivityForResult(intent, WRITE_REQUEST_CODE);
     }
 
-    public void selectExternalDbFile() {
+    public void selectExternalDbFile(Activity activity) {
         Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
         intent.addCategory(Intent.CATEGORY_OPENABLE);
         intent.setDataAndType(Uri.fromParts("content", "*.db", null), "*/*");
 
-        parent.startActivityForResult(intent, OPEN_REQUEST_CODE);
+        activity.startActivityForResult(intent, OPEN_REQUEST_CODE);
     }
 
     public static boolean isDbExtension(Uri uri, Activity parent) {
@@ -98,11 +83,11 @@ public class DbFileHandler {
     }
 
     private InputStream getInputStream(Uri uri) throws FileNotFoundException {
-        return parent.getContentResolver().openInputStream(uri);
+        return MyApplication.getInstance().getContentResolver().openInputStream(uri);
     }
 
     private OutputStream getOutputStream(Uri uri) throws FileNotFoundException {
-        return parent.getContentResolver().openOutputStream(uri);
+        return MyApplication.getInstance().getContentResolver().openOutputStream(uri);
     }
 
     public void copyDataFromExternalFileToLocalDb(Uri externalDbUri){

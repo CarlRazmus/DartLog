@@ -1,7 +1,5 @@
 package com.fraz.dartlog.game.x01;
 
-import android.app.Activity;
-
 import com.fraz.dartlog.game.Game;
 import com.fraz.dartlog.game.PlayerData;
 
@@ -10,8 +8,8 @@ import java.util.ArrayList;
 
 public class X01 extends Game implements Serializable{
 
-    X01(Activity context, ArrayList<? extends X01PlayerData> playerData) {
-        super(context, playerData);
+    X01(ArrayList<? extends X01PlayerData> playerData) {
+        super(playerData);
     }
 
     public boolean submitScore(int score) {

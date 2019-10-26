@@ -1,7 +1,6 @@
 package com.fraz.dartlog.db;
 
 import android.content.ContentValues;
-import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
@@ -12,6 +11,7 @@ import android.util.SparseArray;
 import android.util.SparseLongArray;
 
 import com.fraz.dartlog.CheckoutChart;
+import com.fraz.dartlog.MyApplication;
 import com.fraz.dartlog.game.AdditionScoreManager;
 import com.fraz.dartlog.game.Game;
 import com.fraz.dartlog.game.GameData;
@@ -35,24 +35,22 @@ public class DartLogDatabaseHelper extends SQLiteOpenHelper {
     // If you change the database schema, you must increment the database version.
     private static final int DATABASE_VERSION = 2;
     private static final String DATABASE_NAME = "DartLog.db";
-    private CheckoutChart checkoutChart;
 
     private static DartLogDatabaseHelper dbHelperInstance = null;
 
-    public static DartLogDatabaseHelper getInstance(Context context) {
+    public static DartLogDatabaseHelper getInstance() {
         if (dbHelperInstance == null) {
-           dbHelperInstance = new DartLogDatabaseHelper(context.getApplicationContext());
+           dbHelperInstance = new DartLogDatabaseHelper();
         }
         return dbHelperInstance;
     }
 
-    public DartLogDatabaseHelper(Context context) {
-        super(context, DATABASE_NAME, null, DATABASE_VERSION);
-        checkoutChart = new CheckoutChart(context);
+    public DartLogDatabaseHelper() {
+        super(MyApplication.getInstance(), DATABASE_NAME, null, DATABASE_VERSION);
     }
 
-    public DartLogDatabaseHelper(Context context, String databaseName){
-        super(context, databaseName, null, DATABASE_VERSION);
+    public DartLogDatabaseHelper(String databaseName){
+        super(MyApplication.getInstance(), databaseName, null, DATABASE_VERSION);
         Log.d("dbHelper", "successfully opened database "+ databaseName);
     }
 
@@ -284,7 +282,7 @@ public class DartLogDatabaseHelper extends SQLiteOpenHelper {
                     scoreManager.setDoubleOutAttempts(double_out);
                     scoreManager.applyScores(playerEntry.getValue());
                     playerData.put(playerEntry.getKey(),
-                                   new X01PlayerData(checkoutChart, playerEntry.getKey(), scoreManager));
+                                   new X01PlayerData(new CheckoutChart(), playerEntry.getKey(), scoreManager));
                 }
 
                 return new GameData(new ArrayList<>(playerData.values()),

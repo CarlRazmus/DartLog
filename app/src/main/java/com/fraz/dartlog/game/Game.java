@@ -1,8 +1,9 @@
 package com.fraz.dartlog.game;
 
-import android.app.Activity;
 import android.view.Gravity;
 import android.widget.Toast;
+
+import com.fraz.dartlog.MyApplication;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -12,7 +13,6 @@ public abstract class Game {
 
 
     private LinkedList<Integer> playOrder = new LinkedList<>();
-    protected Activity context;
     protected int currentPlayerIdx;
 
     private PlayerData winner = null;
@@ -24,8 +24,7 @@ public abstract class Game {
     protected Game() {
     }
 
-    public Game(Activity context, ArrayList<? extends PlayerData> players) {
-        this.context = context;
+    public Game(ArrayList<? extends PlayerData> players) {
         this.players = players;
         this.startingPlayerIdx = 0;
         this.date = Calendar.getInstance();
@@ -79,7 +78,7 @@ public abstract class Game {
     }
 
     protected void showToast(CharSequence text) {
-        Toast toast = Toast.makeText(context, text, Toast.LENGTH_SHORT);
+        Toast toast = Toast.makeText(MyApplication.getInstance(), text, Toast.LENGTH_SHORT);
         toast.setGravity(Gravity.CENTER, 0, 0);
         toast.show();
     }

@@ -6,19 +6,13 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
 import android.support.v4.view.ViewPager;
-import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.Toast;
 
-import com.fraz.dartlog.MainActivity;
 import com.fraz.dartlog.MenuBackground;
 import com.fraz.dartlog.R;
 import com.fraz.dartlog.Util;
-import com.fraz.dartlog.game.setup.SetupActivity;
 
 /**
  * An activity representing a single Profile detail screen. This
@@ -29,7 +23,6 @@ import com.fraz.dartlog.game.setup.SetupActivity;
 public class ProfileDetailActivity extends MenuBackground {
 
     private String playerName;
-
 
     public ProfileDetailActivity(){
         super(R.layout.activity_profile_detail);
@@ -74,7 +67,7 @@ public class ProfileDetailActivity extends MenuBackground {
                 .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
 
                     public void onClick(DialogInterface dialog, int whichButton) {
-                        Util.removePlayer(playerName, getApplicationContext());
+                        Util.removePlayer(playerName);
                         startUpdatedProfileListActivity();
                     }})
                 .setNegativeButton(android.R.string.no, null).show();
