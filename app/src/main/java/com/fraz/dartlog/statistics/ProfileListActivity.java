@@ -19,10 +19,10 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
-import android.widget.TextView;
 
 import com.fraz.dartlog.MenuBackground;
 import com.fraz.dartlog.R;
+import com.fraz.dartlog.databinding.ProfileListItemBinding;
 import com.fraz.dartlog.viewmodel.ProfileListViewModel;
 
 import java.util.ArrayList;
@@ -121,20 +121,18 @@ public class ProfileListActivity extends MenuBackground {
         @Override
         @NonNull
         public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-            View view = LayoutInflater.from(parent.getContext())
-                    .inflate(R.layout.profile_list_item, parent, false);
-            return new ViewHolder(view);
+            LayoutInflater layoutInflater = LayoutInflater.from(parent.getContext());
+            ProfileListItemBinding binding = ProfileListItemBinding.inflate(
+                    layoutInflater, parent, false);
+            return new ViewHolder(binding);
         }
 
         @Override
         public void onBindViewHolder(@NonNull final ViewHolder holder, int position) {
             holder.mItem = profiles.get(position);
-
-            TextView profileNameView = holder.mView.findViewById(R.id.profile_name);
-            profileNameView.setText(holder.mItem);
-
+            holder.mBinding.setProfileName(holder.mItem);
             // Setup view change on click
-            holder.mView.setOnClickListener(new View.OnClickListener() {
+            holder.mBinding.getRoot().setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     if (twoPaneMode) {
@@ -161,12 +159,12 @@ public class ProfileListActivity extends MenuBackground {
         }
 
         public class ViewHolder extends RecyclerView.ViewHolder {
-            final View mView;
+            final ProfileListItemBinding mBinding;
             String mItem;
 
-            public ViewHolder(View view) {
-                super(view);
-                mView = view;
+            public ViewHolder(ProfileListItemBinding binding) {
+                super(binding.getRoot());
+                mBinding = binding;
             }
         }
     }

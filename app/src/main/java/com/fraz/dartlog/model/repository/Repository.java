@@ -5,6 +5,7 @@ import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.MutableLiveData;
 
 import com.fraz.dartlog.db.DartLogDatabaseHelper;
+import com.fraz.dartlog.model.Profile;
 
 import java.util.ArrayList;
 
@@ -48,5 +49,24 @@ public class Repository {
         long id = dbHelper.addPlayer(playerName);
         data.setValue(dbHelper.getPlayers());
         return id;
+    }
+
+    public Profile GetProfile(String profileName) {
+        Profile profile = new Profile();
+        profile.setGamesWon(dbHelper.getNumberOfGamesWon(profileName));
+        profile.setGamesPlayed(dbHelper.getNumberOfGamesPlayed(profileName));
+        profile.setHighestCheckoutGame(dbHelper.getHighestCheckoutGame(profileName));
+        profile.setFewestTurns301Game(dbHelper.getFewestTurns301Game(profileName));
+        profile.setFewestTurns501Game(dbHelper.getFewestTurns501Game(profileName));
+        if (profile.getHighestCheckoutGame() == null &&
+            profile.getFewestTurns301Game () == null &&
+            profile.getFewestTurns501Game() == null)
+        {
+            dbHelper.refreshStatistics(profileName);
+            profile.setHighestCheckoutGame(dbHelper.getHighestCheckoutGame(profileName));
+            profile.setFewestTurns301Game(dbHelper.getFewestTurns301Game(profileName));
+            profile.setFewestTurns501Game(dbHelper.getFewestTurns501Game(profileName));
+        }
+        return profile;
     }
 }

@@ -12,7 +12,6 @@ public class ProfileListViewModel extends AndroidViewModel {
 
     private final LiveData<ArrayList<String>> profiles;
     private final Repository repository;
-
     public ProfileListViewModel(Application application)
     {
         super(application);

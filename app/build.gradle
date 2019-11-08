@@ -27,6 +27,10 @@ android {
     dexOptions {
         preDexLibraries = !project.hasProperty("disablePreDex")
     }
+
+    dataBinding {
+        enabled = true
+    }
 }
 
 dependencies {

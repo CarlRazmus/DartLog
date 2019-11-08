@@ -1,14 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:orientation="horizontal"
-    android:layout_marginBottom="1dp"
-    android:paddingTop="16dp"
-    android:paddingBottom="16dp"
-    android:animateLayoutChanges="true"
-    android:background="@drawable/list_item">
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+    <data>
+        <variable
+            name="profileName"
+            type="String">
+        </variable>
+    </data>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginBottom="1dp"
+        android:paddingTop="16dp"
+        android:paddingBottom="16dp"
+        android:animateLayoutChanges="true"
+        android:background="@drawable/list_item">
 
         <TextView
             android:id="@+id/profile_name"
@@ -19,5 +27,7 @@
             android:textSize="15sp"
             android:textStyle="bold"
             android:textColor="@color/main_white"
+            android:text="@{profileName}"
             tools:text="PlayerName"/>
-</RelativeLayout>
+    </RelativeLayout>
+</layout>

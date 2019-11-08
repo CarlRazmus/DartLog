@@ -1,5 +1,6 @@
 package com.fraz.dartlog.statistics;
 
+import android.arch.lifecycle.ViewModelProviders;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.Toolbar;
@@ -12,6 +13,8 @@ import android.widget.TextView;
 import com.fraz.dartlog.R;
 import com.fraz.dartlog.db.DartLogDatabaseHelper;
 import com.fraz.dartlog.game.GameData;
+import com.fraz.dartlog.model.Profile;
+import com.fraz.dartlog.viewmodel.ProfileViewModel;
 
 import java.util.Locale;
 
@@ -25,16 +28,13 @@ public class ProfileDetailFragment extends Fragment {
 
     public static final String ARG_ITEM_NAME = "item_name";
 
-    private GameData highestCheckoutGame;
-    private GameData fewestTurns301Game;
-    private GameData fewestTurns501Game;
-    private int gamesWon;
-    private int gamesPlayed;
+    ProfileViewModel profileViewModel;
 
     /**
      * Name of the profile this fragment is presenting.
      */
     private String profileName;
+    private Profile profile;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -49,18 +49,10 @@ public class ProfileDetailFragment extends Fragment {
         if (getArguments().containsKey(ARG_ITEM_NAME)) {
             profileName = getArguments().getString(ARG_ITEM_NAME);
             DartLogDatabaseHelper databaseHelper = DartLogDatabaseHelper.getInstance();
-            gamesWon = databaseHelper.getNumberOfGamesWon(profileName);
-            gamesPlayed = databaseHelper.getNumberOfGamesPlayed(profileName);
-            highestCheckoutGame = databaseHelper.getHighestCheckoutGame(profileName);
-            fewestTurns301Game = databaseHelper.getFewestTurns301Game(profileName);
-            fewestTurns501Game = databaseHelper.getFewestTurns501Game(profileName);
-            if (highestCheckoutGame == null && fewestTurns301Game  == null && fewestTurns501Game  == null) {
-                databaseHelper.refreshStatistics(profileName);
-                highestCheckoutGame = databaseHelper.getHighestCheckoutGame(profileName);
-                fewestTurns301Game = databaseHelper.getFewestTurns301Game(profileName);
-                fewestTurns501Game = databaseHelper.getFewestTurns501Game(profileName);
-            }
+            profileViewModel = ViewModelProviders.of(this).get(ProfileViewModel.class);
+            profile = profileViewModel.getProfile(profileName);
         }
+
     }
 
     @Override
@@ -86,10 +78,10 @@ public class ProfileDetailFragment extends Fragment {
 
     private void initSummary(View rootView) {
         ((TextView) rootView.findViewById(R.id.profile_detail_games_played))
-                .setText(String.format(Locale.getDefault(), "%d", gamesPlayed));
+                .setText(String.format(Locale.getDefault(), "%d", profile.getGamesPlayed()));
 
         ((TextView) rootView.findViewById(R.id.profile_detail_games_won))
-                .setText(String.format(Locale.getDefault(), "%d", gamesWon));
+                .setText(String.format(Locale.getDefault(), "%d", profile.getGamesWon()));
     }
 
     private void initFewestTurnsGames(LinearLayout linearLayout) {
@@ -97,10 +89,10 @@ public class ProfileDetailFragment extends Fragment {
                 linearLayout.findViewById(R.id.profile_detail_fewest_turns_label);
         int index = linearLayout.indexOfChild(fewestTurnsHeader) + 1;
         fewestTurnsHeader.setText(R.string.fewest_turns);
-        if (fewestTurns301Game != null)
-            addFewestTurnsView(fewestTurns301Game, linearLayout, index);
-        if (fewestTurns501Game != null)
-            addFewestTurnsView(fewestTurns501Game, linearLayout, index);
+        if (profile.getFewestTurns301Game() != null)
+            addFewestTurnsView(profile.getFewestTurns301Game(), linearLayout, index);
+        if (profile.getFewestTurns501Game() != null)
+            addFewestTurnsView(profile.getFewestTurns501Game(), linearLayout, index);
     }
 
     private void initHighestOutGame(LinearLayout linearLayout) {
@@ -108,8 +100,8 @@ public class ProfileDetailFragment extends Fragment {
                 linearLayout.findViewById(R.id.profile_detail_highest_out_label);
         int index = linearLayout.indexOfChild(highestOutHeader) + 1;
         highestOutHeader.setText(R.string.highest_out);
-        if (highestCheckoutGame != null)
-            addCheckoutView(highestCheckoutGame, linearLayout, index);
+        if (profile.getHighestCheckoutGame() != null)
+            addCheckoutView(profile.getHighestCheckoutGame(), linearLayout, index);
     }
 
     private void addCheckoutView(final GameData game, LinearLayout linearLayout, final int index) {
