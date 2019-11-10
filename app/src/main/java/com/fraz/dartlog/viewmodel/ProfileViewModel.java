@@ -14,7 +14,7 @@ public class ProfileViewModel extends AndroidViewModel {
     {
         super(application);
 
-        repository = Repository.getInstance(application);
+        repository = Repository.getInstance();
 
     }
 

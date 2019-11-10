@@ -1,28 +1,26 @@
 package com.fraz.dartlog.statistics;
 
-import android.app.Dialog;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.design.widget.FloatingActionButton;
-import android.support.v4.app.DialogFragment;
 import android.support.v4.app.NavUtils;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
 
 import com.fraz.dartlog.MenuBackground;
 import com.fraz.dartlog.R;
+import com.fraz.dartlog.databinding.ActivityProfileListBinding;
 import com.fraz.dartlog.databinding.ProfileListItemBinding;
+import com.fraz.dartlog.util.BindingRecyclerViewHolder;
+import com.fraz.dartlog.util.EventObserver;
+import com.fraz.dartlog.view.AddPlayerDialogFragment;
 import com.fraz.dartlog.viewmodel.ProfileListViewModel;
 
 import java.util.ArrayList;
@@ -53,29 +51,24 @@ public class ProfileListActivity extends MenuBackground {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         myToolbar.setTitle(getTitle());
 
-        FloatingActionButton fab = findViewById(R.id.fab);
-        assert fab != null;
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                new AddPlayerDialogFragment().show(getSupportFragmentManager(),
-                        "AddPlayerDialogFragment");
-            }
-        });
 
         recyclerView = findViewById(R.id.profile_list);
         assert recyclerView != null;
         setupRecyclerView(recyclerView);
-
         if (findViewById(R.id.profile_detail_container) != null) {
             twoPaneMode = true;
         }
 
         profileListViewModel = ViewModelProviders.of(this).get(ProfileListViewModel.class);
+        ActivityProfileListBinding binding = ActivityProfileListBinding.bind(findViewById(R.id.profile_list_root));
+        binding.setViewModel(profileListViewModel);
+
         observeViewModel(profileListViewModel);
     }
+
 
     public void observeViewModel(ProfileListViewModel viewModel)
     {
@@ -90,6 +83,13 @@ public class ProfileListActivity extends MenuBackground {
                         adapter.updateProfiles(profiles);
                     }
                 }
+            }
+        });
+        viewModel.getAddPlayerClickEvent().observe(this, new EventObserver<String>() {
+            @Override
+            public void onEventUnhandled(String content) {
+                new AddPlayerDialogFragment().show(getSupportFragmentManager(),
+                        "AddPlayerDialogFragment");
             }
         });
     }
@@ -109,7 +109,7 @@ public class ProfileListActivity extends MenuBackground {
     }
 
     public class ProfilesRecyclerViewAdapter
-            extends RecyclerView.Adapter<ProfilesRecyclerViewAdapter.ViewHolder> {
+            extends RecyclerView.Adapter<BindingRecyclerViewHolder> {
 
         private ArrayList<String> profiles;
 
@@ -120,24 +120,24 @@ public class ProfileListActivity extends MenuBackground {
 
         @Override
         @NonNull
-        public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        public BindingRecyclerViewHolder<ProfileListItemBinding> onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
             LayoutInflater layoutInflater = LayoutInflater.from(parent.getContext());
             ProfileListItemBinding binding = ProfileListItemBinding.inflate(
                     layoutInflater, parent, false);
-            return new ViewHolder(binding);
+            return new BindingRecyclerViewHolder<>(binding);
         }
 
         @Override
-        public void onBindViewHolder(@NonNull final ViewHolder holder, int position) {
-            holder.mItem = profiles.get(position);
-            holder.mBinding.setProfileName(holder.mItem);
+        public void onBindViewHolder(@NonNull final BindingRecyclerViewHolder holder, int position) {
+            final ProfileListItemBinding binding = (ProfileListItemBinding) holder.getBinding();
+            binding.setName(profiles.get(position));
             // Setup view change on click
-            holder.mBinding.getRoot().setOnClickListener(new View.OnClickListener() {
+            binding.getRoot().setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     if (twoPaneMode) {
                         Bundle arguments = new Bundle();
-                        arguments.putString(ProfileDetailFragment.ARG_ITEM_NAME, holder.mItem);
+                        arguments.putString(ProfileDetailFragment.ARG_ITEM_NAME, binding.getName());
                         ProfileDetailFragment fragment = new ProfileDetailFragment();
                         fragment.setArguments(arguments);
                         getSupportFragmentManager().beginTransaction()
@@ -146,7 +146,7 @@ public class ProfileListActivity extends MenuBackground {
                     } else {
                         Context context = v.getContext();
                         Intent intent = new Intent(context, ProfileDetailActivity.class);
-                        intent.putExtra(ProfileDetailFragment.ARG_ITEM_NAME, holder.mItem);
+                        intent.putExtra(ProfileDetailFragment.ARG_ITEM_NAME, binding.getName());
                         context.startActivity(intent);
                     }
                 }
@@ -158,36 +158,5 @@ public class ProfileListActivity extends MenuBackground {
             return profiles.size();
         }
 
-        public class ViewHolder extends RecyclerView.ViewHolder {
-            final ProfileListItemBinding mBinding;
-            String mItem;
-
-            public ViewHolder(ProfileListItemBinding binding) {
-                super(binding.getRoot());
-                mBinding = binding;
-            }
-        }
-    }
-
-    public static class AddPlayerDialogFragment extends DialogFragment {
-
-        @NonNull
-        @Override
-        public Dialog onCreateDialog(Bundle savedInstanceState) {
-            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-
-            builder.setTitle("Add new profile").setView(R.layout.dialog_add_player)
-                    .setNegativeButton(R.string.cancel, null)
-                    .setPositiveButton("Add", new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int id) {
-                            EditText profileNameEditText =
-                                    getDialog().findViewById(R.id.add_player_edit_text);
-                            String name = profileNameEditText.getText().toString();
-                            ProfileListViewModel profileListViewModel = ViewModelProviders.of(getActivity()).get(ProfileListViewModel.class);
-                            profileListViewModel.AddProfile(name);
-                        }
-                    });
-            return builder.create();
-        }
     }
 }

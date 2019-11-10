@@ -18,6 +18,7 @@ import android.widget.EditText;
 
 import com.fraz.dartlog.game.setup.SetupActivity;
 import com.fraz.dartlog.statistics.ProfileListActivity;
+import com.fraz.dartlog.view.AddPlayerDialogFragment;
 import com.fraz.dartlog.viewmodel.ProfileListViewModel;
 import com.mikepenz.materialdrawer.AccountHeader;
 import com.mikepenz.materialdrawer.AccountHeaderBuilder;
@@ -47,6 +48,7 @@ public class MenuBackground extends AppCompatActivity {
     public void setParentActivity(Activity parentActivity){
         this.parentActivity = parentActivity;
     }
+
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
         setContentView(parentView);
@@ -192,27 +194,5 @@ public class MenuBackground extends AppCompatActivity {
     private void openFriendsActivity() {
         Intent intent = new Intent(this, ProfileListActivity.class);
         openActivity(ProfileListActivity.class.getName(), intent);
-    }
-
-    public static class AddPlayerDialogFragment extends DialogFragment {
-        @NonNull
-        @Override
-        public Dialog onCreateDialog(Bundle savedInstanceState) {
-            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-
-            builder.setTitle("Add new profile").setView(R.layout.dialog_add_player)
-                .setNegativeButton(R.string.cancel, null)
-                .setPositiveButton("Add", new DialogInterface.OnClickListener() {
-
-                    public void onClick(DialogInterface dialog, int id) {
-                        EditText profileNameEditText =
-                                getDialog().findViewById(R.id.add_player_edit_text);
-                        String name = profileNameEditText.getText().toString();
-                        ProfileListViewModel profileListViewModel = ViewModelProviders.of(getActivity()).get(ProfileListViewModel.class);
-                        profileListViewModel.AddProfile(name);
-                        }
-                    });
-            return builder.create();
-        }
     }
 }

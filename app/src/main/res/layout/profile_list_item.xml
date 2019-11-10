@@ -4,9 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools">
     <data>
         <variable
-            name="profileName"
-            type="String">
-        </variable>
+            name="name"
+            type="String"/>
     </data>
     <RelativeLayout
         android:layout_width="match_parent"
@@ -27,7 +26,7 @@
             android:textSize="15sp"
             android:textStyle="bold"
             android:textColor="@color/main_white"
-            android:text="@{profileName}"
+            android:text="@{name}"
             tools:text="PlayerName"/>
     </RelativeLayout>
 </layout>

@@ -48,7 +48,6 @@ public class ProfileDetailFragment extends Fragment {
         super.onCreate(savedInstanceState);
         if (getArguments().containsKey(ARG_ITEM_NAME)) {
             profileName = getArguments().getString(ARG_ITEM_NAME);
-            DartLogDatabaseHelper databaseHelper = DartLogDatabaseHelper.getInstance();
             profileViewModel = ViewModelProviders.of(this).get(ProfileViewModel.class);
             profile = profileViewModel.getProfile(profileName);
         }
