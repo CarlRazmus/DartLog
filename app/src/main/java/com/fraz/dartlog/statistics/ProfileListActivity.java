@@ -4,6 +4,7 @@ import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.content.Intent;
+import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -35,11 +36,6 @@ import java.util.ArrayList;
  */
 public class ProfileListActivity extends MenuBackground {
 
-    /**
-     * Whether or not the activity is in two-pane mode, i.e. running on a tablet
-     * device.
-     */
-    private boolean twoPaneMode;
     RecyclerView recyclerView;
     ProfileListViewModel profileListViewModel;
 
@@ -51,16 +47,12 @@ public class ProfileListActivity extends MenuBackground {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         myToolbar.setTitle(getTitle());
 
 
         recyclerView = findViewById(R.id.profile_list);
         assert recyclerView != null;
         setupRecyclerView(recyclerView);
-        if (findViewById(R.id.profile_detail_container) != null) {
-            twoPaneMode = true;
-        }
 
         profileListViewModel = ViewModelProviders.of(this).get(ProfileListViewModel.class);
         ActivityProfileListBinding binding = ActivityProfileListBinding.bind(findViewById(R.id.profile_list_root));
@@ -131,24 +123,15 @@ public class ProfileListActivity extends MenuBackground {
         public void onBindViewHolder(@NonNull final BindingRecyclerViewHolder holder, int position) {
             final ProfileListItemBinding binding = (ProfileListItemBinding) holder.getBinding();
             binding.setName(profiles.get(position));
+
             // Setup view change on click
             binding.getRoot().setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if (twoPaneMode) {
-                        Bundle arguments = new Bundle();
-                        arguments.putString(ProfileDetailFragment.ARG_ITEM_NAME, binding.getName());
-                        ProfileDetailFragment fragment = new ProfileDetailFragment();
-                        fragment.setArguments(arguments);
-                        getSupportFragmentManager().beginTransaction()
-                                .replace(R.id.profile_detail_container, fragment)
-                                .commit();
-                    } else {
-                        Context context = v.getContext();
-                        Intent intent = new Intent(context, ProfileDetailActivity.class);
-                        intent.putExtra(ProfileDetailFragment.ARG_ITEM_NAME, binding.getName());
-                        context.startActivity(intent);
-                    }
+                    Context context = v.getContext();
+                    Intent intent = new Intent(context, ProfileDetailActivity.class);
+                    intent.putExtra(ProfileDetailFragment.ARG_ITEM_NAME, binding.getName());
+                    context.startActivity(intent);
                 }
             });
         }

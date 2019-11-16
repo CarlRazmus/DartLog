@@ -8,6 +8,7 @@
         <variable
             name="viewModel"
             type="com.fraz.dartlog.viewmodel.ProfileListViewModel"/>
+
     </data>
 
     <android.support.design.widget.CoordinatorLayout

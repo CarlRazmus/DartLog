@@ -16,7 +16,7 @@ public abstract class EventObserver<T> implements Observer<Event<T>>
         {
             T value = event.getContentIfNotHandled();
             if (value != null)
-            onEventUnhandled(value);
+                onEventUnhandled(value);
         }
     }
 

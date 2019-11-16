@@ -1,6 +1,8 @@
 package com.fraz.dartlog.statistics;
 
 import android.arch.lifecycle.ViewModelProviders;
+import android.databinding.DataBindingUtil;
+import android.databinding.ViewDataBinding;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.Toolbar;
@@ -11,6 +13,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.fraz.dartlog.R;
+import com.fraz.dartlog.databinding.ProfileDetailBinding;
 import com.fraz.dartlog.db.DartLogDatabaseHelper;
 import com.fraz.dartlog.game.GameData;
 import com.fraz.dartlog.model.Profile;
@@ -49,15 +52,18 @@ public class ProfileDetailFragment extends Fragment {
         if (getArguments().containsKey(ARG_ITEM_NAME)) {
             profileName = getArguments().getString(ARG_ITEM_NAME);
             profileViewModel = ViewModelProviders.of(this).get(ProfileViewModel.class);
-            profile = profileViewModel.getProfile(profileName);
+            profileViewModel.setProfile(profileName);
+            profile = profileViewModel.getProfile();
         }
-
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.profile_detail, container, false);
+        ProfileDetailBinding binding = DataBindingUtil.inflate(
+                inflater, R.layout.profile_detail, container, false);
+        binding.setViewModel(profileViewModel);
+        View rootView = binding.getRoot();
 
         Toolbar toolbar =
                 getActivity().findViewById(R.id.toolbar);
@@ -65,67 +71,46 @@ public class ProfileDetailFragment extends Fragment {
             toolbar.setTitle(profileName);
         }
 
-
-        LinearLayout linearLayout =
-                rootView.findViewById(R.id.profile_detail_linear_layout);
-
-        initSummary(rootView);
-        initFewestTurnsGames(linearLayout);
-        initHighestOutGame(linearLayout);
+        initFewestTurnsGames((LinearLayout) rootView.findViewById(R.id.fewest_turns_linear_layout));
+        initHighestOutGame((LinearLayout) rootView.findViewById(R.id.highest_out_linear_layout));
         return rootView;
     }
 
-    private void initSummary(View rootView) {
-        ((TextView) rootView.findViewById(R.id.profile_detail_games_played))
-                .setText(String.format(Locale.getDefault(), "%d", profile.getGamesPlayed()));
-
-        ((TextView) rootView.findViewById(R.id.profile_detail_games_won))
-                .setText(String.format(Locale.getDefault(), "%d", profile.getGamesWon()));
-    }
-
     private void initFewestTurnsGames(LinearLayout linearLayout) {
-        TextView fewestTurnsHeader =
-                linearLayout.findViewById(R.id.profile_detail_fewest_turns_label);
-        int index = linearLayout.indexOfChild(fewestTurnsHeader) + 1;
-        fewestTurnsHeader.setText(R.string.fewest_turns);
         if (profile.getFewestTurns301Game() != null)
-            addFewestTurnsView(profile.getFewestTurns301Game(), linearLayout, index);
+            addFewestTurnsView(profile.getFewestTurns301Game(), linearLayout);
         if (profile.getFewestTurns501Game() != null)
-            addFewestTurnsView(profile.getFewestTurns501Game(), linearLayout, index);
+            addFewestTurnsView(profile.getFewestTurns501Game(), linearLayout);
     }
 
     private void initHighestOutGame(LinearLayout linearLayout) {
-        TextView highestOutHeader =
-                linearLayout.findViewById(R.id.profile_detail_highest_out_label);
-        int index = linearLayout.indexOfChild(highestOutHeader) + 1;
-        highestOutHeader.setText(R.string.highest_out);
         if (profile.getHighestCheckoutGame() != null)
-            addCheckoutView(profile.getHighestCheckoutGame(), linearLayout, index);
+            addCheckoutView(profile.getHighestCheckoutGame(), linearLayout);
     }
 
-    private void addCheckoutView(final GameData game, LinearLayout linearLayout, final int index) {
+    private void addCheckoutView(final GameData game, LinearLayout linearLayout) {
         MatchItemView matchItemView = new MatchItemView(getContext());
         matchItemView.setStatToShow(MatchItemView.Stat.CHECKOUT);
-        addGameView(matchItemView, game, linearLayout, index);
+        addGameView(matchItemView, game, linearLayout);
     }
 
-    private void addFewestTurnsView(final GameData game, LinearLayout linearLayout, final int index) {
+    private void addFewestTurnsView(final GameData game, LinearLayout linearLayout) {
         MatchItemView matchItemView = new MatchItemView(getContext());
         matchItemView.setStatToShow(MatchItemView.Stat.TURNS);
-        addGameView(matchItemView, game, linearLayout, index);
+        addGameView(matchItemView, game, linearLayout);
     }
 
-    private void addGameView(MatchItemView matchItemView, final GameData game, LinearLayout linearLayout, final int index) {
+    private void addGameView(MatchItemView matchItemView, final GameData game, LinearLayout linearLayout) {
         matchItemView.setVisibility(View.VISIBLE);
         matchItemView.setGame(game, profileName);
         matchItemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 MatchFragment.newInstance(game).show(getFragmentManager(),
-                        "overview_game_" + Integer.toString(index));
+                        "overview_game");
             }
         });
 
-        linearLayout.addView(matchItemView, index);
+        linearLayout.addView(matchItemView);
     }
 }
