@@ -29,12 +29,10 @@ public class ProfileListViewModel extends AndroidViewModel {
         return profiles;
     }
 
-
     public MutableLiveData<Event<String>> getAddPlayerClickEvent()
     {
         return addPlayerClickEvent;
     }
-
 
     public void onAddPlayerClick()
     {

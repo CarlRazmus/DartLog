@@ -46,6 +46,12 @@ public class Repository {
         profiles.setValue(Util.loadProfileNames());
     }
 
+    public void removeProfile(String name)
+    {
+        Util.removePlayer(name);
+        profiles.setValue(Util.loadProfileNames());
+    }
+
     public Profile GetProfile(String profileName) {
         Profile profile = new Profile();
         profile.setGamesWon(dbHelper.getNumberOfGamesWon(profileName));

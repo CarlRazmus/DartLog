@@ -1,5 +1,6 @@
 package com.fraz.dartlog.statistics;
 
+import android.arch.lifecycle.ViewModelProviders;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
@@ -12,7 +13,8 @@ import android.view.MenuItem;
 
 import com.fraz.dartlog.MenuBackground;
 import com.fraz.dartlog.R;
-import com.fraz.dartlog.Util;
+import com.fraz.dartlog.model.repository.Repository;
+import com.fraz.dartlog.viewmodel.ProfileViewModel;
 
 /**
  * An activity representing a single Profile detail screen. This
@@ -22,7 +24,8 @@ import com.fraz.dartlog.Util;
  */
 public class ProfileDetailActivity extends MenuBackground {
 
-    private String playerName;
+    private String profileName;
+    ProfileViewModel profileViewModel;
 
     public ProfileDetailActivity(){
         super(R.layout.activity_profile_detail);
@@ -33,10 +36,12 @@ public class ProfileDetailActivity extends MenuBackground {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        playerName = getIntent().getStringExtra(ProfileDetailFragment.ARG_ITEM_NAME);
+        profileName = getIntent().getStringExtra(ProfileDetailFragment.ARG_ITEM_NAME);
+        profileViewModel = ViewModelProviders.of(this).get(ProfileViewModel.class);
+        profileViewModel.setProfile(profileName);
+
         AsyncTaskRunner runner = new AsyncTaskRunner();
         runner.execute();
-
     }
 
     @Override
@@ -61,16 +66,16 @@ public class ProfileDetailActivity extends MenuBackground {
 
     private void showDeleteUserDialog(){
         new AlertDialog.Builder(this)
-                .setTitle("Delete user")
-                .setMessage("Do you really want to delete the user? This will not remove database data.")
-                .setIcon(android.R.drawable.ic_dialog_alert)
-                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+            .setTitle("Delete user")
+            .setMessage("Do you really want to delete the user? This will not remove database data.")
+            .setIcon(android.R.drawable.ic_dialog_alert)
+            .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
 
-                    public void onClick(DialogInterface dialog, int whichButton) {
-                        Util.removePlayer(playerName);
-                        startUpdatedProfileListActivity();
-                    }})
-                .setNegativeButton(android.R.string.no, null).show();
+                public void onClick(DialogInterface dialog, int whichButton) {
+                    profileViewModel.deleteProfile();
+                    startUpdatedProfileListActivity();
+                }})
+            .setNegativeButton(android.R.string.no, null).show();
     }
 
     private void startUpdatedProfileListActivity() {
@@ -79,7 +84,6 @@ public class ProfileDetailActivity extends MenuBackground {
         startActivity(intent);
     }
 
-
     private class AsyncTaskRunner extends AsyncTask<Void, Void, Void> {
 
         private ProfileDetailFragmentPagerAdapter profileAdapter;
@@ -87,7 +91,7 @@ public class ProfileDetailActivity extends MenuBackground {
         @Override
         protected Void doInBackground(Void... voids) {
             profileAdapter = new ProfileDetailFragmentPagerAdapter(getSupportFragmentManager(),
-                    playerName);
+                    profileName);
             return null;
         }
 

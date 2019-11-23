@@ -1,9 +1,5 @@
 package com.fraz.dartlog.viewmodel;
 
-import android.app.Application;
-import android.arch.lifecycle.AndroidViewModel;
-import android.arch.lifecycle.LiveData;
-import android.arch.lifecycle.MutableLiveData;
 import android.arch.lifecycle.ViewModel;
 
 import com.fraz.dartlog.model.Profile;
@@ -28,5 +24,10 @@ public class ProfileViewModel extends ViewModel {
 
     public void setProfile(String profileName) {
         profile = repository.GetProfile(profileName);
+    }
+
+    public void deleteProfile()
+    {
+        Repository.getInstance().removeProfile(profile.getName());
     }
 }
