@@ -1,9 +1,12 @@
 package com.fraz.dartlog.game.x01;
 
 import android.app.DialogFragment;
+import android.arch.lifecycle.Observer;
+import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
+import android.databinding.DataBindingUtil;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -16,87 +19,77 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.ViewAnimator;
 
-import com.fraz.dartlog.CheckoutChart;
 import com.fraz.dartlog.MainActivity;
 import com.fraz.dartlog.OnBackPressedDialogFragment;
 import com.fraz.dartlog.R;
+import com.fraz.dartlog.databinding.ActivityProfileListBinding;
+import com.fraz.dartlog.databinding.ActivityX01GameBinding;
 import com.fraz.dartlog.db.DartLogDatabaseHelper;
 import com.fraz.dartlog.game.InputEventListener;
 import com.fraz.dartlog.game.NumPadHandler;
+import com.fraz.dartlog.statistics.ProfileListActivity;
+import com.fraz.dartlog.util.EventObserver;
+import com.fraz.dartlog.view.AddPlayerDialogFragment;
+import com.fraz.dartlog.viewmodel.ProfileListViewModel;
+import com.fraz.dartlog.viewmodel.X01GameViewModel;
 
 import java.util.ArrayList;
 
-public class X01GameActivity extends AppCompatActivity implements View.OnClickListener,
-        InputEventListener, OnBackPressedDialogFragment.OnBackPressedDialogListener {
+public class X01GameActivity extends AppCompatActivity implements
+        OnBackPressedDialogFragment.OnBackPressedDialogListener {
 
-    private X01 game;
     private X01GameListAdapter gameListAdapter;
-    private ViewAnimator viewAnimator;
-    private DartLogDatabaseHelper dbHelper;
-    private TextView roundTextView;
+    private X01GameViewModel viewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_x01_game);
+
+        viewModel = ViewModelProviders.of(this).get(X01GameViewModel.class);
+        ActivityX01GameBinding binding = DataBindingUtil.setContentView(this, R.layout.activity_x01_game);
+        binding.setLifecycleOwner(this);
+        binding.setViewModel(viewModel);
+        binding.setGame(viewModel.getGameObservable());
 
         setSupportActionBar((Toolbar) findViewById(R.id.game_toolbar));
-        viewAnimator = findViewById(R.id.game_input);
-        dbHelper = DartLogDatabaseHelper.getInstance();
-        roundTextView = findViewById(R.id.game_header_round);
 
-        game = GetX01GameInstance(savedInstanceState);
-        gameListAdapter = new X01GameListAdapter(game);
-
-        initListView();
         initNumPadView();
-        initGameDoneView();
-        updateView();
-    }
 
-    @Override
-    public void onBackPressed() {
-        DialogFragment onBackPressedDialogFragment = new OnBackPressedDialogFragment();
-        onBackPressedDialogFragment.show(getFragmentManager(), "OnBackPressedDialogFragment");
-    }
+        viewModel.Init(savedInstanceState, getIntent());
+        gameListAdapter = new X01GameListAdapter(viewModel.getGame());
+        initListView();
 
-    @NonNull
-    private X01 GetX01GameInstance(Bundle savedInstanceState) {
-        if (savedInstanceState != null) {
-            X01 game = (X01) savedInstanceState.getSerializable("game");
-            if (game != null)
-                return game;
-        }
-        return new X01(createPlayerDataList());
+        observeViewModel();
     }
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putSerializable("game", game);
+        outState.putSerializable("game", viewModel.getGame());
     }
 
-    @Override
-    public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.new_leg:
-                dbHelper.addX01Match(game);
-                game.newLeg();
-                updateView();
-                break;
-            case R.id.complete_match:
-                dbHelper.addX01Match(game);
+    public void observeViewModel()
+    {
+        viewModel.getGameObservable().observe(this, new Observer<X01>() {
+            @Override
+            public void onChanged(@Nullable X01 x01) {
+                gameListAdapter.notifyDataSetChanged();
+                scrollToPlayerInList();
+            }
+        });
+        viewModel.getCompleteMatchEvent().observe(this, new EventObserver<String>() {
+            @Override
+            public void onEventUnhandled(String content) {
                 completeMatch();
-                break;
-        }
+            }
+        });
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_undo:
-                game.undo();
-                updateView();
+                viewModel.undo();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -110,83 +103,38 @@ public class X01GameActivity extends AppCompatActivity implements View.OnClickLi
         return true;
     }
 
-    @Override
-    public void enter(int score) {
-        game.submitScore(score);
-        updateView();
-    }
-
-    private void updateView() {
-        gameListAdapter.notifyDataSetChanged();
-        scrollToPlayerInList();
-        if (game.isGameOver()) {
-            setGameDoneView();
-        } else {
-            setNumPadView();
-            updateGameRound();
-        }
-    }
-
-    private void updateGameRound() {
-        ((TextView) findViewById(R.id.game_header_round)).setText(String.valueOf(game.getTurn()));
-    }
-
     private void initListView() {
         RecyclerView myListView = findViewById(R.id.play_players_listView);
         assert myListView != null;
         myListView.setAdapter(gameListAdapter);
     }
 
-    /**
-     * Create and return a list of player data from a list of player names.
-     */
-    private ArrayList<X01PlayerData> createPlayerDataList() {
-        Intent intent = getIntent();
-        ArrayList<String> playerNames = intent.getStringArrayListExtra("playerNames");
-        int x = intent.getIntExtra("x", 3);
-        int doubleOutAttempts = intent.getIntExtra("double_out", 0);
-        ArrayList<X01PlayerData> playerDataList = new ArrayList<>();
-        for (String playerName : playerNames) {
-            X01ScoreManager scoreManager = new X01ScoreManager(x);
-            scoreManager.setDoubleOutAttempts(doubleOutAttempts);
-            playerDataList.add(new X01PlayerData(new CheckoutChart(), playerName, scoreManager));
-        }
-        return playerDataList;
-    }
-
     private void scrollToPlayerInList() {
         RecyclerView playersListView = findViewById(R.id.play_players_listView);
         assert playersListView != null;
-        playersListView.smoothScrollToPosition(game.getCurrentPlayerIdx());
+        playersListView.smoothScrollToPosition(viewModel.getGame().getCurrentPlayerIdx());
     }
 
     private void initNumPadView() {
         NumPadHandler numPadHandler = new NumPadHandler((ViewGroup) findViewById(R.id.num_pad), 180);
-        numPadHandler.setListener(this);
-    }
-
-    private void initGameDoneView() {
-        Button newLegButton = findViewById(R.id.new_leg);
-        Button completeMatchButton = findViewById(R.id.complete_match);
-
-        assert newLegButton != null;
-        newLegButton.setOnClickListener(this);
-        assert completeMatchButton != null;
-        completeMatchButton.setOnClickListener(this);
-    }
-
-    private void setGameDoneView() {
-        viewAnimator.setDisplayedChild(1);
-    }
-
-    private void setNumPadView() {
-        viewAnimator.setDisplayedChild(0);
+        numPadHandler.setListener(new InputEventListener() {
+            @Override
+            public void enter(int score) {
+                viewModel.submitScore(score);
+            }
+        });
     }
 
     private void completeMatch() {
         Intent i = new Intent(this, MainActivity.class);
         i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(i);
+    }
+
+    @Override
+    public void onBackPressed() {
+        DialogFragment onBackPressedDialogFragment = new OnBackPressedDialogFragment();
+        onBackPressedDialogFragment.show(getFragmentManager(), "OnBackPressedDialogFragment");
     }
 
     @Override

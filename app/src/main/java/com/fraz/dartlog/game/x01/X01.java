@@ -8,7 +8,7 @@ import java.util.ArrayList;
 
 public class X01 extends Game implements Serializable{
 
-    X01(ArrayList<? extends X01PlayerData> playerData) {
+    public X01(ArrayList<? extends X01PlayerData> playerData) {
         super(playerData);
     }
 
@@ -42,7 +42,7 @@ public class X01 extends Game implements Serializable{
         showToast(text);
     }
 
-    void newLeg() {
+    public void newLeg() {
         newGame();
     }
 

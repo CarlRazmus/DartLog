@@ -85,7 +85,7 @@ public class MatchItemView extends FrameLayout {
         int numberOfPlayers = game.getNumberOfPlayers();
         String text;
         if (numberOfPlayers == 1)
-            text = String.format(Locale.getDefault(), "%d playerName", numberOfPlayers);
+            text = String.format(Locale.getDefault(), "%d player", numberOfPlayers);
         else
             text = String.format(Locale.getDefault(), "%d players", numberOfPlayers);
         players.setText(text);
