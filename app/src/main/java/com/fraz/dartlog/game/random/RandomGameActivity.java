@@ -1,56 +1,54 @@
 package com.fraz.dartlog.game.random;
 
 import android.app.DialogFragment;
+import android.arch.lifecycle.Observer;
+import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
+import android.databinding.DataBindingUtil;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.TextView;
-import android.widget.ViewAnimator;
+
 import com.fraz.dartlog.MainActivity;
 import com.fraz.dartlog.OnBackPressedDialogFragment;
 import com.fraz.dartlog.R;
-import com.fraz.dartlog.db.DartLogDatabaseHelper;
-import com.fraz.dartlog.game.AdditionScoreManager;
+import com.fraz.dartlog.databinding.ActivityRandomGameBinding;
 import com.fraz.dartlog.game.InputEventListener;
 import com.fraz.dartlog.game.NumPadHandler;
-import com.fraz.dartlog.game.PlayerData;
-import java.util.ArrayList;
+import com.fraz.dartlog.util.EventObserver;
+import com.fraz.dartlog.viewmodel.RandomGameViewModel;
 
-public class RandomGameActivity extends AppCompatActivity implements View.OnClickListener,
-        InputEventListener, OnBackPressedDialogFragment.OnBackPressedDialogListener {
+public class RandomGameActivity extends AppCompatActivity implements
+        OnBackPressedDialogFragment.OnBackPressedDialogListener {
 
-    private Random game;
     private RandomGameListAdapter gameListAdapter;
-    private ViewAnimator viewAnimator;
-    private DartLogDatabaseHelper dbHelper;
+    private RandomGameViewModel viewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_random_game);
+
+        viewModel = ViewModelProviders.of(this).get(RandomGameViewModel.class);
+        ActivityRandomGameBinding binding = DataBindingUtil.setContentView(this, R.layout.activity_random_game);
+        binding.setLifecycleOwner(this);
+        binding.setViewModel(viewModel);
+        binding.setGame(viewModel.getGameObservable());
 
         setSupportActionBar((Toolbar) findViewById(R.id.game_toolbar));
-        viewAnimator = findViewById(R.id.game_input);
-        dbHelper = DartLogDatabaseHelper.getInstance();
 
-        game = GetRandomGameInstance(savedInstanceState);
-        gameListAdapter = new RandomGameListAdapter(game);
+        viewModel.initGame(savedInstanceState, getIntent());
+        gameListAdapter = new RandomGameListAdapter(viewModel.getGame());
 
         initListView();
         initNumPadView();
-        initGameDoneView();
-        updateView();
-        updateCurrentFieldTextView(game.getCurrentField());
-        updateNextFieldTextView(game.getNextField());
+
+        observeViewModel();
     }
 
     @Override
@@ -59,44 +57,35 @@ public class RandomGameActivity extends AppCompatActivity implements View.OnClic
         onBackPressedDialogFragment.show(getFragmentManager(), "OnBackPressedDialogFragment");
     }
 
-    @NonNull
-    private Random GetRandomGameInstance(Bundle savedInstanceState) {
-        if (savedInstanceState != null) {
-            Random game = (Random) savedInstanceState.getSerializable("randomGame");
-            if (game != null)
-                return game;
-        }
-        int nrOfTurns = getIntent().getIntExtra("turns", 10);
-        return new Random(createPlayerDataList(), nrOfTurns);
-    }
-
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putSerializable("randomGame", game);
+        outState.putSerializable("randomGame", viewModel.getGame());
     }
 
-    @Override
-    public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.new_leg:
-                dbHelper.addRandomMatch(game);
-                game.newLeg();
-                updateView();
-                break;
-            case R.id.complete_match:
-                dbHelper.addRandomMatch(game);
+    public void observeViewModel()
+    {
+        viewModel.getGameObservable().observe(this, new Observer<Random>() {
+            @Override
+            public void onChanged(@Nullable Random random) {
+                gameListAdapter.notifyDataSetChanged();
+                scrollToPlayerInList();
+            }
+        });
+
+        viewModel.getCompleteMatchEvent().observe(this, new EventObserver<String>() {
+            @Override
+            public void onEventUnhandled(String content) {
                 completeMatch();
-                break;
-        }
+            }
+        });
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_undo:
-                game.undo();
-                updateView();
+                viewModel.undo();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -110,92 +99,26 @@ public class RandomGameActivity extends AppCompatActivity implements View.OnClic
         return true;
     }
 
-    @Override
-    public void enter(int score) {
-        game.submitScore(score);
-        updateView();
-    }
-
-    private void updateView() {
-        gameListAdapter.notifyDataSetChanged();
-        scrollToPlayerInList();
-        if (game.isGameOver()) {
-            setGameDoneView();
-        } else {
-            setNumPadView();
-            updateCurrentFieldTextView(game.getCurrentField());
-            updateNextFieldTextView(game.getNextField());
-            updateGameRound();
-        }
-    }
-
-    public void updateNextFieldTextView(int nextFieldNr){
-        TextView myListView = findViewById(R.id.next_field_textview);
-        assert myListView != null;
-
-        if(nextFieldNr != 0)
-            myListView.setText(String.valueOf(nextFieldNr));
-        else
-            myListView.setText("");
-    }
-
-    public void updateCurrentFieldTextView(int newFieldNr) {
-        TextView myListView = findViewById(R.id.current_field_textview);
-        assert myListView != null;
-        myListView.setText(String.valueOf(newFieldNr));
-    }
-
     private void initListView() {
         RecyclerView myListView = findViewById(R.id.play_players_listView);
         assert myListView != null;
         myListView.setAdapter(gameListAdapter);
     }
 
-    private void updateGameRound() {
-        ((TextView) findViewById(R.id.game_header_turn)).setText(String.valueOf(game.getTurn()));
-    }
-
-    /**
-     * Create and return a list of player data from a list of player names.
-     */
-    private ArrayList<PlayerData> createPlayerDataList() {
-        Intent intent = getIntent();
-        ArrayList<String> playerNames = intent.getStringArrayListExtra("playerNames");
-        ArrayList<PlayerData> playerDataList = new ArrayList<>();
-
-        for (String playerName : playerNames) {
-            playerDataList.add(new PlayerData(playerName, new AdditionScoreManager()));
-        }
-        return playerDataList;
-    }
-
     private void scrollToPlayerInList() {
         RecyclerView playersListView = findViewById(R.id.play_players_listView);
         assert playersListView != null;
-        playersListView.smoothScrollToPosition(game.getCurrentPlayerIdx());
+        playersListView.smoothScrollToPosition(viewModel.getGame().getCurrentPlayerIdx());
     }
 
     private void initNumPadView() {
         NumPadHandler numPadHandler = new NumPadHandler((ViewGroup) findViewById(R.id.num_pad), 9);
-        numPadHandler.setListener(this);
-    }
-
-    private void initGameDoneView() {
-        Button newLegButton = findViewById(R.id.new_leg);
-        assert newLegButton != null;
-        newLegButton.setOnClickListener(this);
-
-        Button completeMatchButton = findViewById(R.id.complete_match);
-        assert completeMatchButton != null;
-        completeMatchButton.setOnClickListener(this);
-    }
-
-    private void setGameDoneView() {
-        viewAnimator.setDisplayedChild(1);
-    }
-
-    private void setNumPadView() {
-        viewAnimator.setDisplayedChild(0);
+        numPadHandler.setListener(new InputEventListener() {
+            @Override
+            public void enter(int score) {
+                viewModel.submitScore(score);
+            }
+        });
     }
 
     private void completeMatch() {

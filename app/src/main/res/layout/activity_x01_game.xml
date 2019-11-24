@@ -7,6 +7,7 @@
     <data>
         <import type="android.view.View"/>
 
+        <import type="com.fraz.dartlog.viewmodel.GameViewModel"/>
         <import type="com.fraz.dartlog.viewmodel.X01GameViewModel"/>
         <variable
             name="viewModel"
@@ -73,7 +74,7 @@
                 android:visibility="@{game.isGameOver() ? View.GONE : View.VISIBLE}"/>
 
             <include layout="@layout/game_over"
-                app:viewModel="@{viewModel}"
+                app:viewModel="@{(GameViewModel) viewModel}"
                 android:visibility="@{game.isGameOver() ? View.VISIBLE : View.GONE}"/>
         </FrameLayout>
     </LinearLayout>

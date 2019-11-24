@@ -13,27 +13,16 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.TextView;
-import android.widget.ViewAnimator;
 
 import com.fraz.dartlog.MainActivity;
 import com.fraz.dartlog.OnBackPressedDialogFragment;
 import com.fraz.dartlog.R;
-import com.fraz.dartlog.databinding.ActivityProfileListBinding;
 import com.fraz.dartlog.databinding.ActivityX01GameBinding;
-import com.fraz.dartlog.db.DartLogDatabaseHelper;
 import com.fraz.dartlog.game.InputEventListener;
 import com.fraz.dartlog.game.NumPadHandler;
-import com.fraz.dartlog.statistics.ProfileListActivity;
 import com.fraz.dartlog.util.EventObserver;
-import com.fraz.dartlog.view.AddPlayerDialogFragment;
-import com.fraz.dartlog.viewmodel.ProfileListViewModel;
 import com.fraz.dartlog.viewmodel.X01GameViewModel;
-
-import java.util.ArrayList;
 
 public class X01GameActivity extends AppCompatActivity implements
         OnBackPressedDialogFragment.OnBackPressedDialogListener {
@@ -53,10 +42,10 @@ public class X01GameActivity extends AppCompatActivity implements
 
         setSupportActionBar((Toolbar) findViewById(R.id.game_toolbar));
 
-        initNumPadView();
-
-        viewModel.Init(savedInstanceState, getIntent());
+        viewModel.initGame(savedInstanceState, getIntent());
         gameListAdapter = new X01GameListAdapter(viewModel.getGame());
+
+        initNumPadView();
         initListView();
 
         observeViewModel();
