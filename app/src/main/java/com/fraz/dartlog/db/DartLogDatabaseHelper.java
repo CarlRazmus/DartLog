@@ -49,7 +49,7 @@ public class DartLogDatabaseHelper extends SQLiteOpenHelper {
         return dbHelperInstance;
     }
 
-    public DartLogDatabaseHelper(Context context) {
+    private DartLogDatabaseHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
         checkoutChart = new CheckoutChart(context);
         db = getWritableDatabase();
@@ -98,17 +98,6 @@ public class DartLogDatabaseHelper extends SQLiteOpenHelper {
      * @return the row ID of the newly inserted player, or -1 if the player could not be added.
      */
     public long addPlayer(String name) {
-        return addPlayer(name, db);
-    }
-
-    /**
-     * Add a player to the database. Duplicated names is not allowed.
-     *
-     * @param name the name of the player to add.
-     * @param db   the database which the name shall be added to.
-     * @return the row ID of the newly inserted player, or -1 if the player could not be added.
-     */
-    private long addPlayer(String name, SQLiteDatabase db) {
         ContentValues values = new ContentValues();
         values.put(DartLogContract.PlayerEntry.COLUMN_NAME_PLAYER_NAME, name);
         return db.insert(DartLogContract.PlayerEntry.TABLE_NAME, null, values);
@@ -520,8 +509,11 @@ public class DartLogDatabaseHelper extends SQLiteOpenHelper {
         runQueryAndLogStatistics( sqlGetX01MaxCheckoutQuerySlow);
     }
 
-    public HashMap<String, Integer> getHighestCheckouts(long playerId){
-        Log.d("hej", String.valueOf(playerId));
+    public GameData getHighestX01Checkout(long playerId){
+        int highestCheckout = 0;
+        int matchId = -1;
+        GameData gameData = null;
+
         String sqlGetX01MaxCheckoutsQuery =
             "SELECT  x, m_id, winner_id, max(ms_score) as max_checkout  " +
                     "FROM statistics_view_" + playerId + " " +
@@ -529,19 +521,38 @@ public class DartLogDatabaseHelper extends SQLiteOpenHelper {
                     "GROUP BY winner_id " +
                     "ORDER BY winner_id; ";
 
-        runQueryAndPrintTable(sqlGetX01MaxCheckoutsQuery);
-
-        return null;
+        try (Cursor c = db.rawQuery(sqlGetX01MaxCheckoutsQuery, null)) {
+            while (c.moveToNext()) {
+                 Integer checkout = c.getInt(c.getColumnIndex("max_checkout"));
+                 if (checkout < highestCheckout) {
+                     highestCheckout = checkout;
+                     matchId = c.getInt(c.getColumnIndex("m_id"));
+                 }
+            }
+        }
+        if(highestCheckout > 0)
+            gameData = getX01GameData(matchId);
+        //runQueryAndPrintTable(sqlGetX01MaxCheckoutsQuery);
+        return gameData;
     }
 
-    public ArrayList<HashMap<String, Integer>> getfewestTurns(Integer playerId){
+    public HashMap<String, Integer> getFewestTurns(long playerId){
+        HashMap<String, Integer> fewestTurns = new HashMap<>();
         String sqlGetX01FewestTurnsQuery =
                 "SELECT  x, m_id, winner_id, min(ms_count) as fewest_turns  " +
                         "FROM statistics_view_ " + playerId + " " +
                         "WHERE winner_id ==  " + playerId + " " +
                         "GROUP BY x, winner_id " +
                         "ORDER BY winner_id; ";
-        return null;
+
+        try (Cursor c = db.rawQuery(sqlGetX01FewestTurnsQuery, null)) {
+            while (c.moveToNext()) {
+                String x01 = c.getString(c.getColumnIndex(DartLogContract.X01Entry.COLUMN_NAME_X));
+                fewestTurns.put(x01, c.getInt(c.getColumnIndex("fewest_turns")));
+            }
+        }
+        //runQueryAndPrintTable(sqlGetX01FewestTurnsQuery);
+        return fewestTurns;
     }
 
     private void runQueryAndPrintTable(String sqlQuery){
@@ -839,7 +850,7 @@ public class DartLogDatabaseHelper extends SQLiteOpenHelper {
         playersNames.add("Maria");
 
         for (String name : playersNames) {
-            addPlayer(name, db);
+            addPlayer(name);
         }
     }
 
