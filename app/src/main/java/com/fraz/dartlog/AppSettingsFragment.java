@@ -57,21 +57,22 @@ public class AppSettingsFragment extends PreferenceFragment {
     public void onSuccessfulFindExistingExternalDb(Intent intent) {
         dbFileHandler.copyDataFromExternalFileToLocalDb(intent.getData());
         DartLogDatabaseHelper dbHelper = DartLogDatabaseHelper.getInstance(parent);
+        dbHelper.runQueryAndPrintTable("SELECT * FROM match;");
         Util.saveProfileNames(dbHelper.getPlayers(), parent);
         showToast(R.string.successful_import);
     }
 
-    public void onUnsuccessfulExternalDbCreation(Intent intent){
+    public void onUnsuccessfulExternalDbCreation(){
         /* TODO: Should add missing .db extension or remove the file */
         showToast(R.string.unsuccessful_export);
     }
 
-    public void onUnsuccessfulImportOfDatabase(Intent intent) {
+    public void onUnsuccessfulImportOfDatabase() {
         /* TODO: Should add missing .db extension or remove the file? */
         showToast(R.string.unsuccessful_import);
     }
 
-    public void onUnsuccessfulExportOfDatabase(Intent intent) {
+    public void onUnsuccessfulExportOfDatabase() {
         /* TODO: Should add missing .db extension or remove the file? */
         showToast(R.string.unsuccessful_export);
     }

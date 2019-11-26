@@ -37,7 +37,6 @@ public class DartLogDatabaseHelper extends SQLiteOpenHelper {
     private static final int DATABASE_VERSION = 2;
     private static final String DATABASE_NAME = "DartLog.db";
     private CheckoutChart checkoutChart;
-    private SQLiteDatabase db;
 
     private static DartLogDatabaseHelper dbHelperInstance = null;
 
@@ -52,7 +51,6 @@ public class DartLogDatabaseHelper extends SQLiteOpenHelper {
     private DartLogDatabaseHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
         checkoutChart = new CheckoutChart(context);
-        db = getWritableDatabase();
     }
 
     @Override
@@ -61,7 +59,6 @@ public class DartLogDatabaseHelper extends SQLiteOpenHelper {
             db.execSQL(createSql);
         }
         db.execSQL(DartLogContract.SQL_CREATE_STATISTIC_ENTRIES );
-        initializePlayers();
     }
 
     @Override
@@ -82,13 +79,13 @@ public class DartLogDatabaseHelper extends SQLiteOpenHelper {
     }
 
     private void resetDatabase() {
+        SQLiteDatabase db = getWritableDatabase();
         for (String deleteSql : DartLogContract.SQL_DELETE_ENTRIES) {
             db.execSQL(deleteSql);
         }
         for (String createSql : DartLogContract.SQL_CREATE_ENTRIES) {
             db.execSQL(createSql);
         }
-        initializePlayers();
     }
 
     /**
@@ -98,6 +95,7 @@ public class DartLogDatabaseHelper extends SQLiteOpenHelper {
      * @return the row ID of the newly inserted player, or -1 if the player could not be added.
      */
     public long addPlayer(String name) {
+        SQLiteDatabase db = getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put(DartLogContract.PlayerEntry.COLUMN_NAME_PLAYER_NAME, name);
         return db.insert(DartLogContract.PlayerEntry.TABLE_NAME, null, values);
@@ -109,6 +107,7 @@ public class DartLogDatabaseHelper extends SQLiteOpenHelper {
      * @return the player names of all the players in the database.
      */
     public ArrayList<String> getPlayers() {
+        SQLiteDatabase db = getWritableDatabase();
         ArrayList<String> names;
         String[] projection = {
                 DartLogContract.PlayerEntry.COLUMN_NAME_PLAYER_NAME
@@ -131,6 +130,7 @@ public class DartLogDatabaseHelper extends SQLiteOpenHelper {
      * @return the player names of all the players in the database.
      */
     public ArrayList<Integer> getPlayerIds() {
+        SQLiteDatabase db = getWritableDatabase();
         ArrayList<Integer> ids;
         String[] projection = {
                 DartLogContract.PlayerEntry.COLUMN_NAME_ID
@@ -221,6 +221,7 @@ public class DartLogDatabaseHelper extends SQLiteOpenHelper {
     }
 
     public int getNumberOfGamesPlayed(String playerName) {
+        SQLiteDatabase db = getWritableDatabase();
         long playerId = getPlayerId(playerName);
         try (Cursor c = db.query(true, DartLogContract.ScoreEntry.TABLE_NAME,
                 new String[]{DartLogContract.ScoreEntry.COLUMN_NAME_MATCH_ID},
@@ -232,6 +233,7 @@ public class DartLogDatabaseHelper extends SQLiteOpenHelper {
     }
 
     public int getNumberOfGamesWon(String playerName) {
+        SQLiteDatabase db = getWritableDatabase();
         long playerId = getPlayerId(playerName);
         String query = "SELECT m._ID" +
                       "     FROM \"match\" m" +
@@ -356,6 +358,7 @@ public class DartLogDatabaseHelper extends SQLiteOpenHelper {
     }
 
     private void generateDatabaseX01MatchEntries(int nrEntries){
+        SQLiteDatabase db = getWritableDatabase();
         ArrayList<Integer> playerIds = getPlayerIds();
         java.util.Random rand = new java.util.Random();
         int matchId = getLatestMatchId() + 1;
@@ -396,6 +399,7 @@ public class DartLogDatabaseHelper extends SQLiteOpenHelper {
     }
 
     private int getLatestMatchId() {
+        SQLiteDatabase db = getWritableDatabase();
         int matchId = 0;
         String sql = "SELECT max(m._id) as m_max FROM match m;";
 
@@ -408,6 +412,7 @@ public class DartLogDatabaseHelper extends SQLiteOpenHelper {
     }
 
     public void createStatisticViews(){
+        SQLiteDatabase db = getWritableDatabase();
         ArrayList<Integer> playerIds = getPlayerIds();
         long start = SystemClock.currentThreadTimeMillis();
         for (int id : playerIds){
@@ -431,6 +436,7 @@ public class DartLogDatabaseHelper extends SQLiteOpenHelper {
     }
 
     public void updateStatisticViews(ArrayList<Integer> playerIds){
+        SQLiteDatabase db = getWritableDatabase();
         long start = SystemClock.currentThreadTimeMillis();
         for (int id : playerIds){
             String sqlDropStatisticsView = "DROP VIEW IF EXISTS [statistics_view_" + id + "];";
@@ -453,6 +459,7 @@ public class DartLogDatabaseHelper extends SQLiteOpenHelper {
     }
 
     public void test(){
+        SQLiteDatabase db = getWritableDatabase();
         String sqlCreateStatisticsView_1 =
                 "CREATE VIEW IF NOT EXISTS statistics_view_1 AS " +
                         "SELECT m._id as m_id, m.game_type, " +
@@ -510,6 +517,7 @@ public class DartLogDatabaseHelper extends SQLiteOpenHelper {
     }
 
     public GameData getHighestX01Checkout(long playerId){
+        SQLiteDatabase db = getWritableDatabase();
         int highestCheckout = 0;
         int matchId = -1;
         GameData gameData = null;
@@ -537,6 +545,7 @@ public class DartLogDatabaseHelper extends SQLiteOpenHelper {
     }
 
     public HashMap<String, Integer> getFewestTurns(long playerId){
+        SQLiteDatabase db = getWritableDatabase();
         HashMap<String, Integer> fewestTurns = new HashMap<>();
         String sqlGetX01FewestTurnsQuery =
                 "SELECT  x, m_id, winner_id, min(ms_count) as fewest_turns  " +
@@ -555,7 +564,8 @@ public class DartLogDatabaseHelper extends SQLiteOpenHelper {
         return fewestTurns;
     }
 
-    private void runQueryAndPrintTable(String sqlQuery){
+    public void runQueryAndPrintTable(String sqlQuery){
+        SQLiteDatabase db = getWritableDatabase();
         ArrayList<String> headers = new ArrayList<>();
         String baseFormatString = new String();
         int maxHeaderLen = 5;
@@ -584,6 +594,7 @@ public class DartLogDatabaseHelper extends SQLiteOpenHelper {
     }
 
     private void runQueryAndLogStatistics(String sqlQuery){
+        SQLiteDatabase db = getWritableDatabase();
         long startTime = System.currentTimeMillis();
         Cursor c = db.rawQuery(sqlQuery, null);
 
@@ -631,6 +642,7 @@ public class DartLogDatabaseHelper extends SQLiteOpenHelper {
     }
 
     private void insertScores( Game game, long matchId) {
+        SQLiteDatabase db = getWritableDatabase();
         SparseLongArray playerIds = new SparseLongArray();
         SparseArray<Iterator<Integer>> playerScoreIterators = new SparseArray<>();
 
@@ -652,6 +664,7 @@ public class DartLogDatabaseHelper extends SQLiteOpenHelper {
     }
 
     private HashMap<String, LinkedList<Integer>> getMatchScores(long matchId) {
+        SQLiteDatabase db = getWritableDatabase();
         String sql = "SELECT p.name, s.score " +
                 "          FROM match_score s " +
                 "              join player p " +
@@ -684,6 +697,7 @@ public class DartLogDatabaseHelper extends SQLiteOpenHelper {
      * @return List of match ids.
      */
     private ArrayList<Long> getAllMatchIds(long playerId) {
+        SQLiteDatabase db = getWritableDatabase();
         ArrayList<Long> matchIds = new ArrayList<>();
 
         try (Cursor c = db.query(true, DartLogContract.ScoreEntry.TABLE_NAME,
@@ -708,6 +722,7 @@ public class DartLogDatabaseHelper extends SQLiteOpenHelper {
      * @return List of match ids.
      */
     private ArrayList<Long> getMatchIds(long playerId, long startIndex, int amount) {
+        SQLiteDatabase db = getWritableDatabase();
         ArrayList<Long> matchIds = new ArrayList<>();
 
         try (Cursor c = db.query(true, DartLogContract.ScoreEntry.TABLE_NAME,
@@ -735,6 +750,7 @@ public class DartLogDatabaseHelper extends SQLiteOpenHelper {
      * @return The game type of the game (x01, random).
      */
     private String getGameType(long matchId) {
+        SQLiteDatabase db = getWritableDatabase();
         String gameType = "";
 
         try (Cursor c = db.query(true, DartLogContract.Match.TABLE_NAME,
@@ -772,6 +788,7 @@ public class DartLogDatabaseHelper extends SQLiteOpenHelper {
      * @return The id of the player in the database.
      */
     public long getPlayerId(String playerName) {
+        SQLiteDatabase db = getWritableDatabase();
         long playerId;
         try (Cursor c = db.query(DartLogContract.PlayerEntry.TABLE_NAME,
                 new String[]{DartLogContract.PlayerEntry._ID},
@@ -788,6 +805,7 @@ public class DartLogDatabaseHelper extends SQLiteOpenHelper {
     }
 
     private long insertMatchEntry(Game game, String gameType){
+        SQLiteDatabase db = getWritableDatabase();
         ContentValues matchValues = new ContentValues();
 
         matchValues.put(DartLogContract.Match.COLUMN_NAME_DATE,
@@ -800,6 +818,7 @@ public class DartLogDatabaseHelper extends SQLiteOpenHelper {
     }
 
     private long insertX01Entry(X01 game, long matchId) {
+        SQLiteDatabase db = getWritableDatabase();
         ContentValues matchValues = new ContentValues();
         matchValues.put(DartLogContract.X01Entry.COLUMN_NAME_X, game.getX());
         matchValues.put(DartLogContract.X01Entry.COLUMN_NAME_MATCH_ID, matchId);
@@ -809,6 +828,7 @@ public class DartLogDatabaseHelper extends SQLiteOpenHelper {
     }
 
     private long insertRandomEntry(Random game, long matchId) {
+        SQLiteDatabase db = getWritableDatabase();
         ContentValues matchValues = new ContentValues();
         matchValues.put(DartLogContract.RandomEntry.COLUMN_NAME_MATCH_ID, matchId);
         matchValues.put(DartLogContract.RandomEntry.COLUMN_NAME_TURNS, game.getNrOfTurns());
@@ -816,6 +836,7 @@ public class DartLogDatabaseHelper extends SQLiteOpenHelper {
     }
 
     private Cursor getX01MatchEntry(long matchId) {
+        SQLiteDatabase db = getWritableDatabase();
         String sql = "SELECT x.double_out, x.x, m.date, p.name as winner" +
                 "     FROM x01 x" +
                 "          join \"match\" m" +
@@ -829,6 +850,7 @@ public class DartLogDatabaseHelper extends SQLiteOpenHelper {
 
 
     private Cursor getRandomMatchEntry(long matchId) {
+        SQLiteDatabase db = getWritableDatabase();
         String sql = "SELECT r.turns, m.date, p.name as winner" +
                 "     FROM random r" +
                 "          join \"match\" m" +
@@ -840,21 +862,8 @@ public class DartLogDatabaseHelper extends SQLiteOpenHelper {
         return db.rawQuery(sql, new String[]{String.valueOf(matchId)});
     }
 
-    private void initializePlayers() {
-        ArrayList<String> playersNames = new ArrayList<>();
-
-        playersNames.add("Razmus");
-        playersNames.add("Filip");
-        playersNames.add("Fredrik");
-        playersNames.add("Stefan");
-        playersNames.add("Maria");
-
-        for (String name : playersNames) {
-            addPlayer(name);
-        }
-    }
-
     public boolean playerExist(String playerName) {
+        SQLiteDatabase db = getWritableDatabase();
         try (Cursor cc = db.query(DartLogContract.PlayerEntry.TABLE_NAME,
                 new String[]{DartLogContract.PlayerEntry._ID},
                 String.format("%s = '%s'", DartLogContract.PlayerEntry.COLUMN_NAME_PLAYER_NAME,
