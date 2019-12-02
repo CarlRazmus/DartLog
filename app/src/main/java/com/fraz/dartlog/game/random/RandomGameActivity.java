@@ -43,7 +43,7 @@ public class RandomGameActivity extends AppCompatActivity implements
         setSupportActionBar((Toolbar) findViewById(R.id.game_toolbar));
 
         viewModel.initGame(savedInstanceState, getIntent());
-        gameListAdapter = new RandomGameListAdapter(viewModel.getGame());
+        gameListAdapter = new RandomGameListAdapter(viewModel);
 
         initListView();
         initNumPadView();

@@ -12,7 +12,7 @@ public class Random extends Game implements Serializable{
 
     private final int nrOfTurns;
     private ArrayList<Integer> fields = new ArrayList<>();
-    java.util.Random rand;
+    private java.util.Random rand;
 
 
     private void addFields(int nrOfTurns) {
@@ -21,36 +21,8 @@ public class Random extends Game implements Serializable{
     }
 
     private void generateRandomFieldNr() {
-        if(isNetworkAvailable())
-            fields.add(generateRandomNrFromSpace());
-        else
-            fields.add(rand.nextInt(20) + 1);
+       fields.add(rand.nextInt(20) + 1);
     }
-
-    private Integer generateRandomNrFromSpace() {
-        return rand.nextInt(20) + 1;
-    }
-
-    private boolean isNetworkAvailable() {
-    /*    boolean haveConnectedWifi = false;
-        boolean haveConnectedMobile = false;
-
-        ConnectivityManager cm = (ConnectivityManager) MyApplication.getInstance().getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo[] netInfo = cm.getAllNetworkInfo();
-        for (NetworkInfo ni : netInfo) {
-            if (ni.getTypeName().equalsIgnoreCase("WIFI"))
-                if (ni.isConnected())
-                    haveConnectedWifi = true;
-            if (ni.getTypeName().equalsIgnoreCase("MOBILE"))
-                if (ni.isConnected())
-                    haveConnectedMobile = true;
-        }
-        Log.d("Internet connection", String.valueOf(haveConnectedWifi || haveConnectedMobile));
-        return haveConnectedWifi || haveConnectedMobile;
-        */
-        return false;
-    }
-
 
     private void updateGameState() {
         nextPlayer();
@@ -89,16 +61,11 @@ public class Random extends Game implements Serializable{
     public int getCurrentField(){return fields.get(getTurn() - 1);}
 
     public int getNextField() {
-        int field = 0;
-
-        try {
-            field = fields.get(getTurn());
+        int turn = getTurn();
+        if (fields.size() > turn) {
+            return fields.get(turn);
         }
-        catch (Exception e)
-        {
-            e.getMessage();
-        }
-        return field;
+        return 0;
     }
 
     public int getNrOfTurns(){

@@ -43,7 +43,7 @@ public class X01GameActivity extends AppCompatActivity implements
         setSupportActionBar((Toolbar) findViewById(R.id.game_toolbar));
 
         viewModel.initGame(savedInstanceState, getIntent());
-        gameListAdapter = new X01GameListAdapter(viewModel.getGame());
+        gameListAdapter = new X01GameListAdapter(viewModel);
 
         initNumPadView();
         initListView();
