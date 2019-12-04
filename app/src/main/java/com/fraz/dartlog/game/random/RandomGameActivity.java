@@ -38,12 +38,11 @@ public class RandomGameActivity extends AppCompatActivity implements
         ActivityRandomGameBinding binding = DataBindingUtil.setContentView(this, R.layout.activity_random_game);
         binding.setLifecycleOwner(this);
         binding.setViewModel(viewModel);
-        binding.setGame(viewModel.getGameObservable());
 
         setSupportActionBar((Toolbar) findViewById(R.id.game_toolbar));
 
         viewModel.initGame(savedInstanceState, getIntent());
-        gameListAdapter = new RandomGameListAdapter(viewModel);
+        gameListAdapter = new RandomGameListAdapter(viewModel, this);
 
         initListView();
         initNumPadView();

@@ -1,12 +1,11 @@
 package com.fraz.dartlog.game.random;
 
-import android.support.annotation.NonNull;
+import android.arch.lifecycle.LifecycleOwner;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
 import com.fraz.dartlog.databinding.GamePlayerListItemBinding;
 import com.fraz.dartlog.game.GameListAdapter;
-import com.fraz.dartlog.util.BindingRecyclerViewHolder;
 import com.fraz.dartlog.viewmodel.RandomGameViewModel;
 
 /**
@@ -14,16 +13,13 @@ import com.fraz.dartlog.viewmodel.RandomGameViewModel;
  */
 public class RandomGameListAdapter extends GameListAdapter {
 
-    public RandomGameListAdapter(RandomGameViewModel viewModel) {
-        super(viewModel);
+    public RandomGameListAdapter(RandomGameViewModel viewModel, LifecycleOwner lifecycleOwner) {
+        super(viewModel, lifecycleOwner);
     }
 
-    @NonNull
     @Override
-    public BindingRecyclerViewHolder<GamePlayerListItemBinding> onCreateViewHolder(
-            ViewGroup parent, int viewType) {
+    public GamePlayerListItemBinding onCreateBinding(ViewGroup parent) {
         LayoutInflater layoutInflater = LayoutInflater.from(parent.getContext());
-        GamePlayerListItemBinding binding = GamePlayerListItemBinding.inflate(layoutInflater, parent, false);
-        return new BindingRecyclerViewHolder<>(binding);
+        return GamePlayerListItemBinding.inflate(layoutInflater, parent, false);
     }
 }

@@ -1,5 +1,6 @@
 package com.fraz.dartlog.game.x01;
 
+import android.arch.lifecycle.LifecycleOwner;
 import android.support.annotation.NonNull;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,8 +16,23 @@ import com.fraz.dartlog.viewmodel.X01GameViewModel;
 public class X01GameListAdapter extends GameListAdapter {
 
 
-    public X01GameListAdapter(X01GameViewModel viewModel) {
-        super(viewModel);
+    public X01GameListAdapter(X01GameViewModel viewModel, LifecycleOwner lifecycleOwner) {
+        super(viewModel, lifecycleOwner);
+    }
+
+    @Override
+    public GamePlayerListItemBinding onCreateBinding(ViewGroup parent) {
+        LayoutInflater layoutInflater = LayoutInflater.from(parent.getContext());
+        return GamePlayerListItemBinding.inflate(layoutInflater, parent, false);
+    }
+
+    @NonNull
+    @Override
+    public BindingRecyclerViewHolder<GamePlayerListItemBinding> onCreateViewHolder(
+            ViewGroup parent, int viewType){
+        GamePlayerListItemBinding binding = onCreateBinding(parent);
+        setLifecycleOwner(binding);
+        return new X01ViewHolder(binding);
     }
 
     @Override
@@ -24,15 +40,6 @@ public class X01GameListAdapter extends GameListAdapter {
         super.onBindViewHolder(holder, position);
         final X01PlayerData player = (X01PlayerData) this.viewModel.getGame().getPlayer(position);
         updateCheckoutView(player, (X01ViewHolder) holder);
-    }
-
-    @NonNull
-    @Override
-    public X01ViewHolder onCreateViewHolder(
-            ViewGroup parent, int viewType) {
-        LayoutInflater layoutInflater = LayoutInflater.from(parent.getContext());
-        GamePlayerListItemBinding binding = GamePlayerListItemBinding.inflate(layoutInflater, parent, false);
-        return new X01ViewHolder(binding);
     }
 
     class X01ViewHolder extends BindingRecyclerViewHolder<GamePlayerListItemBinding> {

@@ -1,5 +1,7 @@
 package com.fraz.dartlog.game;
 
+import android.arch.lifecycle.LifecycleOwner;
+import android.databinding.ViewDataBinding;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.ViewGroup;
@@ -13,15 +15,23 @@ public abstract class GameListAdapter
         extends RecyclerView.Adapter<BindingRecyclerViewHolder<GamePlayerListItemBinding>> {
 
     protected GameViewModel viewModel;
+    private LifecycleOwner lifecycleOwner;
 
-    public GameListAdapter(GameViewModel viewModel) {
+    public GameListAdapter(GameViewModel viewModel, LifecycleOwner lifecycleOwner) {
         this.viewModel = viewModel;
+        this.lifecycleOwner = lifecycleOwner;
     }
+
+    public abstract GamePlayerListItemBinding onCreateBinding(ViewGroup parent);
 
     @NonNull
     @Override
-    public abstract BindingRecyclerViewHolder<GamePlayerListItemBinding> onCreateViewHolder(
-            ViewGroup parent, int viewType);
+    public BindingRecyclerViewHolder<GamePlayerListItemBinding> onCreateViewHolder(
+            ViewGroup parent, int viewType){
+        GamePlayerListItemBinding binding = onCreateBinding(parent);
+        setLifecycleOwner(binding);
+        return new BindingRecyclerViewHolder<>(binding);
+    }
 
     @Override
     public int getItemCount() {
@@ -32,7 +42,10 @@ public abstract class GameListAdapter
     public void onBindViewHolder(BindingRecyclerViewHolder<GamePlayerListItemBinding> holder, int position) {
         PlayerViewModel playerViewModel = viewModel.getPlayerViewModel(position);
         holder.getBinding().setViewModel(playerViewModel);
-        holder.getBinding().setGameViewModel(viewModel);
-        holder.getBinding().setPosition(position);
+    }
+
+    public void setLifecycleOwner(ViewDataBinding binding)
+    {
+        binding.setLifecycleOwner(lifecycleOwner);
     }
 }

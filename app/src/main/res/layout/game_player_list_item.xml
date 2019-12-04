@@ -12,12 +12,6 @@
         <variable
             name="viewModel"
             type="PlayerViewModel" />
-        <variable
-            name="gameViewModel"
-            type="GameViewModel" />
-        <variable
-            name="position"
-            type="int" />
     </data>
 
     <android.support.v7.widget.CardView
@@ -30,8 +24,8 @@
         android:id="@+id/game_player_list_item"
         android:layout_marginBottom="1dp"
         android:animateLayoutChanges="true"
-        android:alpha="@{gameViewModel.currentPlayerIdx == position ? 1.0f : .85f}"
-        android:elevation="@{gameViewModel.currentPlayerIdx == position || gameViewModel.winner == viewModel.player ? 8 : 4}"
+        android:alpha="@{viewModel.isNextToThrow() ? 1.0f : .85f}"
+        android:elevation="@{viewModel.isNextToThrow() ? 8 : 4}"
         >
 
         <RelativeLayout
@@ -39,7 +33,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="8dp"
-            android:background="@{gameViewModel.winner == viewModel.player ? Converters.convertColorToDrawable(@color/accent) : @drawable/list_item}"
+            android:background="@{viewModel.isWinner() ? Converters.convertColorToDrawable(@color/accent) : @drawable/list_item}"
             android:orientation="vertical">
 
             <View
@@ -50,7 +44,7 @@
                 android:layout_marginEnd="8dp"
                 android:layout_alignTop="@+id/game_player_list_item_name"
                 android:layout_alignBottom="@+id/game_player_list_item_score"
-                android:visibility="@{gameViewModel.currentPlayerIdx == position &amp;&amp; gameViewModel.winner != viewModel.player ? View.VISIBLE : View.INVISIBLE}"/>
+                android:visibility="@{viewModel.isNextToThrow() ? View.VISIBLE : View.INVISIBLE}"/>
 
             <TextView
                 android:id="@id/game_player_list_item_name"
@@ -61,8 +55,8 @@
                 android:textColor="@color/background"
                 android:text="@{viewModel.playerName}"
                 tools:text="@string/player_1"
-                android:alpha="@{gameViewModel.currentPlayerIdx != position ? 0.75f : 1f}"
-                card_view:isBold="@{gameViewModel.currentPlayerIdx == position &amp;&amp; gameViewModel.winner != viewModel.player}"/>
+                android:alpha="@{viewModel.isNextToThrow() ? 1f : 0.75f}"
+                card_view:isBold="@{viewModel.isNextToThrow()}"/>
 
             <TextView
                 android:id="@+id/total_score_history"

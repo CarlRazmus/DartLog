@@ -1,6 +1,9 @@
 package com.fraz.dartlog.viewmodel;
 
+import android.arch.core.util.Function;
+import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.MutableLiveData;
+import android.arch.lifecycle.Transformations;
 import android.arch.lifecycle.ViewModel;
 import android.content.Intent;
 import android.os.Bundle;
@@ -12,15 +15,6 @@ import com.fraz.dartlog.util.Event;
 public abstract class GameViewModel<T extends Game> extends ViewModel {
 
     private MutableLiveData<T> game = new MutableLiveData<>();
-    private MutableLiveData<PlayerData> winner = new MutableLiveData<>();
-    private MutableLiveData<Integer> currentPlayerIdx = new MutableLiveData<>();
-
-    public MutableLiveData<PlayerData> getWinner() {
-        return winner;
-    }
-    public MutableLiveData<Integer> getCurrentPlayerIdx() {
-        return currentPlayerIdx;
-    }
 
     private MutableLiveData<Event<String>> completeMatchEvent = new MutableLiveData<>();
     public MutableLiveData<Event<String>> getCompleteMatchEvent()
@@ -31,9 +25,31 @@ public abstract class GameViewModel<T extends Game> extends ViewModel {
     public T getGame() {
         return game.getValue();
     }
-
     public MutableLiveData<T> getGameObservable() {
         return game;
+    }
+
+    private LiveData<PlayerData> getNextToThrow()
+    {
+        return Transformations.map(game, new Function<T, PlayerData>() {
+            @Override
+            public PlayerData apply(T game) {
+                if (!game.isGameOver()) {
+                    return game.getPlayer(game.getCurrentPlayerIdx());
+                } else {
+                    return null;
+                }
+            }
+        });
+    }
+    private LiveData<PlayerData> getWinner()
+    {
+        return Transformations.map(game, new Function<T, PlayerData>() {
+            @Override
+            public PlayerData apply(T game) {
+                return game.getWinner();
+            }
+        });
     }
 
     /**
@@ -73,9 +89,7 @@ public abstract class GameViewModel<T extends Game> extends ViewModel {
 
     void notifyGameUpdated()
     {
-        winner.setValue(getGame().getWinner());
-        currentPlayerIdx.setValue(getGame().getCurrentPlayerIdx());
-        getGameObservable().setValue(getGame());
+        game.setValue(getGame());
     }
 
     private  void onCompleteMatchEvent()
@@ -84,7 +98,7 @@ public abstract class GameViewModel<T extends Game> extends ViewModel {
     }
 
     public PlayerViewModel getPlayerViewModel(int position) {
-        PlayerViewModel playerViewModel = new PlayerViewModel();
+        PlayerViewModel playerViewModel = new PlayerViewModel(getWinner(), getNextToThrow());
         playerViewModel.updatePlayer(getGame().getPlayer(position));
         return playerViewModel;
     }
