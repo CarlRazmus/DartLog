@@ -212,9 +212,7 @@ public class ProfileDetailFragment extends Fragment {
             profileId = databaseHelper.getPlayerId(profileName);
             Thread.currentThread().setName(profileName + "_Highscore");
 
-            highestCheckoutGame = databaseHelper.getHighestX01Checkout(profileId);
-            //HashMap<String, Integer> fewestTurns = databaseHelper.getFewestTurns(profileId);
-
+            HashMap<String, Integer> highestCheckoutGames = databaseHelper.getHighestCheckouts(profileId);
             //fewestTurns301Game = databaseHelper.getFewestTurns301Game(profileName);
             //fewestTurns501Game = databaseHelper.getFewestTurns501Game(profileName);
             finishedLoadingHighscores = true;

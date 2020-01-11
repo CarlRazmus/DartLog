@@ -17,14 +17,11 @@ import java.util.ArrayList;
 
 public class MainActivity extends MenuBackground implements View.OnClickListener {
 
-    public MainActivity(){
-        super(R.layout.activity_main);
-        setParentActivity(this);
-    }
+    private DartLogDatabaseHelper dbHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+        super.onCreate(savedInstanceState, this, R.layout.activity_main);
 
         UpdateStatisticsAsyncTask asyncTask = new UpdateStatisticsAsyncTask(this);
         asyncTask.executeOnExecutor(Util.getExecutorInstance());
@@ -32,6 +29,7 @@ public class MainActivity extends MenuBackground implements View.OnClickListener
         Button playButton = (Button) findViewById(R.id.play_x01_button);
         Button profilesButton = (Button) findViewById(R.id.profiles_button);
         Button randomButton = (Button) findViewById(R.id.play_random_button);
+        dbHelper = DartLogDatabaseHelper.getInstance(this);
 
         assert playButton != null;
         assert profilesButton != null;
@@ -53,8 +51,8 @@ public class MainActivity extends MenuBackground implements View.OnClickListener
         /* If no preference file exist -> create an empty list, or get the player names from
          * the database (if the database contains any names) */
         if(playerNames == null || playerNames.isEmpty()) {
-            if(DartLogDatabaseHelper.getInstance(this).getPlayers().size() > 0)
-                Util.saveProfileNames(DartLogDatabaseHelper.getInstance(this).getPlayers(), this);
+            if(dbHelper.getPlayers().size() > 0)
+                Util.saveProfileNames(dbHelper.getPlayers(), this);
             else
                 Util.saveProfileNames(new ArrayList<String>(), this);
         }
