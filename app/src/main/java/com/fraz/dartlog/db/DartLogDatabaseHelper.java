@@ -264,6 +264,9 @@ public class DartLogDatabaseHelper extends SQLiteOpenHelper {
     private GameData getRandomGameData(long matchId) {
         HashMap<String, LinkedList<Integer>> matchScores = getMatchScores(matchId);
 
+        if (matchId == -1)
+            return null;
+
         try (Cursor c = getRandomMatchEntry(matchId)) {
             if (c.moveToFirst()) {
                 String winnerName = c.getString(c.getColumnIndex("winner"));
@@ -286,6 +289,9 @@ public class DartLogDatabaseHelper extends SQLiteOpenHelper {
 
     private GameData getX01GameData(long matchId) {
         HashMap<String, LinkedList<Integer>> matchScores = getMatchScores(matchId);
+
+        if (matchId == -1)
+            return null;
 
         try (Cursor c = getX01MatchEntry(matchId)) {
             if (c.moveToFirst()) {
@@ -500,8 +506,11 @@ public class DartLogDatabaseHelper extends SQLiteOpenHelper {
         runQueryAndLogStatistics( sqlGetX01MaxCheckoutQuerySlow);
     }
 
-    public ArrayList<Pair<String, GameData>> getHighestCheckouts(long playerId){
-        Log.d("hej", String.valueOf(playerId));
+    public GameData getHighestCheckout(long playerId){
+        int highCheckout = 0;
+        long matchId = -1;
+
+
         String sqlGetX01MaxCheckoutsQuery =
             "SELECT  x, m_id, winner_id, max(ms_score) as max_checkout  " +
                     "FROM statistics_view_" + playerId + " " +
@@ -509,9 +518,18 @@ public class DartLogDatabaseHelper extends SQLiteOpenHelper {
                     "GROUP BY winner_id " +
                     "ORDER BY winner_id; ";
 
-        runQueryAndPrintTable(sqlGetX01MaxCheckoutsQuery);
+        Cursor c = db.rawQuery(sqlGetX01MaxCheckoutsQuery, null);
+        while (c.moveToNext()) {
+            int checkout = c.getInt(c.getColumnIndex("max_checkout"));
+            if (checkout > highCheckout)
+            {
+                highCheckout = checkout;
+                matchId = c.getLong(c.getColumnIndex("m_id"));
+            }
+        }
+        c.close();
 
-        return null;
+        return getX01GameData(matchId);
     }
 
     public ArrayList<HashMap<String, Integer>> getfewestTurns(Integer playerId){

@@ -23,6 +23,7 @@ import com.fraz.dartlog.game.GameData;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Locale;
+import java.util.Map;
 
 /**
  * A fragment representing a single Profile detail screen.
@@ -214,7 +215,7 @@ public class ProfileDetailFragment extends Fragment {
             profileId = databaseHelper.getPlayerId(profileName);
             Thread.currentThread().setName(profileName + "_Highscore");
 
-            ArrayList<Pair<String, GameData>> highestCheckoutGames = databaseHelper.getHighestCheckouts(profileId);
+            highestCheckoutGame = databaseHelper.getHighestCheckout(profileId);
             //fewestTurns301Game = databaseHelper.getFewestTurns301Game(profileName);
             //fewestTurns501Game = databaseHelper.getFewestTurns501Game(profileName);
             finishedLoadingHighscores = true;
