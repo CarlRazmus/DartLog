@@ -51,7 +51,7 @@ public class MatchHistoryFragment extends Fragment {
             lastLoadedMatchId = databaseHelper.getLastLoadedMatchId();
 
             AsyncTaskRunner fetchHistoryAsyncTask = new AsyncTaskRunner();
-            fetchHistoryAsyncTask.executeOnExecutor(Util.getExecutorInstance(), null);
+            fetchHistoryAsyncTask.executeOnExecutor(Util.getExecutorInstance());
 
         }
     }

@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.os.SystemClock;
 import android.support.v4.app.Fragment;
 import android.util.Log;
+import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,6 +20,7 @@ import com.fraz.dartlog.Util;
 import com.fraz.dartlog.db.DartLogDatabaseHelper;
 import com.fraz.dartlog.game.GameData;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Locale;
 
@@ -114,9 +116,9 @@ public class ProfileDetailFragment extends Fragment {
 
         //Executor exec = Executors.newFixedThreadPool(3);
 
-        runnerSummary.executeOnExecutor(Util.getExecutorInstance(), null);
-        runnerHighScores.executeOnExecutor(Util.getExecutorInstance(), null);
-        runnerProgressBar.executeOnExecutor(Util.getExecutorInstance(), null);
+        runnerSummary.executeOnExecutor(Util.getExecutorInstance());
+        runnerHighScores.executeOnExecutor(Util.getExecutorInstance());
+        runnerProgressBar.executeOnExecutor(Util.getExecutorInstance());
     }
 
     private void removeProgressBar(int id_){
@@ -212,7 +214,7 @@ public class ProfileDetailFragment extends Fragment {
             profileId = databaseHelper.getPlayerId(profileName);
             Thread.currentThread().setName(profileName + "_Highscore");
 
-            HashMap<String, Integer> highestCheckoutGames = databaseHelper.getHighestCheckouts(profileId);
+            ArrayList<Pair<String, GameData>> highestCheckoutGames = databaseHelper.getHighestCheckouts(profileId);
             //fewestTurns301Game = databaseHelper.getFewestTurns301Game(profileName);
             //fewestTurns501Game = databaseHelper.getFewestTurns501Game(profileName);
             finishedLoadingHighscores = true;

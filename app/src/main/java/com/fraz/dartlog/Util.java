@@ -4,10 +4,13 @@ import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.os.AsyncTask;
 import android.preference.PreferenceManager;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.WindowManager;
+
+import com.fraz.dartlog.db.DartLogDatabaseHelper;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -103,5 +106,25 @@ public class Util {
         layoutParams.height = (int) (displayMetrics.heightPixels * height);
 
         dialog.getWindow().setAttributes(layoutParams);
+    }
+
+    public void updateDbStatistics(Context context) {
+        UpdateStatisticsAsyncTask asyncTask = new UpdateStatisticsAsyncTask(context);
+        asyncTask.executeOnExecutor(getExecutorInstance());
+    }
+
+
+    private class UpdateStatisticsAsyncTask extends AsyncTask<Void, Void, Void> {
+
+        private Context context;
+        public UpdateStatisticsAsyncTask(Context context){
+            this.context = context;
+        }
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+            DartLogDatabaseHelper.getInstance(context).createStatisticViews();
+            return null;
+        }
     }
 }

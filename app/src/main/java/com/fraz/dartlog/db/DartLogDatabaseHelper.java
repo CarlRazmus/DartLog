@@ -8,6 +8,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.support.annotation.NonNull;
 import android.util.Log;
+import android.util.Pair;
 import android.util.SparseArray;
 import android.util.SparseLongArray;
 
@@ -43,12 +44,12 @@ public class DartLogDatabaseHelper extends SQLiteOpenHelper {
     public static DartLogDatabaseHelper getInstance(Context context) {
         if (dbHelperInstance == null) {
            dbHelperInstance = new DartLogDatabaseHelper(context.getApplicationContext());
-           dbHelperInstance.setWriteAheadLoggingEnabled(true);
+           dbHelperInstance.setWriteAheadLoggingEnabled(false);
         }
         return dbHelperInstance;
     }
 
-    public DartLogDatabaseHelper(Context context) {
+    private DartLogDatabaseHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
         checkoutChart = new CheckoutChart(context);
         db = getWritableDatabase();
@@ -60,7 +61,6 @@ public class DartLogDatabaseHelper extends SQLiteOpenHelper {
             db.execSQL(createSql);
         }
         db.execSQL(DartLogContract.SQL_CREATE_STATISTIC_ENTRIES );
-        initializePlayers();
     }
 
     @Override
@@ -80,6 +80,14 @@ public class DartLogDatabaseHelper extends SQLiteOpenHelper {
         }
     }
 
+    public void closeDb()
+    {
+        if(db != null && db.isOpen()){
+            db.close();
+        }
+        dbHelperInstance = null;
+    }
+
     private void resetDatabase() {
         for (String deleteSql : DartLogContract.SQL_DELETE_ENTRIES) {
             db.execSQL(deleteSql);
@@ -87,7 +95,6 @@ public class DartLogDatabaseHelper extends SQLiteOpenHelper {
         for (String createSql : DartLogContract.SQL_CREATE_ENTRIES) {
             db.execSQL(createSql);
         }
-        initializePlayers();
     }
 
     /**
@@ -493,7 +500,7 @@ public class DartLogDatabaseHelper extends SQLiteOpenHelper {
         runQueryAndLogStatistics( sqlGetX01MaxCheckoutQuerySlow);
     }
 
-    public HashMap<String, Integer> getHighestCheckouts(long playerId){
+    public ArrayList<Pair<String, GameData>> getHighestCheckouts(long playerId){
         Log.d("hej", String.valueOf(playerId));
         String sqlGetX01MaxCheckoutsQuery =
             "SELECT  x, m_id, winner_id, max(ms_score) as max_checkout  " +
@@ -789,7 +796,6 @@ public class DartLogDatabaseHelper extends SQLiteOpenHelper {
         return db.rawQuery(sql, new String[]{String.valueOf(matchId)});
     }
 
-
     private Cursor getRandomMatchEntry(long matchId) {
         String sql = "SELECT r.turns, m.date, p.name as winner" +
                 "     FROM random r" +
@@ -800,20 +806,6 @@ public class DartLogDatabaseHelper extends SQLiteOpenHelper {
                 "     WHERE r.match_id = ?;";
 
         return db.rawQuery(sql, new String[]{String.valueOf(matchId)});
-    }
-
-    private void initializePlayers() {
-        ArrayList<String> playersNames = new ArrayList<>();
-
-        playersNames.add("Razmus");
-        playersNames.add("Filip");
-        playersNames.add("Fredrik");
-        playersNames.add("Stefan");
-        playersNames.add("Maria");
-
-        for (String name : playersNames) {
-            addPlayer(name, db);
-        }
     }
 
     public boolean playerExist(String playerName) {

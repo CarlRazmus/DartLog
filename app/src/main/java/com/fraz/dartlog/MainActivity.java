@@ -19,12 +19,17 @@ public class MainActivity extends MenuBackground implements View.OnClickListener
 
     private DartLogDatabaseHelper dbHelper;
 
+    public MainActivity() {
+        super(R.layout.activity_main);
+        setParentActivity(this);
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState, this, R.layout.activity_main);
+        super.onCreate(savedInstanceState);
 
-        UpdateStatisticsAsyncTask asyncTask = new UpdateStatisticsAsyncTask(this);
-        asyncTask.executeOnExecutor(Util.getExecutorInstance());
+        Util util = new Util();
+        util.updateDbStatistics(this);
 
         Button playButton = (Button) findViewById(R.id.play_x01_button);
         Button profilesButton = (Button) findViewById(R.id.profiles_button);
@@ -82,19 +87,5 @@ public class MainActivity extends MenuBackground implements View.OnClickListener
     private void startProfileActivity() {
         Intent intent = new Intent(this, ProfileListActivity.class);
         startActivity(intent);
-    }
-
-    private class UpdateStatisticsAsyncTask extends AsyncTask<Void, Void, Void>{
-
-        private Context context;
-        public UpdateStatisticsAsyncTask(Context context){
-            this.context = context;
-        }
-
-        @Override
-        protected Void doInBackground(Void... voids) {
-            DartLogDatabaseHelper.getInstance(context).createStatisticViews();
-            return null;
-        }
     }
 }
