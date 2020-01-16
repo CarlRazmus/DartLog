@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.os.SystemClock;
 import android.support.v4.app.Fragment;
 import android.util.Log;
-import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,10 +19,8 @@ import com.fraz.dartlog.Util;
 import com.fraz.dartlog.db.DartLogDatabaseHelper;
 import com.fraz.dartlog.game.GameData;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Locale;
-import java.util.Map;
 
 /**
  * A fragment representing a single Profile detail screen.
@@ -41,7 +38,7 @@ public class ProfileDetailFragment extends Fragment {
     private String profileName;
     private long profileId;
     private View rootView;
-    private GameData highestCheckoutGame;
+    private GameData highestX01CheckoutGame;
     private GameData fewestTurns301Game;
     private GameData fewestTurns501Game;
     private int gamesWon;
@@ -160,10 +157,10 @@ public class ProfileDetailFragment extends Fragment {
 
     private void addHighestOutGame( ) {
         LinearLayout linearLayout= rootView.findViewById(R.id.profile_detail_highest_out_container);
-        if (highestCheckoutGame != null){
+        if (highestX01CheckoutGame != null){
             MatchItemView matchItemView = new MatchItemView(getContext());
             matchItemView.setStatToShow(MatchItemView.Stat.CHECKOUT);
-            addGameView(matchItemView, highestCheckoutGame, linearLayout);
+            addGameView(matchItemView, highestX01CheckoutGame, linearLayout);
         }
     }
 
@@ -215,9 +212,10 @@ public class ProfileDetailFragment extends Fragment {
             profileId = databaseHelper.getPlayerId(profileName);
             Thread.currentThread().setName(profileName + "_Highscore");
 
-            highestCheckoutGame = databaseHelper.getHighestCheckout(profileId);
-            //fewestTurns301Game = databaseHelper.getFewestTurns301Game(profileName);
-            //fewestTurns501Game = databaseHelper.getFewestTurns501Game(profileName);
+            highestX01CheckoutGame = databaseHelper.getHighestCheckout(profileId);
+            HashMap<String, GameData> fewestTurnsX01Games = databaseHelper.getfewestTurnsX01Games(profileId);
+            fewestTurns301Game = fewestTurnsX01Games.get("3");
+            fewestTurns501Game = fewestTurnsX01Games.get("5");
             finishedLoadingHighscores = true;
             return null;
         }

@@ -532,14 +532,26 @@ public class DartLogDatabaseHelper extends SQLiteOpenHelper {
         return getX01GameData(matchId);
     }
 
-    public ArrayList<HashMap<String, Integer>> getfewestTurns(Integer playerId){
+    public HashMap<String, GameData> getfewestTurnsX01Games(long playerId){
+        HashMap<String, GameData> fewestTurnsGames = new HashMap<>();
+        ArrayList<Pair<String, Integer>> matchIds = new ArrayList<>();
         String sqlGetX01FewestTurnsQuery =
                 "SELECT  x, m_id, winner_id, min(ms_count) as fewest_turns  " +
-                        "FROM statistics_view_ " + playerId + " " +
+                        "FROM statistics_view_" + playerId + " " +
                         "WHERE winner_id ==  " + playerId + " " +
                         "GROUP BY x, winner_id " +
                         "ORDER BY winner_id; ";
-        return null;
+
+        Cursor c = db.rawQuery(sqlGetX01FewestTurnsQuery, null);
+        while (c.moveToNext()) {
+
+            matchIds.add(new Pair<>(c.getString(c.getColumnIndex("x")),
+                                    (int)c.getLong(c.getColumnIndex("m_id"))));
+        }
+        c.close();
+        for (Pair<String, Integer> pair : matchIds)
+            fewestTurnsGames.put(pair.first, getX01GameData(pair.second));
+        return fewestTurnsGames;
     }
 
     private void runQueryAndPrintTable(String sqlQuery){
