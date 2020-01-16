@@ -78,7 +78,7 @@ public class Util {
 
     public static void removePlayer(String name, Context context){
         ArrayList<String> playerNames = loadProfileNames(context);
-        Log.d("RemovePlayers", "found players : " + playerNames.toString());
+
         if(playerNames.contains(name)){
             playerNames.remove(name);
             saveProfileNames(playerNames, context);

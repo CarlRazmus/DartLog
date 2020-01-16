@@ -568,7 +568,7 @@ public class DartLogDatabaseHelper extends SQLiteOpenHelper {
             baseFormatString += "%" + maxHeaderLen + "s  |";
         }
 
-        Log.d("hej", String.format(baseFormatString, headers.toArray()));
+        Log.d("DartLogDebug", String.format(baseFormatString, headers.toArray()));
         while (c.moveToNext()) {
             ArrayList<String> values = new ArrayList<>();
             for (int i=0; i< c.getColumnCount(); i++){
@@ -577,7 +577,7 @@ public class DartLogDatabaseHelper extends SQLiteOpenHelper {
                 else
                     values.add(c.getString(i));
             }
-            Log.d("hej", String.format(baseFormatString, values.toArray()));
+            Log.d("DartLogDebug", String.format(baseFormatString, values.toArray()));
         }
         c.close();
     }
@@ -589,7 +589,7 @@ public class DartLogDatabaseHelper extends SQLiteOpenHelper {
         while (c.moveToNext()) {   }
 
         long executionTime = System.currentTimeMillis() - startTime;
-        Log.d("hej", "exekveringstid: " + executionTime + "ms");
+        Log.d("DartLogDebug", "exekveringstid: " + executionTime + "ms");
         c.close();
     }
 
@@ -698,6 +698,7 @@ public class DartLogDatabaseHelper extends SQLiteOpenHelper {
         }
         return matchIds;
     }
+
     /**
      * Get the ids of the specified matches.
      *

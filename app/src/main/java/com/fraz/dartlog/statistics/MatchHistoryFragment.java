@@ -52,7 +52,6 @@ public class MatchHistoryFragment extends Fragment {
 
             AsyncTaskRunner fetchHistoryAsyncTask = new AsyncTaskRunner();
             fetchHistoryAsyncTask.executeOnExecutor(Util.getExecutorInstance());
-
         }
     }
 

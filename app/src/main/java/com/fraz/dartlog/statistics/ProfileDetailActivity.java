@@ -35,7 +35,7 @@ public class ProfileDetailActivity extends MenuBackground {
         super.onCreate(savedInstanceState);
 
         playerName = getIntent().getStringExtra(ProfileDetailFragment.ARG_ITEM_NAME);
-        Log.d("playerName", playerName);
+
         ViewPager viewPager = findViewById(R.id.profile_detail_view_pager);
         viewPager.setAdapter(new ProfileDetailFragmentPagerAdapter(getSupportFragmentManager(),
                                                                    playerName));

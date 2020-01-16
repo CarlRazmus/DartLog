@@ -100,7 +100,6 @@ public class ProfileDetailFragment extends Fragment {
 
     @Override
     public void onDestroy(){
-        Log.d("hej", "destroying activity!");
         super.onDestroy();
     }
 
@@ -111,8 +110,6 @@ public class ProfileDetailFragment extends Fragment {
         runnerProgressBar = new AsyncTaskProgressBarHandler();
 
         startTime = SystemClock.uptimeMillis();
-
-        //Executor exec = Executors.newFixedThreadPool(3);
 
         runnerSummary.executeOnExecutor(Util.getExecutorInstance());
         runnerHighScores.executeOnExecutor(Util.getExecutorInstance());
