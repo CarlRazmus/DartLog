@@ -1,7 +1,5 @@
 package com.fraz.dartlog;
 
-import android.content.Context;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -14,9 +12,9 @@ public class CheckoutChart implements Serializable {
     private static HashMap<Integer, String> doubleCheckouts = new HashMap<>();
     private static HashMap<Integer, String> singleCheckouts = new HashMap<>();
 
-    public CheckoutChart(Context context) {
+    public CheckoutChart() {
         if (doubleCheckouts.isEmpty())
-            initCheckoutMap(context);
+            initCheckoutMap();
     }
 
     public String getSingleOutCheckoutText(int score) {
@@ -27,11 +25,11 @@ public class CheckoutChart implements Serializable {
         return getCheckoutText(score, doubleCheckouts);
     }
 
-    public static void initCheckoutMap(Context context) {
+    public static void initCheckoutMap() {
         initCheckoutMap(singleCheckouts,
-                context.getResources().openRawResource(R.raw.single_checkout_chart));
+                MyApplication.getInstance().getResources().openRawResource(R.raw.single_checkout_chart));
         initCheckoutMap(doubleCheckouts,
-                context.getResources().openRawResource(R.raw.double_checkout_chart));
+                MyApplication.getInstance().getResources().openRawResource(R.raw.double_checkout_chart));
     }
 
     private String getCheckoutText(int score, HashMap<Integer, String> checkouts) {

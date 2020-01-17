@@ -1,27 +1,40 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
+<layout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:gravity="center">
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <TextView
-        android:id="@+id/game_header_round_label"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/turn"
-        android:textSize="20sp"
-        android:textColor="@color/main_white"/>
+    <data>
 
-    <TextView
-        android:id="@+id/game_header_round"
-        android:layout_width="wrap_content"
+        <import type="android.arch.lifecycle.MutableLiveData"/>
+        <import type="com.fraz.dartlog.game.x01.X01"/>
+       <variable
+            name="game"
+            type="MutableLiveData&lt;X01>"/>
+    </data>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_toEndOf="@id/game_header_round_label"
-        android:layout_alignBaseline="@id/game_header_round_label"
-        android:layout_marginStart="8dp"
-        android:textSize="20sp"
-        android:textColor="@color/main_white"
-        tools:text="1"/>
-</RelativeLayout>
+        android:gravity="center">
+
+        <TextView
+            android:id="@+id/game_header_round_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/turn"
+            android:textSize="20sp"
+            android:textColor="@color/main_white"/>
+
+        <TextView
+            android:id="@+id/game_header_round"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toEndOf="@id/game_header_round_label"
+            android:layout_alignBaseline="@id/game_header_round_label"
+            android:layout_marginStart="8dp"
+            android:textSize="20sp"
+            android:textColor="@color/main_white"
+            android:text="@{Integer.toString(game.getTurn())}"
+            tools:text="1"/>
+    </RelativeLayout>
+</layout>

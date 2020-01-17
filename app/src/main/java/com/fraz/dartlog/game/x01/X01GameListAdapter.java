@@ -1,45 +1,57 @@
 package com.fraz.dartlog.game.x01;
 
-import android.support.v7.widget.RecyclerView;
+import android.arch.lifecycle.LifecycleOwner;
+import android.support.annotation.NonNull;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.fraz.dartlog.R;
+import com.fraz.dartlog.databinding.GamePlayerListItemBinding;
 import com.fraz.dartlog.game.GameListAdapter;
+import com.fraz.dartlog.util.BindingRecyclerViewHolder;
+import com.fraz.dartlog.viewmodel.X01GameViewModel;
 
-public class X01GameListAdapter extends GameListAdapter<X01GameListAdapter.X01ViewHolder> {
+public class X01GameListAdapter extends GameListAdapter {
 
 
-    public X01GameListAdapter(X01 game) {
-        super(game);
+    public X01GameListAdapter(X01GameViewModel viewModel, LifecycleOwner lifecycleOwner) {
+        super(viewModel, lifecycleOwner);
     }
 
     @Override
-    public void onBindViewHolder(X01ViewHolder holder, int position) {
+    public GamePlayerListItemBinding onCreateBinding(ViewGroup parent) {
+        LayoutInflater layoutInflater = LayoutInflater.from(parent.getContext());
+        return GamePlayerListItemBinding.inflate(layoutInflater, parent, false);
+    }
+
+    @NonNull
+    @Override
+    public BindingRecyclerViewHolder<GamePlayerListItemBinding> onCreateViewHolder(
+            ViewGroup parent, int viewType){
+        GamePlayerListItemBinding binding = onCreateBinding(parent);
+        setLifecycleOwner(binding);
+        return new X01ViewHolder(binding);
+    }
+
+    @Override
+    public void onBindViewHolder(BindingRecyclerViewHolder<GamePlayerListItemBinding> holder, int position) {
         super.onBindViewHolder(holder, position);
-        final X01PlayerData player = (X01PlayerData) this.game.getPlayer(position);
-        updateCheckoutView(player, holder);
+        final X01PlayerData player = (X01PlayerData) this.viewModel.getGame().getPlayer(position);
+        updateCheckoutView(player, (X01ViewHolder) holder);
     }
 
-    @Override
-    public X01ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View listItem = LayoutInflater.from(parent.getContext()).inflate(
-                R.layout.game_player_list_item, parent, false);
-        return new X01ViewHolder(listItem);
-    }
-
-    class X01ViewHolder extends GameListAdapter.ViewHolder {
+    class X01ViewHolder extends BindingRecyclerViewHolder<GamePlayerListItemBinding> {
         TextView checkout;
         TextView checkoutLabel;
         ViewGroup checkout_view;
 
-        X01ViewHolder(View itemView) {
-            super(itemView);
-            checkout = itemView.findViewById(R.id.checkout);
-            checkoutLabel = itemView.findViewById(R.id.checkout_label);
-            checkout_view = itemView.findViewById(R.id.checkout_view);
+        X01ViewHolder(GamePlayerListItemBinding binding) {
+            super(binding);
+            checkout = binding.getRoot().findViewById(R.id.checkout);
+            checkoutLabel = binding.getRoot().findViewById(R.id.checkout_label);
+            checkout_view = binding.getRoot().findViewById(R.id.checkout_view);
         }
     }
 

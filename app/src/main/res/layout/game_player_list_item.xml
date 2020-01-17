@@ -1,102 +1,126 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v7.widget.CardView
-    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+<layout xmlns:card_view="http://schemas.android.com/apk/res-auto"
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    card_view:cardBackgroundColor="@color/main_white"
-    card_view:cardElevation="@dimen/cardview_default_elevation"
-    card_view:cardCornerRadius="@dimen/cardview_default_radius"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:id="@+id/game_player_list_item"
-    android:layout_marginBottom="1dp"
-    android:animateLayoutChanges="true">
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <RelativeLayout
-        android:id="@+id/game_player_list_item_background"
+    <data>
+        <import type="com.fraz.dartlog.viewmodel.PlayerViewModel"/>
+        <import type="com.fraz.dartlog.viewmodel.GameViewModel"/>
+        <import type="android.view.View"/>
+        <import type="android.graphics.Typeface"/>
+        <import type="android.databinding.adapters.Converters"/>
+        <variable
+            name="viewModel"
+            type="PlayerViewModel" />
+    </data>
+
+    <android.support.v7.widget.CardView
+
+        card_view:cardBackgroundColor="@color/main_white"
+        card_view:cardElevation="@dimen/cardview_default_elevation"
+        card_view:cardCornerRadius="@dimen/cardview_default_radius"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="8dp"
-        android:background="@drawable/list_item"
-        android:orientation="vertical">
+        android:id="@+id/game_player_list_item"
+        android:layout_marginBottom="1dp"
+        android:animateLayoutChanges="true"
+        android:alpha="@{viewModel.isNextToThrow() ? 1.0f : .85f}"
+        android:elevation="@{viewModel.isNextToThrow() ? 8 : 4}"
+        >
 
-        <View
-            android:layout_width="2dp"
-            android:layout_height="0dp"
-            android:id="@+id/game_player_list_item_current_player_indicator"
-            android:background="@color/primary"
-            android:layout_marginEnd="8dp"
-            android:layout_alignTop="@+id/game_player_list_item_name"
-            android:layout_alignBottom="@+id/game_player_list_item_score" />
-
-        <TextView
-            android:id="@id/game_player_list_item_name"
-            android:layout_width="wrap_content"
+        <RelativeLayout
+            android:id="@+id/game_player_list_item_background"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_toEndOf="@id/game_player_list_item_current_player_indicator"
-            android:text="@string/player_1"
-            android:textSize="15sp"
-            android:textColor="@color/background"/>
+            android:padding="8dp"
+            android:background="@{viewModel.isWinner() ? Converters.convertColorToDrawable(@color/accent) : @drawable/list_item}"
+            android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/total_score_history"
-            android:layout_height="wrap_content"
-            android:layout_width="0dp"
-            android:layout_toStartOf="@id/game_player_list_item_score"
-            android:layout_alignParentStart="true"
-            android:layout_alignBaseline="@id/game_player_list_item_score"
-            android:textColor="@color/main_grey"
-            android:layout_marginEnd="8dp"
-            android:layout_marginStart="8dp"
-            android:gravity="end"
-            android:singleLine="true"
-            android:textAlignment="gravity"
-            android:textSize="15sp"
-            tools:text="250 180 112 73 32 32"
-            android:requiresFadingEdge="horizontal"
-            android:fadingEdgeLength="40dp"
-            android:ellipsize="none"
-            android:typeface="monospace" />
-
-        <TextView
-            android:id="@id/game_player_list_item_score"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            android:layout_below="@id/game_player_list_item_name"
-            tools:text="32"
-            android:textSize="20sp"
-            android:textColor="@color/background"/>
-
-        <LinearLayout
-            android:layout_width="200dp"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_alignParentEnd="true"
-            android:layout_above="@id/game_player_list_item_score"
-            android:alpha=".8"
-            android:id="@+id/checkout_view">
+            <View
+                android:layout_width="2dp"
+                android:layout_height="0dp"
+                android:id="@+id/game_player_list_item_current_player_indicator"
+                android:background="@color/primary"
+                android:layout_marginEnd="8dp"
+                android:layout_alignTop="@+id/game_player_list_item_name"
+                android:layout_alignBottom="@+id/game_player_list_item_score"
+                android:visibility="@{viewModel.isNextToThrow() ? View.VISIBLE : View.INVISIBLE}"/>
 
             <TextView
-                android:id="@+id/checkout_label"
+                android:id="@id/game_player_list_item_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                tools:text="@string/double_out"
-                android:layout_marginEnd="5dp"
+                android:layout_toEndOf="@id/game_player_list_item_current_player_indicator"
+                android:textSize="15sp"
                 android:textColor="@color/background"
-                android:textSize="12sp"
-                android:textStyle="bold"/>
+                android:text="@{viewModel.playerName}"
+                tools:text="@string/player_1"
+                android:alpha="@{viewModel.isNextToThrow() ? 1f : 0.75f}"
+                card_view:isBold="@{viewModel.isNextToThrow()}"/>
 
             <TextView
-                android:id="@+id/checkout"
+                android:id="@+id/total_score_history"
+                android:layout_height="wrap_content"
+                android:layout_width="0dp"
+                android:layout_toStartOf="@id/game_player_list_item_score"
+                android:layout_alignParentStart="true"
+                android:layout_alignBaseline="@id/game_player_list_item_score"
+                android:textColor="@color/main_grey"
+                android:layout_marginEnd="8dp"
+                android:layout_marginStart="8dp"
+                android:gravity="end"
+                android:singleLine="true"
+                android:textAlignment="gravity"
+                android:textSize="15sp"
+                android:text="@{viewModel.scoreHistory}"
+                tools:text="250 180 112 73 32 32"
+                android:requiresFadingEdge="horizontal"
+                android:fadingEdgeLength="40dp"
+                android:ellipsize="none"
+                android:typeface="monospace"
+                />
+
+            <TextView
+                android:id="@id/game_player_list_item_score"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="@color/background"
-                android:textSize="12sp"
-                tools:text="D9"
-                android:typeface="monospace" />
+                android:layout_alignParentEnd="true"
+                android:layout_below="@id/game_player_list_item_name"
+                android:text="@{viewModel.currentScore}"
+                tools:text="32"
+                android:textSize="20sp"
+                android:textColor="@color/background" />
 
-        </LinearLayout>
-    </RelativeLayout>
+            <LinearLayout
+                android:layout_width="200dp"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_alignParentEnd="true"
+                android:layout_above="@id/game_player_list_item_score"
+                android:alpha=".8"
+                android:id="@+id/checkout_view">
 
-</android.support.v7.widget.CardView>
+                <TextView
+                    android:id="@+id/checkout_label"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    tools:text="@string/double_out"
+                    android:layout_marginEnd="5dp"
+                    android:textColor="@color/background"
+                    android:textSize="12sp"
+                    android:textStyle="bold"/>
+
+                <TextView
+                    android:id="@+id/checkout"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/background"
+                    android:textSize="12sp"
+                    tools:text="D9"
+                    android:typeface="monospace" />
+
+            </LinearLayout>
+        </RelativeLayout>
+
+    </android.support.v7.widget.CardView>
+</layout>

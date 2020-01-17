@@ -1,81 +1,95 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
+<layout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="vertical">
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <LinearLayout
-        android:id="@+id/field_group_layout"
-        android:layout_width="wrap_content"
+    <data>
+        <import type="android.arch.lifecycle.MutableLiveData"/>
+        <import type="com.fraz.dartlog.game.random.Random"/>
+        <variable
+            name="game"
+            type="MutableLiveData&lt;Random>"/>
+    </data>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true">
+        android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/game_header_field_label"
+        <LinearLayout
+            android:id="@+id/field_group_layout"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/field_to_hit"
+            android:layout_centerHorizontal="true">
+
+            <TextView
+                android:id="@+id/game_header_field_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/field_to_hit"
+                android:textSize="15sp"
+                android:textColor="@color/main_white"/>
+
+            <TextView
+                android:id="@+id/current_field_textview"
+                android:layout_width="30sp"
+                android:layout_height="wrap_content"
+                android:textStyle="bold"
+                android:layout_marginStart="8dp"
+                android:textSize="25sp"
+                android:textColor="@color/main_white"
+                android:text='@{game.isGameOver() ? "" : Integer.toString(game.getCurrentField())}'
+                tools:text="17"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/turn_layout_group"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_alignBottom="@id/field_group_layout">
+
+        <TextView
+            android:id="@+id/game_header_round_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/turn"
             android:textSize="15sp"
             android:textColor="@color/main_white"/>
 
         <TextView
-            android:id="@+id/current_field_textview"
-            android:layout_width="30sp"
+            android:id="@+id/game_header_turn"
+            android:layout_width="60sp"
             android:layout_height="wrap_content"
-            android:textStyle="bold"
             android:layout_marginStart="8dp"
-            android:textSize="25sp"
+            android:textSize="15sp"
             android:textColor="@color/main_white"
-            tools:text="17"/>
-    </LinearLayout>
+            android:text='@{game.isGameOver() ? "" : Integer.toString(game.getTurn())}'
+            tools:text="1" />
+        </LinearLayout>
 
-    <LinearLayout
-        android:id="@+id/turn_layout_group"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_alignBottom="@id/field_group_layout">
+        <TextView
+            android:id="@+id/next_field_textview"
+            android:layout_width="20sp"
+            android:layout_height="wrap_content"
+            android:textSize="15sp"
+            android:layout_alignParentEnd="true"
+            android:layout_alignBottom="@id/turn_layout_group"
+            android:textColor="@color/main_white"
+            android:alpha="0.7"
+            android:text='@{game.getNextField() == 0 ? "" : Integer.toString(game.getNextField())}'
+            tools:text="20"/>
 
-    <TextView
-        android:id="@+id/game_header_round_label"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/turn"
-        android:textSize="15sp"
-        android:textColor="@color/main_white"/>
-
-    <TextView
-        android:id="@+id/game_header_turn"
-        android:layout_width="60sp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:textSize="15sp"
-        android:textColor="@color/main_white"
-        tools:text="1"/>
-    </LinearLayout>
-
-    <TextView
-        android:id="@+id/next_field_textview"
-        android:layout_width="20sp"
-        android:layout_height="wrap_content"
-        android:textSize="15sp"
-        android:layout_alignParentEnd="true"
-        android:layout_alignBottom="@id/turn_layout_group"
-        android:textColor="@color/main_white"
-        android:alpha="0.7"
-        tools:text="20"/>
-
-    <TextView
-        android:id="@+id/next_field_label"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textSize="15sp"
-        android:layout_toStartOf="@id/next_field_textview"
-        android:layout_marginEnd="8dp"
-        android:layout_alignBottom="@id/turn_layout_group"
-        android:textColor="@color/main_white"
-        android:alpha="0.7"
-        android:text="@string/next"/>
-</RelativeLayout>
+        <TextView
+            android:id="@+id/next_field_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="15sp"
+            android:layout_toStartOf="@id/next_field_textview"
+            android:layout_marginEnd="8dp"
+            android:layout_alignBottom="@id/turn_layout_group"
+            android:textColor="@color/main_white"
+            android:alpha="0.7"
+            android:text="@string/next"/>
+    </RelativeLayout>
+</layout>

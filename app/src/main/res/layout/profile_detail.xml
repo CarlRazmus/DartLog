@@ -1,84 +1,110 @@
-<android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    style="?android:attr/textAppearanceLarge"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:padding="8dp"
-    android:clipToPadding="false"
-    tools:context="com.fraz.dartlog.statistics.ProfileDetailFragment">
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <LinearLayout
+    <data>
+        <variable
+            name="viewModel"
+            type="com.fraz.dartlog.viewmodel.ProfileViewModel"/>
+    </data>
+
+    <android.support.v4.widget.NestedScrollView
+        style="?android:attr/textAppearanceLarge"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/profile_detail_linear_layout"
-        android:orientation="vertical">
+        android:padding="8dp"
+        android:clipToPadding="false"
+        tools:context="com.fraz.dartlog.statistics.ProfileDetailFragment">
 
-
-        <RelativeLayout
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/main_white"
-            android:layout_marginTop="1dp"
-            android:padding="8dp"
-            android:gravity="center">
+            android:layout_height="match_parent"
+            android:id="@+id/profile_detail_linear_layout"
+            android:orientation="vertical">
 
-            <TextView
-                android:layout_width="wrap_content"
+
+            <RelativeLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/profile_detail_games_played_label"
-                android:textSize="12sp"
-                android:textColor="@color/main_grey"
-                android:layout_below="@+id/profile_detail_games_played"
-                android:text="@string/textView_games_played"/>
+                android:background="@color/main_white"
+                android:layout_marginTop="1dp"
+                android:padding="8dp"
+                android:gravity="center">
 
-            <TextView
-                android:layout_width="0dp"
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/profile_detail_games_played_label"
+                    android:textSize="12sp"
+                    android:textColor="@color/main_grey"
+                    android:layout_below="@+id/profile_detail_games_played"
+                    android:text="@string/textView_games_played"/>
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:id="@id/profile_detail_games_played"
+                    android:textSize="20sp"
+                    android:textColor="@android:color/black"
+                    android:gravity="center"
+                    android:layout_alignEnd="@id/profile_detail_games_played_label"
+                    android:layout_alignStart="@id/profile_detail_games_played_label"
+                    android:text="@{Integer.toString(viewModel.getProfile().getGamesPlayed())}"
+                    tools:text="30"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/profile_detail_games_won_label"
+                    android:layout_marginStart="60dp"
+                    android:layout_toEndOf="@id/profile_detail_games_played_label"
+                    android:layout_below="@+id/profile_detail_games_won"
+                    android:textColor="@color/main_grey"
+                    android:textSize="12sp"
+                    android:text="@string/games_won"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@id/profile_detail_games_won"
+                    android:textSize="20sp"
+                    android:textColor="@android:color/black"
+                    android:gravity="center"
+                    android:layout_alignEnd="@id/profile_detail_games_won_label"
+                    android:layout_alignStart="@id/profile_detail_games_won_label"
+                    android:text="@{Integer.toString(viewModel.getProfile().getGamesWon())}"
+                    tools:text="12"/>
+
+            </RelativeLayout>
+
+            <include layout="@layout/match_statistics_header"
                 android:layout_height="wrap_content"
-                android:id="@id/profile_detail_games_played"
-                android:textSize="20sp"
-                android:textColor="@android:color/black"
-                android:gravity="center"
-                android:layout_alignEnd="@id/profile_detail_games_played_label"
-                android:layout_alignStart="@id/profile_detail_games_played_label"
-                tools:text="30"/>
+                android:layout_width="match_parent"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="1dp"
+                android:id="@+id/profile_detail_fewest_turns_label"
+                app:header="@{@string/fewest_turns}"/>
 
-            <TextView
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:id="@+id/fewest_turns_linear_layout"
+                android:orientation="vertical"/>
+
+            <include layout="@layout/match_statistics_header"
                 android:layout_height="wrap_content"
-                android:id="@+id/profile_detail_games_won_label"
-                android:layout_marginStart="60dp"
-                android:layout_toEndOf="@id/profile_detail_games_played_label"
-                android:layout_below="@+id/profile_detail_games_won"
-                android:textColor="@color/main_grey"
-                android:textSize="12sp"
-                android:text="@string/games_won"/>
+                android:layout_width="match_parent"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="1dp"
+                app:header="@{@string/highest_out}"
+                android:id="@+id/profile_detail_highest_out_label"/>
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@id/profile_detail_games_won"
-                android:textSize="20sp"
-                android:textColor="@android:color/black"
-                android:gravity="center"
-                android:layout_alignEnd="@id/profile_detail_games_won_label"
-                android:layout_alignStart="@id/profile_detail_games_won_label"
-                tools:text="12"/>
-
-        </RelativeLayout>
-
-        <include layout="@layout/match_statistics_header"
-            android:layout_height="wrap_content"
-            android:layout_width="match_parent"
-            android:layout_marginTop="8dp"
-            android:layout_marginBottom="1dp"
-            android:id="@+id/profile_detail_fewest_turns_label"/>
-
-
-        <include layout="@layout/match_statistics_header"
-            android:layout_height="wrap_content"
-            android:layout_width="match_parent"
-            android:layout_marginTop="8dp"
-            android:layout_marginBottom="1dp"
-            android:id="@+id/profile_detail_highest_out_label"/>
-    </LinearLayout>
-</android.support.v4.widget.NestedScrollView>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:id="@+id/highest_out_linear_layout"
+                android:orientation="vertical"/>
+        </LinearLayout>
+    </android.support.v4.widget.NestedScrollView>
+</layout>

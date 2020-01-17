@@ -2,6 +2,7 @@ package com.fraz.dartlog;
 
 import android.app.Activity;
 import android.app.Dialog;
+import android.arch.lifecycle.ViewModelProviders;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -10,17 +11,15 @@ import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
-import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.Toast;
 
-import com.fraz.dartlog.db.DartLogDatabaseHelper;
 import com.fraz.dartlog.game.setup.SetupActivity;
 import com.fraz.dartlog.statistics.ProfileListActivity;
+import com.fraz.dartlog.view.AddPlayerDialogFragment;
+import com.fraz.dartlog.viewmodel.ProfileListViewModel;
 import com.mikepenz.materialdrawer.AccountHeader;
 import com.mikepenz.materialdrawer.AccountHeaderBuilder;
 import com.mikepenz.materialdrawer.Drawer;
@@ -49,6 +48,7 @@ public class MenuBackground extends AppCompatActivity {
     public void setParentActivity(Activity parentActivity){
         this.parentActivity = parentActivity;
     }
+
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
         setContentView(parentView);
@@ -194,39 +194,5 @@ public class MenuBackground extends AppCompatActivity {
     private void openFriendsActivity() {
         Intent intent = new Intent(this, ProfileListActivity.class);
         openActivity(ProfileListActivity.class.getName(), intent);
-    }
-
-    public static class AddPlayerDialogFragment extends DialogFragment {
-        @NonNull
-        @Override
-        public Dialog onCreateDialog(Bundle savedInstanceState) {
-            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-
-            builder.setTitle("Create  profile").setView(R.layout.dialog_add_player)
-                .setNegativeButton(R.string.cancel, null)
-                .setPositiveButton("Add", new DialogInterface.OnClickListener() {
-
-                    public void onClick(DialogInterface dialog, int id) {
-                        EditText profileNameEditText =
-                                getDialog().findViewById(R.id.add_player_edit_text);
-                        String name = profileNameEditText.getText().toString();
-                        DartLogDatabaseHelper dbHelper = DartLogDatabaseHelper.getInstance(getContext());
-                        if(!dbHelper.playerExist(name)) {
-                            if (dbHelper.addPlayer(name) != -1) {
-                                Util.addPlayer(name, getContext());
-
-                                if(getActivity().getClass().getName().equals(ProfileListActivity.class.getName()))
-                                    ((ProfileListActivity)getActivity()).updateProfileList();
-                            }
-                        }
-                        else {
-                            if(!Util.loadProfileNames(getContext()).contains(name))
-                                Util.addPlayer(name, getContext());
-                            Util.showToast("A player with that name already exists", getContext());
-                        }
-                }
-            });
-            return builder.create();
-        }
     }
 }

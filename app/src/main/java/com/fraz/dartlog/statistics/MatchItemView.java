@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 
+import com.fraz.dartlog.MyApplication;
 import com.fraz.dartlog.R;
 import com.fraz.dartlog.game.GameData;
 
@@ -34,7 +35,6 @@ public class MatchItemView extends FrameLayout {
 
     private GameData game;
     private String playerName;
-    private Context context;
     private TextView stat_1_label;
     private TextView stat_1;
     private TextView stat_2;
@@ -60,7 +60,6 @@ public class MatchItemView extends FrameLayout {
     }
 
     private void initView(Context context) {
-        this.context = context;
         LayoutInflater.from(context).inflate(R.layout.match_history_item, this);
         gameType = findViewById(R.id.match_history_game_type);
         players = findViewById(R.id.match_history_players);
@@ -86,7 +85,7 @@ public class MatchItemView extends FrameLayout {
         int numberOfPlayers = game.getNumberOfPlayers();
         String text;
         if (numberOfPlayers == 1)
-            text = String.format(Locale.getDefault(), "%d playerName", numberOfPlayers);
+            text = String.format(Locale.getDefault(), "%d player", numberOfPlayers);
         else
             text = String.format(Locale.getDefault(), "%d players", numberOfPlayers);
         players.setText(text);
@@ -95,11 +94,11 @@ public class MatchItemView extends FrameLayout {
     private void initSecondStatView() {
         if (game.getPlayer(playerName).equals(game.getWinner())) {
             stat_2.setText(R.string.win);
-            stat_2.setTextColor(context.getResources().getColor(R.color.green_win));
+            stat_2.setTextColor(MyApplication.getInstance().getResources().getColor(R.color.green_win));
         }
         else {
             stat_2.setText(R.string.loss);
-            stat_2.setTextColor(context.getResources().getColor(R.color.red_loss));
+            stat_2.setTextColor(MyApplication.getInstance().getResources().getColor(R.color.red_loss));
         }
     }
 

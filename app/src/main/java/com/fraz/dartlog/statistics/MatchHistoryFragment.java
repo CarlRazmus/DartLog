@@ -4,7 +4,6 @@ import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.view.ViewPager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -45,7 +44,7 @@ public class MatchHistoryFragment extends Fragment {
 
         if (getArguments().containsKey(ARG_ITEM_NAME)) {
             profileName = getArguments().getString(ARG_ITEM_NAME);
-            databaseHelper = DartLogDatabaseHelper.getInstance(getActivity());
+            databaseHelper = DartLogDatabaseHelper.getInstance();
             playerGameData = databaseHelper.getPlayerMatchData(profileName, lastLoadedMatchId, AMOUNT_ITEMS_TO_LOAD);
             lastLoadedMatchId = databaseHelper.getLastLoadedMatchId();
 

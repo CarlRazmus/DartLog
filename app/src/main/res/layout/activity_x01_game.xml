@@ -1,56 +1,81 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".game.x01.X01GameActivity"
-    android:orientation="vertical"
-    android:background="@drawable/background"
-    android:keepScreenOn="true">
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <android.support.v7.widget.Toolbar
-        android:id="@+id/game_toolbar"
+    <data>
+        <import type="android.view.View"/>
+
+        <import type="com.fraz.dartlog.viewmodel.GameViewModel"/>
+        <import type="com.fraz.dartlog.viewmodel.X01GameViewModel"/>
+        <variable
+            name="viewModel"
+            type="X01GameViewModel"/>
+
+
+        <import type="android.arch.lifecycle.MutableLiveData"/>
+        <import type="com.fraz.dartlog.game.x01.X01"/>
+        <variable
+            name="game"
+            type="MutableLiveData&lt;X01>"/>
+    </data>
+
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        android:theme="@style/AppBarOverlayStyle"
-        android:elevation="4dp"/>
+        android:layout_height="match_parent"
+        tools:context=".game.x01.X01GameActivity"
+        android:orientation="vertical"
+        android:background="@drawable/background"
+        android:keepScreenOn="true">
 
-    <include layout="@layout/game_header"
-        android:layout_height="wrap_content"
-        android:layout_width="match_parent"
-        android:layout_marginTop="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginEnd="8dp"/>
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/game_toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:theme="@style/AppBarOverlayStyle"
+            android:elevation="4dp"/>
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/play_players_listView"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
-        android:paddingBottom="8dp"
-        android:clipToPadding="false"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        app:layoutManager="LinearLayoutManager"
-        tools:listitem="@layout/game_player_list_item"/>
+        <include layout="@layout/game_header"
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:layout_marginTop="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            app:game="@{game}"/>
 
-    <View
-        android:id="@+id/num_pad_divider"
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="@color/red_divider"
-        android:elevation="4dp"/>
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/play_players_listView"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginStart="8dp"
+            android:paddingBottom="8dp"
+            android:clipToPadding="false"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            app:layoutManager="LinearLayoutManager"
+            tools:listitem="@layout/game_player_list_item"/>
 
-    <ViewAnimator
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/game_input"
-        android:elevation="4dp">
+        <View
+            android:id="@+id/num_pad_divider"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/red_divider"
+            android:elevation="4dp"/>
 
-        <include layout="@layout/game_num_pad"/>
-        <include layout="@layout/game_over"/>
-    </ViewAnimator>
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/game_input"
+            android:elevation="4dp">
 
-</LinearLayout>
+            <include layout="@layout/game_num_pad"
+                android:visibility="@{game.isGameOver() ? View.GONE : View.VISIBLE}"/>
+
+            <include layout="@layout/game_over"
+                app:viewModel="@{(GameViewModel) viewModel}"
+                android:visibility="@{game.isGameOver() ? View.VISIBLE : View.GONE}"/>
+        </FrameLayout>
+    </LinearLayout>
+</layout>

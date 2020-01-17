@@ -1,6 +1,5 @@
 package com.fraz.dartlog;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.preference.Preference;
@@ -13,10 +12,9 @@ import com.fraz.dartlog.db.DartLogDatabaseHelper;
 public class AppSettingsFragment extends PreferenceFragment {
 
     DbFileHandler dbFileHandler;
-    Activity parent;
 
     private void showToast(int resId) {
-        Toast toast = Toast.makeText(parent, resId, Toast.LENGTH_SHORT);
+        Toast toast = Toast.makeText(MyApplication.getInstance(), resId, Toast.LENGTH_SHORT);
         toast.setGravity(Gravity.CENTER, 0, 0);
         toast.show();
     }
@@ -25,8 +23,7 @@ public class AppSettingsFragment extends PreferenceFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        parent = getActivity();
-        dbFileHandler = new DbFileHandler(parent);
+        dbFileHandler = new DbFileHandler();
 
         addPreferencesFromResource(R.xml.app_preferences);
 
@@ -34,7 +31,7 @@ public class AppSettingsFragment extends PreferenceFragment {
         export_db_preference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
             public boolean onPreferenceClick(Preference preference) {
-                dbFileHandler.createCopyOfLocalDb();
+                dbFileHandler.createCopyOfLocalDb(getActivity());
                 return true;
             }
         });
@@ -43,7 +40,7 @@ public class AppSettingsFragment extends PreferenceFragment {
         import_db_preference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
             public boolean onPreferenceClick(Preference preference) {
-                dbFileHandler.selectExternalDbFile();
+                dbFileHandler.selectExternalDbFile(getActivity());
                 return true;
             }
         });
@@ -56,8 +53,8 @@ public class AppSettingsFragment extends PreferenceFragment {
 
     public void onSuccessfulFindExistingExternalDb(Intent intent) {
         dbFileHandler.copyDataFromExternalFileToLocalDb(intent.getData());
-        DartLogDatabaseHelper dbHelper = DartLogDatabaseHelper.getInstance(parent);
-        Util.saveProfileNames(dbHelper.getPlayers(), parent);
+        DartLogDatabaseHelper dbHelper = DartLogDatabaseHelper.getInstance();
+        Util.saveProfileNames(dbHelper.getPlayers());
         showToast(R.string.successful_import);
     }
 
