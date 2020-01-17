@@ -2,6 +2,7 @@ package com.fraz.dartlog;
 
 import android.app.Activity;
 import android.app.Dialog;
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.util.DisplayMetrics;
@@ -95,9 +96,8 @@ public class Util {
         dialog.getWindow().setAttributes(layoutParams);
     }
 
-
-    public static void showToast(CharSequence text, Context context) {
-        Toast toast = Toast.makeText(context, text, Toast.LENGTH_SHORT);
+    public static void showToast(CharSequence text) {
+        Toast toast = Toast.makeText(MyApplication.getInstance(), text, Toast.LENGTH_SHORT);
         toast.setGravity(Gravity.CENTER, 0, 0);
         toast.show();
     }

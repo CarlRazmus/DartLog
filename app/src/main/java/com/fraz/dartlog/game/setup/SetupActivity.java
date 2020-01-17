@@ -172,7 +172,7 @@ public class SetupActivity extends MenuBackground
 
     private void startPlayActivity() {
         if (participantNames.size() == 0) {
-            Util.showToast("A game requires 1 or more players to start!", this);
+            Util.showToast("A game requires 1 or more players to start!");
         } else {
             startActivity(createGameIntent());
         }
