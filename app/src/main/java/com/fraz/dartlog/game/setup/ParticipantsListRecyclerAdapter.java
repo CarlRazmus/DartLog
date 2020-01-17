@@ -89,7 +89,6 @@ public class ParticipantsListRecyclerAdapter
             public boolean onTouch(View v, MotionEvent event) {
                 if (MotionEventCompat.getActionMasked(event) ==
                         MotionEvent.ACTION_DOWN) {
-                    Log.d("drag", "ACTION_DOWN event");
                     dragStartListener.onDragStarted(holder);
                 }
                 return false;

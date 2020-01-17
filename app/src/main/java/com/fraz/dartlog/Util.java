@@ -2,8 +2,8 @@ package com.fraz.dartlog;
 
 import android.app.Activity;
 import android.app.Dialog;
-import android.content.Context;
 import android.content.SharedPreferences;
+import android.os.AsyncTask;
 import android.preference.PreferenceManager;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -11,14 +11,27 @@ import android.view.Gravity;
 import android.view.WindowManager;
 import android.widget.Toast;
 
+import com.fraz.dartlog.db.DartLogDatabaseHelper;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Set;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
 
 public class Util {
 
     private static String PROFILE_NAMES = "PROFILE_NAMES_STRING";
+    private static Executor executorInstance;
+
+    public static Executor getExecutorInstance(){
+        if(executorInstance == null)
+            executorInstance = Executors.newFixedThreadPool(8);
+        return executorInstance;
+    }
 
     public static float dpFromPx(final float px) {
         return px / MyApplication.getInstance().getResources().getDisplayMetrics().density;
@@ -66,7 +79,6 @@ public class Util {
 
     public static void removePlayer(String name){
         ArrayList<String> playerNames = loadProfileNames();
-        Log.d("RemovePlayers", "found players : " + playerNames.toString());
         if(playerNames.contains(name)){
             playerNames.remove(name);
             saveProfileNames(playerNames);
@@ -100,5 +112,25 @@ public class Util {
         Toast toast = Toast.makeText(MyApplication.getInstance(), text, Toast.LENGTH_SHORT);
         toast.setGravity(Gravity.CENTER, 0, 0);
         toast.show();
+    }
+
+    public void updateDbStatistics(Context context) {
+        UpdateStatisticsAsyncTask asyncTask = new UpdateStatisticsAsyncTask(context);
+        asyncTask.executeOnExecutor(getExecutorInstance());
+    }
+
+
+    private class UpdateStatisticsAsyncTask extends AsyncTask<Void, Void, Void> {
+
+        private Context context;
+        public UpdateStatisticsAsyncTask(Context context){
+            this.context = context;
+        }
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+            DartLogDatabaseHelper.getInstance(context).createStatisticViews();
+            return null;
+        }
     }
 }

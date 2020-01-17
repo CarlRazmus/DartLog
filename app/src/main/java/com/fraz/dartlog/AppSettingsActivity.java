@@ -36,7 +36,7 @@ public class AppSettingsActivity extends MenuBackground {
                 if(DbFileHandler.isDbExtension(intent.getData(), this))
                     fragment.onSuccessfullyCreatedExternalDbFile(intent);
                 else {
-                    fragment.onUnsuccessfulExportOfDatabase(intent);
+                    fragment.onUnsuccessfulExportOfDatabase();
                     openErrorOccurredDialog(intent);
                 }
             }
@@ -45,7 +45,7 @@ public class AppSettingsActivity extends MenuBackground {
                     fragment.onSuccessfulFindExistingExternalDb(intent);
                 }
                 else{
-                    fragment.onUnsuccessfulImportOfDatabase(intent);
+                    fragment.onUnsuccessfulImportOfDatabase();
                 }
         }
     }
@@ -59,7 +59,7 @@ public class AppSettingsActivity extends MenuBackground {
                 .setTitle(R.string.dialog_title_missing_file_extension)
                 .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                        fragment.onUnsuccessfulExternalDbCreation(intent);
+                        fragment.onUnsuccessfulExternalDbCreation();
                     }
                 });
         // 3. Get the AlertDialog from create()

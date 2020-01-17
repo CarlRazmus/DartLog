@@ -1,6 +1,7 @@
 package com.fraz.dartlog;
 
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.view.View;
@@ -17,8 +18,7 @@ public class MainActivity extends MenuBackground implements View.OnClickListener
 
     private DartLogDatabaseHelper dbHelper;
 
-
-    public MainActivity(){
+    public MainActivity() {
         super(R.layout.activity_main);
         setParentActivity(this);
     }
@@ -26,6 +26,10 @@ public class MainActivity extends MenuBackground implements View.OnClickListener
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        Util util = new Util();
+        util.updateDbStatistics(this);
+
         Button playButton = findViewById(R.id.play_x01_button);
         Button profilesButton = findViewById(R.id.profiles_button);
         Button randomButton = findViewById(R.id.play_random_button);

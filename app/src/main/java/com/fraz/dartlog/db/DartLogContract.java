@@ -68,6 +68,7 @@ final class DartLogContract {
     /* Inner class that defines the table contents */
     static abstract class PlayerEntry implements BaseColumns {
         static final String TABLE_NAME = "player";
+        static final String COLUMN_NAME_ID = "_id";
         static final String COLUMN_NAME_PLAYER_NAME = "name";
     }
 

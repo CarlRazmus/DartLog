@@ -71,7 +71,6 @@ public class DbFileHandler {
             returnCursor.moveToFirst();
             fileName = returnCursor.getString(nameIndex);
         } catch (Exception e) {
-            Log.d(TAG, "error: ", e);
             return false;
         } finally {
             returnCursor.close();
