@@ -52,7 +52,7 @@ public class AppSettingsFragment extends PreferenceFragment {
     }
 
     public void onSuccessfulFindExistingExternalDb(Intent intent) {
-        DartLogDatabaseHelper.getInstance(parent).closeDb();
+        DartLogDatabaseHelper.getInstance().closeDb();
 
         dbFileHandler.copyDataFromExternalFileToLocalDb(intent.getData());
 

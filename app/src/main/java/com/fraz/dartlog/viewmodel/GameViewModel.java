@@ -42,6 +42,7 @@ public abstract class GameViewModel<T extends Game> extends ViewModel {
             }
         });
     }
+
     private LiveData<PlayerData> getWinner()
     {
         return Transformations.map(game, new Function<T, PlayerData>() {

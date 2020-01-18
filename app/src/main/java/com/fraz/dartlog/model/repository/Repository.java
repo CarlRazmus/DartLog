@@ -51,23 +51,4 @@ public class Repository {
         Util.removePlayer(name);
         profiles.setValue(Util.loadProfileNames());
     }
-
-    public Profile GetProfile(String profileName) {
-        Profile profile = new Profile();
-        profile.setGamesWon(dbHelper.getNumberOfGamesWon(profileName));
-        profile.setGamesPlayed(dbHelper.getNumberOfGamesPlayed(profileName));
-        profile.setHighestCheckoutGame(dbHelper.getHighestCheckoutGame(profileName));
-        profile.setFewestTurns301Game(dbHelper.getFewestTurns301Game(profileName));
-        profile.setFewestTurns501Game(dbHelper.getFewestTurns501Game(profileName));
-        if (profile.getHighestCheckoutGame() == null &&
-            profile.getFewestTurns301Game () == null &&
-            profile.getFewestTurns501Game() == null)
-        {
-            dbHelper.refreshStatistics(profileName);
-            profile.setHighestCheckoutGame(dbHelper.getHighestCheckoutGame(profileName));
-            profile.setFewestTurns301Game(dbHelper.getFewestTurns301Game(profileName));
-            profile.setFewestTurns501Game(dbHelper.getFewestTurns501Game(profileName));
-        }
-        return profile;
-    }
 }

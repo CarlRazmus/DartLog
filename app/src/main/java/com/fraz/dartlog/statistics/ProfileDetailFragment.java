@@ -38,31 +38,11 @@ public class ProfileDetailFragment extends Fragment {
 
     public static final String ARG_ITEM_NAME = "item_name";
 
-    /**
-     * Name of the profile this fragment is presenting.
-     */
-    private String profileName;
-    private long profileId;
     private View rootView;
-    private GameData highestX01CheckoutGame;
-    private GameData fewestTurns301Game;
-    private GameData fewestTurns501Game;
-    private int gamesWon;
-    private int gamesPlayed;
-    private long startTime;
-    private boolean finishedLoadingSummary;
-    private boolean finishedLoadingHighscores;
+    private String profileName;
     private int unique_id = 0;
-    private AsyncTaskFetchSummaryData runnerSummary;
-    private AsyncTaskFetchHighScores runnerHighScores;
-    private AsyncTaskProgressBarHandler runnerProgressBar;
     ProfileViewModel profileViewModel;
 
-    /**
-     * Name of the profile this fragment is presenting.
-     */
-    private String profileName;
-    private Profile profile;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -76,32 +56,17 @@ public class ProfileDetailFragment extends Fragment {
         super.onCreate(savedInstanceState);
         if (getArguments().containsKey(ARG_ITEM_NAME)) {
             profileName = getArguments().getString(ARG_ITEM_NAME);
-            profileViewModel = ViewModelProviders.of(this).get(ProfileViewModel.class);
-            profileViewModel.setProfile(profileName);
-            profile = profileViewModel.getProfile();
+            profileViewModel = ViewModelProviders.of(requireActivity()).get(ProfileViewModel.class);
         }
     }
 
-    @Override
-    public void onDestroyView()
-    {
-        if (runnerSummary != null)
-        runnerSummary.cancel(true);
-
-        if (runnerHighScores != null)
-            runnerHighScores.cancel(true);
-
-        if (runnerProgressBar != null)
-            runnerProgressBar.cancel(true);
-
-        super.onDestroyView();
-    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         ProfileDetailBinding binding = DataBindingUtil.inflate(
                 inflater, R.layout.profile_detail, container, false);
+        binding.setLifecycleOwner(this);
         binding.setViewModel(profileViewModel);
         rootView = binding.getRoot();
 
@@ -117,36 +82,9 @@ public class ProfileDetailFragment extends Fragment {
         super.onDestroy();
     }
 
-    @Override
-    public void onViewCreated(View view, Bundle savedInstanceState){
-        runnerSummary = new AsyncTaskFetchSummaryData();
-        runnerHighScores = new AsyncTaskFetchHighScores();
-        runnerProgressBar = new AsyncTaskProgressBarHandler();
 
-        startTime = SystemClock.uptimeMillis();
 
-        runnerSummary.executeOnExecutor(Util.getExecutorInstance());
-        runnerHighScores.executeOnExecutor(Util.getExecutorInstance());
-        runnerProgressBar.executeOnExecutor(Util.getExecutorInstance());
-    }
-
-    private void removeProgressBar(int id_){
-        View layout = rootView.findViewById(id_);
-        ProgressBar progressBar = layout.findViewById(R.id.progress_bar);
-
-        if(layout.getClass().equals(RelativeLayout.class)){
-            if(progressBar != null){
-                ((RelativeLayout)layout).removeView(progressBar);
-            }
-        }
-        if(layout.getClass().equals(LinearLayout.class)){
-            if(progressBar != null){
-                ((LinearLayout)layout).removeView(progressBar);
-            }
-        }
-    }
-
-    private void addSummaryData() {
+    /*private void addSummaryData() {
         LinearLayout profileLayout = rootView.findViewById(R.id.profile_detail_linear_layout);
         profileLayout.removeViewAt(0);
         View summaryView = getLayoutInflater().inflate(R.layout.profile_match_summary, null);
@@ -194,76 +132,5 @@ public class ProfileDetailFragment extends Fragment {
         });
 
         linearLayout.addView(matchItemView);
-    }
-
-
-    private class AsyncTaskFetchSummaryData extends AsyncTask<Void, Void, Void> {
-
-        @Override
-        protected Void doInBackground(Void... voids) {
-            Thread.currentThread().setName(profileName + "Summary");
-            DartLogDatabaseHelper databaseHelper = DartLogDatabaseHelper.getInstance(getContext());
-            gamesWon = databaseHelper.getNumberOfGamesWon(profileName);
-            gamesPlayed = databaseHelper.getNumberOfGamesPlayed(profileName);
-            finishedLoadingSummary = true;
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(Void result) {
-            removeProgressBar(R.id.summary_container);
-            addSummaryData();
-        }
-    }
-
-    private class AsyncTaskFetchHighScores extends AsyncTask<Void, Void, Void> {
-
-        @Override
-        protected Void doInBackground(Void... voids) {
-            DartLogDatabaseHelper databaseHelper = DartLogDatabaseHelper.getInstance(getContext());
-            profileId = databaseHelper.getPlayerId(profileName);
-            Thread.currentThread().setName(profileName + "_Highscore");
-
-            highestX01CheckoutGame = databaseHelper.getHighestCheckout(profileId);
-            HashMap<String, GameData> fewestTurnsX01Games = databaseHelper.getfewestTurnsX01Games(profileId);
-            fewestTurns301Game = fewestTurnsX01Games.get("3");
-            fewestTurns501Game = fewestTurnsX01Games.get("5");
-            finishedLoadingHighscores = true;
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(Void result) {
-            removeProgressBar(R.id.profile_detail_fewest_turns_container);
-            removeProgressBar(R.id.profile_detail_highest_out_container);
-            addFewestTurnsGames();
-            addHighestOutGame();
-        }
-    }
-
-    private class AsyncTaskProgressBarHandler extends AsyncTask<Void, Void, Void>{
-
-        @Override
-        protected Void doInBackground(Void... voids) {
-            Thread.currentThread().setName(profileName + "_Progressbar");
-            while(!finishedLoadingSummary || !finishedLoadingHighscores)
-                if (SystemClock.uptimeMillis() - startTime > 1000)
-                    break;
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(Void result) {
-            if(!finishedLoadingSummary){
-                RelativeLayout summaryLayout = rootView.findViewById(R.id.summary_container);
-                getLayoutInflater().inflate(R.layout.circular_progress_bar, summaryLayout);
-            }
-            if(!finishedLoadingHighscores){
-                LinearLayout fewestTurnLayout = rootView.findViewById(R.id.profile_detail_fewest_turns_container);
-                LinearLayout highestOutLayout = rootView.findViewById(R.id.profile_detail_highest_out_container);
-                getLayoutInflater().inflate(R.layout.linear_progress_bar, fewestTurnLayout);
-                getLayoutInflater().inflate(R.layout.linear_progress_bar, highestOutLayout);
-            }
-        }
-    }
+    }*/
 }

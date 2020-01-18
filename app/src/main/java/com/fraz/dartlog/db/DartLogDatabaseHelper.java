@@ -48,7 +48,7 @@ public class DartLogDatabaseHelper extends SQLiteOpenHelper {
         return dbHelperInstance;
     }
 
-    private DartLogDatabaseHelper(Context context) {
+    private DartLogDatabaseHelper() {
         super(MyApplication.getInstance(), DATABASE_NAME, null, DATABASE_VERSION);
         db = getWritableDatabase();
     }

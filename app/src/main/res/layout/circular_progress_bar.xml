@@ -1,7 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ProgressBar xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_height="48dp"
-    android:layout_width="48dp"
-    android:padding="4dp"
-    android:layout_centerInParent="true"
-    android:id="@+id/progress_bar"/>
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <data>
+        <import type="android.view.View"/>
+        <variable
+            name="viewModel"
+            type="com.fraz.dartlog.viewmodel.ProfileViewModel"/>
+    </data>
+
+    <ProgressBar
+        android:layout_height="48dp"
+        android:layout_width="48dp"
+        android:padding="4dp"
+        android:visibility="@{viewModel.showSummaryProgressBar ? View.VISIBLE : View.GONE}"
+        android:id="@+id/progress_bar"/>
+</layout>

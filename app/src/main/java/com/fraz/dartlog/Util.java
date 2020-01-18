@@ -114,22 +114,16 @@ public class Util {
         toast.show();
     }
 
-    public void updateDbStatistics(Context context) {
-        UpdateStatisticsAsyncTask asyncTask = new UpdateStatisticsAsyncTask(context);
+    public void updateDbStatistics() {
+        UpdateStatisticsAsyncTask asyncTask = new UpdateStatisticsAsyncTask();
         asyncTask.executeOnExecutor(getExecutorInstance());
     }
 
-
     private class UpdateStatisticsAsyncTask extends AsyncTask<Void, Void, Void> {
-
-        private Context context;
-        public UpdateStatisticsAsyncTask(Context context){
-            this.context = context;
-        }
 
         @Override
         protected Void doInBackground(Void... voids) {
-            DartLogDatabaseHelper.getInstance(context).createStatisticViews();
+            DartLogDatabaseHelper.getInstance().createStatisticViews();
             return null;
         }
     }

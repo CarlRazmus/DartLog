@@ -4,6 +4,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
+        <import type="android.view.View"/>
         <variable
             name="viewModel"
             type="com.fraz.dartlog.viewmodel.ProfileViewModel"/>
@@ -26,55 +27,23 @@
 
             <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@color/main_white"
-                android:layout_marginTop="1dp"
-                android:padding="8dp"
-                android:gravity="center">
+                android:layout_height="60dp"
+                android:background="@color/main_white">
 
-                <TextView
+                <include
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    layout="@layout/profile_match_summary"
+                    app:viewModel="@{viewModel}">
+                </include>
+
+                <include
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:id="@+id/profile_detail_games_played_label"
-                    android:textSize="12sp"
-                    android:textColor="@color/main_grey"
-                    android:layout_below="@+id/profile_detail_games_played"
-                    android:text="@string/textView_games_played"/>
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:id="@id/profile_detail_games_played"
-                    android:textSize="20sp"
-                    android:textColor="@android:color/black"
-                    android:gravity="center"
-                    android:layout_alignEnd="@id/profile_detail_games_played_label"
-                    android:layout_alignStart="@id/profile_detail_games_played_label"
-                    android:text="@{Integer.toString(viewModel.getProfile().getGamesPlayed())}"
-                    tools:text="30"/>
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/profile_detail_games_won_label"
-                    android:layout_marginStart="60dp"
-                    android:layout_toEndOf="@id/profile_detail_games_played_label"
-                    android:layout_below="@+id/profile_detail_games_won"
-                    android:textColor="@color/main_grey"
-                    android:textSize="12sp"
-                    android:text="@string/games_won"/>
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@id/profile_detail_games_won"
-                    android:textSize="20sp"
-                    android:textColor="@android:color/black"
-                    android:gravity="center"
-                    android:layout_alignEnd="@id/profile_detail_games_won_label"
-                    android:layout_alignStart="@id/profile_detail_games_won_label"
-                    android:text="@{Integer.toString(viewModel.getProfile().getGamesWon())}"
-                    tools:text="12"/>
+                    layout="@layout/circular_progress_bar"
+                    app:viewModel="@{viewModel}"
+                    android:layout_centerInParent="true">
+                </include>
 
             </RelativeLayout>
 

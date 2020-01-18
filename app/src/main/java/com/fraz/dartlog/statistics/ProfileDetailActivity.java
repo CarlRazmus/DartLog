@@ -41,7 +41,7 @@ public class ProfileDetailActivity extends MenuBackground {
 
         ViewPager viewPager = findViewById(R.id.profile_detail_view_pager);
         viewPager.setAdapter(new ProfileDetailFragmentPagerAdapter(getSupportFragmentManager(),
-                                                                   playerName));
+                                                                   profileName));
     }
 
     @Override
