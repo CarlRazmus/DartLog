@@ -18,8 +18,7 @@
         android:background="@color/main_white"
         android:layout_marginTop="1dp"
         android:padding="8dp"
-        android:gravity="center"
-        android:visibility="@{viewModel.finishedLoadingSummary ? View.VISIBLE : View.GONE}">
+        android:gravity="center">
 
         <TextView
             android:layout_width="wrap_content"
@@ -39,7 +38,7 @@
             android:gravity="center"
             android:layout_alignEnd="@id/profile_detail_games_played_label"
             android:layout_alignStart="@id/profile_detail_games_played_label"
-            android:text="@{Integer.toString(viewModel.getProfile().getGamesPlayed())}"
+            android:text="@{Integer.toString(viewModel.profile.getGamesPlayed())}"
             tools:text="30"/>
 
         <TextView
@@ -62,7 +61,7 @@
             android:gravity="center"
             android:layout_alignEnd="@id/profile_detail_games_won_label"
             android:layout_alignStart="@id/profile_detail_games_won_label"
-            android:text="@{Integer.toString(viewModel.getProfile().getGamesWon())}"
+            android:text="@{Integer.toString(viewModel.profile.getGamesWon())}"
             tools:text="12"/>
     </RelativeLayout>
 </layout>

@@ -13,6 +13,6 @@
         android:layout_height="48dp"
         android:layout_width="48dp"
         android:padding="4dp"
-        android:visibility="@{viewModel.showSummaryProgressBar ? View.VISIBLE : View.GONE}"
+
         android:id="@+id/progress_bar"/>
 </layout>

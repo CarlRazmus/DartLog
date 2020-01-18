@@ -67,9 +67,14 @@ public class ProfileViewModel extends ViewModel {
         repository = Repository.getInstance();
     }
 
-    public Profile getProfile()
+    public String getProfileName()
     {
-        return profile.getValue();
+        return profile.getValue().getName();
+    }
+
+    public LiveData<Profile> getProfile()
+    {
+        return profile;
     }
 
     public LiveData<Boolean> getFinishedLoadingSummary() {
@@ -86,16 +91,15 @@ public class ProfileViewModel extends ViewModel {
 
     public void setProfile(String profileName) {
 
-        if(getProfile() != null && getProfile().getName().equals(profileName))
+        if(profile.getValue() != null && getProfileName().equals(profileName))
             return;
 
         profile.setValue(new Profile());
-        getProfile().setName(profileName);
+        profile.getValue().setName(profileName);
 
         finishedLoadingSummary.setValue(false);
         finishedLoadingHighScores.setValue(false);
         startupDelayTimePassed.setValue(false);
-        startupDelayTimePassed.setValue(true);
 
         new Handler().postDelayed(new Runnable() {
             @Override
@@ -121,20 +125,25 @@ public class ProfileViewModel extends ViewModel {
 
         @Override
         protected Profile doInBackground(Void... voids) {
-            Thread.currentThread().setName(getProfile().getName() + "Summary");
+            Thread.currentThread().setName(getProfileName() + "Summary");
+            try {
+                Thread.sleep(2000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
             DartLogDatabaseHelper databaseHelper = DartLogDatabaseHelper.getInstance();
             Profile profileData = new Profile();
-            profileData.setGamesWon(databaseHelper.getNumberOfGamesWon(getProfile().getName()));
-            profileData.setGamesPlayed(databaseHelper.getNumberOfGamesPlayed(getProfile().getName()));
+            profileData.setGamesWon(databaseHelper.getNumberOfGamesWon(getProfileName()));
+            profileData.setGamesPlayed(databaseHelper.getNumberOfGamesPlayed(getProfileName()));
             return profileData;
         }
 
         @Override
         protected void onPostExecute(Profile profileData) {
             finishedLoadingSummary.setValue(true);
-            getProfile().setGamesWon(profileData.getGamesWon());
-            getProfile().setGamesPlayed(profileData.getGamesPlayed());
-            profile.setValue(getProfile());
+            profile.getValue().setGamesWon(profileData.getGamesWon());
+            profile.getValue().setGamesPlayed(profileData.getGamesPlayed());
+            profile.setValue(profile.getValue());
         }
     }
 
@@ -143,8 +152,8 @@ public class ProfileViewModel extends ViewModel {
         @Override
         protected Profile doInBackground(Void... voids) {
             DartLogDatabaseHelper databaseHelper = DartLogDatabaseHelper.getInstance();
-            long  profileId = databaseHelper.getPlayerId(getProfile().getName());
-            Thread.currentThread().setName(getProfile().getName() + "_Highscore");
+            long  profileId = databaseHelper.getPlayerId(getProfileName());
+            Thread.currentThread().setName(getProfileName() + "_Highscore");
 
             Profile profileData = new Profile();
             profileData.setHighestCheckoutGame(databaseHelper.getHighestCheckout(profileId));
@@ -156,10 +165,10 @@ public class ProfileViewModel extends ViewModel {
 
         @Override
         protected void onPostExecute(Profile profileData) {
-            getProfile().setFewestTurns501Game(profileData.getFewestTurns501Game());
-            getProfile().setFewestTurns301Game(profileData.getFewestTurns301Game());
-            getProfile().setHighestCheckoutGame(profileData.getHighestCheckoutGame());
-            profile.setValue(getProfile());
+            profile.getValue().setFewestTurns501Game(profileData.getFewestTurns501Game());
+            profile.getValue().setFewestTurns301Game(profileData.getFewestTurns301Game());
+            profile.getValue().setHighestCheckoutGame(profileData.getHighestCheckoutGame());
+            profile.setValue(profile.getValue());
             finishedLoadingHighScores.setValue(true);
         }
     }

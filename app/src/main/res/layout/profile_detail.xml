@@ -34,7 +34,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     layout="@layout/profile_match_summary"
-                    app:viewModel="@{viewModel}">
+                    app:viewModel="@{viewModel}"
+                    android:visibility="@{viewModel.finishedLoadingSummary ? View.VISIBLE : View.GONE}">
                 </include>
 
                 <include
@@ -42,7 +43,8 @@
                     android:layout_height="wrap_content"
                     layout="@layout/circular_progress_bar"
                     app:viewModel="@{viewModel}"
-                    android:layout_centerInParent="true">
+                    android:layout_centerInParent="true"
+                    android:visibility="@{viewModel.showSummaryProgressBar ? View.VISIBLE : View.GONE}">
                 </include>
 
             </RelativeLayout>
