@@ -6,21 +6,30 @@ import android.util.Log;
 
 import com.fraz.dartlog.db.DartLogDatabaseHelper;
 
+import org.junit.Before;
+import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.runners.MockitoJUnitRunner;
-
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
 
+
 @RunWith(MockitoJUnitRunner.class)
-public class GenerateTestData {
+public class GenerateDataTest {
 
     private int[] x01GameTypes = {301, 401, 501, 601, 701, 801};
     private DartLogDatabaseHelper dbHelper;
 
-    public GenerateTestData() {
-        dbHelper = DartLogDatabaseHelper.getInstance(null);
+
+    @Before
+    public void setUp() {
+        dbHelper = DartLogDatabaseHelper.getInstance();
+    }
+
+    @Test
+    public void testGenerateData() {
+        generateDatabaseX01MatchEntries(150);
     }
 
     private String generateX01MatchString(int winnerId){

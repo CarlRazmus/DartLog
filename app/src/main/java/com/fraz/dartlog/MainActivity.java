@@ -38,7 +38,7 @@ public class MainActivity extends MenuBackground implements View.OnClickListener
         Button profilesButton = findViewById(R.id.profiles_button);
         Button randomButton = findViewById(R.id.play_random_button);
         dbHelper = DartLogDatabaseHelper.getInstance();
-        generateDatabaseX01MatchEntries(150);
+
         assert playButton != null;
         assert profilesButton != null;
         assert randomButton != null;
