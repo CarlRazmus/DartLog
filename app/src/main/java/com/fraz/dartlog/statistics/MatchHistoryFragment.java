@@ -21,14 +21,13 @@ import static com.fraz.dartlog.statistics.ProfileDetailFragment.ARG_ITEM_NAME;
 
 public class MatchHistoryFragment extends Fragment {
 
-    private long lastLoadedMatchId = Long.MAX_VALUE;
+    private final int AMOUNT_ITEMS_TO_LOAD = 20;
 
+    private long lastLoadedMatchId = Long.MAX_VALUE;
     private boolean allLoaded = false;
-    private int AMOUNT_ITEMS_TO_LOAD = 20;
 
     private String profileName;
-    private ArrayList<GameData> playerGameData;
-    private DartLogDatabaseHelper databaseHelper;
+    private ArrayList<GameData> playerGameData = new ArrayList<>();
     private MatchRecyclerViewAdapter recyclerViewAdapter;
     private RecyclerView recyclerView;
 
@@ -45,9 +44,6 @@ public class MatchHistoryFragment extends Fragment {
 
         if (getArguments().containsKey(ARG_ITEM_NAME)) {
             profileName = getArguments().getString(ARG_ITEM_NAME);
-            databaseHelper = DartLogDatabaseHelper.getInstance();
-            playerGameData = databaseHelper.getPlayerMatchData(profileName, lastLoadedMatchId, AMOUNT_ITEMS_TO_LOAD);
-            lastLoadedMatchId = databaseHelper.getLastLoadedMatchId();
 
             AsyncTaskRunner fetchHistoryAsyncTask = new AsyncTaskRunner();
             fetchHistoryAsyncTask.executeOnExecutor(Util.getExecutorInstance());
@@ -75,6 +71,8 @@ public class MatchHistoryFragment extends Fragment {
 
         @Override
         protected Void doInBackground(Void... voids) {
+            DartLogDatabaseHelper databaseHelper = DartLogDatabaseHelper.getInstance();
+
             while(!allLoaded) {
                     Integer size = playerGameData.size();
                     ArrayList<GameData> newData = databaseHelper.getPlayerMatchData(profileName, lastLoadedMatchId, AMOUNT_ITEMS_TO_LOAD);
