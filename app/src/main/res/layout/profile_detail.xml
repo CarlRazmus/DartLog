@@ -24,7 +24,6 @@
             android:id="@+id/profile_detail_linear_layout"
             android:orientation="vertical">
 
-
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="60dp"
@@ -61,7 +60,13 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:id="@+id/fewest_turns_linear_layout"
-                android:orientation="vertical"/>
+                android:orientation="vertical">
+
+                <include
+                    layout="@layout/linear_progress_bar"
+                    android:visibility="@{viewModel.showHighScoresProgressBar ? View.VISIBLE : View.GONE}">
+                </include>
+            </LinearLayout>
 
             <include layout="@layout/match_statistics_header"
                 android:layout_height="wrap_content"
@@ -75,7 +80,13 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:id="@+id/highest_out_linear_layout"
-                android:orientation="vertical"/>
+                android:orientation="vertical">
+
+                <include
+                    layout="@layout/linear_progress_bar"
+                    android:visibility="@{viewModel.showHighScoresProgressBar ? View.VISIBLE : View.GONE}">
+                </include>
+            </LinearLayout>
         </LinearLayout>
     </android.support.v4.widget.NestedScrollView>
 </layout>

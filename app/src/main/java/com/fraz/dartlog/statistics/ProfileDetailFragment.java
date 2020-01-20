@@ -2,31 +2,20 @@ package com.fraz.dartlog.statistics;
 
 import android.arch.lifecycle.ViewModelProviders;
 import android.databinding.DataBindingUtil;
-import android.databinding.ViewDataBinding;
-import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.SystemClock;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
-import android.widget.ProgressBar;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
-import android.support.v7.widget.Toolbar;
 
 import com.fraz.dartlog.R;
 import com.fraz.dartlog.databinding.ProfileDetailBinding;
-import com.fraz.dartlog.Util;
-import com.fraz.dartlog.db.DartLogDatabaseHelper;
 import com.fraz.dartlog.game.GameData;
 import com.fraz.dartlog.model.Profile;
+import com.fraz.dartlog.util.EventObserver;
 import com.fraz.dartlog.viewmodel.ProfileViewModel;
-
-import java.util.HashMap;
-import java.util.Locale;
 
 /**
  * A fragment representing a single Profile detail screen.
@@ -44,13 +33,6 @@ public class ProfileDetailFragment extends Fragment {
     ProfileViewModel profileViewModel;
 
 
-    /**
-     * Mandatory empty constructor for the fragment manager to instantiate the
-     * fragment (e.g. upon screen orientation changes).
-     */
-    public ProfileDetailFragment() {
-    }
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -59,7 +41,6 @@ public class ProfileDetailFragment extends Fragment {
             profileViewModel = ViewModelProviders.of(requireActivity()).get(ProfileViewModel.class);
         }
     }
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -74,6 +55,22 @@ public class ProfileDetailFragment extends Fragment {
         if (toolbar != null)
             toolbar.setTitle(profileName);
 
+        EventObserver<String> observer = new EventObserver<String>() {
+            @Override
+            public void onEventUnhandled(String content) {
+                Profile profile = profileViewModel.getProfile().getValue();
+
+                LinearLayout turnsLayout = rootView.findViewById(R.id.fewest_turns_linear_layout);
+                turnsLayout.removeAllViews();
+                addFewestTurnsGames(profile.getFewestTurns301Game(), turnsLayout);
+                addFewestTurnsGames(profile.getFewestTurns501Game(), turnsLayout);
+
+                LinearLayout checkoutLayout = rootView.findViewById(R.id.highest_out_linear_layout);
+                checkoutLayout.removeAllViews();
+                addHighestOutGame(profile.getHighestCheckoutGame(), checkoutLayout);
+            }
+        };
+        profileViewModel.getHighScoresLoaded().observe(getViewLifecycleOwner(), observer);
         return rootView;
     }
 
@@ -83,43 +80,24 @@ public class ProfileDetailFragment extends Fragment {
     }
 
 
-
-    /*private void addSummaryData() {
-        LinearLayout profileLayout = rootView.findViewById(R.id.profile_detail_linear_layout);
-        profileLayout.removeViewAt(0);
-        View summaryView = getLayoutInflater().inflate(R.layout.profile_match_summary, null);
-        ((TextView) summaryView.findViewById(R.id.profile_detail_games_played))
-                .setText(String.format(Locale.getDefault(), "%d", gamesPlayed));
-
-        ((TextView) summaryView.findViewById(R.id.profile_detail_games_won))
-                .setText(String.format(Locale.getDefault(), "%d", gamesWon));
-        profileLayout.addView(summaryView, 0);
+    private void addFewestTurnsGames(GameData game, ViewGroup layout) {
+        if (game != null)
+            addFewestTurnsView(game, layout);
     }
 
-    private void addFewestTurnsGames() {
-        LinearLayout fewestTurnsLayout = rootView.findViewById(R.id.profile_detail_fewest_turns_container);
-        if (fewestTurns301Game != null)
-            addFewestTurnsView(fewestTurns301Game, fewestTurnsLayout);
-        if (fewestTurns501Game != null)
-            addFewestTurnsView(fewestTurns501Game, fewestTurnsLayout);
+    private void addHighestOutGame(GameData game, ViewGroup layout ) {
+        MatchItemView matchItemView = new MatchItemView(getContext());
+        matchItemView.setStatToShow(MatchItemView.Stat.CHECKOUT);
+        addGameView(matchItemView, game, layout);
     }
 
-    private void addHighestOutGame( ) {
-        LinearLayout linearLayout= rootView.findViewById(R.id.profile_detail_highest_out_container);
-        if (highestX01CheckoutGame != null){
-            MatchItemView matchItemView = new MatchItemView(getContext());
-            matchItemView.setStatToShow(MatchItemView.Stat.CHECKOUT);
-            addGameView(matchItemView, highestX01CheckoutGame, linearLayout);
-        }
-    }
-
-    private void addFewestTurnsView(final GameData game, LinearLayout linearLayout) {
+    private void addFewestTurnsView(final GameData game, ViewGroup linearLayout) {
         MatchItemView matchItemView = new MatchItemView(getContext());
         matchItemView.setStatToShow(MatchItemView.Stat.TURNS);
         addGameView(matchItemView, game, linearLayout);
     }
 
-    private void addGameView(MatchItemView matchItemView, final GameData game, LinearLayout linearLayout) {
+    private void addGameView(MatchItemView matchItemView, final GameData game, ViewGroup layout) {
         matchItemView.setVisibility(View.VISIBLE);
         matchItemView.setGame(game, profileName);
         matchItemView.setOnClickListener(new View.OnClickListener() {
@@ -131,6 +109,6 @@ public class ProfileDetailFragment extends Fragment {
             }
         });
 
-        linearLayout.addView(matchItemView);
-    }*/
+        layout.addView(matchItemView);
+    }
 }

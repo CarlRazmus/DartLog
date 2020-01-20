@@ -14,21 +14,26 @@ import com.fraz.dartlog.db.DartLogDatabaseHelper;
 import com.fraz.dartlog.game.GameData;
 import com.fraz.dartlog.model.Profile;
 import com.fraz.dartlog.model.repository.Repository;
+import com.fraz.dartlog.util.Event;
 
 import java.util.HashMap;
 
 public class ProfileViewModel extends ViewModel {
 
     private MutableLiveData<Profile> profile = new MutableLiveData<>();
+
+    private MutableLiveData<Event<String>> highScoresLoaded = new MutableLiveData<>();
+
     private final Repository repository;
+
     private AsyncTaskFetchSummaryData runnerSummary;
     private AsyncTaskFetchHighScores runnerHighScores;
-
     private MutableLiveData<Boolean> finishedLoadingSummary = new MutableLiveData<>();
+
     private MutableLiveData<Boolean> finishedLoadingHighScores = new MutableLiveData<>();
     private MediatorLiveData<Boolean> showSummaryProgressBar = new MediatorLiveData<>();
+    private MediatorLiveData<Boolean> showHighScoresProgressBar = new MediatorLiveData<>();
     private MutableLiveData<Boolean> startupDelayTimePassed = new MutableLiveData<>();
-
 
     public ProfileViewModel()
     {
@@ -42,7 +47,7 @@ public class ProfileViewModel extends ViewModel {
         runnerSummary = new AsyncTaskFetchSummaryData();
         runnerHighScores = new AsyncTaskFetchHighScores();
 
-        showSummaryProgressBar.addSource(finishedLoadingSummary, new Observer<Boolean>() {
+        Observer<Boolean> summaryObserver = new Observer<Boolean>() {
             @Override
             public void onChanged(@Nullable Boolean aBoolean) {
                 if (startupDelayTimePassed.getValue() == null ||
@@ -52,19 +57,30 @@ public class ProfileViewModel extends ViewModel {
                 showSummaryProgressBar.setValue(
                         startupDelayTimePassed.getValue() &&
                                 !finishedLoadingSummary.getValue());
-            }});
-        showSummaryProgressBar.addSource(startupDelayTimePassed, new Observer<Boolean>() {
+            }};
+
+        Observer<Boolean> highScoresObserver = new Observer<Boolean>() {
             @Override
             public void onChanged(@Nullable Boolean aBoolean) {
                 if (startupDelayTimePassed.getValue() == null ||
-                        finishedLoadingSummary.getValue() == null) {
+                        finishedLoadingHighScores.getValue() == null) {
                     return;
                 }
-                showSummaryProgressBar.setValue(
+                showHighScoresProgressBar.setValue(
                         startupDelayTimePassed.getValue() &&
-                                !finishedLoadingSummary.getValue());
-            }});
+                                !finishedLoadingHighScores.getValue());
+            }};
+
+        showSummaryProgressBar.addSource(finishedLoadingSummary, summaryObserver);
+        showSummaryProgressBar.addSource(startupDelayTimePassed, summaryObserver);
+        showHighScoresProgressBar.addSource(finishedLoadingHighScores, highScoresObserver);
+        showHighScoresProgressBar.addSource(startupDelayTimePassed, highScoresObserver);
+
         repository = Repository.getInstance();
+    }
+
+    public MutableLiveData<Event<String>> getHighScoresLoaded() {
+        return highScoresLoaded;
     }
 
     public String getProfileName()
@@ -81,12 +97,12 @@ public class ProfileViewModel extends ViewModel {
         return finishedLoadingSummary;
     }
 
-    public LiveData<Boolean> getFinishedLoadingHighScores() {
-        return finishedLoadingHighScores;
-    }
-
     public LiveData<Boolean> getShowSummaryProgressBar(){
         return showSummaryProgressBar;
+    }
+
+    public LiveData<Boolean> getShowHighScoresProgressBar(){
+        return showHighScoresProgressBar;
     }
 
     public void setProfile(String profileName) {
@@ -104,13 +120,9 @@ public class ProfileViewModel extends ViewModel {
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                Boolean value = getFinishedLoadingSummary().getValue();
-                if(value != null && !value)
-                {
-                    startupDelayTimePassed.setValue(true);
-                }
+                startupDelayTimePassed.setValue(true);
             }
-        }, 1000);
+        }, 500);
 
         runnerSummary.executeOnExecutor(Util.getExecutorInstance());
         runnerHighScores.executeOnExecutor(Util.getExecutorInstance());
@@ -126,11 +138,6 @@ public class ProfileViewModel extends ViewModel {
         @Override
         protected Profile doInBackground(Void... voids) {
             Thread.currentThread().setName(getProfileName() + "Summary");
-            try {
-                Thread.sleep(2000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
             DartLogDatabaseHelper databaseHelper = DartLogDatabaseHelper.getInstance();
             Profile profileData = new Profile();
             profileData.setGamesWon(databaseHelper.getNumberOfGamesWon(getProfileName()));
@@ -154,7 +161,11 @@ public class ProfileViewModel extends ViewModel {
             DartLogDatabaseHelper databaseHelper = DartLogDatabaseHelper.getInstance();
             long  profileId = databaseHelper.getPlayerId(getProfileName());
             Thread.currentThread().setName(getProfileName() + "_Highscore");
-
+            try {
+                Thread.sleep(3000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
             Profile profileData = new Profile();
             profileData.setHighestCheckoutGame(databaseHelper.getHighestCheckout(profileId));
             HashMap<String, GameData> fewestTurnsX01Games = databaseHelper.getfewestTurnsX01Games(profileId);
@@ -165,11 +176,12 @@ public class ProfileViewModel extends ViewModel {
 
         @Override
         protected void onPostExecute(Profile profileData) {
-            profile.getValue().setFewestTurns501Game(profileData.getFewestTurns501Game());
             profile.getValue().setFewestTurns301Game(profileData.getFewestTurns301Game());
+            profile.getValue().setFewestTurns501Game(profileData.getFewestTurns501Game());
             profile.getValue().setHighestCheckoutGame(profileData.getHighestCheckoutGame());
             profile.setValue(profile.getValue());
             finishedLoadingHighScores.setValue(true);
+            highScoresLoaded.setValue(new Event<>(""));
         }
     }
 
