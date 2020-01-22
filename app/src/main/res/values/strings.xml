@@ -15,7 +15,6 @@
     <string name="textView_games_played">Games played</string>
     <string name="player_1">Player 1</string>
     <string name="_301">301</string>
-    <string name="button_done">Done</string>
     <string name="contentDescription_handle_to_trigger_drag_event">Handle to trigger drag event</string>
     <string name="contentDescription_main_activity_background_image">Main activity background image</string>
     <string name="button_zero">0</string>
@@ -118,4 +117,6 @@
     <string name="unsuccessful_export">Unsuccessful export of database</string>
     <string name="about">About</string>
     <string name="about_activity">About</string>
+    <string name="select_players">Select players</string>
+    <string name="new_profile">New Profile</string>
 </resources>

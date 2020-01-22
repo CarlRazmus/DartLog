@@ -11,16 +11,15 @@ import java.util.ArrayList;
 
 public class PlayerSelectorDialogFragment extends DialogFragment{
 
-
-    public interface PlayerSelectorDialogListener {
-        void onDialogPositiveClick(PlayerSelectorDialogFragment dialog);
-    }
-
-
     public PlayerSelectorDialogListener mListener;
 
     private ArrayList<String> playerNames = new ArrayList<>();
     private ArrayList<String> selectedPlayerNames = new ArrayList<>();
+
+
+    public interface PlayerSelectorDialogListener {
+        void onDialogPositiveClick(PlayerSelectorDialogFragment dialog);
+    }
 
 
     @Override

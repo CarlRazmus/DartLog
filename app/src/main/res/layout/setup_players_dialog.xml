@@ -4,46 +4,63 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingBottom="8dp">
+    android:minHeight="70dp"
+    android:paddingBottom="8dp"
+    android:paddingStart="8dp"
+    android:paddingEnd="8dp">
 
     <TextView
         android:id="@+id/header"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Select players"
+        android:text="@string/select_players"
         android:textColor="@color/main_white"
         android:layout_centerHorizontal="true"
         android:textSize="20sp"
         android:layout_marginTop="8dp"/>
 
-    <Button
-        android:id="@+id/done_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentRight="true"
-        android:layout_marginBottom="8dp"
-        android:layout_marginRight="8dp"
-        android:layout_marginLeft="8dp"
-        android:textColor="@color/accent"
-        style="?android:attr/borderlessButtonStyle"
-        android:text="@string/button_done"/>
-
-     <RelativeLayout
-        android:id="@+id/participants_container"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/header"
-         android:layout_above="@id/done_button"
-        android:layout_margin="16dp">
-
-
-
         <android.support.v7.widget.RecyclerView
             android:id="@+id/setup_dialog_available_players"
+            android:layout_margin="8dp"
+            android:layout_below="@id/header"
+            android:layout_above="@id/buttonLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             tools:listitem="@layout/available_player_list_item"/>
-    </RelativeLayout>
 
+        <Button
+            style="?android:attr/borderlessButtonStyle"
+            android:id="@+id/create_profile_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentBottom="true"
+            android:layout_margin="8dp"
+            android:textColor="@color/accent"
+            android:text="@string/new_profile"/>
+
+        <LinearLayout
+            android:id="@+id/buttonLayout"
+            android:layout_alignParentBottom="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true">
+
+            <Button
+                style="?android:attr/borderlessButtonStyle"
+                android:id="@+id/cancel_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/accent"
+                android:text="@string/cancel"/>
+
+            <Button
+                android:id="@+id/ok_button"
+                style="?android:attr/borderlessButtonStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:text="@string/ok"
+                android:textColor="@color/accent" />
+        </LinearLayout>
 </RelativeLayout>
