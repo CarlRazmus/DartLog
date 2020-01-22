@@ -70,13 +70,13 @@ public class MenuBackground extends AppCompatActivity {
         PrimaryDrawerItem profilesItem = new PrimaryDrawerItem().withIdentifier(2).withName(R.string.drawer_item_profiles).withIcon(R.drawable.ic_group_white_24dp);
         PrimaryDrawerItem addProfileItem = new PrimaryDrawerItem().withIdentifier(2).withName(R.string.add_profile).withIcon(R.drawable.ic_person_add);
         PrimaryDrawerItem settingsItem = new PrimaryDrawerItem().withIdentifier(2).withName(R.string.settings).withIcon(R.drawable.ic_settings_white_24dp);
-        PrimaryDrawerItem aboutItem = new PrimaryDrawerItem().withIdentifier(2).withName(R.string.about).withIcon(R.drawable.ic_help_white_24dp);
+        // PrimaryDrawerItem aboutItem = new PrimaryDrawerItem().withIdentifier(2).withName(R.string.about).withIcon(R.drawable.ic_help_white_24dp);
 
-        /* TODO Create an empty AccountHeader - This will be re-added in version 2.0 */
+        /* TODO Create an empty AccountHeader - This will be re-added in version 2.0
         AccountHeader headerResult = new AccountHeaderBuilder()
                 .withActivity(parentActivity)
                 .withHeaderBackground(R.drawable.profile_background)
-                .build();
+                .build();*/
 
         navigationDrawer = new DrawerBuilder()
                 .withActivity(parentActivity)
@@ -94,8 +94,8 @@ public class MenuBackground extends AppCompatActivity {
                         profilesItem,
                         addProfileItem,
                         new DividerDrawerItem(),
-                        settingsItem,
-                        aboutItem
+                        settingsItem
+                        //aboutItem
                 )
                 .withOnDrawerItemClickListener(new Drawer.OnDrawerItemClickListener() {
                     @Override
@@ -115,7 +115,7 @@ public class MenuBackground extends AppCompatActivity {
     private final int PROFILES = 6;
     private final int ADD_PROFILE = 7;
     private final int SETTINGS = 9;
-    private final int ABOUT = 10;
+    //private final int ABOUT = 10;
 
     private void itemClickedEvent(int position) {
         switch (position){
@@ -137,18 +137,18 @@ public class MenuBackground extends AppCompatActivity {
             case(SETTINGS):
                 openSettingsActivity();
                 break;
-            case(ABOUT):
+            /* case(ABOUT):
                 openAboutActivity();
-                break;
+                break; */
             default:
                 throw new Error("Non defined item clicked");
         }
     }
 
-    private void openAboutActivity() {
+    /* private void openAboutActivity() {
         Intent intent = new Intent(this, AboutActivity.class);
         openActivity(AppSettingsActivity.class.getName(), intent);
-    }
+    }*/
 
     private void openActivity(String className, Intent intent)
     {
