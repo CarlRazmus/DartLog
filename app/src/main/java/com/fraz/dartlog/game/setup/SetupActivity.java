@@ -1,7 +1,6 @@
 package com.fraz.dartlog.game.setup;
 
 import android.app.Dialog;
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -14,12 +13,10 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.support.v7.widget.helper.ItemTouchHelper;
-import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
-import android.widget.Toast;
 
 import com.fraz.dartlog.MenuBackground;
 import com.fraz.dartlog.PlayerSelectorDialogFragment;
@@ -32,6 +29,7 @@ import com.fraz.dartlog.game.x01.X01SettingsFragment;
 import com.fraz.dartlog.statistics.ProfileListActivity;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 public class SetupActivity extends MenuBackground
         implements ParticipantsListRecyclerAdapter.OnDragStartListener, View.OnClickListener,
@@ -84,6 +82,7 @@ public class SetupActivity extends MenuBackground
 
     private void InitializeRules() {
         android.support.v7.app.ActionBar ab = getSupportActionBar();
+        assert ab != null;
         switch (gameType) {
             case ("x01"):
                 ab.setTitle("X01 setup");
@@ -138,11 +137,8 @@ public class SetupActivity extends MenuBackground
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.start_game_button:
-                startPlayActivity();
-                break;
-        }
+        if(v.getId() == R.id.start_game_button)
+            startPlayActivity();
     }
 
     @Override
@@ -210,14 +206,14 @@ public class SetupActivity extends MenuBackground
 
     private int getSelectedX() {
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
-        return Integer.parseInt(sharedPref.getString(
-                getResources().getString(R.string.pref_key_x01_starting_score), "3"));
+        return Integer.parseInt(Objects.requireNonNull(sharedPref.getString(
+                getResources().getString(R.string.pref_key_x01_starting_score), "3")));
     }
 
     private int getSelectedNrTurns() {
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
-        return Integer.parseInt(sharedPref.getString(
-                getResources().getString(R.string.pref_key_random_nr_of_rounds), "10"));
+        return Integer.parseInt(Objects.requireNonNull(sharedPref.getString(
+                getResources().getString(R.string.pref_key_random_nr_of_rounds), "10")));
     }
 
     private boolean isDoubleOutEnabled() {
@@ -228,8 +224,8 @@ public class SetupActivity extends MenuBackground
 
     private int getDoubleOutAttemptsSetting() {
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
-        return Integer.parseInt(sharedPref.getString(
-                getResources().getString(R.string.pref_key_x01_double_out_attempts), "5"));
+        return Integer.parseInt(Objects.requireNonNull(sharedPref.getString(
+                getResources().getString(R.string.pref_key_x01_double_out_attempts), "5")));
     }
 
     @Override
