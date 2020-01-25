@@ -93,6 +93,7 @@ public class MatchHistoryFragment extends Fragment {
 
             recyclerView.post(new Runnable() {
                 public void run() {
+                    recyclerViewAdapter.notifyItemRangeRemoved(params[0], params[1]);
                     recyclerViewAdapter.notifyItemRangeInserted(params[0], params[1]);
                 }
             });

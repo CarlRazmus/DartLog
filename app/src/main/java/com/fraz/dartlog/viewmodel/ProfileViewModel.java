@@ -161,11 +161,6 @@ public class ProfileViewModel extends ViewModel {
             DartLogDatabaseHelper databaseHelper = DartLogDatabaseHelper.getInstance();
             long  profileId = databaseHelper.getPlayerId(getProfileName());
             Thread.currentThread().setName(getProfileName() + "_Highscore");
-            try {
-                Thread.sleep(3000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
             Profile profileData = new Profile();
             profileData.setHighestCheckoutGame(databaseHelper.getHighestCheckout(profileId));
             HashMap<String, GameData> fewestTurnsX01Games = databaseHelper.getfewestTurnsX01Games(profileId);

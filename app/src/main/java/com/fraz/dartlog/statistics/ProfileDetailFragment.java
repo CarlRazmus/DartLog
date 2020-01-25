@@ -86,9 +86,11 @@ public class ProfileDetailFragment extends Fragment {
     }
 
     private void addHighestOutGame(GameData game, ViewGroup layout ) {
-        MatchItemView matchItemView = new MatchItemView(getContext());
-        matchItemView.setStatToShow(MatchItemView.Stat.CHECKOUT);
-        addGameView(matchItemView, game, layout);
+        if (game != null) {
+            MatchItemView matchItemView = new MatchItemView(getContext());
+            matchItemView.setStatToShow(MatchItemView.Stat.CHECKOUT);
+            addGameView(matchItemView, game, layout);
+        }
     }
 
     private void addFewestTurnsView(final GameData game, ViewGroup linearLayout) {
