@@ -1,5 +1,4 @@
 <resources>
-    <string name="app_name">DartLog</string>
     <string name="action_delete_profile">Delete profile</string>
     <string name="title_activity_players">PlayersActivity</string>
     <string name="ok">OK</string>
