@@ -94,7 +94,7 @@ public class MatchItemView extends FrameLayout {
     private void initSecondStatView() {
         if (game.getPlayer(playerName).equals(game.getWinner())) {
             stat_2.setText(R.string.win);
-            stat_2.setTextColor(MyApplication.getInstance().getResources().getColor(R.color.green_win));
+            stat_2.setTextColor(MyApplication.getInstance().getResources().getColor(R.color.accent));
         }
         else {
             stat_2.setText(R.string.loss);

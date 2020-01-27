@@ -68,7 +68,7 @@ public class PlayerViewModel extends ViewModel {
         StringBuilder scoreHistoryText = new StringBuilder();
         if (player != null) {
             for (Integer score : player.getScoreHistory()) {
-                scoreHistoryText.append(String.format("%s ", Integer.toString(score)));
+                scoreHistoryText.insert(0, String.format("%s ", Integer.toString(score)));
             }
         }
         return scoreHistoryText.toString().trim();

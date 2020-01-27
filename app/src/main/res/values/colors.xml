@@ -15,8 +15,8 @@
     <color name="main_white_transparent">#CCFFFFFF</color>
     <color name="light_grey">#BDBDBD</color>
     <color name="main_grey">#616161</color>
+    <color name="dark_gray">#323232</color>
     <color name="light_red">#D03535</color>
-    <color name="green_win">#7AB317</color>
     <color name="red_loss">#B90504</color>
     <color name="red_divider">#570504</color>
 
