@@ -1,6 +1,7 @@
 package com.fraz.dartlog.game.setup;
 
 import android.app.Dialog;
+import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -19,7 +20,7 @@ import android.view.View;
 import android.widget.Button;
 
 import com.fraz.dartlog.MenuBackground;
-import com.fraz.dartlog.PlayerSelectorDialogFragment;
+import com.fraz.dartlog.PlayerSelectorDialog;
 import com.fraz.dartlog.R;
 import com.fraz.dartlog.Util;
 import com.fraz.dartlog.game.random.RandomGameActivity;
@@ -27,21 +28,20 @@ import com.fraz.dartlog.game.random.RandomSettingsFragment;
 import com.fraz.dartlog.game.x01.X01GameActivity;
 import com.fraz.dartlog.game.x01.X01SettingsFragment;
 import com.fraz.dartlog.statistics.ProfileListActivity;
+import com.fraz.dartlog.viewmodel.GameSetupViewModel;
 
-import java.util.ArrayList;
 import java.util.Objects;
 
 public class SetupActivity extends MenuBackground
-        implements ParticipantsListRecyclerAdapter.OnDragStartListener, View.OnClickListener,
-                    PlayerSelectorDialogFragment.PlayerSelectorDialogListener {
+        implements ParticipantsListRecyclerAdapter.OnDragStartListener, View.OnClickListener {
 
     private ParticipantsListRecyclerAdapter participantsRecyclerAdapter;
-    private ArrayList<String> participantNames;
     private ItemTouchHelper itemTouchHelper;
     private String gameType;
     private String rulesString;
     private String rulesTitle;
-    private PlayerSelectorDialogFragment dialogFragment;
+    private PlayerSelectorDialog dialogFragment;
+    private GameSetupViewModel gameSetupViewModel;
 
 
     public SetupActivity(){
@@ -49,21 +49,16 @@ public class SetupActivity extends MenuBackground
         setParentActivity(this);
     }
 
-    @Override
-    public void onDialogPositiveClick(PlayerSelectorDialogFragment dialog) {
-        participantNames.clear();
-        participantNames.addAll(dialog.getSelectedPlayers());
-        participantsRecyclerAdapter.notifyDataSetChanged();
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        gameSetupViewModel = ViewModelProviders.of(this).get(GameSetupViewModel.class);
+
         RecyclerView.LayoutManager participantsLayoutManager = new LinearLayoutManager(this);
-        dialogFragment = new PlayerSelectorDialogFragment();
-        participantNames = new ArrayList<>();
-        participantsRecyclerAdapter = new ParticipantsListRecyclerAdapter(this, participantNames);
+        dialogFragment = new PlayerSelectorDialog();
+        participantsRecyclerAdapter = new ParticipantsListRecyclerAdapter(this, gameSetupViewModel.getParticipants().getValue());
         gameType = getIntent().getStringExtra("gameType");
 
         InitializeToolbar();
@@ -76,7 +71,7 @@ public class SetupActivity extends MenuBackground
         participantsRecyclerView.setLayoutManager(participantsLayoutManager);
         participantsRecyclerView.setAdapter(participantsRecyclerAdapter);
 
-        itemTouchHelper = new ItemTouchHelper(new ParticipantSwipeCallback(ItemTouchHelper.UP | ItemTouchHelper.DOWN, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT, participantNames, participantsRecyclerAdapter));
+        itemTouchHelper = new ItemTouchHelper(new ParticipantSwipeCallback(ItemTouchHelper.UP | ItemTouchHelper.DOWN, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT, participantsRecyclerAdapter));
         itemTouchHelper.attachToRecyclerView(participantsRecyclerView);
     }
 
@@ -109,9 +104,6 @@ public class SetupActivity extends MenuBackground
         FloatingActionButton openPlayerSelectionFab = findViewById(R.id.open_player_selection_fab);
         openPlayerSelectionFab.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                Bundle args = new Bundle();
-                args.putStringArrayList("selectedNames", participantNames);
-                dialogFragment.setArguments(args);
                 dialogFragment.show(getSupportFragmentManager(), "selectPlayers");
             }
         });
@@ -167,7 +159,7 @@ public class SetupActivity extends MenuBackground
     }
 
     private void startPlayActivity() {
-        if (participantNames.size() == 0) {
+        if (Objects.requireNonNull(gameSetupViewModel.getParticipants().getValue()).size() == 0) {
             Util.showToast("A game requires 1 or more players to start!");
         } else {
             startActivity(createGameIntent());
@@ -186,7 +178,7 @@ public class SetupActivity extends MenuBackground
                 gameIntent = createX01GameIntent();
                 break;
         }
-        gameIntent.putStringArrayListExtra("playerNames", participantNames);
+        gameIntent.putStringArrayListExtra("playerNames", gameSetupViewModel.getParticipants().getValue());
         return gameIntent;
     }
 

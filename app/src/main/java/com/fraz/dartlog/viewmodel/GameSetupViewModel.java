@@ -1,0 +1,92 @@
+package com.fraz.dartlog.viewmodel;
+
+import android.app.Application;
+import android.arch.lifecycle.AndroidViewModel;
+import android.arch.lifecycle.LiveData;
+import android.arch.lifecycle.MutableLiveData;
+import android.arch.lifecycle.Observer;
+import android.os.LocaleList;
+import android.support.annotation.Nullable;
+
+import com.fraz.dartlog.model.repository.Repository;
+import com.fraz.dartlog.util.Event;
+
+import java.util.ArrayList;
+
+public class GameSetupViewModel extends AndroidViewModel {
+
+    private final Observer<ArrayList<String>> observer;
+    private ArrayList<String> profiles;
+    private final MutableLiveData<ArrayList<String>> participants = new MutableLiveData<>();
+    private  ArrayList<Participant> newParticipants = new ArrayList<>();
+    private final Repository repository;
+
+
+    public GameSetupViewModel(Application application)
+    {
+        super(application);
+
+        repository = Repository.getInstance();
+        profiles = repository.getProfiles().getValue();
+        participants.setValue(new ArrayList<String>());
+        initNewParticipants();
+
+
+        observer = new Observer<ArrayList<String>>() {
+            @Override
+            public void onChanged(@Nullable ArrayList<String> names) {
+                profiles = names;
+                initNewParticipants();
+            }
+        };
+        repository.getProfiles().observeForever(observer);
+    }
+
+
+    private void initNewParticipants() {
+        newParticipants.clear();
+        for (String profileName : profiles)
+        {
+            newParticipants.add(new Participant(profileName, participants.getValue().contains(profileName)));
+        }
+    }
+
+    @Override
+    protected void onCleared() {
+        super.onCleared();
+        repository.getProfiles().removeObserver(observer);
+    }
+
+
+    public LiveData<ArrayList<String>> getParticipants()
+    {
+        return participants;
+    }
+
+    public void setParticipantsToNewParticipants(){
+        participants.getValue().clear();
+        for (Participant participant : newParticipants){
+            if (participant.isParticipating.getValue())
+                participants.getValue().add(participant.name);
+        }
+    }
+
+    public ArrayList<Participant> getNewParticipants() {
+        return newParticipants;
+    }
+
+    public class Participant {
+        public String name;
+        private MutableLiveData<Boolean> isParticipating = new MutableLiveData<>();
+
+        public Participant(String name, boolean isParticipating){
+            this.name = name;
+            this.isParticipating.setValue(isParticipating);
+        }
+
+        public MutableLiveData<Boolean> getIsParticipating() {
+            return isParticipating;
+        }
+
+    }
+}

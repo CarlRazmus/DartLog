@@ -63,7 +63,6 @@ public class AvailablePlayersRecyclerAdapter extends RecyclerView.Adapter<Availa
         public ViewHolder(View listItem) {
             super(listItem);
             statusCheckBox = listItem.findViewById(R.id.checkbox);
-            nameTextView = listItem.findViewById(R.id.available_player_name);
         }
     }
 

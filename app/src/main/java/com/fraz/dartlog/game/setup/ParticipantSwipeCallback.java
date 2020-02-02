@@ -11,7 +11,7 @@ class ParticipantSwipeCallback extends ItemTouchHelper.SimpleCallback {
     private ParticipantsListRecyclerAdapter participantsListAdapter;
 
 
-    public ParticipantSwipeCallback(int dragDirs, int swipeDirs, ArrayList<String> participantsNames,
+    public ParticipantSwipeCallback(int dragDirs, int swipeDirs,
                                     ParticipantsListRecyclerAdapter participantsListAdapter) {
         super(dragDirs, swipeDirs);
         this.participantsListAdapter = participantsListAdapter;
