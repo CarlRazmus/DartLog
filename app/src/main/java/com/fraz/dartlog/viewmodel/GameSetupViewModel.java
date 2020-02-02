@@ -75,6 +75,15 @@ public class GameSetupViewModel extends AndroidViewModel {
         return newParticipants;
     }
 
+    public void setNewParticipantsToParticipants() {
+        for (Participant participant : newParticipants){
+            if (participants.getValue().contains(participant.name))
+                participant.isParticipating.setValue(true);
+            else
+                participant.isParticipating.setValue(false);
+        }
+    }
+
     public class Participant {
         public String name;
         private MutableLiveData<Boolean> isParticipating = new MutableLiveData<>();
@@ -87,6 +96,5 @@ public class GameSetupViewModel extends AndroidViewModel {
         public MutableLiveData<Boolean> getIsParticipating() {
             return isParticipating;
         }
-
     }
 }

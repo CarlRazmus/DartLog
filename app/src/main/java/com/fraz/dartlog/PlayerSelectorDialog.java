@@ -28,6 +28,7 @@ public class PlayerSelectorDialog extends DialogFragment {
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         setupViewModel = ViewModelProviders.of(getActivity()).get(GameSetupViewModel.class);
+        setupViewModel.setNewParticipantsToParticipants();
         recyclerView = view.findViewById(R.id.availablePlayersRecyclerView);
         recyclerView.setAdapter(new ParticipantsRecyclerViewAdapter());
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
