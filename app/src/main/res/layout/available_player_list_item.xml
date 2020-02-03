@@ -21,6 +21,4 @@
         android:textColor="@color/main_white"
         android:textSize="15sp"
         android:textStyle="bold"/>
-
-
 </layout>

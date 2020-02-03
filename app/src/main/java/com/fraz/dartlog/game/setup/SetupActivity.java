@@ -49,16 +49,18 @@ public class SetupActivity extends MenuBackground
         setParentActivity(this);
     }
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         gameSetupViewModel = ViewModelProviders.of(this).get(GameSetupViewModel.class);
-
         RecyclerView.LayoutManager participantsLayoutManager = new LinearLayoutManager(this);
-        dialogFragment = new PlayerSelectorDialog();
+
         participantsRecyclerAdapter = new ParticipantsListRecyclerAdapter(this, gameSetupViewModel.getParticipants().getValue());
+
+        dialogFragment = new PlayerSelectorDialog();
+        dialogFragment.setAdapterReference(participantsRecyclerAdapter);
+
         gameType = getIntent().getStringExtra("gameType");
 
         InitializeToolbar();

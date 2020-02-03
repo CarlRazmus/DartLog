@@ -11,14 +11,16 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.fraz.dartlog.databinding.AvailablePlayerListItemBinding;
+import com.fraz.dartlog.game.setup.ParticipantsListRecyclerAdapter;
 import com.fraz.dartlog.util.BindingRecyclerViewHolder;
 import com.fraz.dartlog.viewmodel.GameSetupViewModel;
+
+import java.util.Objects;
 
 public class PlayerSelectorDialog extends DialogFragment {
 
     private GameSetupViewModel setupViewModel;
-    private RecyclerView recyclerView;
-
+    private ParticipantsListRecyclerAdapter adapterReference;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -27,9 +29,9 @@ public class PlayerSelectorDialog extends DialogFragment {
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
-        setupViewModel = ViewModelProviders.of(getActivity()).get(GameSetupViewModel.class);
+        setupViewModel = ViewModelProviders.of(Objects.requireNonNull(getActivity())).get(GameSetupViewModel.class);
         setupViewModel.setNewParticipantsToParticipants();
-        recyclerView = view.findViewById(R.id.availablePlayersRecyclerView);
+        RecyclerView recyclerView = view.findViewById(R.id.availablePlayersRecyclerView);
         recyclerView.setAdapter(new ParticipantsRecyclerViewAdapter());
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
@@ -37,6 +39,7 @@ public class PlayerSelectorDialog extends DialogFragment {
             @Override
             public void onClick(View view) {
                 setupViewModel.setParticipantsToNewParticipants();
+                adapterReference.notifyDataSetChanged();
                 dismiss();
             }
         });
@@ -48,6 +51,9 @@ public class PlayerSelectorDialog extends DialogFragment {
         });
     }
 
+    public void setAdapterReference(ParticipantsListRecyclerAdapter adapter){
+        adapterReference = adapter;
+    }
 
     public class ParticipantsRecyclerViewAdapter extends RecyclerView.Adapter<BindingRecyclerViewHolder> {
 

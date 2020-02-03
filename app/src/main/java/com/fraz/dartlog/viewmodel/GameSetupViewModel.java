@@ -57,7 +57,6 @@ public class GameSetupViewModel extends AndroidViewModel {
         repository.getProfiles().removeObserver(observer);
     }
 
-
     public LiveData<ArrayList<String>> getParticipants()
     {
         return participants;
