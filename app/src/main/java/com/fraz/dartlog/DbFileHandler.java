@@ -26,10 +26,7 @@ public class DbFileHandler {
     public static final int OPEN_REQUEST_CODE = 44;
 
     private File getDbFile() {
-        File dbDir = new File("/data/data/com.fraz.dartlog/databases");
-        File dbFile = new File(dbDir, "DartLog.db");
-
-        return dbFile;
+        return MyApplication.getInstance().getDatabasePath("DartLog.db");
     }
 
     private String getDateAsString() {
@@ -91,10 +88,9 @@ public class DbFileHandler {
 
     public void copyDataFromExternalFileToLocalDb(Uri externalDbUri){
         File appDb = getDbFile();
-        Uri appDbUri = Uri.fromFile(appDb);
-
         if (appDb.exists()) {
             try {
+                Uri appDbUri = Uri.fromFile(appDb);
                 InputStream inStream = getInputStream(externalDbUri);
                 OutputStream outStream = getOutputStream(appDbUri);
 
@@ -113,10 +109,9 @@ public class DbFileHandler {
 
     public void copyLocalDbDataToExternalFile(Uri newFileUri) {
         File db = getDbFile();
-        Uri dbUri = Uri.fromFile(db);
-
         if (db.exists()) {
             try {
+                Uri dbUri = Uri.fromFile(db);
                 InputStream inStream = getInputStream(dbUri);
                 OutputStream outStream = getOutputStream(newFileUri);
 
