@@ -15,10 +15,10 @@
         android:id="@+id/game_player_list_item"
         android:layout_marginTop="4dp"
         android:layout_marginBottom="4dp"
-        android:layout_marginStart="8dp"
         android:checked="@={participant.isParticipating}"
         android:text="@{participant.name}"
         android:textColor="@color/main_white"
+        android:paddingStart="8dp"
         android:textSize="15sp"
         android:textStyle="bold"/>
 </layout>
