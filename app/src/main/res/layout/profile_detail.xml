@@ -45,7 +45,6 @@
                     android:layout_centerInParent="true"
                     android:visibility="@{viewModel.showSummaryProgressBar ? View.VISIBLE : View.GONE}">
                 </include>
-
             </RelativeLayout>
 
             <include layout="@layout/match_statistics_header"

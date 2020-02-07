@@ -3,6 +3,8 @@ package com.fraz.dartlog.statistics;
 import android.arch.lifecycle.ViewModelProviders;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
@@ -36,14 +38,14 @@ public class ProfileDetailFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments().containsKey(ARG_ITEM_NAME)) {
+        if (getArguments() != null && getArguments().containsKey(ARG_ITEM_NAME)) {
             profileName = getArguments().getString(ARG_ITEM_NAME);
             profileViewModel = ViewModelProviders.of(requireActivity()).get(ProfileViewModel.class);
         }
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         ProfileDetailBinding binding = DataBindingUtil.inflate(
                 inflater, R.layout.profile_detail, container, false);
@@ -51,34 +53,50 @@ public class ProfileDetailFragment extends Fragment {
         binding.setViewModel(profileViewModel);
         rootView = binding.getRoot();
 
-        Toolbar toolbar = getActivity().findViewById(R.id.toolbar);
-        if (toolbar != null)
-            toolbar.setTitle(profileName);
-
         EventObserver<String> observer = new EventObserver<String>() {
             @Override
             public void onEventUnhandled(String content) {
-                Profile profile = profileViewModel.getProfile().getValue();
-
-                LinearLayout turnsLayout = rootView.findViewById(R.id.fewest_turns_linear_layout);
-                turnsLayout.removeAllViews();
-                addFewestTurnsGames(profile.getFewestTurns301Game(), turnsLayout);
-                addFewestTurnsGames(profile.getFewestTurns501Game(), turnsLayout);
-
-                LinearLayout checkoutLayout = rootView.findViewById(R.id.highest_out_linear_layout);
-                checkoutLayout.removeAllViews();
-                addHighestOutGame(profile.getHighestCheckoutGame(), checkoutLayout);
+                updateProfileDetails();
             }
         };
         profileViewModel.getHighScoresLoaded().observe(getViewLifecycleOwner(), observer);
+        Boolean finishedLoadingHighScores = profileViewModel.getFinishedLoadingHighScores().getValue();
+        if(finishedLoadingHighScores != null && finishedLoadingHighScores)
+        {
+            updateProfileDetails();
+        }
         return rootView;
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+
+        Toolbar toolbar = requireActivity().findViewById(R.id.toolbar);
+        if (toolbar != null)
+            toolbar.setTitle(profileName);
+    }
+
+    public void updateProfileDetails()
+    {
+        Profile profile = profileViewModel.getProfile().getValue();
+
+        if (profile == null) return;
+
+        LinearLayout turnsLayout = rootView.findViewById(R.id.fewest_turns_linear_layout);
+        turnsLayout.removeAllViews();
+        addFewestTurnsGames(profile.getFewestTurns301Game(), turnsLayout);
+        addFewestTurnsGames(profile.getFewestTurns501Game(), turnsLayout);
+
+        LinearLayout checkoutLayout = rootView.findViewById(R.id.highest_out_linear_layout);
+        checkoutLayout.removeAllViews();
+        addHighestOutGame(profile.getHighestCheckoutGame(), checkoutLayout);
     }
 
     @Override
     public void onDestroy(){
         super.onDestroy();
     }
-
 
     private void addFewestTurnsGames(GameData game, ViewGroup layout) {
         if (game != null)
@@ -105,8 +123,8 @@ public class ProfileDetailFragment extends Fragment {
         matchItemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                MatchFragment.newInstance(game).show(getFragmentManager(),
-                        "game_overview_" + String.valueOf(unique_id));
+                MatchFragment.newInstance(game).show(requireFragmentManager(),
+                        "game_overview_" + unique_id);
                 unique_id += 1;
             }
         });

@@ -49,11 +49,6 @@
                 android:value="com.fraz.dartlog.statistics.ProfileListActivity" />
         </activity>
         <activity
-            android:name=".statistics.MatchPagerActivity"
-            android:label="@string/title_match_activity"
-            android:screenOrientation="portrait">
-        </activity>
-        <activity
             android:name=".AppSettingsActivity"
             android:label="@string/app_settings_activity"
             android:screenOrientation="portrait">

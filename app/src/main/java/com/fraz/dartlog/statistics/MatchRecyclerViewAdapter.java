@@ -1,12 +1,15 @@
 package com.fraz.dartlog.statistics;
 
 import android.content.Context;
-import android.content.Intent;
 import android.support.annotation.NonNull;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.fraz.dartlog.R;
 import com.fraz.dartlog.game.GameData;
 
 import java.util.ArrayList;
@@ -39,11 +42,12 @@ public class MatchRecyclerViewAdapter extends RecyclerView.Adapter<MatchRecycler
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(context, MatchPagerActivity.class);
-                intent.putExtra(MatchPagerActivity.ARG_ITEM_NAME, playerName);
-                intent.putExtra(MatchPagerActivity.ARG_ITEM_POSITION, holder.getAdapterPosition());
-                intent.putExtra(MatchPagerActivity.ARG_MATCHES, gameData.size());
-                context.startActivity(intent);
+                FragmentManager fragmentManager = ((AppCompatActivity) context).getSupportFragmentManager();
+                MatchPagerFragment pagerFragment = MatchPagerFragment.newInstance(playerName, holder.getAdapterPosition(), gameData.size());
+                FragmentTransaction transaction = fragmentManager.beginTransaction();
+                transaction.replace(R.id.profile_fragment_container, pagerFragment);
+                transaction.addToBackStack(null);
+                transaction.commit();
             }
         });
     }
@@ -52,9 +56,9 @@ public class MatchRecyclerViewAdapter extends RecyclerView.Adapter<MatchRecycler
         return gameData.size();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
+    class ViewHolder extends RecyclerView.ViewHolder {
 
-        public ViewHolder(View view) {
+        ViewHolder(View view) {
             super(view);
         }
     }

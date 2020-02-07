@@ -4,15 +4,16 @@ import android.arch.lifecycle.ViewModelProviders;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.app.NavUtils;
-import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
 import android.view.Menu;
 import android.view.MenuItem;
 
 import com.fraz.dartlog.MenuBackground;
 import com.fraz.dartlog.R;
-import com.fraz.dartlog.model.repository.Repository;
+import com.fraz.dartlog.view.ProfileFragment;
 import com.fraz.dartlog.viewmodel.ProfileViewModel;
 
 /**
@@ -39,9 +40,10 @@ public class ProfileDetailActivity extends MenuBackground {
         profileViewModel = ViewModelProviders.of(this).get(ProfileViewModel.class);
         profileViewModel.setProfile(profileName);
 
-        ViewPager viewPager = findViewById(R.id.profile_detail_view_pager);
-        viewPager.setAdapter(new ProfileDetailFragmentPagerAdapter(getSupportFragmentManager(),
-                                                                   profileName));
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentTransaction transaction = fragmentManager.beginTransaction();
+        transaction.add(R.id.profile_fragment_container, new ProfileFragment());
+        transaction.commit();
     }
 
     @Override

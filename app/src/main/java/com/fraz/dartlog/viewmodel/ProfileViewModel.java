@@ -42,6 +42,7 @@ public class ProfileViewModel extends ViewModel {
         finishedLoadingHighScores.setValue(false);
         finishedLoadingSummary.setValue(false);
         showSummaryProgressBar.setValue(false);
+        showHighScoresProgressBar.setValue(false);
         startupDelayTimePassed.setValue(false);
 
         runnerSummary = new AsyncTaskFetchSummaryData();
@@ -103,6 +104,10 @@ public class ProfileViewModel extends ViewModel {
 
     public LiveData<Boolean> getShowHighScoresProgressBar(){
         return showHighScoresProgressBar;
+    }
+
+    public MutableLiveData<Boolean> getFinishedLoadingHighScores() {
+        return finishedLoadingHighScores;
     }
 
     public void setProfile(String profileName) {
@@ -179,5 +184,4 @@ public class ProfileViewModel extends ViewModel {
             highScoresLoaded.setValue(new Event<>(""));
         }
     }
-
 }
