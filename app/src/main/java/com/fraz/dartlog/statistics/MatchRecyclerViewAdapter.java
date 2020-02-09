@@ -17,14 +17,17 @@ import java.util.ArrayList;
 public class MatchRecyclerViewAdapter extends RecyclerView.Adapter<MatchRecyclerViewAdapter.ViewHolder> {
 
     private Context context;
+
     private ArrayList<GameData> gameData;
     private String playerName;
 
     public MatchRecyclerViewAdapter(Context context, ArrayList<GameData> gameData, String playerName) {
         this.context = context;
-        this.gameData = gameData;
         this.playerName = playerName;
+
+        this.gameData = gameData;
     }
+
 
     @NonNull
     @Override
@@ -62,4 +65,6 @@ public class MatchRecyclerViewAdapter extends RecyclerView.Adapter<MatchRecycler
             super(view);
         }
     }
+
+
 }

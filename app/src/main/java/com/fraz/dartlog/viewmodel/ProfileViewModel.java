@@ -16,20 +16,24 @@ import com.fraz.dartlog.model.Profile;
 import com.fraz.dartlog.model.repository.Repository;
 import com.fraz.dartlog.util.Event;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 public class ProfileViewModel extends ViewModel {
 
     private MutableLiveData<Profile> profile = new MutableLiveData<>();
+    private ArrayList<GameData> matchHistory = new ArrayList<>();
 
     private MutableLiveData<Event<String>> highScoresLoaded = new MutableLiveData<>();
+    private MutableLiveData<Event<Integer>> matchHistoryLoaded = new MutableLiveData<>();
 
     private final Repository repository;
 
     private AsyncTaskFetchSummaryData runnerSummary;
     private AsyncTaskFetchHighScores runnerHighScores;
-    private MutableLiveData<Boolean> finishedLoadingSummary = new MutableLiveData<>();
+    private AsyncTaskFetchMatchHistory runnerMatchHistory;
 
+    private MutableLiveData<Boolean> finishedLoadingSummary = new MutableLiveData<>();
     private MutableLiveData<Boolean> finishedLoadingHighScores = new MutableLiveData<>();
     private MediatorLiveData<Boolean> showSummaryProgressBar = new MediatorLiveData<>();
     private MediatorLiveData<Boolean> showHighScoresProgressBar = new MediatorLiveData<>();
@@ -47,6 +51,7 @@ public class ProfileViewModel extends ViewModel {
 
         runnerSummary = new AsyncTaskFetchSummaryData();
         runnerHighScores = new AsyncTaskFetchHighScores();
+        runnerMatchHistory = new AsyncTaskFetchMatchHistory();
 
         Observer<Boolean> summaryObserver = new Observer<Boolean>() {
             @Override
@@ -83,7 +88,9 @@ public class ProfileViewModel extends ViewModel {
     public MutableLiveData<Event<String>> getHighScoresLoaded() {
         return highScoresLoaded;
     }
-
+    public MutableLiveData<Event<Integer>> getMatchHistoryLoaded() {
+        return matchHistoryLoaded;
+    }
     public String getProfileName()
     {
         return profile.getValue().getName();
@@ -110,6 +117,10 @@ public class ProfileViewModel extends ViewModel {
         return finishedLoadingHighScores;
     }
 
+    public ArrayList<GameData> getMatchHistory() {
+        return matchHistory;
+    }
+
     public void setProfile(String profileName) {
 
         if(profile.getValue() != null && getProfileName().equals(profileName))
@@ -129,13 +140,15 @@ public class ProfileViewModel extends ViewModel {
             }
         }, 500);
 
+
         runnerSummary.executeOnExecutor(Util.getExecutorInstance());
         runnerHighScores.executeOnExecutor(Util.getExecutorInstance());
+        runnerMatchHistory.executeOnExecutor(Util.getExecutorInstance());
     }
 
     public void deleteProfile()
     {
-        Repository.getInstance().removeProfile(profile.getValue().getName());
+        Repository.getInstance().removeProfile(getProfileName());
     }
 
     private class AsyncTaskFetchSummaryData extends AsyncTask<Void, Void, Profile> {
@@ -182,6 +195,35 @@ public class ProfileViewModel extends ViewModel {
             profile.setValue(profile.getValue());
             finishedLoadingHighScores.setValue(true);
             highScoresLoaded.setValue(new Event<>(""));
+        }
+    }
+
+    private class AsyncTaskFetchMatchHistory extends AsyncTask<Void, Integer, Void> {
+        private boolean allLoaded = false;
+        private long lastLoadedMatchId = Long.MAX_VALUE;
+        private final int AMOUNT_ITEMS_TO_LOAD = 20;
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+            DartLogDatabaseHelper databaseHelper = DartLogDatabaseHelper.getInstance();
+
+            while(!allLoaded) {
+                ArrayList<GameData> newData = databaseHelper.getPlayerMatchData(getProfileName(), lastLoadedMatchId, AMOUNT_ITEMS_TO_LOAD);
+                Integer sizeNewData = newData.size();
+                if (sizeNewData < AMOUNT_ITEMS_TO_LOAD)
+                    allLoaded = true;
+                lastLoadedMatchId = databaseHelper.getLastLoadedMatchId();
+                matchHistory.addAll(newData);
+
+                publishProgress(sizeNewData);
+            }
+            return null;
+        }
+
+        @Override
+        protected void onProgressUpdate(Integer... values) {
+            super.onProgressUpdate(values);
+            matchHistoryLoaded.setValue(new Event<>(values[0]));
         }
     }
 }
