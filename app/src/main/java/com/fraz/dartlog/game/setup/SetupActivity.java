@@ -2,21 +2,27 @@ package com.fraz.dartlog.game.setup;
 
 import android.app.Dialog;
 import android.arch.lifecycle.ViewModelProviders;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.app.NavUtils;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.support.v7.widget.helper.ItemTouchHelper;
+import android.transition.Scene;
+import android.util.AttributeSet;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 
 import com.fraz.dartlog.MenuBackground;
@@ -42,7 +48,7 @@ public class SetupActivity extends MenuBackground
     private String rulesTitle;
     private PlayerSelectorDialog dialogFragment;
     private GameSetupViewModel gameSetupViewModel;
-
+    private BasicTransitionFragment transitionFragment;
 
     public SetupActivity(){
         super(R.layout.activity_setup);
@@ -57,6 +63,12 @@ public class SetupActivity extends MenuBackground
         RecyclerView.LayoutManager participantsLayoutManager = new LinearLayoutManager(this);
 
         participantsRecyclerAdapter = new ParticipantsListRecyclerAdapter(this, gameSetupViewModel.getParticipants().getValue());
+
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        transitionFragment = new BasicTransitionFragment();
+        //transitionFragment.initStuff();
+        transaction.replace(R.id.scene_content_layout, transitionFragment);
+        transaction.commit();
 
         dialogFragment = new PlayerSelectorDialog();
         dialogFragment.setAdapterReference(participantsRecyclerAdapter);
@@ -106,13 +118,15 @@ public class SetupActivity extends MenuBackground
         FloatingActionButton openPlayerSelectionFab = findViewById(R.id.open_player_selection_fab);
         openPlayerSelectionFab.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                dialogFragment.show(getSupportFragmentManager(), "selectPlayers");
+                //dialogFragment.show(getSupportFragmentManager(), "selectPlayers");
+                transitionFragment.changeScene();
             }
         });
     }
 
     private void InitializeButton() {
-        Button readyButton = findViewById(R.id.start_game_button);
+        View view = findViewById(R.id.scene_content_layout);
+        Button readyButton = view.findViewById(R.id.start_game_button);
         assert readyButton != null;
         readyButton.setOnClickListener(this);
     }

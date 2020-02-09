@@ -5,95 +5,33 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:id="@+id/activity_root_view"
     tools:context=".game.setup.SetupActivity">
 
-    <LinearLayout
+    <ScrollView
+        android:id="@+id/setup_scrollview"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:background="@drawable/background"
+        android:fillViewport="true">
 
-        <android.support.design.widget.AppBarLayout
-            android:id="@+id/app_bar"
+        <FrameLayout
+            android:id="@+id/scene_content_layout"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:theme="@style/AppBarOverlayStyle">
+            android:layout_height="wrap_content"/>
+    </ScrollView>
 
-            <android.support.v7.widget.Toolbar
-                android:id="@+id/toolbar"
-                android:layout_width="match_parent"
-                android:layout_height="?attr/actionBarSize"
-                app:popupTheme="@style/PopupOverlayStyle" />
-        </android.support.design.widget.AppBarLayout>
-
-        <ScrollView
-            android:id="@+id/setup_scrollview"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@drawable/background"
-            android:fillViewport="true">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical">
-
-                <FrameLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/game_preferences"/>
-
-                <View
-                    android:id="@+id/preference_delimiter"
-                    android:layout_width="match_parent"
-                    android:layout_marginTop="-1dp"
-                    android:elevation="1dp"
-                    android:layout_height="1dp"
-                    android:background="@color/accent"/>
-
-                <TextView
-                    android:id="@+id/participant_label"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:textSize="15sp"
-                    android:layout_margin="@dimen/activity_horizontal_margin"
-                    android:textColor="@android:color/white"
-                    android:text="@string/setup_play_order"/>
-
-                <android.support.v7.widget.RecyclerView
-                    android:id="@+id/participants_recycler_view"
-                    android:scrollbars="none"
-                    android:layout_marginStart="@dimen/activity_horizontal_margin"
-                    android:layout_marginEnd="@dimen/activity_horizontal_margin"
-                    android:layout_marginBottom="@dimen/activity_horizontal_margin"
-                    android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    android:layout_weight="1"
-                    tools:listitem="@layout/participant_list_item"/>
-
-                <Button
-                    android:id="@+id/start_game_button"
-                    android:layout_width="300dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/activity_horizontal_margin"
-                    android:layout_marginEnd="@dimen/activity_horizontal_margin"
-                    android:layout_marginBottom="@dimen/activity_horizontal_margin"
-                    android:background="@drawable/button_default"
-                    android:layout_gravity="center_horizontal"
-                    android:text="@string/button_start_game"/>
-
-            </LinearLayout>
-        </ScrollView>
-    </LinearLayout>
-
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/open_player_selection_fab"
-        android:layout_width="wrap_content"
+    <android.support.design.widget.AppBarLayout
+        android:id="@+id/app_bar"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="16dp"
-        android:layout_marginTop="24dp"
-        android:clickable="true"
-        android:src="@drawable/ic_group_add_white_24dp"
-        app:layout_anchor="@id/preference_delimiter"
-        app:layout_anchorGravity="center|end"/>
+        android:theme="@style/AppBarOverlayStyle">
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            app:popupTheme="@style/PopupOverlayStyle" />
+    </android.support.design.widget.AppBarLayout>
 
 </android.support.design.widget.CoordinatorLayout>
