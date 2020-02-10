@@ -21,7 +21,7 @@ public class MatchRecyclerViewAdapter extends RecyclerView.Adapter<MatchRecycler
     private ArrayList<GameData> gameData;
     private String playerName;
 
-    public MatchRecyclerViewAdapter(Context context, ArrayList<GameData> gameData, String playerName) {
+    MatchRecyclerViewAdapter(Context context, ArrayList<GameData> gameData, String playerName) {
         this.context = context;
         this.playerName = playerName;
 
@@ -46,7 +46,7 @@ public class MatchRecyclerViewAdapter extends RecyclerView.Adapter<MatchRecycler
             @Override
             public void onClick(View view) {
                 FragmentManager fragmentManager = ((AppCompatActivity) context).getSupportFragmentManager();
-                MatchPagerFragment pagerFragment = MatchPagerFragment.newInstance(playerName, holder.getAdapterPosition(), gameData.size());
+                MatchPagerFragment pagerFragment = MatchPagerFragment.newInstance(holder.getAdapterPosition());
                 FragmentTransaction transaction = fragmentManager.beginTransaction();
                 transaction.replace(R.id.profile_fragment_container, pagerFragment);
                 transaction.addToBackStack(null);
@@ -65,6 +65,4 @@ public class MatchRecyclerViewAdapter extends RecyclerView.Adapter<MatchRecycler
             super(view);
         }
     }
-
-
 }

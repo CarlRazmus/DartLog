@@ -7,7 +7,6 @@ import android.support.v4.app.FragmentStatePagerAdapter;
 import com.fraz.dartlog.game.GameData;
 
 import java.util.ArrayList;
-import java.util.Collections;
 
 /**
  * Created by Filip on 2017-02-05.
@@ -17,7 +16,7 @@ public class MatchPagerAdapter extends FragmentStatePagerAdapter {
 
     private ArrayList<GameData> games;
 
-    public MatchPagerAdapter(FragmentManager fm, ArrayList<GameData> games) {
+    MatchPagerAdapter(FragmentManager fm, ArrayList<GameData> games) {
         super(fm);
         this.games = games;
     }

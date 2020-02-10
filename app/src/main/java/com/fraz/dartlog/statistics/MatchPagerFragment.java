@@ -1,5 +1,6 @@
 package com.fraz.dartlog.statistics;
 
+import android.arch.lifecycle.ViewModelProviders;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -11,8 +12,9 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.fraz.dartlog.R;
-import com.fraz.dartlog.db.DartLogDatabaseHelper;
 import com.fraz.dartlog.game.GameData;
+import com.fraz.dartlog.util.EventObserver;
+import com.fraz.dartlog.viewmodel.ProfileViewModel;
 
 import java.util.ArrayList;
 import java.util.Locale;
@@ -20,17 +22,12 @@ import java.util.Locale;
 public class MatchPagerFragment extends Fragment {
 
     public static final String ARG_ITEM_POSITION = "ARG_POSITION";
-    public static final String ARG_ITEM_NAME = "ARG_NAME";
-    public static final String ARG_MATCHES = "ARG_MATCHES";
-    private ArrayList<GameData> playerGameData;
     private int position;
 
-    public static MatchPagerFragment newInstance(String playerName, int position, int numMatches) {
+    public static MatchPagerFragment newInstance(int position) {
         MatchPagerFragment matchPagerFragment = new MatchPagerFragment();
         Bundle args = new Bundle();
-        args.putString(MatchPagerFragment.ARG_ITEM_NAME, playerName);
         args.putInt(MatchPagerFragment.ARG_ITEM_POSITION, position);
-        args.putInt(MatchPagerFragment.ARG_MATCHES, numMatches);
         matchPagerFragment.setArguments(args);
         return matchPagerFragment;
     }
@@ -43,11 +40,6 @@ public class MatchPagerFragment extends Fragment {
         if(arguments != null)
         {
             position = arguments.getInt(ARG_ITEM_POSITION, 0);
-            int nrOfMatches = arguments.getInt(ARG_MATCHES, 0);
-            String profileName = arguments.getString(ARG_ITEM_NAME);
-
-            DartLogDatabaseHelper databaseHelper = DartLogDatabaseHelper.getInstance();
-            playerGameData = databaseHelper.getPlayerMatchData(profileName, Long.MAX_VALUE, nrOfMatches);
         }
     }
 
@@ -56,14 +48,31 @@ public class MatchPagerFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         ViewPager view = (ViewPager) inflater.inflate(R.layout.activity_match_pager, container, false);
 
-        MatchPagerAdapter adapter =
-                new MatchPagerAdapter(getFragmentManager(), playerGameData);
-        view.setAdapter(adapter);
-        view.setCurrentItem(position);
         view.addOnPageChangeListener(new OnPageChangeListener());
         UpdateToolbar(position, view);
-
         return view;
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        if(getView() == null) return;
+
+        ViewPager pager = (ViewPager) getView();
+
+        ProfileViewModel profileViewModel = ViewModelProviders.of(requireActivity()).get(ProfileViewModel.class);
+        ArrayList<GameData> playerGameData = profileViewModel.getMatchHistory();
+
+        final MatchPagerAdapter adapter = new MatchPagerAdapter(getFragmentManager(), playerGameData);
+        pager.setAdapter(adapter);
+        profileViewModel.getMatchHistoryLoaded().observe(this, new EventObserver<Integer>() {
+            @Override
+            public void onEventUnhandled(Integer content) {
+                adapter.notifyDataSetChanged();
+            }
+        });
+
+        pager.setCurrentItem(position);
     }
 
     private void UpdateToolbar(int position, View view) {
