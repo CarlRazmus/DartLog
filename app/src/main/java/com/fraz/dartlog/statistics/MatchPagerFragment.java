@@ -23,6 +23,7 @@ public class MatchPagerFragment extends Fragment {
 
     public static final String ARG_ITEM_POSITION = "ARG_POSITION";
     private int position;
+    private ProfileViewModel profileViewModel;
 
     public static MatchPagerFragment newInstance(int position) {
         MatchPagerFragment matchPagerFragment = new MatchPagerFragment();
@@ -49,7 +50,6 @@ public class MatchPagerFragment extends Fragment {
         ViewPager view = (ViewPager) inflater.inflate(R.layout.activity_match_pager, container, false);
 
         view.addOnPageChangeListener(new OnPageChangeListener());
-        UpdateToolbar(position, view);
         return view;
     }
 
@@ -60,7 +60,7 @@ public class MatchPagerFragment extends Fragment {
 
         ViewPager pager = (ViewPager) getView();
 
-        ProfileViewModel profileViewModel = ViewModelProviders.of(requireActivity()).get(ProfileViewModel.class);
+        profileViewModel = ViewModelProviders.of(requireActivity()).get(ProfileViewModel.class);
         ArrayList<GameData> playerGameData = profileViewModel.getMatchHistory();
 
         final MatchPagerAdapter adapter = new MatchPagerAdapter(getFragmentManager(), playerGameData);
@@ -72,6 +72,7 @@ public class MatchPagerFragment extends Fragment {
             }
         });
 
+        UpdateToolbar(position, pager);
         pager.setCurrentItem(position);
     }
 
@@ -81,7 +82,10 @@ public class MatchPagerFragment extends Fragment {
             AppCompatActivity activity = (AppCompatActivity) requireActivity();
             if (activity.getSupportActionBar() != null) {
                 activity.getSupportActionBar().setTitle(
-                        String.format(Locale.getDefault(), "Match %d", position + 1));
+                        String.format(Locale.getDefault(),
+                                "%s | Match %d",
+                                profileViewModel.getProfileName(),
+                                position + 1));
             }
         }
     }
