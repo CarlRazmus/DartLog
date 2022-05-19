@@ -1,13 +1,13 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 28
+    compileSdkVersion 32
     buildToolsVersion '28.0.3'
 
     defaultConfig {
         applicationId "com.fraz.dartlog"
-        minSdkVersion 21
-        targetSdkVersion 27
+        minSdkVersion 28
+        targetSdkVersion 32
         versionCode 1
         versionName "1.0"
 
@@ -25,17 +25,18 @@ android {
         }
     }
 
-    lintOptions {
-        abortOnError false
-    }
-
     dexOptions {
         preDexLibraries = !project.hasProperty("disablePreDex")
+    }
+
+    lint {
+        abortOnError false
     }
 
     dataBinding {
         enabled = true
     }
+    namespace 'com.fraz.dartlog'
 }
 
 dependencies {
