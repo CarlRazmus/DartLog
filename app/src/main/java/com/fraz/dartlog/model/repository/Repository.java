@@ -1,11 +1,10 @@
 package com.fraz.dartlog.model.repository;
 
-import android.arch.lifecycle.LiveData;
-import android.arch.lifecycle.MutableLiveData;
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
 
 import com.fraz.dartlog.Util;
 import com.fraz.dartlog.db.DartLogDatabaseHelper;
-import com.fraz.dartlog.model.Profile;
 
 import java.util.ArrayList;
 

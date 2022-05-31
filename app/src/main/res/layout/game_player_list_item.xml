@@ -9,13 +9,13 @@
         <import type="android.view.View"/>
         <import type="android.graphics.Typeface"/>
         <import type="android.graphics.Color"/>
-        <import type="android.databinding.adapters.Converters"/>
+        <import type="androidx.databinding.adapters.Converters"/>
         <variable
             name="viewModel"
             type="PlayerViewModel" />
     </data>
 
-    <android.support.v7.widget.CardView
+    <androidx.cardview.widget.CardView
         card_view:cardElevation="@dimen/cardview_default_elevation"
         card_view:cardCornerRadius="@dimen/cardview_default_radius"
         android:layout_width="match_parent"
@@ -131,5 +131,5 @@
                     android:textColor="@color/main_white" />
             </LinearLayout>
         </RelativeLayout>
-    </android.support.v7.widget.CardView>
+    </androidx.cardview.widget.CardView>
 </layout>

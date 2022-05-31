@@ -1,9 +1,9 @@
 package com.fraz.dartlog.game;
 
-import android.arch.lifecycle.LifecycleOwner;
-import android.databinding.ViewDataBinding;
-import android.support.annotation.NonNull;
-import android.support.v7.widget.RecyclerView;
+import androidx.lifecycle.LifecycleOwner;
+import androidx.databinding.ViewDataBinding;
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
 import android.view.ViewGroup;
 
 import com.fraz.dartlog.databinding.GamePlayerListItemBinding;

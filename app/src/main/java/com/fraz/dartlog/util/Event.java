@@ -1,6 +1,6 @@
 package com.fraz.dartlog.util;
 
-import android.arch.lifecycle.MutableLiveData;
+import androidx.lifecycle.MutableLiveData;
 
 public class Event<T> {
 

@@ -1,15 +1,13 @@
 package com.fraz.dartlog.viewmodel;
 
 import android.app.Application;
-import android.arch.lifecycle.AndroidViewModel;
-import android.arch.lifecycle.LiveData;
-import android.arch.lifecycle.MutableLiveData;
-import android.arch.lifecycle.Observer;
-import android.os.LocaleList;
-import android.support.annotation.Nullable;
+import androidx.lifecycle.AndroidViewModel;
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.Observer;
+import androidx.annotation.Nullable;
 
 import com.fraz.dartlog.model.repository.Repository;
-import com.fraz.dartlog.util.Event;
 
 import java.util.ArrayList;
 

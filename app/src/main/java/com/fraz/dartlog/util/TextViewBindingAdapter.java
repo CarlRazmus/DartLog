@@ -1,6 +1,6 @@
 package com.fraz.dartlog.util;
 
-import android.databinding.BindingAdapter;
+import androidx.databinding.BindingAdapter;
 import android.graphics.Typeface;
 import android.widget.TextView;
 

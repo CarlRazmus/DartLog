@@ -1,7 +1,7 @@
 package com.fraz.dartlog.util;
 
-import android.databinding.ViewDataBinding;
-import android.support.v7.widget.RecyclerView;
+import androidx.databinding.ViewDataBinding;
+import androidx.recyclerview.widget.RecyclerView;
 
 public class BindingRecyclerViewHolder<T extends ViewDataBinding> extends RecyclerView.ViewHolder {
 

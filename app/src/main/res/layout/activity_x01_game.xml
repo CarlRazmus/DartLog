@@ -14,7 +14,7 @@
             type="X01GameViewModel"/>
 
 
-        <import type="android.arch.lifecycle.MutableLiveData"/>
+        <import type="androidx.lifecycle.MutableLiveData"/>
         <import type="com.fraz.dartlog.game.x01.X01"/>
         <variable
             name="game"
@@ -29,7 +29,7 @@
         android:background="@drawable/background"
         android:keepScreenOn="true">
 
-        <android.support.v7.widget.Toolbar
+        <androidx.appcompat.widget.Toolbar
             android:id="@+id/game_toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
@@ -44,7 +44,7 @@
             android:layout_marginEnd="8dp"
             app:game="@{game}"/>
 
-        <android.support.v7.widget.RecyclerView
+        <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/play_players_listView"
             android:layout_marginTop="8dp"
             android:layout_marginEnd="8dp"

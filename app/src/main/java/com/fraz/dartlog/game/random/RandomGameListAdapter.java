@@ -1,6 +1,6 @@
 package com.fraz.dartlog.game.random;
 
-import android.arch.lifecycle.LifecycleOwner;
+import androidx.lifecycle.LifecycleOwner;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 

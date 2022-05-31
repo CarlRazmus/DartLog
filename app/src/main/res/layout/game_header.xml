@@ -5,7 +5,7 @@
 
     <data>
 
-        <import type="android.arch.lifecycle.MutableLiveData"/>
+        <import type="androidx.lifecycle.MutableLiveData"/>
         <import type="com.fraz.dartlog.game.x01.X01"/>
        <variable
             name="game"

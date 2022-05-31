@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
-        <import type="android.arch.lifecycle.MutableLiveData"/>
+        <import type="androidx.lifecycle.MutableLiveData"/>
         <import type="com.fraz.dartlog.game.random.Random"/>
         <variable
             name="game"
