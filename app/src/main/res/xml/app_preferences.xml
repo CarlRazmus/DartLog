@@ -9,4 +9,9 @@
         android:key="@string/import_database"
         android:title="Import Database">
     </Preference>
+
+    <EditTextPreference
+        android:key="@string/server_address"
+        android:title="Server address">
+    </EditTextPreference>
 </PreferenceScreen>
