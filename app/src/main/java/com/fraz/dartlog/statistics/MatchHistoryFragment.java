@@ -39,10 +39,11 @@ public class MatchHistoryFragment extends Fragment {
             recyclerView.setLayoutManager(layoutManager);
 
             recyclerViewAdapter = new MatchRecyclerViewAdapter(getContext(), profileViewModel.getMatchHistory(), profileViewModel.getProfileName());
-            profileViewModel.getMatchHistoryLoaded().observe(this, new EventObserver<Integer>() {
+            profileViewModel.getMatchHistoryLoaded().observe(getViewLifecycleOwner(), new EventObserver<Integer>() {
                 @Override
                 public void onEventUnhandled(Integer content) {
                     int itemCount = recyclerViewAdapter.getItemCount();
+                    recyclerViewAdapter.notifyItemRangeRemoved(itemCount - content, content);
                     recyclerViewAdapter.notifyItemRangeInserted(itemCount - content, content);
                 }
             });
