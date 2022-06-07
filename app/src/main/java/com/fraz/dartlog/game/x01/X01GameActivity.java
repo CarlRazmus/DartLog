@@ -9,12 +9,15 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import androidx.databinding.DataBindingUtil;
+
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.appcompat.widget.Toolbar;
 
+import android.preference.PreferenceManager;
 import android.provider.Settings;
 import android.util.Log;
 import android.view.Menu;
@@ -40,7 +43,6 @@ import com.fraz.dartlog.viewmodel.X01GameViewModel;
 
 import org.json.JSONObject;
 
-import java.net.URISyntaxException;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Map;
@@ -52,7 +54,6 @@ public class X01GameActivity extends AppCompatActivity implements
     private X01GameListAdapter gameListAdapter;
     private X01GameViewModel viewModel;
     private RequestQueue requestQueue;
-    private final String url = "http://192.168.28.157:5000";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -136,6 +137,9 @@ public class X01GameActivity extends AppCompatActivity implements
     }
 
     private JsonObjectRequest convertToRequestObject(Map data){
+        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
+        String url = sharedPref.getString(getResources().getString(R.string.server_address), "192.168.0.0:5000");
+
         return new JsonObjectRequest(Request.Method.POST, url + "/matches",new JSONObject(data),
             new Response.Listener<JSONObject>() {
                 @Override
