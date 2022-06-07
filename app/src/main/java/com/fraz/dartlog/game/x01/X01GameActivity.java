@@ -100,7 +100,8 @@ public class X01GameActivity extends AppCompatActivity implements
         viewModel.getGameObservable().observe(this, new Observer<X01>() {
             @Override
             public void onChanged(@Nullable X01 x01) {
-                sendGameDataToServer();
+                if(viewModel.getGame().getNumberOfPlayers() == 2)
+                    sendGameDataToServer();
                 gameListAdapter.notifyDataSetChanged();
                 scrollToPlayerInList();
             }
