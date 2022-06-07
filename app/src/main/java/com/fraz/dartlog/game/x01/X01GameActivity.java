@@ -16,11 +16,18 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.appcompat.widget.Toolbar;
 
 import android.provider.Settings;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.ViewGroup;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
 import com.fraz.dartlog.MainActivity;
 import com.fraz.dartlog.OnBackPressedDialogFragment;
 import com.fraz.dartlog.R;
@@ -38,27 +45,18 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Map;
 
-import io.socket.client.IO;
-import io.socket.client.Socket;
-
 
 public class X01GameActivity extends AppCompatActivity implements
         OnBackPressedDialogFragment.OnBackPressedDialogListener {
 
     private X01GameListAdapter gameListAdapter;
     private X01GameViewModel viewModel;
-    private Socket socket;
+    private RequestQueue requestQueue;
+    private final String url = "http://192.168.28.157:5000";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        try {
-            socket = IO.socket("http://192.168.28.157:5000");
-            socket.connect();
-        } catch (URISyntaxException e) {
-            throw new RuntimeException(e);
-        }
 
         viewModel = ViewModelProviders.of(this).get(X01GameViewModel.class);
         ActivityX01GameBinding binding = DataBindingUtil.setContentView(this, R.layout.activity_x01_game);
@@ -70,6 +68,7 @@ public class X01GameActivity extends AppCompatActivity implements
 
         viewModel.initGame(savedInstanceState, getIntent());
         gameListAdapter = new X01GameListAdapter(viewModel, this);
+        requestQueue = Volley.newRequestQueue(this);
 
         initNumPadView();
         initListView();
@@ -134,7 +133,23 @@ public class X01GameActivity extends AppCompatActivity implements
     @Override
     public void onDestroy() {
         super.onDestroy();
-        socket.disconnect();
+    }
+
+    private JsonObjectRequest convertToRequestObject(Map data){
+        return new JsonObjectRequest(Request.Method.POST, url + "/matches",new JSONObject(data),
+            new Response.Listener<JSONObject>() {
+                @Override
+                public void onResponse(JSONObject response) {
+                    Log.d("dartserver", "Got a response!");
+                }
+            },
+            new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                        Log.d("dartserver", "Got an error :(\n" + error.getMessage() );
+                }
+            }
+        );
     }
 
     private void sendGameDataToServer()
@@ -168,7 +183,7 @@ public class X01GameActivity extends AppCompatActivity implements
         data.put("device_id", android_id);
         data.put("match", match);
 
-        socket.emit("matchdata-update-from-android", new JSONObject(data));
+        requestQueue.add(convertToRequestObject(data));
     }
 
     private void initListView() {
