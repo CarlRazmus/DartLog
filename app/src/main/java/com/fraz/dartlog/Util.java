@@ -114,12 +114,12 @@ public class Util {
         toast.show();
     }
 
-    public void updateDbStatistics() {
+    public static void updateDbStatistics() {
         UpdateStatisticsAsyncTask asyncTask = new UpdateStatisticsAsyncTask();
         asyncTask.executeOnExecutor(getExecutorInstance());
     }
 
-    private class UpdateStatisticsAsyncTask extends AsyncTask<Void, Void, Void> {
+    private static class UpdateStatisticsAsyncTask extends AsyncTask<Void, Void, Void> {
 
         @Override
         protected Void doInBackground(Void... voids) {

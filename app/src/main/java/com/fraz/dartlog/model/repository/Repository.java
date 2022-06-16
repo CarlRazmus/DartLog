@@ -43,6 +43,7 @@ public class Repository {
         else if(!Util.loadProfileNames().contains(name))
             Util.addPlayer(name);
         profiles.setValue(Util.loadProfileNames());
+        Util.updateDbStatistics();
     }
 
     public void removeProfile(String name)

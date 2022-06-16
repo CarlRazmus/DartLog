@@ -58,9 +58,8 @@ public class AppSettingsFragment extends PreferenceFragment {
 
         DartLogDatabaseHelper dbHelper = DartLogDatabaseHelper.getInstance();
 
-        Util util = new Util();
         Util.saveProfileNames(dbHelper.getPlayers());
-        util.updateDbStatistics();
+        Util.updateDbStatistics();
         showToast(R.string.successful_import);
     }
 

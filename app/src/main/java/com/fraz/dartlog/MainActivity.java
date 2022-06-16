@@ -31,8 +31,7 @@ public class MainActivity extends MenuBackground implements View.OnClickListener
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        Util util = new Util();
-        util.updateDbStatistics();
+        Util.updateDbStatistics();
 
         Button playButton = findViewById(R.id.play_x01_button);
         Button profilesButton = findViewById(R.id.profiles_button);
