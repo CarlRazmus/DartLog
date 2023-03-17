@@ -179,6 +179,11 @@ public class X01GameActivity extends AppCompatActivity implements
         player1data.put("matchdata", player1list);
         player2data.put("matchdata", player2list);
 
+        int player1doubles = ((X01PlayerData) player1).getRemainingDoubleOutAttempts();
+        int player2doubles = ((X01PlayerData) player2).getRemainingDoubleOutAttempts();
+        player1data.put("double_out", player1doubles);
+        player2data.put("double_out", player2doubles);
+
         Map match = new HashMap();
         match.put("winner", winner);
         match.put("player1", player1data);
